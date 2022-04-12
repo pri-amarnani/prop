@@ -80,19 +80,35 @@ public class Block {
     }
 
     public void findAndReplace (int n) {
-
+        for (int i = 0; i < block.length; ++i) {
+            for (int j = 0; j < block[0].length; ++j) {
+                if (block[i][j].value() == n) this.block[i][j].changeValue(n);
+            }
+        }
     }
 
     public void findAndReplace (String n) {
-
+        for (int i = 0; i < block.length; ++i) {
+            for (int j = 0; j < block[0].length; ++j) {
+                if (block[i][j].value() == n) this.block[i][j].changeValue(n);
+            }
+        }
     }
 
     public void findAndReplace (LocalDate ld) {
-
+        for (int i = 0; i < block.length; ++i) {
+            for (int j = 0; j < block[0].length; ++j) {
+                if (block[i][j].value() == ld) this.block[i][j].changeValue(ld);
+            }
+        }
     }
 
     public void floor (Block b, Boolean ref) {
-
+        for (int i = 0; i < this.block.length; ++i) {
+            for (int j = 0; j < this.block[0].length; ++j) {
+                b.getCell(i,j).changeValue((float) Math.floor((double) block[i][j].value()));
+            }
+        }
     }
 
     public void convert (Block b, Boolean ref) {
@@ -135,8 +151,8 @@ public class Block {
 
     }
 
-    public String dayOfTheWeek (Block b, Boolean ref) {
-        return null;
+    public void dayOfTheWeek (Block b, Boolean ref) {
+
     }
 
     public void replace (Block b, String criteria) {
