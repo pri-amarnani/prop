@@ -1,5 +1,7 @@
 import Cell;
+import java.util.Arrays;
 import java.time.LocalDate; // this will need to be included in Cell
+import java.math.RoundingMode;
 
 public class Block {
     Cell [][] block;
@@ -9,18 +11,22 @@ public class Block {
     }
 
     public Block (Cell [][] b) {
-        block = new Cell[bottom_r.row() - top_left.row()][bottom_r.column() - top_left.column()];
+        block = new Cell[][];
         block = b;
+    }
+
+    public Cell getCell (int i, int j) {
+        return this.block[i][j];
     }
 
     public void CopyB () {
         // copy to clipboard
     }
 
-    public void ModifyBlock(int n) {
+    public void ModifyBlock(float n) {
         for (int i = 0; i < block.length; ++i) {
             for (int j = 0; j < block[0].length; ++j) {
-                if (block[i][j].isInt()) block[i][j].changeValue(n);
+                if (block[i][j].isFloat()) block[i][j].changeValue(n);
             }
         }
     }
@@ -94,19 +100,35 @@ public class Block {
     }
 
     public void sum (Block b1, Block b2, Boolean ref) {
-
+        for (int i = 0; i < this.block.length; ++i) {
+            for (int j = 0; j < this.block[0].length; ++j) {
+                b2.getCell(i,j).changeValue(this.block[i][j].value() + b1.getCell(i,j).value());
+            }
+        }
     }
 
     public void mult (Block b1, Block b2, Boolean ref) {
-
+        for (int i = 0; i < this.block.length; ++i) {
+            for (int j = 0; j < this.block[0].length; ++j) {
+                b2.getCell(i,j).changeValue(this.block[i][j].value() * b1.getCell(i,j).value());
+            }
+        }
     }
 
     public void div (Block b1, Block b2, Boolean ref) {
-
+        for (int i = 0; i < this.block.length; ++i) {
+            for (int j = 0; j < this.block[0].length; ++j) {
+                b2.getCell(i,j).changeValue(this.block[i][j].value() / b1.getCell(i,j).value());
+            }
+        }
     }
 
     public void substract (Block b1, Block b2, Boolean ref) {
-
+        for (int i = 0; i < this.block.length; ++i) {
+            for (int j = 0; j < this.block[0].length; ++j) {
+                b2.getCell(i,j).changeValue(this.block[i][j].value() - b1.getCell(i,j).value());
+            }
+        }
     }
 
     public void extract (Block b, Boolean ref) {
@@ -120,28 +142,63 @@ public class Block {
     public void replace (Block b, String criteria) {
 
     }
-
-    public float mean (Block b, Boolean ref) {
-        return -1;
+    public float mean (Boolean ref) {
+        float sum = 0;
+        for (int i = 0; i < this.block.length; ++i) {
+            for (int j = 0; j < this.block[0].length; ++j) {
+                sum += this.block[i][j].value();
+            }
+        }
+        return sum/(this.block.length*this.block[0].length);
     }
 
-    public int median (Block b, Boolean ref) {
-        return -1;
+    // left to right and then to down
+    public float median (Boolean ref) {
+        float [] s = new float[this.block.length*this.block[0].length];
+
+        for (int i = 0; i < this.block.length; ++i) {
+            for (int j = 0; j < this.block[0].length; ++j) {
+                s[i+j] = this.block[i][j].getValue();
+            }
+        }
+
+        Arrays.sort(s);
+        return s[s.length/2];
     }
 
-    public float var (Block b, Boolean ref) {
-        return -1;
+    public float var (Boolean ref) {
+        return (float)Math.pow(this.std(false), 2);
     }
 
     public float covar (Block b, Boolean ref) {
         return -1;
     }
 
-    public float std (Block b, Boolean ref) {
-        return -1;
+    public float std (Boolean ref) {
+        float sum = 0, std = 0;
+        float [] s = new float[this.block.length*this.block[0].length];
+
+        for (int i = 0; i < this.block.length; ++i) {
+            for (int j = 0; j < this.block[0].length; ++j) {
+                s[i+j] = this.block[i][j].getValue();
+                sum += this.block[i][j].getValue();
+            }
+        }
+
+        float mean = sum/s.length;
+
+        for(float num: s) {
+            std += Math.pow(num - mean, 2);
+        }
+
+        return (float)Math.sqrt(std/s.length);
     }
 
     public float CPearson (Block b, Boolean ref) {
-        return -1;
+        return this.covar(b, false)/(b.std(false)*this.std(false));
+    }
+
+    public static void main(String[] args) {
+
     }
 }
