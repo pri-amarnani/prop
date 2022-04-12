@@ -1,19 +1,16 @@
-package projProp;
+
 
 import com.digidemic.unitof.UnitOf;
 
-import java.math.RoundingMode;
-import java.text.DecimalFormat;
-
-public class celdaNum extends celda{
+public class NumCell extends Cell{
 
     //truncament
     //conversio
-    //aritmetiques
+    //aritmetiques *falta*
     private final double info;
 
-    public celdaNum(int fila,int columna, String id, float info){
-        super(fila,columna,id);
+    public NumCell(int row,int column, String type, float info){
+        super(row,column,type);
         this.info= info;
     }
 
@@ -49,5 +46,7 @@ public class celdaNum extends celda{
     public double getInfo(){
         return info;
     }
+
+
 
 }
