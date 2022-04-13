@@ -1,8 +1,9 @@
 package classes;
 
 import java.util.Objects;
+import java.util.Date;
 
-public class Cell {
+public abstract class Cell {
     private final int row; //que es final??
     private final int column;
     private final String type;
@@ -43,5 +44,31 @@ public class Cell {
     public boolean isDate(){
         return (Objects.equals(type, "D"));
     }
+
+    public abstract double getInfoNum();
+    public abstract String getInfoText();
+    public abstract Date getInfoDate();
+
+    public void getInfo(){
+       if (Objects.equals(type, "N"))  getInfoNum();
+       else if (Objects.equals(type, "T")) getInfoText();
+       else if (Objects.equals(type, "D")) getInfoDate();
+    }
+
+    public double getInfoN(){
+        return getInfoNum();
+    }
+    public String getInfoT(){
+        return getInfoText();
+    }
+    public Date getInfoD(){
+        return getInfoDate();
+    }
+
+    public abstract void changeValueN(double n);
+    public abstract void changeValueT (String t);
+    public abstract void changeValueD (Date d);
+
+
 }
 

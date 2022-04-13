@@ -4,7 +4,7 @@ import classes.Cell;
 
 import java.util.Objects;
 
-public class TextCell extends Cell {
+public abstract class TextCell extends Cell {
 
     private String info;
 
@@ -46,5 +46,9 @@ public class TextCell extends Cell {
         }
         return -1;
 
+    }
+
+    public void changeValueT(String t){
+        this.info=t;
     }
 }

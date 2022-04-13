@@ -3,12 +3,12 @@ package classes;
 import classes.Cell;
 import com.digidemic.unitof.UnitOf;
 
-public class NumCell extends Cell {
+public abstract class NumCell extends Cell {
 
     //truncament
     //conversio
     //aritmetiques *falta*
-    private final double info;
+    private double info;
 
     public NumCell(int row,int column, String type, float info){
         super(row,column,type);
@@ -44,8 +44,12 @@ public class NumCell extends Cell {
         return result; //si devuelve -1 falla la conv
     }
 
-    public double getInfo(){
+    public double getInfoNum(){
         return info;
+    }
+
+    public void changeValueN(double n){
+        this.info=n;
     }
 
 
