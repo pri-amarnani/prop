@@ -1,4 +1,6 @@
+package classes;
 
+import classes.Cell;
 
 import java.util.Date;
 

@@ -1,9 +1,10 @@
+package classes;
 
+import classes.Cell;
 
-import java.util.Date;
 import java.util.Objects;
 
-public class TextCell extends Cell{
+public class TextCell extends Cell {
 
     private String info;
 

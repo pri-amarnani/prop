@@ -1,8 +1,9 @@
+package classes;
 
-
+import classes.Cell;
 import com.digidemic.unitof.UnitOf;
 
-public class NumCell extends Cell{
+public class NumCell extends Cell {
 
     //truncament
     //conversio

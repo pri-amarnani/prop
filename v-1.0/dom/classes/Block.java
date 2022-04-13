@@ -1,7 +1,8 @@
-import Cell;
+package classes;
+
 import java.util.Arrays;
-import java.time.LocalDate; // this will need to be included in Cell
-import java.math.RoundingMode;
+import java.time.LocalDate; // this will need to be included in classes.Cell
+
 
 public class Block {
     Cell [][] block;
