@@ -1,4 +1,4 @@
-package classes;
+package com.pomc.classes;
 
 import java.time.LocalDate;
 import java.util.ArrayList;

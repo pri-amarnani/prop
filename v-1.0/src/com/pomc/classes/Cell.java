@@ -1,4 +1,4 @@
-package classes;
+package com.pomc.classes;
 
 import java.util.Objects;
 import java.util.Date;

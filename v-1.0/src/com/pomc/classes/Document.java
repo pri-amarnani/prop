@@ -1,4 +1,4 @@
-package classes;
+package com.pomc.classes;
 //import Sheet;
 import java.io.*;
 import java.util.Scanner;
@@ -45,6 +45,7 @@ public class Document {
     public void deleteSheet(String i) {
         docSheets.removeElement(i); //searches by object
     }
+
 
     //Save Files
     public void save() {

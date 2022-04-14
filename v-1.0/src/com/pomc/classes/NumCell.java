@@ -1,6 +1,5 @@
-package classes;
+package com.pomc.classes;
 
-import classes.Cell;
 import com.digidemic.unitof.UnitOf;
 
 public abstract class NumCell extends Cell {

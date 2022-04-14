@@ -1,7 +1,6 @@
-package classes;
+package com.pomc.classes;
 
 import java.util.Arrays;
-import java.time.LocalDate; // this will need to be included in classes.Cell
 import java.util.Date;
 import java.util.Locale;
 

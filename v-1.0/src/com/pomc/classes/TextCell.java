@@ -1,6 +1,4 @@
-package classes;
-
-import classes.Cell;
+package com.pomc.classes;
 
 import java.util.Objects;
 
