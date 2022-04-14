@@ -1,27 +1,60 @@
 package com.pomc.classes;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
+//import java.time.LocalDate;
+import java.util.Date;
+import java.util.Vector;
 
 public class Sheet {
-    //Cell[][] celdas;
-    ArrayList<ArrayList<Cell>> celdas;
-    int num_sheet;
+    Vector<Vector<Cell>> celdas;
     String title;
     int num_rows;
     int num_cols;
 
-    //add = push      remove = pop
+    public Sheet(String title) {
+        this.title = title;
+        celdas = null;
+        num_cols = 0;
+        num_rows = 0;
+    }
 
-    public void AfegirFila(int pos){
+    public Sheet(Vector<Vector<Cell>> celdas, String title) {  //not sure
+        this.title = title;
+        this.celdas = celdas;
+        num_rows = celdas.size();
+        num_cols = celdas.elementAt(0).size();
+    }
+
+    public Sheet(int rows, int columns, String title){
+        this.num_rows = rows;
+        this.num_cols = columns;
+        this.title = title;
+        cells(rows, columns);
+    }
+
+    public void cells(int rows, int cols){ //las celdas por defecto son numericas
+        title = "titulo por defecto"; //poner titulo por defecto
+        String n = "N";
+        for(int i = 0; i < rows; ++i){
+            celdas.add(new Vector<Cell>(rows));
+            for(int j = 0; j < cols; ++j){
+                //celdas.elementAt(i).elementAt(j) = new Cell(i, j, n);     //creadora de cell?
+                //-> Cell' is abstract; cannot be instantiated
+            }
+        }
+    }
+
+    /*
+    public void NewRow(int pos){  //docSheets.removeElement(i);
+        ++num_rows;
         if (pos != celdas.size()) celdas.add(new ArrayList<Cell>()); //celdas.add(celdas[celdas.size()-1]);
         for(int i = celdas.size()-2; i >= pos; --i){      //necesito funcion para cambiar el tipo
             celdas[i+1] = celdas[i];
         }
-        celdas[pos] = new Cell[][]; //vaciar la info
+        celdas[pos] =new  Cell[][]; //vaciar la info
     }
 
-    public void AfegirColumna(int pos){
+    public void NewColumn(int pos){
+        ++num_cols;
         //NO MOVER LAS CELDAS, SOLO LA INFO QUE TIENEN!!!
         for(int i = 0; i < celdas.size(); ++i){
             for(int j = celdas[0].size(); j >= pos; --j ) {
@@ -32,13 +65,15 @@ public class Sheet {
         }
     }
 
-    public void EliminarFila(int pos){
+    public void DeleteRow(int pos){
+        --num_rows; //salta si solo hay una fila
         for(int i = pos; i < celdas.size()-1; ++i){      //necesito funcion para cambiar el tipo
             celdas[i] = celdas[i+1];
         }
         celdas.remove(celdas[celdas.size()-1]); //pop?
     }
-    public void EliminarColumna(int pos){
+    public void DeleteColumn(int pos){
+        --num_cols; //salta si solo hay una columna
         for(int i = 0; i < celdas.size(); ++i){
             for(int j = pos; j < celdas[0].size()-1; ++j ) {
                 celdas[i][j] = celdas[i][j+1];
@@ -47,19 +82,23 @@ public class Sheet {
         }
     }
 
+*/
 
-
-    public void SeleccionarBloc(Cell c1, Cell c2){} //pasar mat
-    public void seleccionarCela(int f, int c){} //necesito un getCell
+    public Block SelectBloc(Cell c1, Cell c2){ //1 bloque seleccionado + crear otro en las aritmeticas
+        //crear bloque y devolverlo
+        return new Block(); //crear uno desde c1 a c2
+    }
 
     public void CopyB(Block b){
         b.CopyB();
     }
 
 
-    public void MoveBlock(Block b, Cell c){}
+    public void MoveBlock(Block b){  //del bloque seleccionado al bloque b
 
-    public void ModifyBlock(Block b, int n){ //float/double en vez de int
+    }
+
+    public void ModifyBlock(Block b, double n){
         b.ModifyBlock(n);
     }
 
@@ -67,7 +106,7 @@ public class Sheet {
         b.ModifyBlock(s);
     }
 
-    public void ModifyBlock(Block b, LocalDate ld){
+    public void ModifyBlock(Block b, Date ld){
         b.ModifyBlock(ld);
     }
 
@@ -82,56 +121,50 @@ public class Sheet {
     }
 
 
-    public Cell find(int n,Block b){
+    public Cell find(double n, Block b){
         return b.find(n);
     }
-    public Cell find(String s,Block b){
+    public Cell find(String s, Block b){
         return b.find(s);
     }
-    public Cell find(LocalDate ld,Block b){
+    public Cell find(Date ld, Block b){
         return b.find(ld);
     }
 
 
-    public void findAndReplace(int n, Block b){ //en vez de int tendria q ser double/float
-        b.findAndReplace(n);
+    public void findAndReplace(double n, double r, Block b){
+        b.findAndReplace(n); //(n,r)
     }
     public void findAndReplace(String s, Block b){
         b.findAndReplace(s);
     }
-    public void findAndReplace(LocalDate ld, Block b){  //que hace exactamente esta funcion? sustituye por q valor?
+    public void findAndReplace(Date ld, Block b){
         b.findAndReplace(ld);
     }
 
 
 
-
-
-    public void FuncioTruncament(Block b1, Cell c, Boolean ref){
-
+    public void floor(Block b1,Block b2, Cell c, Boolean ref){
+        b1.floor(b2, ref);
     }
-
-
 
     public void convert(Block b1, Cell c, Boolean ref){
         b1.convert(b1, ref);
     }
 
-    // public void FuncioOpAritmetiques(Block b1, Block b2, Cell c, Boolean ref){}
-
-    public void sum(Block b1, Block b2, Block b3, Cell c, Boolean ref){
+    public void sum(Block b1, Block b2, Block b3, Boolean ref){  //lo guardamos en cell?
         b1.sum(b2, b3, ref);
     }
 
-    public void mult(Block b1, Block b2, Block b3, Cell c, Boolean ref){
+    public void mult(Block b1, Block b2, Block b3, Boolean ref){
         b1.mult(b2, b3, ref);
     }
 
-    public void div(Block b1, Block b2, Block b3, Cell c, Boolean ref){
+    public void div(Block b1, Block b2, Block b3, Boolean ref){
         b1.div(b2, b3, ref);
     }
 
-    public void substract(Block b1, Block b2, Block b3, Cell c, Boolean ref){
+    public void substract(Block b1, Block b2, Block b3, Boolean ref){
         b1.substract(b2, b3, ref);
     }
 
@@ -143,12 +176,12 @@ public class Sheet {
         b1.dayOfTheWeek(b1, ref);
     }
 
-    public void replace(Block b1,Cell c, Boolean ref, String criteria){
-        b1.replace(b1, criteria);
+    public void replaceWithCriteriaText(Block b1,Cell c, Boolean ref, String criteria){
+        b1.replaceWithCriteriaText(criteria);
     }
 
     public int length(TextCell c, String criteria){
-        return c.length(criteria);   //solo en textCell?
+        return c.length(criteria);
     }
 
     public void mean(Block b1,Cell c, Boolean ref){
@@ -161,23 +194,43 @@ public class Sheet {
 
     public void var(Block b1,Cell c, Boolean ref){
         if(c.isNum()) c.changeValueN(b1.var(ref));
-        else if(c.isText()) c.changeValueT(b1.var(ref));    //siempre devuelve un float!!
-        else if(c.isDate()) c.changeValueD(b1.var(ref));    //siempre devuelve un float!!
+        else if(c.isText()){
+            //cambiar el tipo de la celda a numerica
+            //c.changeValueT(b1.var(ref));
+        }
+        else if(c.isDate()){
+            //cambiar el tipo de la celda a numerica
+            //c.changeValueD(b1.var(ref));
+        }
     }
 
-    public void covar(Block b1,Cell c, Boolean ref){
+    public void covar(Block b1, Block b2, Cell c, Boolean ref){
         if(c.isNum()) c.changeValueN(b1.covar(b1,ref));
-        else if(c.isText()) c.changeValueT(b1.covar(b1,ref));
-        else if(c.isDate()) c.changeValueD(b1.covar(b1,ref)); //primero cambiar el tipo a int/float/DOUBLE
+        else if(c.isText()){
+            //cambiar el tipo de la celda a numerica
+            //c.changeValueT(b1.covar(b1,ref));    //siempre devuelve un float!!
+        }
+        else if(c.isDate()){
+            //cambiar el tipo de la celda a numerica
+            //c.changeValueD(b1.covar(b1,ref));
+        }
+        //else (); //control de errores
     }
 
-    public void std(Block b1,Cell c, Boolean ref){ //que funcion??
+    public void std(Block b1,Cell c, Boolean ref){  //mirar en todas de que tipo es el bloque (numerico)
         b1.std(ref);
     }
 
-    public void CPearson(Block b1, Cell c, Boolean ref){
-        if(c.isNum()) c.changeValueN(b1.CPearson(ref));
-        else if(c.isText()) c.changeValueT(b1.CPearson(ref));
-        else if(c.isDate()) c.changeValueD(b1.CPearson(ref));
+    public void CPearson(Block b1, Cell c, Boolean ref){ //crear bloque desde la celda c
+        Block b2 = new Block();
+        if(c.isNum()) c.changeValueN(b1.CPearson(b2, ref));
+        else if(c.isText()){
+            //cambiar el tipo de la celda a numerica
+            //c.changeValueN(b1.CPearson(b2, ref));
+        }
+        else if(c.isDate()){
+            //cambiar el tipo de la celda a numerica
+            //c.changeValueN(b1.CPearson(b2, ref));
+        }
     }
 }
