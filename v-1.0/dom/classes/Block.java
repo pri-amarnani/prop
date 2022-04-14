@@ -3,6 +3,7 @@ package classes;
 import java.util.Arrays;
 import java.time.LocalDate; // this will need to be included in classes.Cell
 import java.util.Date;
+import java.util.Locale;
 
 
 public class Block {
@@ -181,12 +182,35 @@ public class Block {
     }
 
     public void dayOfTheWeek (Block b, Boolean ref) {
+        for (int i = 0; i < this.block.length; ++i) {
+            for (int j = 0; j < this.block[0].length; ++j) {
+                Date aux = getCell(i,j).getInfoDate();
+
+                //need cell to have DayOfTheWeek method coded
+            }
+        }
 
     }
 
     // criteria == mayus or criteria == minus
-    public void replace (Block b, String criteria) {
+    public void replaceWithCriteriaText (String criteria) {
+        for (Cell[] cells : this.block) {
+            for (int j = 0; j < this.block[0].length; ++j) {
 
+                if (criteria == "ALL CAPS") {
+                    cells[j].changeValueT(cells[j].getInfoText().toUpperCase(Locale.ROOT));
+                }
+
+                else if (criteria == "ALL NOT CAPS") {
+                    cells[j].changeValueT(cells[j].getInfoText().toLowerCase(Locale.ROOT));
+                }
+
+                else if (criteria == "CAP_FIRST_LETTER") {
+                    cells[j].changeValueT(cells[j].getInfoText().substring(0, 1).toUpperCase(Locale.ROOT)
+                            + cells[j].getInfoText().substring(1));
+                }
+            }
+        }
     }
 
     public double mean (Boolean ref) {
@@ -258,7 +282,7 @@ public class Block {
             std += Math.pow(num - mean, 2);
         }
 
-        return (Math.sqrt(std/s.length);
+        return (Math.sqrt(std/s.length));
     }
 
     public double CPearson (Block b, Boolean ref) {
