@@ -13,7 +13,7 @@ public class Block {
     }
 
     public Block (Cell [][] b) {
-        block = new Cell[][];
+        block = new Cell[b.length][b[0].length];
         block = b;
     }
 
@@ -21,30 +21,57 @@ public class Block {
         return this.block[i][j];
     }
 
+    public boolean allDouble() {
+        for (int i = 0; i < this.block[0].length; ++i) {
+            for (int j = 0; j < this.block[0].length; ++j)
+                if (!this.block[i][j].isNum()) return false;
+        }
+
+        return true;
+    }
+
+    public boolean allText() {
+        for (int i = 0; i < this.block[0].length; ++i) {
+            for (int j = 0; j < this.block[0].length; ++j)
+                if (!this.block[i][j].isText()) return false;
+        }
+
+        return true;
+    }
+
+    public boolean allDate() {
+        for (int i = 0; i < this.block[0].length; ++i) {
+            for (int j = 0; j < this.block[0].length; ++j)
+                if (!this.block[i][j].isDate()) return false;
+        }
+
+        return true;
+    }
+
     public void CopyB () {
         // copy to clipboard
     }
 
     public void ModifyBlock(double n) {
-        for (int i = 0; i < block.length; ++i) {
+        for (Cell[] cells : block) {
             for (int j = 0; j < block[0].length; ++j) {
-                if (block[i][j].isNum()) block[i][j].changeValueN(n);
+                if (cells[j].isNum()) cells[j].changeValueN(n);
             }
         }
     }
 
     public void ModifyBlock(String n) {
-        for (int i = 0; i < block.length; ++i) {
+        for (Cell[] cells : block) {
             for (int j = 0; j < block[0].length; ++j) {
-                if (block[i][j].isText()) block[i][j].changeValueT(n);
+                if (cells[j].isText()) cells[j].changeValueT(n);
             }
         }
     }
 
-    public void ModifyBlock(LocalDate ld) {
-        for (int i = 0; i < block.length; ++i) {
+    public void ModifyBlock(Date ld) {
+        for (Cell[] cells : block) {
             for (int j = 0; j < block[0].length; ++j) {
-                if (block[i][j].isDate()) block[i][j].changeValueD(ld);
+                if (cells[j].isDate()) cells[j].changeValueD(ld);
             }
         }
     }
@@ -55,52 +82,52 @@ public class Block {
     }
 
     public Cell find (double n) {
-        for (int i = 0; i < block.length; ++i) {
+        for (Cell[] cells : block) {
             for (int j = 0; j < block[0].length; ++j) {
-                if (block[i][j].getInfoNum() == n) return block[i][j];
+                if (cells[j].getInfoNum() == n) return cells[j];
             }
         }
         return null;
     }
 
     public Cell find (String n) {
-        for (int i = 0; i < block.length; ++i) {
+        for (Cell[] cells : block) {
             for (int j = 0; j < block[0].length; ++j) {
-                if (block[i][j].getInfoText() == n) return block[i][j];
+                if (cells[j].getInfoText() == n) return cells[j];
             }
         }
         return null;
     }
 
     public Cell find (Date ld) {
-        for (int i = 0; i < block.length; ++i) {
+        for (Cell[] cells : block) {
             for (int j = 0; j < block[0].length; ++j) {
-                if (block[i][j].getInfoDate() == ld) return block[i][j];
+                if (cells[j].getInfoDate() == ld) return cells[j];
             }
         }
         return null;
     }
 
     public void findAndReplace (double n) {
-        for (int i = 0; i < block.length; ++i) {
+        for (Cell[] cells : block) {
             for (int j = 0; j < block[0].length; ++j) {
-                if (block[i][j].getInfoNum() == n) this.block[i][j].changeValueN(n);
+                if (cells[j].getInfoNum() == n) cells[j].changeValueN(n);
             }
         }
     }
 
     public void findAndReplace (String n) {
-        for (int i = 0; i < block.length; ++i) {
+        for (Cell[] cells : block) {
             for (int j = 0; j < block[0].length; ++j) {
-                if (block[i][j].getInfoText() == n) this.block[i][j].changeValueT(n);
+                if (cells[j].getInfoText() == n) cells[j].changeValueT(n);
             }
         }
     }
 
     public void findAndReplace (Date ld) {
-        for (int i = 0; i < block.length; ++i) {
+        for (Cell[] cells : block) {
             for (int j = 0; j < block[0].length; ++j) {
-                if (block[i][j].getInfoDate() == ld) this.block[i][j].changeValueD(ld);
+                if (cells[j].getInfoDate() == ld) cells[j].changeValueD(ld);
             }
         }
     }
@@ -157,15 +184,17 @@ public class Block {
 
     }
 
+    // criteria == mayus or criteria == minus
     public void replace (Block b, String criteria) {
 
     }
+
     public double mean (Boolean ref) {
         double sum = 0;
 
-        for (int i = 0; i < this.block.length; ++i) {
+        for (Cell[] cells : this.block) {
             for (int j = 0; j < this.block[0].length; ++j) {
-                sum += this.block[i][j].getInfoNum();
+                sum += cells[j].getInfoNum();
             }
         }
         return sum/(this.block.length*this.block[0].length);
@@ -190,7 +219,26 @@ public class Block {
     }
 
     public double covar (Block b, Boolean ref) {
-        return -1;
+        double mean1 = this.mean(false);
+        double mean2 = b.mean(false);
+
+        double [] x = new double[this.block.length*this.block[0].length];
+        double [] y = new double[this.block.length*this.block[0].length];
+
+        for (int i = 0; i < this.block.length; ++i) {
+            for (int j = 0; j < this.block[0].length; ++j) {
+                x[i+j] = this.block[i][j].getInfoNum();
+                y[i+j] = b.getCell(i,j).getInfoNum();
+            }
+        }
+
+        double sum = 0;
+
+        for (int i = 0; i < x.length; ++i) {
+            sum += (x[i] - mean1)*(y[i] - mean2);
+        }
+
+        return sum/x.length;
     }
 
     public double std (Boolean ref) {
