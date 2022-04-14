@@ -2,6 +2,7 @@ package classes;
 
 import java.util.Arrays;
 import java.time.LocalDate; // this will need to be included in classes.Cell
+import java.util.Date;
 
 
 public class Block {
@@ -24,10 +25,10 @@ public class Block {
         // copy to clipboard
     }
 
-    public void ModifyBlock(float n) {
+    public void ModifyBlock(double n) {
         for (int i = 0; i < block.length; ++i) {
             for (int j = 0; j < block[0].length; ++j) {
-                if (block[i][j].isFloat()) block[i][j].changeValue(n);
+                if (block[i][j].isNum()) block[i][j].changeValueN(n);
             }
         }
     }
@@ -35,7 +36,7 @@ public class Block {
     public void ModifyBlock(String n) {
         for (int i = 0; i < block.length; ++i) {
             for (int j = 0; j < block[0].length; ++j) {
-                if (block[i][j].isString()) block[i][j].changeValue(n);
+                if (block[i][j].isText()) block[i][j].changeValueT(n);
             }
         }
     }
@@ -43,7 +44,7 @@ public class Block {
     public void ModifyBlock(LocalDate ld) {
         for (int i = 0; i < block.length; ++i) {
             for (int j = 0; j < block[0].length; ++j) {
-                if (block[i][j].isDate()) block[i][j].changeValue(ld);
+                if (block[i][j].isDate()) block[i][j].changeValueD(ld);
             }
         }
     }
@@ -53,10 +54,10 @@ public class Block {
 
     }
 
-    public Cell find (int n) {
+    public Cell find (double n) {
         for (int i = 0; i < block.length; ++i) {
             for (int j = 0; j < block[0].length; ++j) {
-                if (block[i][j].value() == n) return block[i][j];
+                if (block[i][j].getInfoNum() == n) return block[i][j];
             }
         }
         return null;
@@ -65,25 +66,25 @@ public class Block {
     public Cell find (String n) {
         for (int i = 0; i < block.length; ++i) {
             for (int j = 0; j < block[0].length; ++j) {
-                if (block[i][j].value() == n) return block[i][j];
+                if (block[i][j].getInfoText() == n) return block[i][j];
             }
         }
         return null;
     }
 
-    public Cell find (LocalDate ld) {
+    public Cell find (Date ld) {
         for (int i = 0; i < block.length; ++i) {
             for (int j = 0; j < block[0].length; ++j) {
-                if (block[i][j].value() == ld) return block[i][j];
+                if (block[i][j].getInfoDate() == ld) return block[i][j];
             }
         }
         return null;
     }
 
-    public void findAndReplace (int n) {
+    public void findAndReplace (double n) {
         for (int i = 0; i < block.length; ++i) {
             for (int j = 0; j < block[0].length; ++j) {
-                if (block[i][j].value() == n) this.block[i][j].changeValue(n);
+                if (block[i][j].getInfoNum() == n) this.block[i][j].changeValueN(n);
             }
         }
     }
@@ -91,15 +92,15 @@ public class Block {
     public void findAndReplace (String n) {
         for (int i = 0; i < block.length; ++i) {
             for (int j = 0; j < block[0].length; ++j) {
-                if (block[i][j].value() == n) this.block[i][j].changeValue(n);
+                if (block[i][j].getInfoText() == n) this.block[i][j].changeValueT(n);
             }
         }
     }
 
-    public void findAndReplace (LocalDate ld) {
+    public void findAndReplace (Date ld) {
         for (int i = 0; i < block.length; ++i) {
             for (int j = 0; j < block[0].length; ++j) {
-                if (block[i][j].value() == ld) this.block[i][j].changeValue(ld);
+                if (block[i][j].getInfoDate() == ld) this.block[i][j].changeValueD(ld);
             }
         }
     }
@@ -107,7 +108,7 @@ public class Block {
     public void floor (Block b, Boolean ref) {
         for (int i = 0; i < this.block.length; ++i) {
             for (int j = 0; j < this.block[0].length; ++j) {
-                b.getCell(i,j).changeValue((float) Math.floor((double) block[i][j].value()));
+                b.getCell(i,j).changeValueN(Math.floor(block[i][j].getInfoNum()));
             }
         }
     }
@@ -119,7 +120,7 @@ public class Block {
     public void sum (Block b1, Block b2, Boolean ref) {
         for (int i = 0; i < this.block.length; ++i) {
             for (int j = 0; j < this.block[0].length; ++j) {
-                b2.getCell(i,j).changeValue(this.block[i][j].value() + b1.getCell(i,j).value());
+                b2.getCell(i,j).changeValueN(this.block[i][j].getInfoNum() + b1.getCell(i,j).getInfoNum());
             }
         }
     }
@@ -127,7 +128,7 @@ public class Block {
     public void mult (Block b1, Block b2, Boolean ref) {
         for (int i = 0; i < this.block.length; ++i) {
             for (int j = 0; j < this.block[0].length; ++j) {
-                b2.getCell(i,j).changeValue(this.block[i][j].value() * b1.getCell(i,j).value());
+                b2.getCell(i,j).changeValueN(this.block[i][j].getInfoNum() * b1.getCell(i,j).getInfoNum());
             }
         }
     }
@@ -135,7 +136,7 @@ public class Block {
     public void div (Block b1, Block b2, Boolean ref) {
         for (int i = 0; i < this.block.length; ++i) {
             for (int j = 0; j < this.block[0].length; ++j) {
-                b2.getCell(i,j).changeValue(this.block[i][j].value() / b1.getCell(i,j).value());
+                b2.getCell(i,j).changeValueN(this.block[i][j].getInfoNum() / b1.getCell(i,j).getInfoNum());
             }
         }
     }
@@ -143,7 +144,7 @@ public class Block {
     public void substract (Block b1, Block b2, Boolean ref) {
         for (int i = 0; i < this.block.length; ++i) {
             for (int j = 0; j < this.block[0].length; ++j) {
-                b2.getCell(i,j).changeValue(this.block[i][j].value() - b1.getCell(i,j).value());
+                b2.getCell(i,j).changeValueN(this.block[i][j].getInfoNum() - b1.getCell(i,j).getInfoNum());
             }
         }
     }
@@ -159,23 +160,24 @@ public class Block {
     public void replace (Block b, String criteria) {
 
     }
-    public float mean (Boolean ref) {
-        float sum = 0;
+    public double mean (Boolean ref) {
+        double sum = 0;
+
         for (int i = 0; i < this.block.length; ++i) {
             for (int j = 0; j < this.block[0].length; ++j) {
-                sum += this.block[i][j].value();
+                sum += this.block[i][j].getInfoNum();
             }
         }
         return sum/(this.block.length*this.block[0].length);
     }
 
     // left to right and then to down
-    public float median (Boolean ref) {
-        float [] s = new float[this.block.length*this.block[0].length];
+    public double median (Boolean ref) {
+        double [] s = new double[this.block.length*this.block[0].length];
 
         for (int i = 0; i < this.block.length; ++i) {
             for (int j = 0; j < this.block[0].length; ++j) {
-                s[i+j] = this.block[i][j].getValue();
+                s[i+j] = this.block[i][j].getInfoNum();
             }
         }
 
@@ -183,35 +185,35 @@ public class Block {
         return s[s.length/2];
     }
 
-    public float var (Boolean ref) {
-        return (float)Math.pow(this.std(false), 2);
+    public double var (Boolean ref) {
+        return Math.pow(this.std(false), 2);
     }
 
-    public float covar (Block b, Boolean ref) {
+    public double covar (Block b, Boolean ref) {
         return -1;
     }
 
-    public float std (Boolean ref) {
-        float sum = 0, std = 0;
-        float [] s = new float[this.block.length*this.block[0].length];
+    public double std (Boolean ref) {
+        double sum = 0, std = 0;
+        double [] s = new double[this.block.length*this.block[0].length];
 
         for (int i = 0; i < this.block.length; ++i) {
             for (int j = 0; j < this.block[0].length; ++j) {
-                s[i+j] = this.block[i][j].getValue();
-                sum += this.block[i][j].getValue();
+                s[i+j] = this.block[i][j].getInfoNum();
+                sum += this.block[i][j].getInfoNum();
             }
         }
 
-        float mean = sum/s.length;
+        double mean = sum/s.length;
 
-        for(float num: s) {
+        for (double num: s) {
             std += Math.pow(num - mean, 2);
         }
 
-        return (float)Math.sqrt(std/s.length);
+        return (Math.sqrt(std/s.length);
     }
 
-    public float CPearson (Block b, Boolean ref) {
+    public double CPearson (Block b, Boolean ref) {
         return this.covar(b, false)/(b.std(false)*this.std(false));
     }
 
