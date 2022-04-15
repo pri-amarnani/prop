@@ -108,6 +108,7 @@ public class Sheet {
         }
     }
 
+
     Block create_block(Cell c1, Cell c2){
         Vector<Vector<Cell>> vec_block = new Vector<Vector<Cell>>();
         for(int i = c1.getRow(); i <= c2.getRow(); ++i){
