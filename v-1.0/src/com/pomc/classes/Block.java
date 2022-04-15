@@ -3,6 +3,7 @@ package com.pomc.classes;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Locale;
+import java.util.Objects;
 
 
 public class Block {
@@ -93,7 +94,7 @@ public class Block {
     public Cell find (String n) {
         for (Cell[] cells : block) {
             for (int j = 0; j < block[0].length; ++j) {
-                if (cells[j].getInfoText() == n) return cells[j];
+                if (Objects.equals(cells[j].getInfoText(), n)) return cells[j];
             }
         }
         return null;
@@ -119,7 +120,7 @@ public class Block {
     public void findAndReplace (String n) {
         for (Cell[] cells : block) {
             for (int j = 0; j < block[0].length; ++j) {
-                if (cells[j].getInfoText() == n) cells[j].changeValueT(n);
+                if (Objects.equals(cells[j].getInfoText(), n)) cells[j].changeValueT(n);
             }
         }
     }
@@ -196,15 +197,15 @@ public class Block {
         for (Cell[] cells : this.block) {
             for (int j = 0; j < this.block[0].length; ++j) {
 
-                if (criteria == "ALL CAPS") {
+                if (Objects.equals(criteria, "ALL CAPS")) {
                     cells[j].changeValueT(cells[j].getInfoText().toUpperCase(Locale.ROOT));
                 }
 
-                else if (criteria == "ALL NOT CAPS") {
+                else if (Objects.equals(criteria, "ALL NOT CAPS")) {
                     cells[j].changeValueT(cells[j].getInfoText().toLowerCase(Locale.ROOT));
                 }
 
-                else if (criteria == "CAP_FIRST_LETTER") {
+                else if (Objects.equals(criteria, "CAP_FIRST_LETTER")) {
                     cells[j].changeValueT(cells[j].getInfoText().substring(0, 1).toUpperCase(Locale.ROOT)
                             + cells[j].getInfoText().substring(1));
                 }
