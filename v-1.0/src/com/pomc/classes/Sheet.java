@@ -2,9 +2,10 @@ package com.pomc.classes;
 
 import java.time.LocalDate;
 import java.util.Vector;
+import java.util.Arrays;
 
 public class Sheet {
-    Vector<Vector<Cell>> cells;
+    Vector<Vector<Cell>> cells = new Vector<>();
     String title;
     int num_rows;
     int num_cols;
@@ -107,12 +108,36 @@ public class Sheet {
         }
     }
 
-    public Block SelectBloc(Cell c1, Cell c2){ //1 bloque seleccionado + crear otro en las aritmeticas
-        //crear bloque y devolverlo
-        return new Block(); //crear uno desde c1 a c2
+    Block create_block(Cell c1, Cell c2){
+        Vector<Vector<Cell>> vec_block = new Vector<Vector<Cell>>();
+        for(int i = c1.getRow(); i <= c2.getRow(); ++i){
+            Vector<Cell> row = cells.elementAt(i);
+            Vector<Cell> row2 = new Vector<Cell>();
+            for(int j = c1.getColumn(); j <= c2.getColumn(); ++j){
+                Cell c = row.elementAt(j);
+                row2.add(c);
+            }
+            vec_block.add(row2);
+        }
+        Cell[][] arr_block = new Cell[0][0];
+        Vector<Cell[]> b = new Vector<Cell[]>();
+        for(int i = 0 ; i < vec_block.size(); ++i){
+            Vector<Cell> row_i = vec_block.elementAt(i);
+            Cell[] r = row_i.toArray(new Cell[row_i.size()]);
+            b.add(r);
+        }
+        arr_block = b.toArray(new Cell[b.size()][]);
+        Block block = new Block(arr_block);
+        return block;
     }
 
-    public void CopyB(Block b){
+    public Block SelectBlock(Cell c1, Cell c2){  //no ha de devolver un bloque
+        Block b = create_block(c1,c2);
+        b_selected = b;
+        return b;
+    }
+
+    public void CopyB(Block b){ //falta acabar
         b.CopyB();
     }
 
@@ -136,36 +161,39 @@ public class Sheet {
 
 
 
-    public void ReferenciarBloc(Block b1, Block b2){}
-    public void ReferenciarCela(Cell c, Block b){}
+    public void ReferenceBlock(Block b1, Block b2){}
+    public void ReferenceCell(Cell c, Block b){}
 
-    public void SortBlock(Block b, String Criteria){
+
+
+
+    public void SortBlock(Block b, String Criteria){ //falta acabar
         b.SortBlock(b,Criteria);
     }
-
 
     public Cell find(double n, Block b){
         return b.find(n);
     }
+
     public Cell find(String s, Block b){
         return b.find(s);
     }
+
     public Cell find(LocalDate ld, Block b){
         return b.find(ld);
     }
 
-
     public void findAndReplace(double n, double r, Block b){
         b.findAndReplace(n); //(n,r)
     }
+
     public void findAndReplace(String s, Block b){ //pasar dos doubles
         b.findAndReplace(s);
     }
+
     public void findAndReplace(LocalDate ld, Block b){ //pasar dos doubles
         b.findAndReplace(ld);
     }
-
-
 
     public void floor(Block b1,Block b2, Cell c, Boolean ref){
         b1.floor(b2, ref);
@@ -178,6 +206,11 @@ public class Sheet {
     public void sum(Block b1, Block b2, Block b3, Boolean ref){
         b1.sum(b2, b3, ref);
     }
+
+
+    //1 bloque seleccionado + crear otro en las aritmeticas
+
+
 
     public void mult(Block b1, Block b2, Block b3, Boolean ref){
         b1.mult(b2, b3, ref);
