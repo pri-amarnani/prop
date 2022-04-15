@@ -1,7 +1,7 @@
 package com.pomc.classes;
 
+import java.time.LocalDate;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.Locale;
 
 
@@ -68,7 +68,7 @@ public class Block {
         }
     }
 
-    public void ModifyBlock(Date ld) {
+    public void ModifyBlock(LocalDate ld) {
         for (Cell[] cells : block) {
             for (int j = 0; j < block[0].length; ++j) {
                 if (cells[j].isDate()) cells[j].changeValueD(ld);
@@ -99,7 +99,7 @@ public class Block {
         return null;
     }
 
-    public Cell find (Date ld) {
+    public Cell find (LocalDate ld) {
         for (Cell[] cells : block) {
             for (int j = 0; j < block[0].length; ++j) {
                 if (cells[j].getInfoDate() == ld) return cells[j];
@@ -124,7 +124,7 @@ public class Block {
         }
     }
 
-    public void findAndReplace (Date ld) {
+    public void findAndReplace (LocalDate ld) {
         for (Cell[] cells : block) {
             for (int j = 0; j < block[0].length; ++j) {
                 if (cells[j].getInfoDate() == ld) cells[j].changeValueD(ld);
@@ -183,7 +183,7 @@ public class Block {
     public void dayOfTheWeek (Block b, Boolean ref) {
         for (int i = 0; i < this.block.length; ++i) {
             for (int j = 0; j < this.block[0].length; ++j) {
-                Date aux = getCell(i,j).getInfoDate();
+                LocalDate aux = getCell(i,j).getInfoDate();
 
                 //need cell to have DayOfTheWeek method coded
             }
