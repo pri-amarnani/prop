@@ -2,7 +2,7 @@ package com.pomc.classes;
 
 import com.digidemic.unitof.UnitOf;
 
-public abstract class NumCell extends Cell {
+public class NumCell extends Cell {
 
     //truncament
     //conversio
@@ -12,6 +12,7 @@ public abstract class NumCell extends Cell {
     public NumCell(int row,int column, String type, float info){
         super(row,column,type);
         this.info= info;
+        super.infon=info;
     }
 
     public double truncar(){
@@ -49,6 +50,7 @@ public abstract class NumCell extends Cell {
 
     public void changeValueN(double n){
         this.info=n;
+        super.infon=n;
     }
 
 

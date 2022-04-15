@@ -1,13 +1,16 @@
 package com.pomc.classes;
 
+import java.time.LocalDate;
 import java.util.Objects;
 import java.util.Date;
 
-public abstract class Cell {
-    private final int row; //que es final??
-    private final int column;
-    private final String type;
-
+public class Cell {
+    private int row; //que es final??
+    private int column;
+    private String type;
+    protected double infon;
+    protected String infot;
+    protected LocalDate infod;
 
     public Cell(int row,int column,String type){
         this.row=row;
@@ -33,6 +36,22 @@ public abstract class Cell {
         return column;
     }
 
+    public String getType(){
+        return type;
+    }
+
+    public void setColumn(int c){
+        this.column=c;
+    }
+
+    public void setRow(int r){
+        this.row=r;
+    }
+
+    public void setType(String t){
+        this.type=t;
+    }
+
     public boolean isNum(){
         return  (Objects.equals(type, "N")); //??????????????
     }
@@ -45,29 +64,19 @@ public abstract class Cell {
         return (Objects.equals(type, "D"));
     }
 
-    public abstract double getInfoNum();
-    public abstract String getInfoText();
-    public abstract Date getInfoDate();
+    public double getInfoNum(){return infon;}
+    public String getInfoText() {return infot;}
+    public LocalDate  getInfoDate(){return infod;}
 
-    public void getInfo(){
-       if (Objects.equals(type, "N"))  getInfoNum();
-       else if (Objects.equals(type, "T")) getInfoText();
-       else if (Objects.equals(type, "D")) getInfoDate();
+    public void changeValueN(double n){
+        this.infon=n;
     }
-
-    public double getInfoN(){
-        return getInfoNum();
+    public void changeValueT (String t){
+        this.infot=t;
     }
-    public String getInfoT(){
-        return getInfoText();
+    public void changeValueD (LocalDate d){
+        this.infod=d;
     }
-    public Date getInfoD(){
-        return getInfoDate();
-    }
-
-    public abstract void changeValueN(double n);
-    public abstract void changeValueT (String t);
-    public abstract void changeValueD (Date d);
 
 
 }

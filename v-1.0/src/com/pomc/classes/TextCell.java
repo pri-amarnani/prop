@@ -2,13 +2,14 @@ package com.pomc.classes;
 
 import java.util.Objects;
 
-public abstract class TextCell extends Cell {
+public class TextCell extends Cell {
 
     private String info;
 
     public TextCell (int row,int column, String type, String info){
         super(row,column,type);
         this.info= info;
+        super.infot=info;
     }
 
     public void replace(String criteria){ //return String??
@@ -47,6 +48,8 @@ public abstract class TextCell extends Cell {
     }
 
     public void changeValueT(String t){
+
         this.info=t;
+        super.infot=t;
     }
 }
