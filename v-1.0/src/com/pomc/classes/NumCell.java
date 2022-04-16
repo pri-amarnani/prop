@@ -1,7 +1,7 @@
 package com.pomc.classes;
 
 import com.digidemic.unitof.UnitOf;
-
+import java.util.Vector;
 import java.time.LocalDate;
 
 public class NumCell extends Cell {
@@ -10,6 +10,7 @@ public class NumCell extends Cell {
     //conversio
     //aritmetiques *falta*
     private double info;
+    Cell[] refs;
 
     public NumCell(int row, int column, String type, Double info){
         super(row,column,type);
@@ -64,5 +65,16 @@ public class NumCell extends Cell {
             info= Double.parseDouble(null);
             new DateCell(getRow(),getColumn(),"D",(LocalDate)o);
         }
+
+        if (hasRefs()){
+            Vector<Cell> v= getRefs();
+            for (int i=0; i<v.size();i++){
+                Cell c= v.elementAt(i);
+                String s= c.getRefInfo();//falta func para interpretar este String
+                //Volver a hacer esa operación con los nuevos valores
+            }
+        }
     }
+
+
 }

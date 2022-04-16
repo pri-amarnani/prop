@@ -1,11 +1,14 @@
 package com.pomc.classes;
 
 import java.util.Objects;
+import java.util.Vector;
 
 public abstract class Cell {
     private int row;
     private int column;
     private String type;
+    Vector<Cell> refs; //vector de las celdas que "dependen" de esta celda
+    private String refInfo; //celdas y operaciones
 
     /**
      * Creadora
@@ -13,7 +16,7 @@ public abstract class Cell {
      * @param column
      * @param type
      */
-    public Cell(int row,int column,String type){
+    public Cell(int row,int column,String type){ //debería quitar la creadora??????
         this.row=row;
         this.column=column;
         this.type=type;
@@ -44,6 +47,30 @@ public abstract class Cell {
      */
     public String getType(){
         return type;
+    }
+
+    /**
+     * Consultora de la info que la celda referencia
+     * @return refinfo
+     */
+    public String getRefInfo(){
+        return refInfo;
+    }
+
+    /**
+     * Consultora del vector ref
+     * @return vector refs
+     */
+    public Vector<Cell> getRefs(){
+        return refs;
+    }
+
+    /**
+     * Modificadora de RefInfo
+     * @param s
+     */
+    public void setRefInfo(String s){
+        this.refInfo=s;
     }
 
     /**
@@ -105,6 +132,20 @@ public abstract class Cell {
      * @param o
      */
     public abstract void changeValue(Object o);
+
+    public void AddRef (Cell c){
+        refs.add(c);
+    }
+    public void EliminateRef(Cell c){
+        refs.removeElement(c);
+    }
+    public void EliminateRefInfo(){
+        this.refInfo=null;
+    }
+
+    public boolean hasRefs(){
+        return refs.isEmpty();
+    }
 
 
 }
