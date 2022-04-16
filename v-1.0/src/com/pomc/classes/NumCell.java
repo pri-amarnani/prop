@@ -2,6 +2,8 @@ package com.pomc.classes;
 
 import com.digidemic.unitof.UnitOf;
 
+import java.time.LocalDate;
+
 public class NumCell extends Cell {
 
     //truncament
@@ -9,10 +11,9 @@ public class NumCell extends Cell {
     //aritmetiques *falta*
     private double info;
 
-    public NumCell(int row,int column, String type, float info){
+    public NumCell(int row, int column, String type, Double info){
         super(row,column,type);
         this.info= info;
-        super.infon=info;
     }
 
     public double truncar(){
@@ -44,15 +45,24 @@ public class NumCell extends Cell {
         return result; //si devuelve -1 falla la conv
     }
 
-    public double getInfoNum(){
+
+    @Override
+    public Object getInfo() {
         return info;
     }
 
-    public void changeValueN(double n){
-        this.info=n;
-        super.infon=n;
+    @Override
+    public void changeValue(Object o) {
+        if (o.getClass()==Double.class) {
+            this.info = (double) o;
+        }
+        else if (o.getClass()==String.class){
+            info= Double.parseDouble(null);
+            new TextCell(getRow(),getColumn(),"T", (String) o);
+        }
+        else if(o.getClass()== LocalDate.class){
+            info= Double.parseDouble(null);
+            new DateCell(getRow(),getColumn(),"D",(LocalDate)o);
+        }
     }
-
-
-
 }

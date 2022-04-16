@@ -3,7 +3,7 @@ package com.pomc.classes;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.util.Calendar;
+import java.util.Objects;
 
 public class DateCell extends Cell {
     private LocalDate info;
@@ -11,22 +11,12 @@ public class DateCell extends Cell {
     public DateCell (int row,int column, String type, LocalDate info){
         super(row,column,type);
         this.info= info;
-        super.infod=info;
-    }
-
-    public LocalDate getInfoDate(){
-        return info;
-    }
-
-    public void changeValueD(LocalDate d){
-        this.info=d;
-        super.infod=d;
     }
 
     public int extract(String criteria){ //tendría que devolver localdate???????
-        if (criteria=="DAY") return info.getDayOfMonth();
-        else if (criteria=="MONTH") return info.getMonthValue();
-        else if (criteria=="YEAR") return info.getYear();
+        if (Objects.equals(criteria, "DAY")) return info.getDayOfMonth();
+        else if (Objects.equals(criteria, "MONTH")) return info.getMonthValue();
+        else if (Objects.equals(criteria, "YEAR")) return info.getYear();
         return -1;
     }
 
@@ -43,4 +33,23 @@ public class DateCell extends Cell {
         return "-";
     }
 
+    @Override
+    public Object getInfo() {
+        return info;
+    }
+
+    @Override
+    public void changeValue(Object o) {
+        if (o.getClass()==LocalDate.class) {
+            this.info = (LocalDate) o;
+        }
+        else if (o.getClass()==String.class){
+            info= null;
+            new TextCell(getRow(),getColumn(),"T", (String) o);
+        }
+        else if(o.getClass()== Double.class){
+            info= null;
+            new NumCell(getRow(),getColumn(),"D",(Double) o);
+        }
+    }
 }

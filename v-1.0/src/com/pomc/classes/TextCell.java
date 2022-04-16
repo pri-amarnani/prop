@@ -1,5 +1,6 @@
 package com.pomc.classes;
 
+import java.time.LocalDate;
 import java.util.Objects;
 
 public class TextCell extends Cell {
@@ -9,7 +10,6 @@ public class TextCell extends Cell {
     public TextCell (int row,int column, String type, String info){
         super(row,column,type);
         this.info= info;
-        super.infot=info;
     }
 
     public void replace(String criteria){ //return String??
@@ -47,9 +47,23 @@ public class TextCell extends Cell {
 
     }
 
-    public void changeValueT(String t){
+    @Override
+    public Object getInfo() {
+        return info;
+    }
 
-        this.info=t;
-        super.infot=t;
+    @Override
+    public void changeValue(Object o) {
+        if (o.getClass()==String.class) {
+            this.info = (String) o;
+        }
+        else if (o.getClass()==Double.class){
+            info= null;
+            new NumCell(getRow(),getColumn(),"N", (Double) o);
+        }
+        else if(o.getClass()== LocalDate.class){
+            info= null;
+            new DateCell(getRow(),getColumn(),"D",(LocalDate)o);
+        }
     }
 }
