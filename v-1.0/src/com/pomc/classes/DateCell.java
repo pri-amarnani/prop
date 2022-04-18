@@ -52,13 +52,7 @@ public class DateCell extends Cell {
             info= null;
             new NumCell(getRow(),getColumn(),"D",(Double) o);
         }
-        if (hasRefs()){
-            Vector<Cell> v= getRefs();
-            for (int i=0; i<v.size();i++){
-                Cell c= v.elementAt(i);
-                String s= c.getRefInfo();//falta func per interpretar aquest String
-                //Tornar a fer l'operació amb el nou valor
-            }
-        }
+        if (hasRefs()) updateRefs();
+
     }
 }
