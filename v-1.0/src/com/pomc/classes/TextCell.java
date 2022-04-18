@@ -1,10 +1,14 @@
 package com.pomc.classes;
 
+import java.time.LocalDate;
+import java.util.Map;
 import java.util.Objects;
+import java.util.Vector;
 
-public abstract class TextCell extends Cell {
+public class TextCell extends Cell {
 
     private String info;
+
 
     public TextCell (int row,int column, String type, String info){
         super(row,column,type);
@@ -46,7 +50,26 @@ public abstract class TextCell extends Cell {
 
     }
 
-    public void changeValueT(String t){
-        this.info=t;
+    @Override
+    public Object getInfo() {
+        return info;
     }
+
+    @Override
+    public void changeValue(Object o) {
+        if (o.getClass()==String.class) {
+            this.info = (String) o;
+        }
+        else if (o.getClass()==Double.class){
+            info= null;
+            new NumCell(getRow(),getColumn(),"N", (Double) o);
+        }
+        else if(o.getClass()== LocalDate.class){
+            info= null;
+            new DateCell(getRow(),getColumn(),"D",(LocalDate)o);
+        }
+
+        if (hasRefs()) updateRefs();
+    }
+
 }
