@@ -1,12 +1,12 @@
 package com.pomc.classes;
 
 import java.time.LocalDate;
-import java.util.Arrays;
-import java.util.Locale;
-import java.util.Objects;
+import java.util.*;
 
 public class Block {
     Cell [][] block;
+    Cell ul;
+    Cell dr;
     int size_r;
     int size_c;
 
@@ -14,9 +14,15 @@ public class Block {
         block = null;
     }
 
-    public Block (Cell [][] b) {
-        block = new Cell[b.length][b[0].length];
-        block = b;
+    public Block (Cell [][] b, Cell ul, Cell dr) {
+        this.block = new Cell[b.length][b[0].length];
+        this.block = b;
+
+        this.ul = ul;
+        this.dr = dr;
+
+        this.size_r = this.block.length;
+        this.size_c = this.block[0].length;
     }
 
     public Cell getCell (int i, int j) {
@@ -158,7 +164,19 @@ public class Block {
     public void sum (Block b1, Block b2, Boolean ref) {
         for (int i = 0; i < this.block.length; ++i) {
             for (int j = 0; j < this.block[0].length; ++j) {
-                b2.getCell(i,j).changeValue((double) this.block[i][j].getInfo() + (double) b1.getCell(i,j).getInfo());
+                b2.getCell(i, j).changeValue((double) this.block[i][j].getInfo() + (double) b1.getCell(i, j).getInfo());
+
+                if (ref) {
+
+                    Vector<Cell> s = new Vector<>(2);
+                    s.add(this.block[i][j]);
+                    s.add(b1.getCell(i, j));
+
+                    Map.Entry<String, Vector<Cell>> r = new AbstractMap.SimpleEntry<>("SUM", s);
+
+
+                    b2.getCell(i, j).addRefInfo(r);
+                }
             }
         }
     }
@@ -166,7 +184,20 @@ public class Block {
     public void mult (Block b1, Block b2, Boolean ref) {
         for (int i = 0; i < this.block.length; ++i) {
             for (int j = 0; j < this.block[0].length; ++j) {
-                b2.getCell(i,j).changeValue((double) this.block[i][j].getInfo() * (double) b1.getCell(i,j).getInfo());
+                b2.getCell(i, j).changeValue((double) this.block[i][j].getInfo() * (double) b1.getCell(i, j).getInfo());
+
+                if (ref) {
+
+
+                    Vector<Cell> s = new Vector<>(2);
+                    s.add(this.block[i][j]);
+                    s.add(b1.getCell(i, j));
+
+                    Map.Entry<String, Vector<Cell>> r = new AbstractMap.SimpleEntry<>("MULT", s);
+
+
+                    b2.getCell(i, j).addRefInfo(r);
+                }
             }
         }
     }
@@ -175,6 +206,18 @@ public class Block {
         for (int i = 0; i < this.block.length; ++i) {
             for (int j = 0; j < this.block[0].length; ++j) {
                 b2.getCell(i,j).changeValue((double) this.block[i][j].getInfo() / (double) b1.getCell(i,j).getInfo());
+
+                if (ref) {
+
+                    Vector<Cell> s = new Vector<>(2);
+                    s.add(this.block[i][j]);
+                    s.add(b1.getCell(i, j));
+
+                    Map.Entry<String, Vector<Cell>> r = new AbstractMap.SimpleEntry<>("DIV", s);
+
+
+                    b2.getCell(i, j).addRefInfo(r);
+                }
             }
         }
     }
@@ -183,20 +226,33 @@ public class Block {
         for (int i = 0; i < this.block.length; ++i) {
             for (int j = 0; j < this.block[0].length; ++j) {
                 b2.getCell(i,j).changeValue((double) this.block[i][j].getInfo() - (double) b1.getCell(i,j).getInfo());
+
+                if (ref) {
+
+                    Vector<Cell> s = new Vector<>(2);
+                    s.add(this.block[i][j]);
+                    s.add(b1.getCell(i, j));
+
+                    Map.Entry<String, Vector<Cell>> r = new AbstractMap.SimpleEntry<>("SUB", s);
+
+
+                    b2.getCell(i, j).addRefInfo(r);
+                }
             }
         }
     }
 
+    //FINISH
     public void extract (Block b, Boolean ref) {
 
     }
 
+    //FINISH
     public void dayOfTheWeek (Block b, Boolean ref) {
         for (int i = 0; i < this.block.length; ++i) {
             for (int j = 0; j < this.block[0].length; ++j) {
                 LocalDate aux = (LocalDate) getCell(i,j).getInfo();
 
-                //need cell to have DayOfTheWeek method coded
             }
         }
 
