@@ -1,5 +1,4 @@
 package com.pomc.classes;
-//import Sheet;
 import java.io.*;
 import java.util.Scanner;
 import java.util.Vector;
@@ -8,10 +7,10 @@ import java.util.stream.Stream;
 
 public class Document {
     String Title;
-    Vector<String> docSheets = new Vector<String>();
-    File docFile;
-    FileWriter docWriter;
-    static Scanner userInput = new Scanner(System.in);
+    Vector<Sheet> docSheets = new Vector<Sheet>();
+    private File docFile;
+    private FileWriter docWriter;
+    private static Scanner userInput = new Scanner(System.in);
 
     //constructor
     public Document(String Title, String path) {
@@ -31,15 +30,31 @@ public class Document {
     }
 
 
+    //getters
+
+
+    public String getTitle() {
+        return Title;
+    }
+
+    public Vector<Sheet> getDocSheets() {
+        return docSheets;
+    }
+
     //setters
     public void setTitle(String title) {
         Title = title;
     }
 
     //Sheet management
-    public void createSheet(String i) {
-        //Sheet newSheet = new Sheet();
-        docSheets.add(i);
+    public void createSheet(String title) {
+        Sheet newSheet = new Sheet(title);
+        docSheets.add(newSheet);
+    }
+
+    public void createSheet(int rows, int columns, String title) {
+        Sheet newSheet = new Sheet(rows,columns,title);
+        docSheets.add(newSheet);
     }
 
     public void deleteSheet(String i) {
