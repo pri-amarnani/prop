@@ -148,7 +148,7 @@ public abstract class Cell {
     }
 
     public boolean hasRefs(){
-        return refs.isEmpty();
+        return !refs.isEmpty();
     }
 
     public void addRefInfo(Map.Entry<String,Vector<Cell>> s){
