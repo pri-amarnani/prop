@@ -4,6 +4,7 @@ package com.pomc.classes;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.Objects;
+import java.util.Vector;
 
 public class DateCell extends Cell {
     private LocalDate info;
@@ -51,5 +52,7 @@ public class DateCell extends Cell {
             info= null;
             new NumCell(getRow(),getColumn(),"D",(Double) o);
         }
+        if (hasRefs()) updateRefs();
+
     }
 }

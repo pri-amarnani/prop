@@ -1,11 +1,15 @@
 package com.pomc.classes;
 
+import java.util.Map;
 import java.util.Objects;
-
+import java.util.Vector;
 public abstract class Cell {
     private int row;
     private int column;
     private String type;
+    private Vector<Cell> refs; //vector de las celdas que "dependen" de esta celda
+    private Vector<Map.Entry<String,Map.Entry<Cell,Cell>>> refInfo; //celdas y operaciones (la información que yo guardo).
+
 
     /**
      * Creadora
@@ -13,7 +17,7 @@ public abstract class Cell {
      * @param column
      * @param type
      */
-    public Cell(int row,int column,String type){
+    public Cell(int row,int column,String type){ //debería quitar la creadora??????
         this.row=row;
         this.column=column;
         this.type=type;
@@ -44,6 +48,30 @@ public abstract class Cell {
      */
     public String getType(){
         return type;
+    }
+
+    /**
+     * Consultora de la info que la celda referencia
+     * @return refinfo
+     */
+    public Vector<Map.Entry<String,Map.Entry<Cell,Cell>>> getRefInfo(){
+        return refInfo;
+    }
+
+    /**
+     * Consultora del vector ref
+     * @return vector refs
+     */
+    public Vector<Cell> getRefs(){
+        return refs;
+    }
+
+    /**
+     * Modificadora de RefInfo
+     * @param s
+     */
+    public void setRefInfo(Vector<Map.Entry<String,Map.Entry<Cell,Cell>>> s){
+        this.refInfo=s;
     }
 
     /**
@@ -105,6 +133,71 @@ public abstract class Cell {
      * @param o
      */
     public abstract void changeValue(Object o);
+
+    public void AddRef (Cell c){
+        refs.add(c);
+    }
+    public void EliminateRef(Cell c){
+        refs.removeElement(c);
+    }
+    public void EliminateRefInfo(){
+        this.refInfo=null;
+    }
+
+    public boolean hasRefs(){
+        return refs.isEmpty();
+    }
+
+    public void addRefInfo(Map.Entry<String,Map.Entry<Cell,Cell>> s){
+        this.refInfo.add(s);
+    }
+    public void updateRefs(){
+        Vector<Cell> v= getRefs();
+        for (int i=0; i<v.size();i++){
+            Cell c= v.elementAt(i);
+            Vector<Map.Entry<String,Map.Entry<Cell,Cell>>> r= c.getRefInfo();
+            //Volver a hacer esa operación con los nuevos valores
+            for (int j=0; j<r.size();j++){
+                Map.Entry<String,Map.Entry<Cell,Cell>> s= r.elementAt(j);
+                String op= s.getKey();
+                Map.Entry<Cell,Cell> cellsref= s.getValue();
+                Cell cr1=cellsref.getKey();
+                Cell cr2=cellsref.getValue();
+                if (Objects.equals(op, "+") && Objects.equals(type, "N")) {
+                    double myinfo= (double) getInfo();
+                    c.changeValue(myinfo+(double)c.getInfo());
+                }
+                else if (Objects.equals(op, "-") && Objects.equals(type, "N")) {
+                    double myinfo= (double) getInfo();
+                    c.changeValue(myinfo-(double) c.getInfo());
+                }
+                else if (Objects.equals(op, "*")&& Objects.equals(type, "N")) {
+                    double myinfo= (double) getInfo();
+                    c.changeValue(myinfo*(double) c.getInfo());
+                }
+                else if (Objects.equals(op, "/")&& Objects.equals(type, "N")) {
+                    double myinfo= (double) getInfo();
+                    c.changeValue(myinfo/(double) c.getInfo());
+                }
+                else if(Objects.equals(op, "floor")&& Objects.equals(type, "N")){
+                    double myinfo= (double) getInfo();
+                    c.changeValue((double)Math.floor(myinfo*10)/100);
+                }
+                else if(Objects.equals(op, "convert")&& Objects.equals(type, "N")){
+
+                }
+                else if(Objects.equals(op, "extract")&& Objects.equals(type, "T")){
+
+                }
+                else if(Objects.equals(op, "dayoftheWeek")&& Objects.equals(type, "T")){
+
+                }
+
+            }
+        }
+    }
+
+
 
 
 }

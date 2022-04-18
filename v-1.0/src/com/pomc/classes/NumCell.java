@@ -2,6 +2,9 @@ package com.pomc.classes;
 
 import com.digidemic.unitof.UnitOf;
 
+import java.util.Map;
+import java.util.Objects;
+import java.util.Vector;
 import java.time.LocalDate;
 
 public class NumCell extends Cell {
@@ -10,6 +13,7 @@ public class NumCell extends Cell {
     //conversio
     //aritmetiques *falta*
     private double info;
+    Cell[] refs;
 
     public NumCell(int row, int column, String type, Double info){
         super(row,column,type);
@@ -25,22 +29,22 @@ public class NumCell extends Cell {
     public double conversion(String convFrom, String convTo) {
         UnitOf.Length length = new UnitOf.Length();
         double result=-1;
-        if (convFrom == "m") {
-            if (convTo == "cm") result= length.fromMeters(info).toCentimeters();
-            if (convTo == "km") result=length.fromMeters(info).toKilometers();
-            if (convTo == "inches") result=length.fromMeters(info).toInches();
+        if (Objects.equals(convFrom, "m")) {
+            if (Objects.equals(convTo, "cm")) result= length.fromMeters(info).toCentimeters();
+            if (Objects.equals(convTo, "km")) result=length.fromMeters(info).toKilometers();
+            if (Objects.equals(convTo, "inches")) result=length.fromMeters(info).toInches();
         }
 
-        if (convFrom == "inches") result=length.fromInches(info).toMeters();
+        if (Objects.equals(convFrom, "inches")) result=length.fromInches(info).toMeters();
 
-        if (convFrom == "km") {
-            if (convTo == "m") result=length.fromKilometers(info).toMeters();
-            if (convTo == "cm") result=length.fromKilometers(info).toCentimeters();
+        if (Objects.equals(convFrom, "km")) {
+            if (Objects.equals(convTo, "m")) result=length.fromKilometers(info).toMeters();
+            if (Objects.equals(convTo, "cm")) result=length.fromKilometers(info).toCentimeters();
         }
 
-        if (convFrom == "cm") {
-            if (convTo == "m") result=length.fromCentimeters(info).toMeters();
-            if (convTo == "km") result=length.fromMeters(info).toKilometers();
+        if (Objects.equals(convFrom, "cm")) {
+            if (Objects.equals(convTo, "m")) result=length.fromCentimeters(info).toMeters();
+            if (Objects.equals(convTo, "km")) result=length.fromMeters(info).toKilometers();
         }
         return result; //si devuelve -1 falla la conv
     }
@@ -64,5 +68,9 @@ public class NumCell extends Cell {
             info= Double.parseDouble(null);
             new DateCell(getRow(),getColumn(),"D",(LocalDate)o);
         }
+
+        if (hasRefs()) updateRefs();
     }
+
+
 }

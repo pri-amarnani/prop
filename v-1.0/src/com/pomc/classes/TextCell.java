@@ -1,11 +1,14 @@
 package com.pomc.classes;
 
 import java.time.LocalDate;
+import java.util.Map;
 import java.util.Objects;
+import java.util.Vector;
 
 public class TextCell extends Cell {
 
     private String info;
+
 
     public TextCell (int row,int column, String type, String info){
         super(row,column,type);
@@ -65,5 +68,8 @@ public class TextCell extends Cell {
             info= null;
             new DateCell(getRow(),getColumn(),"D",(LocalDate)o);
         }
+
+        if (hasRefs()) updateRefs();
     }
+
 }
