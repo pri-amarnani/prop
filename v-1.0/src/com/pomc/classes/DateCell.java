@@ -15,7 +15,7 @@ public class DateCell extends Cell {
     }
 
     public int extract(String criteria){ //tendría que devolver localdate???????
-        if (Objects.equals(criteria, "DAY")) return info.getDayOfMonth();
+        if (Objects.equals(criteria, "DAY")) return (info.getDayOfMonth());
         else if (Objects.equals(criteria, "MONTH")) return info.getMonthValue();
         else if (Objects.equals(criteria, "YEAR")) return info.getYear();
         return -1;
