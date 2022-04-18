@@ -32,11 +32,10 @@ public class Sheet {
         this.num_rows = rows;
         this.num_cols = columns;
         this.title = title;
-        String n = "N";
         for(int i = 0; i < rows; ++i){
             Vector<Cell> row = new Vector<>();
             for(int j = 0; j < columns; ++j){
-                row.add(new Cell(i, j, n));
+                row.add(new NumCell(i, j, "N", null));
             }
             cells.add(row);
         }
@@ -46,7 +45,7 @@ public class Sheet {
         ++num_rows;
         Vector<Cell> pos_row = new Vector<>();
         for(int i = 0; i < num_cols; ++i){
-            Cell c = new Cell(pos, i,"N");
+            Cell c = new NumCell(pos, i,"N", null);
             pos_row.add(c);
         }
         cells.insertElementAt(pos_row, pos);
@@ -65,7 +64,7 @@ public class Sheet {
         ++num_cols;
         for(int i = 0; i < num_rows; ++i){
             Vector<Cell> row = cells.elementAt(i);
-            row.insertElementAt(new Cell(i,pos,"N"), pos);
+            row.insertElementAt(new NumCell(i,pos,"N", null), pos);
             for(int j = pos + 1; j < num_cols; ++j ) {
                 Cell c = row.elementAt(j);
                 c.setColumn(j);
@@ -110,7 +109,7 @@ public class Sheet {
     }
 
 
-    Block create_block(Cell c1, Cell c2){
+    public Block create_block(Cell c1, Cell c2){
         Vector<Vector<Cell>> vec_block = new Vector<Vector<Cell>>();
         for(int i = c1.getRow(); i <= c2.getRow(); ++i){
             Vector<Cell> row = cells.elementAt(i);
@@ -166,8 +165,12 @@ public class Sheet {
 
 
 
-    public void ReferenceBlock(Block b1, Block b2){}
-    public void ReferenceCell(Cell c, Block b){}
+    public void ReferenceBlocks(Block b1, Block b2){}  //se puede hacer desde referenceCell
+    public void ReferenceCellBlock(Cell c, Block b){}  //se puede hacer desde referenceCell
+
+    public void ReferenceCells(Cell c, Cell c2){
+
+    }
 
 
 
@@ -268,7 +271,7 @@ public class Sheet {
     public void mean(Block b1,Cell c, Boolean ref){
         if(b1.allDouble()){
             c.setType("N");
-            c.changeValueN(b1.mean(ref));
+            c.changeValue(b1.mean(ref));
         }
         else System.out.println("Error. Not all cells are of type Number.");
     }
@@ -276,7 +279,7 @@ public class Sheet {
     public void median(Block b1, Cell c, Boolean ref){
         if(b1.allDouble()){
             c.setType("N");
-            c.changeValueN(b1.median(ref));
+            c.changeValue(b1.median(ref));
         }
         else System.out.println("Error. Not all cells are of type Number.");
 
@@ -285,7 +288,7 @@ public class Sheet {
     public void var(Block b1,Cell c, Boolean ref){
         if(b1.allDouble()){
             c.setType("N");
-            c.changeValueN(b1.var(ref));
+            c.changeValue(b1.var(ref));
         }
         else System.out.println("Error. Not all cells are of type Number.");
     }
@@ -293,7 +296,7 @@ public class Sheet {
     public void covar(Block b1, Block b2, Cell c, Boolean ref){
         if(b1.allDouble() && b2.allDouble()){
             c.setType("N");
-            c.changeValueN(b1.covar(b1,ref));
+            c.changeValue(b1.covar(b1,ref));
         }
         else System.out.println("Error. Not all cells are of type Number.");
     }
@@ -301,7 +304,7 @@ public class Sheet {
     public void std(Block b1,Cell c, Boolean ref){
         if(b1.allDouble()){
             c.setType("N");
-            c.changeValueN(b1.std(ref));
+            c.changeValue(b1.std(ref));
         }
         else System.out.println("Error. Not all cells are of type Number.");
 
@@ -310,8 +313,13 @@ public class Sheet {
     public void CPearson(Block b1, Block b2, Cell c, Boolean ref){ //crear bloque desde la celda c
         if(b1.allDouble() && b2.allDouble()){
             c.setType("N");
-            c.changeValueN(b1.CPearson(b2, ref));
+            c.changeValue(b1.CPearson(b2, ref));
         }
         else System.out.println("Error. Not all cells are of type Number.");
     }
+
+    public static void main(String[] args) {
+
+    }
+
 }
