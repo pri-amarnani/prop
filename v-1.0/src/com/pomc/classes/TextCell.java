@@ -57,7 +57,7 @@ public class TextCell extends Cell {
 
     @Override
     public void changeValue(Object o) {
-        if (o.getClass()==String.class) {
+        if (o.getClass()==String.class && !((String) o).startsWith("=")) {
             this.info = (String) o;
         }
         else if (o.getClass()==Double.class){

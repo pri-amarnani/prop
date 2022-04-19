@@ -11,8 +11,8 @@ public abstract class Cell {
     private int row;
     private int column;
     private String type;
-    private Vector<Cell> refs; //vector de las celdas que "dependen" de esta celda
-    private Map.Entry<String,Vector<Cell>> refInfo; //celdas y operaciones (la información que yo guardo).
+    private Vector<ReferencedCell> refs; //vector de las celdas que "dependen" de esta celda
+  //  private Map.Entry<String,Vector<Cell>> refInfo; //celdas y operaciones (la información que yo guardo).
 
 
     /**
@@ -54,29 +54,16 @@ public abstract class Cell {
         return type;
     }
 
-    /**
-     * Consultora de la info que la celda referencia
-     * @return refinfo
-     */
-    public Map.Entry<String,Vector<Cell>> getRefInfo(){
-        return refInfo;
-    }
+
 
     /**
      * Consultora del vector ref
      * @return vector refs
      */
-    public Vector<Cell> getRefs(){
+    public Vector<ReferencedCell> getRefs(){
         return refs;
     }
 
-    /**
-     * Modificadora de RefInfo
-     * @param s
-     */
-    public void setRefInfo(Map.Entry<String,Vector<Cell>> s){
-        this.refInfo=s;
-    }
 
     /**
      * Modificadora de columna, la columna de la celda pasa a ser c.
@@ -138,12 +125,9 @@ public abstract class Cell {
      */
     public abstract void changeValue(Object o);
 
-    public void AddRef (Cell c){
+    public void AddRef (ReferencedCell c){refs.add(c);}
 
-        refs.add(c);
-        this.refInfo=null;
-    }
-    public void EliminateRef(Cell c){
+    public void EliminateRef(ReferencedCell c){
         refs.removeElement(c);
     }
 
@@ -151,142 +135,134 @@ public abstract class Cell {
         return !refs.isEmpty();
     }
 
-    public void addRefInfo(Map.Entry<String,Vector<Cell>> s){
-        this.refInfo=s;
-        this.refs=null;
-    }
-
     public void updateRefs(){
         for (int i=0; i<refs.size();i++){
-            Cell c= refs.elementAt(i);
+            ReferencedCell c= refs.elementAt(i);
             Map.Entry<String,Vector<Cell>> s= c.getRefInfo();
             //Volver a hacer esa operación con los nuevos valores
-                String op= s.getKey();
-                Vector<Cell> cellsref= s.getValue();
+            String op= s.getKey();
+            Vector<Cell> cellsref= s.getValue();
 //sum(c1,c2.c3)
-                if (Objects.equals(op, "sum") && Objects.equals(type, "N")) {
-                    double newvalue = 0;
-                    for (int j=0;j<cellsref.size();j++){
-                        newvalue= newvalue+ (double) (cellsref.elementAt(j)).getInfo();
-                    }
-                    c.changeValue(newvalue);
+            if (Objects.equals(op, "sum")) {
+                double newvalue = 0;
+                for (int j=0;j<cellsref.size();j++){
+                    newvalue= newvalue+ (double) (cellsref.elementAt(j)).getInfo();
                 }
+                c.changeValue(newvalue);
+            }
 
-                else if (Objects.equals(op, "sub") && Objects.equals(type, "N")) {
-                    double newvalue = (double) cellsref.elementAt(0).getInfo();
-                    for (int j=1;j<cellsref.size();j++){
-                        newvalue= newvalue- (double) (cellsref.elementAt(j)).getInfo();
-                    }
-                    c.changeValue(newvalue);
+            else if (Objects.equals(op, "sub") && Objects.equals(type, "N")) {
+                double newvalue = (double) cellsref.elementAt(0).getInfo();
+                for (int j=1;j<cellsref.size();j++){
+                    newvalue= newvalue- (double) (cellsref.elementAt(j)).getInfo();
                 }
+                c.changeValue(newvalue);
+            }
 
-                else if (Objects.equals(op, "*")&& Objects.equals(type, "N")) {
-                    double newvalue = (double) cellsref.elementAt(0).getInfo();
-                    for (int j=1;j<cellsref.size();j++){
-                        newvalue= newvalue* (double) (cellsref.elementAt(j)).getInfo();
-                    }
-                    c.changeValue(newvalue);
+            else if (Objects.equals(op, "*")&& Objects.equals(type, "N")) {
+                double newvalue = (double) cellsref.elementAt(0).getInfo();
+                for (int j=1;j<cellsref.size();j++){
+                    newvalue= newvalue* (double) (cellsref.elementAt(j)).getInfo();
                 }
-                else if (Objects.equals(op, "/")&& Objects.equals(type, "N")) {
-                    double newvalue = (double) cellsref.elementAt(0).getInfo();
-                    for (int j=1;j<cellsref.size();j++){
-                        newvalue= newvalue/ (double) (cellsref.elementAt(j)).getInfo();
-                    }
-                    c.changeValue(newvalue);
+                c.changeValue(newvalue);
+            }
+            else if (Objects.equals(op, "/")&& Objects.equals(type, "N")) {
+                double newvalue = (double) cellsref.elementAt(0).getInfo();
+                for (int j=1;j<cellsref.size();j++){
+                    newvalue= newvalue/ (double) (cellsref.elementAt(j)).getInfo();
                 }
-                else if(Objects.equals(op, "floor")&& Objects.equals(type, "N")){
-                    double newvalue = (double) cellsref.elementAt(0).getInfo();
-                    newvalue= Math.floor(newvalue*10)/100;
-                    c.changeValue(newvalue);
-                }
+                c.changeValue(newvalue);
+            }
+            else if(Objects.equals(op, "floor")&& Objects.equals(type, "N")){
+                double newvalue = (double) cellsref.elementAt(0).getInfo();
+                newvalue= Math.floor(newvalue*10)/100;
+                c.changeValue(newvalue);
+            }
 
-                else if(Objects.equals(op, "mTOcm")&& Objects.equals(type, "N")){
-                    UnitOf.Length length = new UnitOf.Length();
-                    double newvalue= (double) cellsref.elementAt(0).getInfo();
-                    newvalue= length.fromMeters(newvalue).toCentimeters();
-                    c.changeValue(newvalue);
-                }
-                else if(Objects.equals(op, "mTOkm")&& Objects.equals(type, "N")){
-                    UnitOf.Length length = new UnitOf.Length();
-                    double newvalue= (double) cellsref.elementAt(0).getInfo();
-                    newvalue= length.fromMeters(newvalue).toKilometers();
-                    c.changeValue(newvalue);
-                }
-                else if(Objects.equals(op, "mTOinchess")&& Objects.equals(type, "N")){
-                    UnitOf.Length length = new UnitOf.Length();
-                    double newvalue= (double) cellsref.elementAt(0).getInfo();
-                    newvalue= length.fromMeters(newvalue).toInches();
-                    c.changeValue(newvalue);
-                }
-                else if(Objects.equals(op, "inchesTOm")&& Objects.equals(type, "N")){
-                    UnitOf.Length length = new UnitOf.Length();
-                    double newvalue= (double) cellsref.elementAt(0).getInfo();
-                    newvalue= length.fromInches(newvalue).toMeters();
-                    c.changeValue(newvalue);
-                }
-                else if(Objects.equals(op, "cmTOm")&& Objects.equals(type, "N")){
-                    UnitOf.Length length = new UnitOf.Length();
-                    double newvalue= (double) cellsref.elementAt(0).getInfo();
-                    newvalue= length.fromCentimeters(newvalue).toMeters();
-                    c.changeValue(newvalue);
-                }
-                else if(Objects.equals(op, "cmTOkm")&& Objects.equals(type, "N")){
-                    UnitOf.Length length = new UnitOf.Length();
-                    double newvalue= (double) cellsref.elementAt(0).getInfo();
-                    newvalue= length.fromCentimeters(newvalue).toKilometers();
-                    c.changeValue(newvalue);
-                }
+            else if(Objects.equals(op, "mTOcm")&& Objects.equals(type, "N")){
+                UnitOf.Length length = new UnitOf.Length();
+                double newvalue= (double) cellsref.elementAt(0).getInfo();
+                newvalue= length.fromMeters(newvalue).toCentimeters();
+                c.changeValue(newvalue);
+            }
+            else if(Objects.equals(op, "mTOkm")&& Objects.equals(type, "N")){
+                UnitOf.Length length = new UnitOf.Length();
+                double newvalue= (double) cellsref.elementAt(0).getInfo();
+                newvalue= length.fromMeters(newvalue).toKilometers();
+                c.changeValue(newvalue);
+            }
+            else if(Objects.equals(op, "mTOinchess")&& Objects.equals(type, "N")){
+                UnitOf.Length length = new UnitOf.Length();
+                double newvalue= (double) cellsref.elementAt(0).getInfo();
+                newvalue= length.fromMeters(newvalue).toInches();
+                c.changeValue(newvalue);
+            }
+            else if(Objects.equals(op, "inchesTOm")&& Objects.equals(type, "N")){
+                UnitOf.Length length = new UnitOf.Length();
+                double newvalue= (double) cellsref.elementAt(0).getInfo();
+                newvalue= length.fromInches(newvalue).toMeters();
+                c.changeValue(newvalue);
+            }
+            else if(Objects.equals(op, "cmTOm")&& Objects.equals(type, "N")){
+                UnitOf.Length length = new UnitOf.Length();
+                double newvalue= (double) cellsref.elementAt(0).getInfo();
+                newvalue= length.fromCentimeters(newvalue).toMeters();
+                c.changeValue(newvalue);
+            }
+            else if(Objects.equals(op, "cmTOkm")&& Objects.equals(type, "N")){
+                UnitOf.Length length = new UnitOf.Length();
+                double newvalue= (double) cellsref.elementAt(0).getInfo();
+                newvalue= length.fromCentimeters(newvalue).toKilometers();
+                c.changeValue(newvalue);
+            }
 
-                else if(Objects.equals(op, "kmTOcm")&& Objects.equals(type, "N")){
-                    UnitOf.Length length = new UnitOf.Length();
-                    double newvalue= (double) cellsref.elementAt(0).getInfo();
-                    newvalue= length.fromKilometers(newvalue).toCentimeters();
-                    c.changeValue(newvalue);
-                }
-                else if(Objects.equals(op, "kmTOm")&& Objects.equals(type, "N")){
-                    UnitOf.Length length = new UnitOf.Length();
-                    double newvalue= (double) cellsref.elementAt(0).getInfo();
-                    newvalue= length.fromKilometers(newvalue).toMeters();
-                    c.changeValue(newvalue);
-                }
+            else if(Objects.equals(op, "kmTOcm")&& Objects.equals(type, "N")){
+                UnitOf.Length length = new UnitOf.Length();
+                double newvalue= (double) cellsref.elementAt(0).getInfo();
+                newvalue= length.fromKilometers(newvalue).toCentimeters();
+                c.changeValue(newvalue);
+            }
+            else if(Objects.equals(op, "kmTOm")&& Objects.equals(type, "N")){
+                UnitOf.Length length = new UnitOf.Length();
+                double newvalue= (double) cellsref.elementAt(0).getInfo();
+                newvalue= length.fromKilometers(newvalue).toMeters();
+                c.changeValue(newvalue);
+            }
 
-                else if(Objects.equals(op, "day")&& Objects.equals(type, "D")){
-                    LocalDate newvaluedate= (LocalDate) cellsref.elementAt((0)).getInfo();
-                    int newvalue=0;
-                    newvalue= newvaluedate.getDayOfMonth();
-                    c.changeValue(newvalue);
-                }
-                else if(Objects.equals(op, "month")&& Objects.equals(type, "D")){
-                    LocalDate newvaluedate= (LocalDate) cellsref.elementAt((0)).getInfo();
-                    int newvalue=0;
-                    newvalue= newvaluedate.getMonthValue();
-                    c.changeValue(newvalue);
-                }
-                else if(Objects.equals(op, "year")&& Objects.equals(type, "D")){
-                    LocalDate newvaluedate= (LocalDate) cellsref.elementAt(0).getInfo();
-                    int newvalue=0;
-                    newvalue= newvaluedate.getYear();
-                    c.changeValue(newvalue);
-                }
-                else if(Objects.equals(op, "dayoftheWeek")&& Objects.equals(type, "D")){
-                    LocalDate newvaluedate= (LocalDate) cellsref.elementAt(0).getInfo();
-                    String newvalue="";
-                    DayOfWeek d= newvaluedate.getDayOfWeek();
-                    int day= d.getValue();
-                    if(day==1) newvalue= "Monday";
-                    else if (day==2) newvalue= "Tuesday";
-                    else if (day==3) newvalue= "Wednesday";
-                    else if (day==4) newvalue= "Thursday";
-                    else if (day==5) newvalue= "Friday";
-                    else if (day==6) newvalue= "Saturday";
-                    else if (day==7) newvalue= "Sunday";
-                    c.changeValue(newvalue);
-                }
+            else if(Objects.equals(op, "day")&& Objects.equals(type, "D")){
+                LocalDate newvaluedate= (LocalDate) cellsref.elementAt((0)).getInfo();
+                int newvalue=0;
+                newvalue= newvaluedate.getDayOfMonth();
+                c.changeValue(newvalue);
+            }
+            else if(Objects.equals(op, "month")&& Objects.equals(type, "D")){
+                LocalDate newvaluedate= (LocalDate) cellsref.elementAt((0)).getInfo();
+                int newvalue=0;
+                newvalue= newvaluedate.getMonthValue();
+                c.changeValue(newvalue);
+            }
+            else if(Objects.equals(op, "year")&& Objects.equals(type, "D")){
+                LocalDate newvaluedate= (LocalDate) cellsref.elementAt(0).getInfo();
+                int newvalue=0;
+                newvalue= newvaluedate.getYear();
+                c.changeValue(newvalue);
+            }
+            else if(Objects.equals(op, "dayoftheWeek")&& Objects.equals(type, "D")){
+                LocalDate newvaluedate= (LocalDate) cellsref.elementAt(0).getInfo();
+                String newvalue="";
+                DayOfWeek d= newvaluedate.getDayOfWeek();
+                int day= d.getValue();
+                if(day==1) newvalue= "Monday";
+                else if (day==2) newvalue= "Tuesday";
+                else if (day==3) newvalue= "Wednesday";
+                else if (day==4) newvalue= "Thursday";
+                else if (day==5) newvalue= "Friday";
+                else if (day==6) newvalue= "Saturday";
+                else if (day==7) newvalue= "Sunday";
+                c.changeValue(newvalue);
+            }
         }
     }
-
-
-
 
 }
 
