@@ -5,12 +5,35 @@ import java.util.Vector;
 //import java.util.Arrays;
 //import java.util.Objects;
 
+
+
+
 public class Sheet {
     Vector<Vector<Cell>> cells = new Vector<>();
     String title;
     int num_rows;
     int num_cols;
     Block b_selected;
+
+    public int getNumRows () {
+        return this.num_rows;
+    }
+
+    public int getNumCols () {
+        return this.num_cols;
+    }
+
+    public String getTitle () {
+        return this.title;
+    }
+
+    public Block getSelectedBlock () {
+        return this.b_selected;
+    }
+
+    public void setTitle (String title) {
+        this.title = title;
+    }
 
     public Sheet(String title) {
         if(title != null) this.title = title;
@@ -111,6 +134,8 @@ public class Sheet {
 
     public Block create_block(Cell c1, Cell c2){
         Vector<Vector<Cell>> vec_block = new Vector<Vector<Cell>>();
+        Cell ul;
+        Cell dr;
         for(int i = c1.getRow(); i <= c2.getRow(); ++i){
             Vector<Cell> row = cells.elementAt(i);
             Vector<Cell> row2 = new Vector<>();
@@ -126,51 +151,53 @@ public class Sheet {
             Cell[] r = row_i.toArray(new Cell[row_i.size()]);
             b.add(r);
         }
+        Vector<Cell> first_row = cells.elementAt(0);
+        ul = first_row.firstElement();
+        Vector<Cell> last_row = cells.lastElement();
+        dr = last_row.lastElement();
         Cell[][] arr_block;
         arr_block = b.toArray(new Cell[b.size()][]);
-        Block block = new Block(arr_block);
+        Block block = new Block(arr_block, ul, dr);
         return block;
     }
 
-    public Block SelectBlock(Cell c1, Cell c2){   //no ha de devolver un bloque
+    public Block SelectBlock(Cell c1, Cell c2){
         Block b = create_block(c1,c2);
         b_selected = b;
         return b;
     }
 
-    public void CopyB(Block b){ //falta acabar
-        b.CopyB();
+    public void CopyB(){ //falta acabar
+        b_selected.CopyB();
     }
 
-
-    public void MoveBlock(Block b){  //del bloque seleccionado al bloque b
-
+    public void MoveBlock(Block b, Boolean ref){
+        if(b.number_cols() == b_selected.number_cols() && b.number_rows() == b_selected.number_rows()) {
+            b_selected.ref(b, ref); //funcion ref en block
+        }
+        else System.out.println("Error. The blocks selected have different sizes.");
     }
 
-    public void ModifyBlock(Block b, double n){
-        if(b.allDate()) b.ModifyBlock(n);
+    public void ModifyBlock(double n){
+        if(b_selected.allDate()) b_selected.ModifyBlock(n);
         else System.out.println("Error. Not all cells are of type Number.");
     }
 
-    public void ModifyBlock(Block b, String s){
-        if(b.allDate()) b.ModifyBlock(s);
+    public void ModifyBlock(String s){
+        if(b_selected.allDate()) b_selected.ModifyBlock(s);
         else System.out.println("Error. Not all cells are of type String.");
     }
 
-    public void ModifyBlock(Block b, LocalDate ld){
-        if(b.allDate()) b.ModifyBlock(ld);
+    public void ModifyBlock(LocalDate ld){
+        if(b_selected.allDate()) b_selected.ModifyBlock(ld);
         else System.out.println("Error. Not all cells are of type Date.");
     }
 
 
 
 
-    public void ReferenceBlocks(Block b1, Block b2){}  //se puede hacer desde referenceCell
-    public void ReferenceCellBlock(Cell c, Block b){}  //se puede hacer desde referenceCell
+    //public void Reference(Block b1, Block b2){} //referencia tal cual de un bloque a otro
 
-    public void ReferenceCells(Cell c, Cell c2){
-
-    }
 
 
 
@@ -179,7 +206,7 @@ public class Sheet {
 
 
     public void SortBlock(Block b, String Criteria){ //falta acabar
-        b.SortBlock(b,Criteria);
+        b_selected.SortBlock(b,Criteria);
     }
 
     public Cell find(double n, Block b){
@@ -221,9 +248,6 @@ public class Sheet {
         else System.out.println("Error. Not all cells are of type Number.");
     }
 
-    //1 bloque seleccionado + crear otro en las aritmeticas?
-
-
     public void convert(Block b1, Cell c, Boolean ref){ //falta acabar
         b1.convert(b1, ref);
     }
@@ -264,7 +288,7 @@ public class Sheet {
 
     public int length(TextCell c, String criteria){
         if(c.getType() == "T") return c.length(criteria);
-        else System.out.println("Error. Not all cells are of type Number.");
+        else System.out.println("Error. Cell is not of type Text.");
         return -1;
     }
 
@@ -282,7 +306,6 @@ public class Sheet {
             c.changeValue(b1.median(ref));
         }
         else System.out.println("Error. Not all cells are of type Number.");
-
     }
 
     public void var(Block b1,Cell c, Boolean ref){
@@ -307,19 +330,14 @@ public class Sheet {
             c.changeValue(b1.std(ref));
         }
         else System.out.println("Error. Not all cells are of type Number.");
-
     }
 
-    public void CPearson(Block b1, Block b2, Cell c, Boolean ref){ //crear bloque desde la celda c
+    public void CPearson(Block b1, Block b2, Cell c, Boolean ref){
         if(b1.allDouble() && b2.allDouble()){
             c.setType("N");
             c.changeValue(b1.CPearson(b2, ref));
         }
         else System.out.println("Error. Not all cells are of type Number.");
-    }
-
-    public static void main(String[] args) {
-
     }
 
 }
