@@ -36,10 +36,6 @@ public class ReferencedCell extends Cell {
         this.info=s;
     }
 
-    public void setValue(Object value) {
-        this.value = value;
-    }
-
     public void changeValue(Object o) {this.value=o;}
 
 }
