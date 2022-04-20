@@ -10,7 +10,6 @@ import java.util.Vector;
 public abstract class Cell {
     private int row;
     private int column;
-    private String type;
     private Vector<ReferencedCell> refs; //vector de las celdas que "dependen" de esta celda
   //  private Map.Entry<String,Vector<Cell>> refInfo; //celdas y operaciones (la información que yo guardo).
 
@@ -19,12 +18,10 @@ public abstract class Cell {
      * Creadora
      * @param row
      * @param column
-     * @param type
      */
-    public Cell(int row,int column,String type){ //debería quitar la creadora??????
+    public Cell(int row,int column){ //debería quitar la creadora??????
         this.row=row;
         this.column=column;
-        this.type=type;
         //faltan el array de punteros para las referencias!!!
     }
 
@@ -50,9 +47,7 @@ public abstract class Cell {
      * Consultora del tipo
      * @return tipo de celda
      */
-    public String getType(){
-        return type;
-    }
+    public abstract String getType();
 
 
 
@@ -81,20 +76,14 @@ public abstract class Cell {
         this.row=r;
     }
 
-    /**
-     * Modificadora del type, el tipo de celda pasa a ser t.
-     * @param t
-     */
-    public void setType(String t){
-        this.type=t;
-    }
 
     /**
      * Consultora
      * @return true si es una celda númerica, false en caso contrario.
      */
     public boolean isNum(){
-        return  (Objects.equals(type, "N"));
+        String t=getType();
+        return  (Objects.equals(t, "N"));
     }
 
     /**
@@ -102,7 +91,8 @@ public abstract class Cell {
      * @return true si es una celda de texto, false en caso contrario.
      */
     public boolean isText(){
-        return (Objects.equals(type, "T"));
+        String t=getType();
+        return (Objects.equals(t, "T"));
     }
 
     /**
@@ -110,7 +100,8 @@ public abstract class Cell {
      * @return true si es una celda de fecha, false en caso contrario.
      */
     public boolean isDate(){
-        return (Objects.equals(type, "D"));
+        String t=getType();
+        return (Objects.equals(t, "D"));
     }
 
     /**
@@ -151,7 +142,7 @@ public abstract class Cell {
                 c.changeValue(newvalue);
             }
 
-            else if (Objects.equals(op, "sub") && Objects.equals(type, "N")) {
+            else if (Objects.equals(op, "sub")) {
                 double newvalue = (double) cellsref.elementAt(0).getInfo();
                 for (int j=1;j<cellsref.size();j++){
                     newvalue= newvalue- (double) (cellsref.elementAt(j)).getInfo();
@@ -159,95 +150,95 @@ public abstract class Cell {
                 c.changeValue(newvalue);
             }
 
-            else if (Objects.equals(op, "*")&& Objects.equals(type, "N")) {
+            else if (Objects.equals(op, "*")) {
                 double newvalue = (double) cellsref.elementAt(0).getInfo();
                 for (int j=1;j<cellsref.size();j++){
                     newvalue= newvalue* (double) (cellsref.elementAt(j)).getInfo();
                 }
                 c.changeValue(newvalue);
             }
-            else if (Objects.equals(op, "/")&& Objects.equals(type, "N")) {
+            else if (Objects.equals(op, "/")) {
                 double newvalue = (double) cellsref.elementAt(0).getInfo();
                 for (int j=1;j<cellsref.size();j++){
                     newvalue= newvalue/ (double) (cellsref.elementAt(j)).getInfo();
                 }
                 c.changeValue(newvalue);
             }
-            else if(Objects.equals(op, "floor")&& Objects.equals(type, "N")){
+            else if(Objects.equals(op, "floor")){
                 double newvalue = (double) cellsref.elementAt(0).getInfo();
                 newvalue= Math.floor(newvalue*10)/100;
                 c.changeValue(newvalue);
             }
 
-            else if(Objects.equals(op, "mTOcm")&& Objects.equals(type, "N")){
+            else if(Objects.equals(op, "mTOcm")){
                 UnitOf.Length length = new UnitOf.Length();
                 double newvalue= (double) cellsref.elementAt(0).getInfo();
                 newvalue= length.fromMeters(newvalue).toCentimeters();
                 c.changeValue(newvalue);
             }
-            else if(Objects.equals(op, "mTOkm")&& Objects.equals(type, "N")){
+            else if(Objects.equals(op, "mTOkm")){
                 UnitOf.Length length = new UnitOf.Length();
                 double newvalue= (double) cellsref.elementAt(0).getInfo();
                 newvalue= length.fromMeters(newvalue).toKilometers();
                 c.changeValue(newvalue);
             }
-            else if(Objects.equals(op, "mTOinchess")&& Objects.equals(type, "N")){
+            else if(Objects.equals(op, "mTOinchess")){
                 UnitOf.Length length = new UnitOf.Length();
                 double newvalue= (double) cellsref.elementAt(0).getInfo();
                 newvalue= length.fromMeters(newvalue).toInches();
                 c.changeValue(newvalue);
             }
-            else if(Objects.equals(op, "inchesTOm")&& Objects.equals(type, "N")){
+            else if(Objects.equals(op, "inchesTOm")){
                 UnitOf.Length length = new UnitOf.Length();
                 double newvalue= (double) cellsref.elementAt(0).getInfo();
                 newvalue= length.fromInches(newvalue).toMeters();
                 c.changeValue(newvalue);
             }
-            else if(Objects.equals(op, "cmTOm")&& Objects.equals(type, "N")){
+            else if(Objects.equals(op, "cmTOm")){
                 UnitOf.Length length = new UnitOf.Length();
                 double newvalue= (double) cellsref.elementAt(0).getInfo();
                 newvalue= length.fromCentimeters(newvalue).toMeters();
                 c.changeValue(newvalue);
             }
-            else if(Objects.equals(op, "cmTOkm")&& Objects.equals(type, "N")){
+            else if(Objects.equals(op, "cmTOkm")){
                 UnitOf.Length length = new UnitOf.Length();
                 double newvalue= (double) cellsref.elementAt(0).getInfo();
                 newvalue= length.fromCentimeters(newvalue).toKilometers();
                 c.changeValue(newvalue);
             }
 
-            else if(Objects.equals(op, "kmTOcm")&& Objects.equals(type, "N")){
+            else if(Objects.equals(op, "kmTOcm")){
                 UnitOf.Length length = new UnitOf.Length();
                 double newvalue= (double) cellsref.elementAt(0).getInfo();
                 newvalue= length.fromKilometers(newvalue).toCentimeters();
                 c.changeValue(newvalue);
             }
-            else if(Objects.equals(op, "kmTOm")&& Objects.equals(type, "N")){
+            else if(Objects.equals(op, "kmTOm")){
                 UnitOf.Length length = new UnitOf.Length();
                 double newvalue= (double) cellsref.elementAt(0).getInfo();
                 newvalue= length.fromKilometers(newvalue).toMeters();
                 c.changeValue(newvalue);
             }
 
-            else if(Objects.equals(op, "day")&& Objects.equals(type, "D")){
+            else if(Objects.equals(op, "day")){
                 LocalDate newvaluedate= (LocalDate) cellsref.elementAt((0)).getInfo();
                 int newvalue=0;
                 newvalue= newvaluedate.getDayOfMonth();
                 c.changeValue(newvalue);
             }
-            else if(Objects.equals(op, "month")&& Objects.equals(type, "D")){
+            else if(Objects.equals(op, "month")){
                 LocalDate newvaluedate= (LocalDate) cellsref.elementAt((0)).getInfo();
                 int newvalue=0;
                 newvalue= newvaluedate.getMonthValue();
                 c.changeValue(newvalue);
             }
-            else if(Objects.equals(op, "year")&& Objects.equals(type, "D")){
+            else if(Objects.equals(op, "year")){
                 LocalDate newvaluedate= (LocalDate) cellsref.elementAt(0).getInfo();
                 int newvalue=0;
                 newvalue= newvaluedate.getYear();
                 c.changeValue(newvalue);
             }
-            else if(Objects.equals(op, "dayoftheWeek")&& Objects.equals(type, "D")){
+            else if(Objects.equals(op, "dayoftheWeek")){
                 LocalDate newvaluedate= (LocalDate) cellsref.elementAt(0).getInfo();
                 String newvalue="";
                 DayOfWeek d= newvaluedate.getDayOfWeek();
@@ -263,6 +254,8 @@ public abstract class Cell {
             }
         }
     }
+
+    public abstract void setRefInfo(Map.Entry<String, Vector<Cell>> refInfo);
 
 }
 

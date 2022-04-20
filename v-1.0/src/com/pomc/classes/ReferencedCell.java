@@ -1,20 +1,24 @@
 package com.pomc.classes;
 
-import com.digidemic.unitof.UnitOf;
-
-import java.time.DayOfWeek;
-import java.time.LocalDate;
 import java.util.*;
 
 public class ReferencedCell extends Cell {
-    String info;
-    Object value;
+    private String info;
+    private Object value;
+    private final String type="R";
     private Map.Entry<String,Vector<Cell>> refInfo; //celdas y operaciones (la información que yo guardo).
 
-    public ReferencedCell (int row, int col,String type,String info){
-        super(row,col,type);
+
+    public ReferencedCell (int row, int col,String info){
+        super(row,col);
         this.info= info;
     }
+
+    @Override
+    public String getType() {
+        return type;
+    }
+
     @Override
     public Object getInfo() {
         return info;
@@ -28,6 +32,7 @@ public class ReferencedCell extends Cell {
     public Object getValue(){
         return value;
     }
+
     public void setRefInfo(Map.Entry<String, Vector<Cell>> refInfo) {
         this.refInfo = refInfo;
     }
