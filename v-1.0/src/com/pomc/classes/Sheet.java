@@ -2,18 +2,15 @@ package com.pomc.classes;
 
 import java.time.LocalDate;
 import java.util.Vector;
-//import java.util.Arrays;
-//import java.util.Objects;
-
-
-
 
 public class Sheet {
+
     Vector<Vector<Cell>> cells = new Vector<>();
     String title;
     int num_rows;
     int num_cols;
     Block b_selected;
+
 
     public int getNumRows () {
         return this.num_rows;
@@ -58,7 +55,7 @@ public class Sheet {
         for(int i = 0; i < rows; ++i){
             Vector<Cell> row = new Vector<>();
             for(int j = 0; j < columns; ++j){
-                row.add(new NumCell(i, j, "N", null));
+                row.add(new NumCell(i, j, null));
             }
             cells.add(row);
         }
@@ -68,7 +65,7 @@ public class Sheet {
         ++num_rows;
         Vector<Cell> pos_row = new Vector<>();
         for(int i = 0; i < num_cols; ++i){
-            Cell c = new NumCell(pos, i,"N", null);
+            Cell c = new NumCell(pos, i, null);
             pos_row.add(c);
         }
         cells.insertElementAt(pos_row, pos);
@@ -87,7 +84,7 @@ public class Sheet {
         ++num_cols;
         for(int i = 0; i < num_rows; ++i){
             Vector<Cell> row = cells.elementAt(i);
-            row.insertElementAt(new NumCell(i,pos,"N", null), pos);
+            row.insertElementAt(new NumCell(i,pos,null), pos);
             for(int j = pos + 1; j < num_cols; ++j ) {
                 Cell c = row.elementAt(j);
                 c.setColumn(j);
@@ -133,9 +130,11 @@ public class Sheet {
 
 
     public Block create_block(Cell c1, Cell c2){
-        Vector<Vector<Cell>> vec_block = new Vector<Vector<Cell>>();
+        Vector<Vector<Cell>> vec_block = new Vector<>();
+
         Cell ul;
         Cell dr;
+
         for(int i = c1.getRow(); i <= c2.getRow(); ++i){
             Vector<Cell> row = cells.elementAt(i);
             Vector<Cell> row2 = new Vector<>();
@@ -145,18 +144,23 @@ public class Sheet {
             }
             vec_block.add(row2);
         }
+
         Vector<Cell[]> b = new Vector<>();
+
         for(int i = 0 ; i < vec_block.size(); ++i){
             Vector<Cell> row_i = vec_block.elementAt(i);
             Cell[] r = row_i.toArray(new Cell[row_i.size()]);
             b.add(r);
         }
+
         Vector<Cell> first_row = cells.elementAt(0);
         ul = first_row.firstElement();
         Vector<Cell> last_row = cells.lastElement();
         dr = last_row.lastElement();
+
         Cell[][] arr_block;
         arr_block = b.toArray(new Cell[b.size()][]);
+
         Block block = new Block(arr_block, ul, dr);
         return block;
     }
@@ -173,7 +177,7 @@ public class Sheet {
 
     public void MoveBlock(Block b, Boolean ref){
         if(b.number_cols() == b_selected.number_cols() && b.number_rows() == b_selected.number_rows()) {
-            b_selected.ref(b, ref); //funcion ref en block
+            //b_selected.ref(b, ref); //funcion ref en block
         }
         else System.out.println("Error. The blocks selected have different sizes.");
     }
@@ -196,17 +200,12 @@ public class Sheet {
 
 
 
-    //public void Reference(Block b1, Block b2){} //referencia tal cual de un bloque a otro
-
-
-
-
-
     //ACABAR CONTROL DE ERRORES
 
 
-    public void SortBlock(Block b, String Criteria){ //falta acabar
-        b_selected.SortBlock(b,Criteria);
+    public void SortBlock(int n_col, String Criteria){
+        if(!b_selected.allText() || !b_selected.allText() || b_selected.allDate()) System.out.println("Error. Whole Block has to be of type number or type text.");
+        else b_selected.SortBlock(b_selected ,n_col, Criteria);
     }
 
     public Cell find(double n, Block b){
@@ -292,50 +291,44 @@ public class Sheet {
         return -1;
     }
 
-    public void mean(Block b1,Cell c, Boolean ref){
-        if(b1.allDouble()){
-            c.setType("N");
-            c.changeValue(b1.mean(ref));
+    public void mean(Cell c, Boolean ref, Boolean val){
+        if(b_selected.allDouble()){
+            b_selected.mean(c, ref, val);
         }
         else System.out.println("Error. Not all cells are of type Number.");
     }
 
-    public void median(Block b1, Cell c, Boolean ref){
-        if(b1.allDouble()){
-            c.setType("N");
-            c.changeValue(b1.median(ref));
+    public void median(Cell c, Boolean ref, Boolean val){
+        if(b_selected.allDouble()){
+            b_selected.median(c, ref, val);
         }
         else System.out.println("Error. Not all cells are of type Number.");
     }
 
-    public void var(Block b1,Cell c, Boolean ref){
-        if(b1.allDouble()){
-            c.setType("N");
-            c.changeValue(b1.var(ref));
+    public void var(Cell c, Boolean ref, Boolean val){
+        if(b_selected.allDouble()){
+            b_selected.var(c, ref, val);
         }
         else System.out.println("Error. Not all cells are of type Number.");
     }
 
-    public void covar(Block b1, Block b2, Cell c, Boolean ref){
-        if(b1.allDouble() && b2.allDouble()){
-            c.setType("N");
-            c.changeValue(b1.covar(b1,ref));
+    public void covar(Block b, Cell c, Boolean ref, Boolean val){
+        if(b_selected.allDouble() && b.allDouble()){
+            b_selected.covar(b, c, ref, val);
         }
         else System.out.println("Error. Not all cells are of type Number.");
     }
 
-    public void std(Block b1,Cell c, Boolean ref){
-        if(b1.allDouble()){
-            c.setType("N");
-            c.changeValue(b1.std(ref));
+    public void std(Cell c, Boolean ref, Boolean val){
+        if(b_selected.allDouble()){
+            b_selected.std(c, ref, val);
         }
         else System.out.println("Error. Not all cells are of type Number.");
     }
 
-    public void CPearson(Block b1, Block b2, Cell c, Boolean ref){
-        if(b1.allDouble() && b2.allDouble()){
-            c.setType("N");
-            c.changeValue(b1.CPearson(b2, ref));
+    public void CPearson(Block b, Cell c, Boolean ref, Boolean val){
+        if(b_selected.allDouble() && b.allDouble()){
+            b_selected.CPearson(b, c, ref, val);
         }
         else System.out.println("Error. Not all cells are of type Number.");
     }
