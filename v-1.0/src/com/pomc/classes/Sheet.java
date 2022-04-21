@@ -32,6 +32,13 @@ public class Sheet {
         this.title = title;
     }
 
+    public Sheet() {
+        this.title = "titulo por defecto"; // valor default depende del num de sheet
+        cells = null;
+        num_cols = 0;
+        num_rows = 0;
+    }
+
     public Sheet(String title) {
         if(title != null) this.title = title;
         else this.title = "titulo por defecto"; // valor default depende del num de sheet
@@ -175,9 +182,20 @@ public class Sheet {
         b_selected.CopyB();
     }
 
+    /*
+    public void ref(Block b1, Block b2, Boolean ref) {   //REVISAR!!!!
+
+        for (int i = 0; i < this.cells.size(); ++i) {
+            for (int j = 0; j < this.cells[0].length; ++j) {
+                b1.getCell(i,j).changeValue((double) this.cells[i][j].getInfo();
+            }
+        }
+    }
+     */
+
     public void MoveBlock(Block b, Boolean ref){
         if(b.number_cols() == b_selected.number_cols() && b.number_rows() == b_selected.number_rows()) {
-            //b_selected.ref(b, ref); //funcion ref en block
+            //ref(b_selected,b, ref);
         }
         else System.out.println("Error. The blocks selected have different sizes.");
     }
@@ -196,7 +214,6 @@ public class Sheet {
         if(b_selected.allDate()) b_selected.ModifyBlock(ld);
         else System.out.println("Error. Not all cells are of type Date.");
     }
-
 
 
 
@@ -247,8 +264,8 @@ public class Sheet {
         else System.out.println("Error. Not all cells are of type Number.");
     }
 
-    public void convert(Block b1, Cell c, Boolean ref){ //falta acabar
-        b1.convert(b1, ref);
+    public void convert(Cell c, Boolean ref){ //falta acabar
+        b_selected.convert(b_selected, ref);
     }
 
     public void sum(Block b1, Block b2, Block b3, Boolean ref){
