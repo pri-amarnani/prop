@@ -63,6 +63,14 @@ public class Block {
         // copy to clipboard
     }
 
+    public void ref(Block b, Boolean ref) {   //REVISAR!!!!
+        for (int i = 0; i < this.block.length; ++i) {
+            for (int j = 0; j < this.block[0].length; ++j) {
+                b.getCell(i,j).changeValue( this.block[i][j].getInfo());
+            }
+        }
+    }
+
     public void ModifyBlock(double n) {
         for (Cell[] cells : block) {
             for (int j = 0; j < block[0].length; ++j) {
