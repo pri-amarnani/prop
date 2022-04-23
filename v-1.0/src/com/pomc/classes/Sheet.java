@@ -24,6 +24,11 @@ public class Sheet {
         return this.title;
     }
 
+    public Cell getCell (int i, int j) {
+        Vector<Cell> row = cells.elementAt(i);
+        return row.elementAt(j);
+    }
+
     public Block getSelectedBlock () {
         return this.b_selected;
     }
@@ -32,9 +37,10 @@ public class Sheet {
         this.title = title;
     }
 
+    /*
     public Sheet() {
-        this.title = "titulo por defecto"; // valor default depende del num de sheet
-        for(int i = 0; i < 60; ++i){  //default 60x60
+        this.title = s;
+        for(int i = 0; i < 60; ++i){
             Vector<Cell> row = new Vector<>();
             for(int j = 0; j < 60; ++j){
                 row.add(new NumCell(i, j, null));
@@ -44,19 +50,20 @@ public class Sheet {
         num_cols = 60;
         num_rows = 60;
     }
+     */
 
     public Sheet(String title) {
         if(title != null) this.title = title;
         else this.title = "titulo por defecto"; // valor default depende del num de sheet
-        for(int i = 0; i < 60; ++i){  //default 60x60
+        for(int i = 0; i < 64; ++i){  //default 60x60
             Vector<Cell> row = new Vector<>();
-            for(int j = 0; j < 60; ++j){
+            for(int j = 0; j < 64; ++j){
                 row.add(new NumCell(i, j, null));
             }
             cells.add(row);
         }
-        num_cols = 60;
-        num_rows = 60;
+        num_cols = 64;
+        num_rows = 64;
     }
 
     public Sheet(Vector<Vector<Cell>> cells, String title) {  //not sure
@@ -264,8 +271,8 @@ public class Sheet {
         return true;
     }
 
-    public void floor(Block b, Cell c, Boolean ref){    //que hace exactamente????
-        if (b_selected.allDouble() && b.allDouble()){    //la celda para seleccionar bloque?
+    public void floor(Block b, Boolean ref){
+        if (b_selected.allDouble() && b.allDouble()){
             if(overlapping(b_selected, b)) System.out.println("Error. The blocks selected are overlapped.");
             else b_selected.floor(b, ref);
         }
@@ -316,7 +323,7 @@ public class Sheet {
         b_selected.extract(b1, ref);
     }
 
-    public void dayOfTheWeek (Block b1,Cell c, Boolean ref){ //no se superponen? q hace la funcion
+    public void dayOfTheWeek (Block b1, Cell c, Boolean ref){ //no se superponen? q hace la funcion
         if(b_selected.allDate()) b_selected.dayOfTheWeek(b1, ref);
         else System.out.println("Error. Not all cells are of type Date.");
     }
@@ -353,7 +360,7 @@ public class Sheet {
         else System.out.println("Error. Not all cells are of type Number.");
     }
 
-    public void covar(Block b, Cell c, Boolean ref, Boolean val){
+    public void covar(Block b, Cell c, Boolean ref, Boolean val){ //sii
         if(b_selected.allDouble() && b.allDouble()){
             b_selected.covar(b, c, ref, val);
         }
@@ -370,7 +377,7 @@ public class Sheet {
     //no ha de devolver nada en el bloque
     public void CPearson(Block b, Cell c, Boolean ref, Boolean val){   //no se superponen?? q hace la funcion
         if(b_selected.allDouble() && b.allDouble()){
-            b_selected.CPearson(b, c, ref, val);
+            System.out.println(b_selected.CPearson(b, c, ref, val));
         }
         else System.out.println("Error. Not all cells are of type Number.");
     }
