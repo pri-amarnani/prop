@@ -65,7 +65,7 @@ public class Block {
 
         for (int i = 0; i < b.number_rows(); ++i) {
             for (int j = 0; j < b.number_cols(); ++j) {
-                if (b.getCell(i,j).getInfo() != this.block[i][j].getInfo()) return false;
+                if (!b.getCell(i,j).getInfo().equals(this.block[i][j].getInfo())) return false;
             }
         }
         return true;
@@ -92,7 +92,15 @@ public class Block {
         }
     }
 
-    public void ModifyBlock(double n) {
+    public void ModifyBlock(Object n) {
+        for (Cell[] cells : block) {
+            for (int j = 0; j < block[0].length; ++j) {
+                cells[j].changeValue(n);
+            }
+        }
+    }
+
+    /*public void ModifyBlock(double n) {
         for (Cell[] cells : block) {
             for (int j = 0; j < block[0].length; ++j) {
                 if (cells[j].isNum()) cells[j].changeValue(n);
@@ -114,14 +122,13 @@ public class Block {
                 if (cells[j].isDate()) cells[j].changeValue(ld);
             }
         }
-    }
+    }*/
 
     public void SortBlock (Block col, int n_col, String criteria) {
         if (Objects.equals(criteria, "<")) {
             if (col.allDouble()) {
                 Arrays.sort(block, (a, b) -> Double.compare((double) a[n_col].getInfo(), (double) b[n_col].getInfo()));
             }
-
             else if (col.allText()) {
                 Arrays.sort(block, (a, b) -> ((String) a[0].getInfo()).compareTo((String) b[0].getInfo()));
             }
@@ -132,14 +139,13 @@ public class Block {
             if (col.allDouble()) {
                 Arrays.sort(block, (a, b) -> Double.compare((double) b[n_col].getInfo(), (double) a[n_col].getInfo()));
             }
-
             else if (col.allText()) {
                 Arrays.sort(block, (a, b) -> ((String) b[0].getInfo()).compareTo((String) a[0].getInfo()));
             }
         }
     }
 
-    public Cell find (double n) {
+    public Cell find (Object n) {
         for (Cell[] cells : block) {
             for (int j = 0; j < block[0].length; ++j) {
                 if (Objects.equals(cells[j].getInfo(), n)) return cells[j];
@@ -148,44 +154,10 @@ public class Block {
         return null;
     }
 
-    public Cell find (String n) {
+    public void findAndReplace (Object n, Object change) {
         for (Cell[] cells : block) {
             for (int j = 0; j < block[0].length; ++j) {
-                if (Objects.equals(cells[j].getInfo(), n)) return cells[j];
-            }
-        }
-        return null;
-    }
-
-    public Cell find (LocalDate ld) {
-        for (Cell[] cells : block) {
-            for (int j = 0; j < block[0].length; ++j) {
-                if (cells[j].getInfo() == ld) return cells[j];
-            }
-        }
-        return null;
-    }
-
-    public void findAndReplace (double n) {
-        for (Cell[] cells : block) {
-            for (int j = 0; j < block[0].length; ++j) {
-                if (Objects.equals(cells[j].getInfo(), n)) cells[j].changeValue(n);
-            }
-        }
-    }
-
-    public void findAndReplace (String n) {
-        for (Cell[] cells : block) {
-            for (int j = 0; j < block[0].length; ++j) {
-                if (Objects.equals(cells[j].getInfo(), n)) cells[j].changeValue(n);
-            }
-        }
-    }
-
-    public void findAndReplace (LocalDate ld) {
-        for (Cell[] cells : block) {
-            for (int j = 0; j < block[0].length; ++j) {
-                if (cells[j].getInfo() == ld) cells[j].changeValue(ld);
+                if (Objects.equals(cells[j].getInfo(), n)) cells[j].changeValue(change);
             }
         }
     }
@@ -487,9 +459,5 @@ public class Block {
         }
 
         return cp;
-    }
-
-    public static void main(String[] args) {
-
     }
 }
