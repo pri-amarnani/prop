@@ -59,8 +59,8 @@ public class CellStub extends Cell {
     }
 
     @Override
-    public void changeValue(Object o) {
-
+    public Object changeValue(Object o) {
+        return null;
     }
 
     @Override

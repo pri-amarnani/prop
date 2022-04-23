@@ -62,20 +62,28 @@ public class TextCell extends Cell {
     }
 
     @Override
-    public void changeValue(Object o) {
+    public Object changeValue(Object o) {
         if (o.getClass()==String.class && !((String) o).startsWith("=")) {
             this.info = (String) o;
         }
         else if (o.getClass()==Double.class){
-            info= null;
-            new NumCell(getRow(),getColumn(), (Double) o);
+            NumCell n=new NumCell(getRow(),getColumn(), (Double) o);
+            this.info= null;
+            this.setRow(null);
+            this.setColumn(null);
+            System.gc();
+            return n;
         }
         else if(o.getClass()== LocalDate.class){
-            info= null;
-            new DateCell(getRow(),getColumn(),(LocalDate)o);
+            DateCell d=new DateCell(getRow(),getColumn(),(LocalDate)o);
+            this.info= null;
+            this.setRow(null);
+            this.setColumn(null);
+            System.gc();
+            return d;
         }
-
         if (hasRefs()) updateRefs();
+        return null;
     }
 
     @Override

@@ -4,7 +4,7 @@ import java.util.*;
 
 public class ReferencedCell extends Cell {
     private String info;
-    private Object value;
+    private Object content;
     private final String type="R";
     private Map.Entry<String,Vector<Cell>> refInfo; //celdas y operaciones (la información que yo guardo).
 
@@ -24,13 +24,18 @@ public class ReferencedCell extends Cell {
         return info;
     }
 
+    @Override
+    public Object changeValue(Object o) {
+        return null;
+    }
+
 
     public Map.Entry<String, Vector<Cell>> getRefInfo() {
         return refInfo;
     }
 
-    public Object getValue(){
-        return value;
+    public Object getContent(){
+        return content;
     }
 
     public void setRefInfo(Map.Entry<String, Vector<Cell>> refInfo) {
@@ -41,6 +46,7 @@ public class ReferencedCell extends Cell {
         this.info=s;
     }
 
-    public void changeValue(Object o) {this.value=o;}
+    public void setContent(Object o) {this.content=o;}
+
 
 }

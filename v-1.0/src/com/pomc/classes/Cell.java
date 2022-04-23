@@ -8,9 +8,9 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Vector;
 public abstract class Cell {
-    private int row;
-    private int column;
-    private Vector<ReferencedCell> refs; //vector de las celdas que "dependen" de esta celda
+    private Integer row;
+    private Integer column;
+    private Vector<ReferencedCell> refs= new Vector<>();
   //  private Map.Entry<String,Vector<Cell>> refInfo; //celdas y operaciones (la información que yo guardo).
 
 
@@ -22,7 +22,6 @@ public abstract class Cell {
     public Cell(int row,int column){ //debería quitar la creadora??????
         this.row=row;
         this.column=column;
-        this.refs=null;
     }
 
     /**
@@ -64,7 +63,7 @@ public abstract class Cell {
      * Modificadora de columna, la columna de la celda pasa a ser c.
      * @param c
      */
-    public void setColumn(int c){
+    public void setColumn(Integer c){
         this.column=c;
     }
 
@@ -72,7 +71,7 @@ public abstract class Cell {
      * Modificadora de la fila, la fila de la celda pasa a ser r.
      * @param r
      */
-    public void setRow(int r){
+    public void setRow(Integer r){
         this.row=r;
     }
 
@@ -114,7 +113,7 @@ public abstract class Cell {
      * Modificadora, cambia el valor de la celda
      * @param o
      */
-    public abstract void changeValue(Object o);
+    public abstract Object changeValue(Object o);
 
     public void AddRef (ReferencedCell c){refs.add(c);}
 
@@ -150,14 +149,14 @@ public abstract class Cell {
                 c.changeValue(newvalue);
             }
 
-            else if (Objects.equals(op, "*")) {
+            else if (Objects.equals(op, "mult")) {
                 double newvalue = (double) cellsref.elementAt(0).getInfo();
                 for (int j=1;j<cellsref.size();j++){
                     newvalue= newvalue* (double) (cellsref.elementAt(j)).getInfo();
                 }
                 c.changeValue(newvalue);
             }
-            else if (Objects.equals(op, "/")) {
+            else if (Objects.equals(op, "div")) {
                 double newvalue = (double) cellsref.elementAt(0).getInfo();
                 for (int j=1;j<cellsref.size();j++){
                     newvalue= newvalue/ (double) (cellsref.elementAt(j)).getInfo();
@@ -218,6 +217,15 @@ public abstract class Cell {
                 double newvalue= (double) cellsref.elementAt(0).getInfo();
                 newvalue= length.fromKilometers(newvalue).toMeters();
                 c.changeValue(newvalue);
+            }
+            else if(Objects.equals(op, "mean")){
+                ////???
+            }
+            else if(Objects.equals(op, "median")){
+                ////???
+            }
+            else if(Objects.equals(op, "var")){
+
             }
 
             else if(Objects.equals(op, "day")){

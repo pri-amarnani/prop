@@ -61,20 +61,29 @@ public class NumCell extends Cell {
     }
 
     @Override
-    public void changeValue(Object o) {
+    public Object changeValue(Object o) {
         if (o.getClass()==Double.class) {
-            this.info = (double) o;
+            this.info = (Double) o;
         }
         else if (o.getClass()==String.class){
-            info= Double.parseDouble(null);
-            new TextCell(getRow(),getColumn(), (String) o);
+            TextCell t=new TextCell(getRow(),getColumn(), (String) o);
+            this.info= Double.parseDouble(null);
+            this.setRow(null);
+            this.setColumn(null);
+            System.gc();
+            return t;
         }
         else if(o.getClass()== LocalDate.class){
-            info= Double.parseDouble(null);
-            new DateCell(getRow(),getColumn(),(LocalDate)o);
+            DateCell d=new DateCell(getRow(),getColumn(),(LocalDate)o);
+            this.info= Double.parseDouble(null);
+            this.setRow(null);
+            this.setColumn(null);
+            System.gc();
+            return d;
         }
 
         if (hasRefs()) updateRefs();
+        return null;
     }
 
     @Override

@@ -47,20 +47,28 @@ public class DateCell extends Cell {
     }
 
     @Override
-    public void changeValue(Object o) {
+    public Object changeValue(Object o) {
         if (o.getClass()==LocalDate.class) {
             this.info = (LocalDate) o;
         }
         else if (o.getClass()==String.class){
-            info= null;
-            new TextCell(getRow(),getColumn(), (String) o);
+            TextCell t=new TextCell(getRow(),getColumn(), (String) o);
+            this.info= null;
+            this.setRow(null);
+            this.setColumn(null);
+            System.gc();
+            return t;
         }
         else if(o.getClass()== Double.class){
-            info= null;
-            new NumCell(getRow(),getColumn(),(Double) o);
+            NumCell n=new NumCell(getRow(),getColumn(),(Double) o);
+            this.info= null;
+            this.setRow(null);
+            this.setColumn(null);
+            System.gc();
+            return n;
         }
         if (hasRefs()) updateRefs();
-
+        return null;
     }
 
     @Override

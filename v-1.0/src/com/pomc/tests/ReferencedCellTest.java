@@ -69,9 +69,9 @@ public class ReferencedCellTest {
 
     @Test
     @DisplayName("getType should work")
-    public void test_changeValue(){
-       rcell.changeValue(2);
-        assertEquals(rcell.getValue(),2);
+    public void test_setValue(){
+       rcell.setContent(2);
+        assertEquals(rcell.getContent(),2);
     }
 
 
