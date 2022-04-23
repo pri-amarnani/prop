@@ -13,10 +13,10 @@ public class NumCell extends Cell {
     //conversio
     //aritmetiques *falta*
     private double info;
-    Cell[] refs;
+    private final String type="N";
 
-    public NumCell(int row, int column, String type, Double info){
-        super(row,column,type);
+    public NumCell(int row, int column, Double info){
+        super(row,column);
         this.info= info;
     }
 
@@ -51,6 +51,11 @@ public class NumCell extends Cell {
 
 
     @Override
+    public String getType() {
+        return type;
+    }
+
+    @Override
     public Object getInfo() {
         return info;
     }
@@ -62,14 +67,19 @@ public class NumCell extends Cell {
         }
         else if (o.getClass()==String.class){
             info= Double.parseDouble(null);
-            new TextCell(getRow(),getColumn(),"T", (String) o);
+            new TextCell(getRow(),getColumn(), (String) o);
         }
         else if(o.getClass()== LocalDate.class){
             info= Double.parseDouble(null);
-            new DateCell(getRow(),getColumn(),"D",(LocalDate)o);
+            new DateCell(getRow(),getColumn(),(LocalDate)o);
         }
 
         if (hasRefs()) updateRefs();
+    }
+
+    @Override
+    public void setRefInfo(Map.Entry<String, Vector<Cell>> refInfo) {
+
     }
 
 

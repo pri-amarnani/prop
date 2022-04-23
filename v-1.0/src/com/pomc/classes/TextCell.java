@@ -8,10 +8,11 @@ import java.util.Vector;
 public class TextCell extends Cell {
 
     private String info;
+    private final String type="T";
 
 
-    public TextCell (int row,int column, String type, String info){
-        super(row,column,type);
+    public TextCell (int row,int column, String info){
+        super(row,column);
         this.info= info;
     }
 
@@ -51,25 +52,35 @@ public class TextCell extends Cell {
     }
 
     @Override
+    public String getType() {
+        return type;
+    }
+
+    @Override
     public Object getInfo() {
         return info;
     }
 
     @Override
     public void changeValue(Object o) {
-        if (o.getClass()==String.class) {
+        if (o.getClass()==String.class && !((String) o).startsWith("=")) {
             this.info = (String) o;
         }
         else if (o.getClass()==Double.class){
             info= null;
-            new NumCell(getRow(),getColumn(),"N", (Double) o);
+            new NumCell(getRow(),getColumn(), (Double) o);
         }
         else if(o.getClass()== LocalDate.class){
             info= null;
-            new DateCell(getRow(),getColumn(),"D",(LocalDate)o);
+            new DateCell(getRow(),getColumn(),(LocalDate)o);
         }
 
         if (hasRefs()) updateRefs();
+    }
+
+    @Override
+    public void setRefInfo(Map.Entry<String, Vector<Cell>> refInfo) {
+
     }
 
 }

@@ -2,22 +2,61 @@ package com.pomc.classes;
 
 import java.time.LocalDate;
 import java.util.Vector;
-//import java.util.Arrays;
-//import java.util.Objects;
 
 public class Sheet {
+
     Vector<Vector<Cell>> cells = new Vector<>();
     String title;
     int num_rows;
     int num_cols;
     Block b_selected;
 
+
+    public int getNumRows () {
+        return this.num_rows;
+    }
+
+    public int getNumCols () {
+        return this.num_cols;
+    }
+
+    public String getTitle () {
+        return this.title;
+    }
+
+    public Block getSelectedBlock () {
+        return this.b_selected;
+    }
+
+    public void setTitle (String title) {
+        this.title = title;
+    }
+
+    public Sheet() {
+        this.title = "titulo por defecto"; // valor default depende del num de sheet
+        for(int i = 0; i < 60; ++i){  //default 60x60
+            Vector<Cell> row = new Vector<>();
+            for(int j = 0; j < 60; ++j){
+                row.add(new NumCell(i, j, null));
+            }
+            cells.add(row);
+        }
+        num_cols = 60;
+        num_rows = 60;
+    }
+
     public Sheet(String title) {
         if(title != null) this.title = title;
         else this.title = "titulo por defecto"; // valor default depende del num de sheet
-        cells = null;
-        num_cols = 0;
-        num_rows = 0;
+        for(int i = 0; i < 60; ++i){  //default 60x60
+            Vector<Cell> row = new Vector<>();
+            for(int j = 0; j < 60; ++j){
+                row.add(new NumCell(i, j, null));
+            }
+            cells.add(row);
+        }
+        num_cols = 60;
+        num_rows = 60;
     }
 
     public Sheet(Vector<Vector<Cell>> cells, String title) {  //not sure
@@ -35,7 +74,7 @@ public class Sheet {
         for(int i = 0; i < rows; ++i){
             Vector<Cell> row = new Vector<>();
             for(int j = 0; j < columns; ++j){
-                row.add(new NumCell(i, j, "N", null));
+                row.add(new NumCell(i, j, null));
             }
             cells.add(row);
         }
@@ -45,7 +84,7 @@ public class Sheet {
         ++num_rows;
         Vector<Cell> pos_row = new Vector<>();
         for(int i = 0; i < num_cols; ++i){
-            Cell c = new NumCell(pos, i,"N", null);
+            Cell c = new NumCell(pos, i, null);
             pos_row.add(c);
         }
         cells.insertElementAt(pos_row, pos);
@@ -64,7 +103,7 @@ public class Sheet {
         ++num_cols;
         for(int i = 0; i < num_rows; ++i){
             Vector<Cell> row = cells.elementAt(i);
-            row.insertElementAt(new NumCell(i,pos,"N", null), pos);
+            row.insertElementAt(new NumCell(i,pos,null), pos);
             for(int j = pos + 1; j < num_cols; ++j ) {
                 Cell c = row.elementAt(j);
                 c.setColumn(j);
@@ -75,7 +114,7 @@ public class Sheet {
     }
 
     public void DeleteRow(int pos){
-        if(num_rows <= 0) System.out.println("Error. Not enough rows.");
+        if(num_rows <= 1) System.out.println("Error. Not enough rows.");
         else{
             --num_rows;
             cells.removeElement(pos);
@@ -92,7 +131,7 @@ public class Sheet {
     }
 
     public void DeleteColumn(int pos){
-        if(num_cols <= 0) System.out.println("Error. Not enough columns.");
+        if(num_cols <= 1) System.out.println("Error. Not enough columns.");
         else{
             --num_cols;
             for(int i = 0; i < num_rows; ++i){
@@ -110,7 +149,11 @@ public class Sheet {
 
 
     public Block create_block(Cell c1, Cell c2){
-        Vector<Vector<Cell>> vec_block = new Vector<Vector<Cell>>();
+        Vector<Vector<Cell>> vec_block = new Vector<>();
+
+        Cell ul;
+        Cell dr;
+
         for(int i = c1.getRow(); i <= c2.getRow(); ++i){
             Vector<Cell> row = cells.elementAt(i);
             Vector<Cell> row2 = new Vector<>();
@@ -120,131 +163,152 @@ public class Sheet {
             }
             vec_block.add(row2);
         }
+
         Vector<Cell[]> b = new Vector<>();
+
         for(int i = 0 ; i < vec_block.size(); ++i){
             Vector<Cell> row_i = vec_block.elementAt(i);
             Cell[] r = row_i.toArray(new Cell[row_i.size()]);
             b.add(r);
         }
+
+        Vector<Cell> first_row = cells.elementAt(0);
+        ul = first_row.firstElement();
+        Vector<Cell> last_row = cells.lastElement();
+        dr = last_row.lastElement();
+
         Cell[][] arr_block;
         arr_block = b.toArray(new Cell[b.size()][]);
-        Block block = new Block(arr_block);
+
+        Block block = new Block(arr_block, ul, dr);
         return block;
     }
 
-    public Block SelectBlock(Cell c1, Cell c2){   //no ha de devolver un bloque
+    public Block SelectBlock(Cell c1, Cell c2){
         Block b = create_block(c1,c2);
         b_selected = b;
         return b;
     }
 
-    public void CopyB(Block b){ //falta acabar
-        b.CopyB();
+    public void CopyB(){ //falta acabar
+        b_selected.CopyB();
     }
 
-
-    public void MoveBlock(Block b){  //del bloque seleccionado al bloque b
-
+    public void MoveBlock(Block b, Boolean ref){
+        if(b.number_cols() == b_selected.number_cols() && b.number_rows() == b_selected.number_rows()) {
+            if(b_selected.dr.getColumn() > b.ul.getColumn() && b_selected.dr.getRow() > b.ul.getRow()) System.out.println("Error. The blocks selected collide.");
+            else b_selected.ref(b, ref);
+        }
+        else System.out.println("Error. The blocks selected have different sizes.");
     }
 
-    public void ModifyBlock(Block b, double n){
-        if(b.allDate()) b.ModifyBlock(n);
+    public void ModifyBlock(double n){
+        if(b_selected.allDate()) b_selected.ModifyBlock(n);
         else System.out.println("Error. Not all cells are of type Number.");
     }
 
-    public void ModifyBlock(Block b, String s){
-        if(b.allDate()) b.ModifyBlock(s);
+    public void ModifyBlock(String s){
+        if(b_selected.allDate()) b_selected.ModifyBlock(s);
         else System.out.println("Error. Not all cells are of type String.");
     }
 
-    public void ModifyBlock(Block b, LocalDate ld){
-        if(b.allDate()) b.ModifyBlock(ld);
+    public void ModifyBlock(LocalDate ld){
+        if(b_selected.allDate()) b_selected.ModifyBlock(ld);
         else System.out.println("Error. Not all cells are of type Date.");
     }
 
-
-
-
-    public void ReferenceBlocks(Block b1, Block b2){}  //se puede hacer desde referenceCell
-    public void ReferenceCellBlock(Cell c, Block b){}  //se puede hacer desde referenceCell
-
-    public void ReferenceCells(Cell c, Cell c2){
-
+    public void SortBlock(int n_col, String Criteria){   //solo se puede ordenar todo texto o todo double
+        if(!b_selected.allText() || !b_selected.allDouble() || b_selected.allDate()) System.out.println("Error. Whole Block has to be of type number or type text.");
+        else b_selected.SortBlock(b_selected ,n_col, Criteria);
     }
 
-
-
-
-    //ACABAR CONTROL DE ERRORES
-
-
-    public void SortBlock(Block b, String Criteria){ //falta acabar
-        b.SortBlock(b,Criteria);
-    }
-
-    public Cell find(double n, Block b){
-        if(b.allDate()) return b.find(n);
+    public Cell find(double n){
+        if(b_selected.allDate()) return b_selected.find(n);
         else System.out.println("Error. Not all cells are of type Number.");
         return null;
     }
 
-    public Cell find(String s, Block b){
-        if(b.allDate()) return b.find(s);
+    public Cell find(String s){
+        if(b_selected.allDate()) return b_selected.find(s);
         else System.out.println("Error. Not all cells are of type String.");
         return null;
     }
 
-    public Cell find(LocalDate ld, Block b){
-        if(b.allDate()) return b.find(ld);
+    public Cell find(LocalDate ld){
+        if(b_selected.allDate()) return b_selected.find(ld);
         else System.out.println("Error. Not all cells are of type Date.");
         return null;
     }
 
-    public void findAndReplace(double n, double r, Block b){
-        if(b.allDouble()) b.findAndReplace(n); //(n,r)
+    public void findAndReplace(double n, double r){  //(n,r)
+        if(b_selected.allDouble()) b_selected.findAndReplace(n);
         else System.out.println("Error. Not all cells are of type Number.");
     }
 
-    public void findAndReplace(String s, Block b){ //pasar dos doubles
-        if(b.allText()) b.findAndReplace(s);
+    public void findAndReplace(String s){ //pasar dos doubles
+        if(b_selected.allText()) b_selected.findAndReplace(s);
         else System.out.println("Error. Not all cells are of type String.");
     }
 
-    public void findAndReplace(LocalDate ld, Block b){ //pasar dos doubles
-        if(b.allDate()) b.findAndReplace(ld);
+    public void findAndReplace(LocalDate ld){ //pasar dos doubles
+        if(b_selected.allDate()) b_selected.findAndReplace(ld);
         else System.out.println("Error. Not all cells are of type Date.");
 
     }
 
-    public void floor(Block b1, Cell c, Boolean ref){           //la celda para seleccionar bloque?
-        if (b_selected.allDouble() && b1.allDouble()) b_selected.floor(b1, ref);
+    public Boolean overlapping(Block b1, Block b2){
+        if(b1.dr.getColumn() < b2.ul.getColumn()) return false;
+        if(b1.dr.getRow() < b2.ul.getRow()) return false;
+        if(b2.dr.getColumn() < b1.ul.getColumn()) return false;
+        if(b2.dr.getRow() < b1.ul.getRow()) return false;
+        return true;
+    }
+
+    public void floor(Block b, Cell c, Boolean ref){    //que hace exactamente????
+        if (b_selected.allDouble() && b.allDouble()){    //la celda para seleccionar bloque?
+            if(overlapping(b_selected, b)) System.out.println("Error. The blocks selected are overlapped.");
+            else b_selected.floor(b, ref);
+        }
         else System.out.println("Error. Not all cells are of type Number.");
     }
 
-    //1 bloque seleccionado + crear otro en las aritmeticas?
-
-
-    public void convert(Block b1, Cell c, Boolean ref){ //falta acabar
-        b1.convert(b1, ref);
+    public void convert(Cell c, Boolean ref){ //falta acabar
+        b_selected.convert(b_selected, ref);
     }
 
-    public void sum(Block b1, Block b2, Block b3, Boolean ref){
-        if (b_selected.allDouble() && b1.allDouble()) b1.sum(b2, b3, ref);
+    public void sum(Block b1, Block b2, Boolean ref){
+        if (b_selected.allDouble() && b1.allDouble()){
+            if(overlapping(b_selected, b2)) System.out.println("Error. The blocks selected are overlapped.");
+            else if(overlapping(b1, b2)) System.out.println("Error. The blocks selected are overlapped.");
+            else b_selected.sum(b1, b2, ref);
+        }
         else System.out.println("Error. Not all cells are of type Number.");
     }
 
     public void mult(Block b1, Block b2, Boolean ref){
-        if (b_selected.allDouble() && b1.allDouble()) b_selected.mult(b1, b2, ref);
+        if (b_selected.allDouble() && b1.allDouble()){
+            if(overlapping(b_selected, b2)) System.out.println("Error. The blocks selected are overlapped.");
+            else if(overlapping(b1, b2)) System.out.println("Error. The blocks selected are overlapped.");
+            else b_selected.mult(b1, b2, ref);
+        }
         else System.out.println("Error. Not all cells are of type Number.");
     }
 
     public void div(Block b1, Block b2, Boolean ref){
-        if (b_selected.allDouble() && b1.allDouble()) b_selected.div(b1, b2, ref);
+        if (b_selected.allDouble() && b1.allDouble()) {
+            if(overlapping(b_selected, b2)) System.out.println("Error. The blocks selected are overlapped.");
+            else if(overlapping(b1, b2)) System.out.println("Error. The blocks selected are overlapped.");
+            else b_selected.div(b1, b2, ref);
+        }
         else System.out.println("Error. Not all cells are of type Number.");
     }
 
     public void substract(Block b1, Block b2, Boolean ref){
-        if (b_selected.allDouble() && b1.allDouble() ) b_selected.substract(b1, b2, ref);
+        if (b_selected.allDouble() && b1.allDouble() ){
+            if(overlapping(b_selected, b2)) System.out.println("Error. The blocks selected are overlapped.");
+            else if(overlapping(b1, b2)) System.out.println("Error. The blocks selected are overlapped.");
+            else b_selected.substract(b1, b2, ref);
+        }
         else System.out.println("Error. Not all cells are of type Number.");
     }
 
@@ -252,74 +316,63 @@ public class Sheet {
         b_selected.extract(b1, ref);
     }
 
-    public void dayOfTheWeek (Block b1,Cell c, Boolean ref){ //q hace exactamente?
+    public void dayOfTheWeek (Block b1,Cell c, Boolean ref){ //no se superponen? q hace la funcion
         if(b_selected.allDate()) b_selected.dayOfTheWeek(b1, ref);
         else System.out.println("Error. Not all cells are of type Date.");
     }
 
-    public void replaceWithCriteriaText(Block b1,Cell c, Boolean ref, String criteria){
-        if (b_selected.allText()) b1.replaceWithCriteriaText(criteria);
-        else System.out.println("Error. Not all cells are of type Number.");
+    public void replaceWithCriteriaText(String criteria){
+        if (b_selected.allText()) b_selected.replaceWithCriteriaText(criteria);
+        else System.out.println("Error. Not all cells are of type Text.");
     }
 
     public int length(TextCell c, String criteria){
         if(c.getType() == "T") return c.length(criteria);
-        else System.out.println("Error. Not all cells are of type Number.");
+        else System.out.println("Error. Cell is not of type Text.");
         return -1;
     }
 
-    public void mean(Block b1,Cell c, Boolean ref){
-        if(b1.allDouble()){
-            c.setType("N");
-            c.changeValue(b1.mean(ref));
+    public void mean(Cell c, Boolean ref, Boolean val){
+        if(b_selected.allDouble()){
+            b_selected.mean(c, ref, val);
         }
         else System.out.println("Error. Not all cells are of type Number.");
     }
 
-    public void median(Block b1, Cell c, Boolean ref){
-        if(b1.allDouble()){
-            c.setType("N");
-            c.changeValue(b1.median(ref));
-        }
-        else System.out.println("Error. Not all cells are of type Number.");
-
-    }
-
-    public void var(Block b1,Cell c, Boolean ref){
-        if(b1.allDouble()){
-            c.setType("N");
-            c.changeValue(b1.var(ref));
+    public void median(Cell c, Boolean ref, Boolean val){
+        if(b_selected.allDouble()){
+            b_selected.median(c, ref, val);
         }
         else System.out.println("Error. Not all cells are of type Number.");
     }
 
-    public void covar(Block b1, Block b2, Cell c, Boolean ref){
-        if(b1.allDouble() && b2.allDouble()){
-            c.setType("N");
-            c.changeValue(b1.covar(b1,ref));
+    public void var(Cell c, Boolean ref, Boolean val){
+        if(b_selected.allDouble()){
+            b_selected.var(c, ref, val);
         }
         else System.out.println("Error. Not all cells are of type Number.");
     }
 
-    public void std(Block b1,Cell c, Boolean ref){
-        if(b1.allDouble()){
-            c.setType("N");
-            c.changeValue(b1.std(ref));
-        }
-        else System.out.println("Error. Not all cells are of type Number.");
-
-    }
-
-    public void CPearson(Block b1, Block b2, Cell c, Boolean ref){ //crear bloque desde la celda c
-        if(b1.allDouble() && b2.allDouble()){
-            c.setType("N");
-            c.changeValue(b1.CPearson(b2, ref));
+    public void covar(Block b, Cell c, Boolean ref, Boolean val){
+        if(b_selected.allDouble() && b.allDouble()){
+            b_selected.covar(b, c, ref, val);
         }
         else System.out.println("Error. Not all cells are of type Number.");
     }
 
-    public static void main(String[] args) {
+    public void std(Cell c, Boolean ref, Boolean val){
+        if(b_selected.allDouble()){
+            b_selected.std(c, ref, val);
+        }
+        else System.out.println("Error. Not all cells are of type Number.");
+    }
 
+    //no ha de devolver nada en el bloque
+    public void CPearson(Block b, Cell c, Boolean ref, Boolean val){   //no se superponen?? q hace la funcion
+        if(b_selected.allDouble() && b.allDouble()){
+            b_selected.CPearson(b, c, ref, val);
+        }
+        else System.out.println("Error. Not all cells are of type Number.");
     }
 
 }

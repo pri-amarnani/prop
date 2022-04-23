@@ -10,12 +10,7 @@ public class Block {
     int size_r;
     int size_c;
 
-    public Block () {
-        block = null;
-    }
-
     public Block (Cell [][] b, Cell ul, Cell dr) {
-        this.block = new Cell[b.length][b[0].length];
         this.block = b;
 
         this.ul = ul;
@@ -68,6 +63,14 @@ public class Block {
         // copy to clipboard
     }
 
+    public void ref(Block b, Boolean ref) {   //REVISAR!!!!
+        for (int i = 0; i < this.block.length; ++i) {
+            for (int j = 0; j < this.block[0].length; ++j) {
+                b.getCell(i,j).changeValue( this.block[i][j].getInfo());
+            }
+        }
+    }
+
     public void ModifyBlock(double n) {
         for (Cell[] cells : block) {
             for (int j = 0; j < block[0].length; ++j) {
@@ -92,10 +95,27 @@ public class Block {
         }
     }
 
-    public void SortBlock (Block b, String criteria) {
-        // b is a column
+    public void SortBlock (Block col, int n_col, String criteria) {
+        if (Objects.equals(criteria, "<")) {
+            if (col.allDouble()) {
+                Arrays.sort(block, (a, b) -> Double.compare((double) a[n_col].getInfo(), (double) b[n_col].getInfo()));
+            }
 
+            else if (col.allText()) {
+                Arrays.sort(block, (a, b) -> ((String) a[0].getInfo()).compareTo((String) b[0].getInfo()));
+            }
+        }
 
+        // >
+        else {
+            if (col.allDouble()) {
+                Arrays.sort(block, (a, b) -> Double.compare((double) b[n_col].getInfo(), (double) a[n_col].getInfo()));
+            }
+
+            else if (col.allText()) {
+                Arrays.sort(block, (a, b) -> ((String) b[0].getInfo()).compareTo((String) a[0].getInfo()));
+            }
+        }
     }
 
     public Cell find (double n) {
@@ -153,6 +173,15 @@ public class Block {
         for (int i = 0; i < this.block.length; ++i) {
             for (int j = 0; j < this.block[0].length; ++j) {
                 b.getCell(i,j).changeValue(Math.floor((double) block[i][j].getInfo()));
+
+                if (ref) {
+                    Vector<Cell> s = new Vector<>(1);
+                    s.add(this.block[i][j]);
+
+                    Map.Entry<String, Vector<Cell>> r = new AbstractMap.SimpleEntry<>("FLOOR", s);
+
+                    b.getCell(i,j).setRefInfo(r);
+                }
             }
         }
     }
@@ -175,7 +204,7 @@ public class Block {
                     Map.Entry<String, Vector<Cell>> r = new AbstractMap.SimpleEntry<>("SUM", s);
 
 
-                    b2.getCell(i, j).addRefInfo(r);
+                    b2.getCell(i, j).setRefInfo(r);
                 }
             }
         }
@@ -196,7 +225,7 @@ public class Block {
                     Map.Entry<String, Vector<Cell>> r = new AbstractMap.SimpleEntry<>("MULT", s);
 
 
-                    b2.getCell(i, j).addRefInfo(r);
+                    b2.getCell(i, j).setRefInfo(r);
                 }
             }
         }
@@ -216,7 +245,7 @@ public class Block {
                     Map.Entry<String, Vector<Cell>> r = new AbstractMap.SimpleEntry<>("DIV", s);
 
 
-                    b2.getCell(i, j).addRefInfo(r);
+                    b2.getCell(i, j).setRefInfo(r);
                 }
             }
         }
@@ -236,7 +265,7 @@ public class Block {
                     Map.Entry<String, Vector<Cell>> r = new AbstractMap.SimpleEntry<>("SUB", s);
 
 
-                    b2.getCell(i, j).addRefInfo(r);
+                    b2.getCell(i, j).setRefInfo(r);
                 }
             }
         }
@@ -279,46 +308,87 @@ public class Block {
         }
     }
 
-    public double mean (Boolean ref) {
+    // val = true means we want to put value in cell, else just show value.
+    public double mean (Cell c, Boolean ref, Boolean val) {
         double sum = 0;
-
+        Vector<Cell> s = new Vector<>();
         for (Cell[] cells : this.block) {
             for (int j = 0; j < this.block[0].length; ++j) {
                 sum += (double) cells[j].getInfo();
+                s.add(cells[j]);
             }
         }
+
+        if (val) {
+            c.changeValue(sum/s.size());
+        }
+
+        if (ref && val) {
+            Map.Entry<String, Vector<Cell>> r = new AbstractMap.SimpleEntry<>("MEAN", s);
+            c.setRefInfo(r);
+        }
+
         return sum/(this.block.length*this.block[0].length);
     }
 
-    // left to right and then to down
-    public double median (Boolean ref) {
-        double [] s = new double[this.block.length*this.block[0].length];
+    public double median (Cell c, Boolean ref, Boolean val) {
+        double [] arr = new double[this.block.length*this.block[0].length];
+        Vector<Cell> s = new Vector<>();
 
         for (int i = 0; i < this.block.length; ++i) {
             for (int j = 0; j < this.block[0].length; ++j) {
-                s[i+j] = (double) this.block[i][j].getInfo();
+                arr[i+j] = (double) this.block[i][j].getInfo();
+                s.add(this.block[i][j]);
             }
         }
 
-        Arrays.sort(s);
-        return s[s.length/2];
+        Arrays.sort(arr);
+
+        if (val) {
+            c.changeValue(arr[arr.length/2]);
+        }
+
+        if (ref && val) {
+            Map.Entry<String, Vector<Cell>> r = new AbstractMap.SimpleEntry<>("MEDIAN", s);
+            c.setRefInfo(r);
+        }
+
+        return arr[arr.length/2];
     }
 
-    public double var (Boolean ref) {
-        return Math.pow(this.std(false), 2);
+    public double var (Cell c, Boolean ref, Boolean val) {
+        double d = Math.pow(this.std(c, false, false), 2);
+        if (val) {
+            c.changeValue(d);
+        }
+
+        if (val && ref) {
+            Vector<Cell> s = new Vector<>();
+
+            for (Cell[] cells : this.block) {
+                s.addAll(Arrays.asList(cells).subList(0, this.block[0].length));
+            }
+
+            Map.Entry<String, Vector<Cell>> r = new AbstractMap.SimpleEntry<>("VAR", s);
+            c.setRefInfo(r);
+        }
+        return d;
     }
 
-    public double covar (Block b, Boolean ref) {
-        double mean1 = this.mean(false);
-        double mean2 = b.mean(false);
+    public double covar (Block b, Cell c, Boolean ref, Boolean val) {
+        double mean1 = this.mean(c,false,false);
+        double mean2 = b.mean(c,false,false);
 
         double [] x = new double[this.block.length*this.block[0].length];
         double [] y = new double[this.block.length*this.block[0].length];
+        Vector<Cell> s = new Vector<>();
 
         for (int i = 0; i < this.block.length; ++i) {
             for (int j = 0; j < this.block[0].length; ++j) {
                 x[i+j] = (double) this.block[i][j].getInfo();
+                s.add(this.block[i][j]);
                 y[i+j] = (double) b.getCell(i,j).getInfo();
+                s.add(b.getCell(i,j));
             }
         }
 
@@ -328,31 +398,74 @@ public class Block {
             sum += (x[i] - mean1)*(y[i] - mean2);
         }
 
-        return sum/x.length;
+        double cov = sum/x.length;
+
+        if (val) {
+            c.changeValue(cov);
+        }
+
+        if (val && ref) {
+            Map.Entry<String, Vector<Cell>> r = new AbstractMap.SimpleEntry<>("COVAR", s);
+            c.setRefInfo(r);
+        }
+
+        return cov;
     }
 
-    public double std (Boolean ref) {
+    public double std (Cell c, Boolean ref, Boolean val) {
         double sum = 0, std = 0;
-        double [] s = new double[this.block.length*this.block[0].length];
-
+        double [] arr = new double[this.block.length*this.block[0].length];
+        Vector<Cell> s = new Vector<>();
         for (int i = 0; i < this.block.length; ++i) {
             for (int j = 0; j < this.block[0].length; ++j) {
-                s[i+j] = (double) this.block[i][j].getInfo();
+                arr[i+j] = (double) this.block[i][j].getInfo();
+                s.add(this.block[i][j]);
                 sum += (double) this.block[i][j].getInfo();
             }
         }
 
-        double mean = sum/s.length;
+        double mean = sum/arr.length;
 
-        for (double num: s) {
+        for (double num: arr) {
             std += Math.pow(num - mean, 2);
         }
+        double stdd = Math.sqrt(std/arr.length);
 
-        return (Math.sqrt(std/s.length));
+        if (val) {
+            c.changeValue(stdd);
+        }
+
+        if (val && ref) {
+            Map.Entry<String, Vector<Cell>> r = new AbstractMap.SimpleEntry<>("VAR", s);
+            c.setRefInfo(r);
+        }
+
+        return stdd;
     }
 
-    public double CPearson (Block b, Boolean ref) {
-        return this.covar(b, false)/(b.std(false)*this.std(false));
+    public double CPearson (Block b, Cell c, Boolean ref, Boolean val) {
+        double cp = this.covar(b,c,false, false)/(b.std(c,false,false)*this.std(c,false,false));
+
+        if (val) {
+            c.changeValue(cp);
+        }
+
+        if (val && ref) {
+
+            Vector<Cell> s = new Vector<>();
+
+            for (int i = 0; i < this.block.length; ++i) {
+                for (int j = 0; j < this.block[0].length; ++j) {
+                    s.add(this.block[i][j]);
+                    s.add(b.getCell(i,j));
+                }
+            }
+
+            Map.Entry<String, Vector<Cell>> r = new AbstractMap.SimpleEntry<>("CP", s);
+            c.setRefInfo(r);
+        }
+
+        return cp;
     }
 
     public static void main(String[] args) {
