@@ -13,6 +13,19 @@ public class PersistenceController {
     static Scanner userInput = new Scanner(System.in);
 
 
+    dooc(){
+        File tempDirectory; //defines where the file is created
+        tempDirectory = new File(path);
+        this.docFile = new File(tempDirectory.getAbsolutePath() +"/" + Title +".pomc");
+        try {
+            if (docFile.createNewFile()) {
+                System.out.println("File created: "+ docFile.getName());
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     //Save Files
     public void save() {
         try {

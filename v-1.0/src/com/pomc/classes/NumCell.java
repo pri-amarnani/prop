@@ -67,7 +67,7 @@ public class NumCell extends Cell {
         }
         else if (o.getClass()==String.class){
             TextCell t=new TextCell(getRow(),getColumn(), (String) o);
-            this.info= Double.parseDouble(null);
+            this.info= null;
             this.setRow(null);
             this.setColumn(null);
             System.gc();
@@ -75,7 +75,7 @@ public class NumCell extends Cell {
         }
         else if(o.getClass()== LocalDate.class){
             DateCell d=new DateCell(getRow(),getColumn(),(LocalDate)o);
-            this.info= Double.parseDouble(null);
+            this.info= null;
             this.setRow(null);
             this.setColumn(null);
             System.gc();

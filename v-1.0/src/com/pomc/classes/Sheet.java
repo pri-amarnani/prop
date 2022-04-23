@@ -117,10 +117,9 @@ public class Sheet {
 
     public void change_value(Cell c, Object o){   //cambiar el valor de las celdas
         Integer id = -1, id2 = -1;
-        for(int i = 0; i < cells.size(); ++i){
-            id2 = cells.elementAt(i).indexOf(c);
-            if(id2 != null){
-                id = id2;
+        for(int i = 0; i < num_rows; ++i){
+            id = cells.elementAt(i).indexOf(c);
+            if(id != -1 && id != null){
                 id2 = i;
                 break;
             }

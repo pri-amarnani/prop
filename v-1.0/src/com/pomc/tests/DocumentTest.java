@@ -14,9 +14,22 @@ public class DocumentTest {
 
     @BeforeEach
     public void initialize() throws Exception {
-        doc = new Document("test","out/production/v-1.0/pomcs");
+        doc = new Document("testDoc");
     }
 
+    @Test
+    @DisplayName("Should get the title of the document")
+    public void testAddSheet()
+    {
+        assertEquals(doc.getTitle(),"testDoc");
+    }
+    @Test
+    @DisplayName("Should change the title of the document")
+    public void testAddSheet()
+    {
+        doc.setTitle("testDoc2");
+        assertEquals(doc.getTitle(),"testDoc2");
+    }
     @Test
     @DisplayName("Should add a new Sheet to the Document")
     public void testAddSheet()

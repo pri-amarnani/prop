@@ -12,22 +12,11 @@ public class Document {
     private static Scanner userInput = new Scanner(System.in);
 
     //constructor
-    public Document(String Title, String path) {
+    public Document(String Title) {
         this.Title = Title;
-        File tempDirectory; //defines where the file is created
-        tempDirectory = new File(path);
-        this.docFile = new File(tempDirectory.getAbsolutePath() +"/" + Title +".pomc");
-            try {
-                if (docFile.createNewFile()) {
-                    System.out.println("File created: "+ docFile.getName());
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
     }
 
     //getters
-
 
     public String getTitle() {
         return Title;
@@ -65,32 +54,4 @@ public class Document {
         //searches by object
     }
 
-
-    //Auxiliar methods
-    public static String validPath() {
-        while(true) {
-            System.out.println("Enter Document Path :");
-            String path = userInput.nextLine();
-            File tempDirectory = new File(path);
-            if (tempDirectory.isDirectory()) {
-                return path;
-            }
-            else {
-                System.out.println("Path not valid, try again.");
-            }
-        }
-    }
-    //testing
-    public static void main(String[] args) {
-
-        String path = validPath();
-        System.out.println("Enter Document Title:");
-        String title = userInput.nextLine();
-        Document doc = new Document(title,path);
-        for (int i = 0; i < 5; i++) {
-            doc.createSheet("Hoja"+(5-i));
-            doc.createSheet("Hojaa"+(i));
-        }
-
-    }
 }
