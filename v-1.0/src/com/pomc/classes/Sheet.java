@@ -217,8 +217,8 @@ public class Sheet {
         else System.out.println("Error. Not all cells are of type Date.");
     }
 
-    public void SortBlock(int n_col, String Criteria){
-        if(!b_selected.allText() || !b_selected.allText() || b_selected.allDate()) System.out.println("Error. Whole Block has to be of type number or type text.");
+    public void SortBlock(int n_col, String Criteria){   //solo se puede ordenar todo texto o todo double
+        if(!b_selected.allText() || !b_selected.allDouble() || b_selected.allDate()) System.out.println("Error. Whole Block has to be of type number or type text.");
         else b_selected.SortBlock(b_selected ,n_col, Criteria);
     }
 
@@ -256,9 +256,17 @@ public class Sheet {
 
     }
 
-    public void floor(Block b, Cell c, Boolean ref){    //no se superponen     que hace exactamente????
+    public Boolean overlapping(Block b1, Block b2){
+        if(b1.dr.getColumn() < b2.ul.getColumn()) return false;
+        if(b1.dr.getRow() < b2.ul.getRow()) return false;
+        if(b2.dr.getColumn() < b1.ul.getColumn()) return false;
+        if(b2.dr.getRow() < b1.ul.getRow()) return false;
+        return true;
+    }
+
+    public void floor(Block b, Cell c, Boolean ref){    //que hace exactamente????
         if (b_selected.allDouble() && b.allDouble()){    //la celda para seleccionar bloque?
-            if(b_selected.dr.getColumn() > b.ul.getColumn() && b_selected.dr.getRow() > b.ul.getRow()) System.out.println("Error. The blocks selected collide.");
+            if(overlapping(b_selected, b)) System.out.println("Error. The blocks selected are overlapped.");
             else b_selected.floor(b, ref);
         }
         else System.out.println("Error. Not all cells are of type Number.");
@@ -268,29 +276,39 @@ public class Sheet {
         b_selected.convert(b_selected, ref);
     }
 
-    //hacer funcion para comprobar q no se superponen
-    public void sum(Block b1, Block b2, Boolean ref){     //no se superponen
+    public void sum(Block b1, Block b2, Boolean ref){
         if (b_selected.allDouble() && b1.allDouble()){
-            // esto no se tiene q comprobar//if(b_selected.dr.getColumn() > b1.ul.getColumn() && b_selected.dr.getRow() > b1.ul.getRow() || b_selected.ul.getColumn() < b1.dr.getColumn() && b_selected.ul.getRow() < b1.dr.getRow()) System.out.println("Error. The blocks selected collide.");
-            //esto si //else if(b_selected.dr.getColumn() > b2.ul.getColumn() && b_selected.dr.getRow() > b2.ul.getRow() || b_selected.ul.getColumn() < b2.dr.getColumn() && b_selected.ul.getRow() < b2.dr.getRow()) System.out.println("Error. The blocks selected collide.");
-            //else if(b1.dr.getColumn() > b2.ul.getColumn() && b1.dr.getRow() > b2.ul.getRow()) System.out.println("Error. The blocks selected collide.");
-            b_selected.sum(b1, b2, ref);
+            if(overlapping(b_selected, b2)) System.out.println("Error. The blocks selected are overlapped.");
+            else if(overlapping(b1, b2)) System.out.println("Error. The blocks selected are overlapped.");
+            else b_selected.sum(b1, b2, ref);
         }
         else System.out.println("Error. Not all cells are of type Number.");
     }
 
-    public void mult(Block b1, Block b2, Boolean ref){  //no se superponen
-        if (b_selected.allDouble() && b1.allDouble()) b_selected.mult(b1, b2, ref);
+    public void mult(Block b1, Block b2, Boolean ref){
+        if (b_selected.allDouble() && b1.allDouble()){
+            if(overlapping(b_selected, b2)) System.out.println("Error. The blocks selected are overlapped.");
+            else if(overlapping(b1, b2)) System.out.println("Error. The blocks selected are overlapped.");
+            else b_selected.mult(b1, b2, ref);
+        }
         else System.out.println("Error. Not all cells are of type Number.");
     }
 
-    public void div(Block b1, Block b2, Boolean ref){  //no se superponen
-        if (b_selected.allDouble() && b1.allDouble()) b_selected.div(b1, b2, ref);
+    public void div(Block b1, Block b2, Boolean ref){
+        if (b_selected.allDouble() && b1.allDouble()) {
+            if(overlapping(b_selected, b2)) System.out.println("Error. The blocks selected are overlapped.");
+            else if(overlapping(b1, b2)) System.out.println("Error. The blocks selected are overlapped.");
+            else b_selected.div(b1, b2, ref);
+        }
         else System.out.println("Error. Not all cells are of type Number.");
     }
 
-    public void substract(Block b1, Block b2, Boolean ref){ //no se superponen (solo con b2)!!!
-        if (b_selected.allDouble() && b1.allDouble() ) b_selected.substract(b1, b2, ref);
+    public void substract(Block b1, Block b2, Boolean ref){
+        if (b_selected.allDouble() && b1.allDouble() ){
+            if(overlapping(b_selected, b2)) System.out.println("Error. The blocks selected are overlapped.");
+            else if(overlapping(b1, b2)) System.out.println("Error. The blocks selected are overlapped.");
+            else b_selected.substract(b1, b2, ref);
+        }
         else System.out.println("Error. Not all cells are of type Number.");
     }
 
@@ -298,7 +316,7 @@ public class Sheet {
         b_selected.extract(b1, ref);
     }
 
-    public void dayOfTheWeek (Block b1,Cell c, Boolean ref){ //no se superponen?
+    public void dayOfTheWeek (Block b1,Cell c, Boolean ref){ //no se superponen? q hace la funcion
         if(b_selected.allDate()) b_selected.dayOfTheWeek(b1, ref);
         else System.out.println("Error. Not all cells are of type Date.");
     }
@@ -349,7 +367,8 @@ public class Sheet {
         else System.out.println("Error. Not all cells are of type Number.");
     }
 
-    public void CPearson(Block b, Cell c, Boolean ref, Boolean val){   //no se superponen??
+    //no ha de devolver nada en el bloque
+    public void CPearson(Block b, Cell c, Boolean ref, Boolean val){   //no se superponen?? q hace la funcion
         if(b_selected.allDouble() && b.allDouble()){
             b_selected.CPearson(b, c, ref, val);
         }
