@@ -274,38 +274,12 @@ public class Sheet {
         else b_selected.SortBlock(b_selected ,n_col, Criteria);
     }
 
-    public Cell find(double n){
-        if(b_selected.allDate()) return b_selected.find(n);
-        else System.out.println("Error. Not all cells are of type Number.");
-        return null;
+    public Cell find(Object o){
+        return b_selected.find(o);
     }
 
-    public Cell find(String s){
-        if(b_selected.allDate()) return b_selected.find(s);
-        else System.out.println("Error. Not all cells are of type String.");
-        return null;
-    }
-
-    public Cell find(LocalDate ld){
-        if(b_selected.allDate()) return b_selected.find(ld);
-        else System.out.println("Error. Not all cells are of type Date.");
-        return null;
-    }
-
-    public void findAndReplace(double n, double r){
-        if(b_selected.allDouble()) b_selected.findAndReplace(n, r);
-        else System.out.println("Error. Not all cells are of type Number.");
-    }
-
-    public void findAndReplace(String s, String r){
-        if(b_selected.allText()) b_selected.findAndReplace(s, r);
-        else System.out.println("Error. Not all cells are of type String.");
-    }
-
-    public void findAndReplace(LocalDate ld, LocalDate r){
-        if(b_selected.allDate()) b_selected.findAndReplace(ld, r);
-        else System.out.println("Error. Not all cells are of type Date.");
-
+    public void findAndReplace(Object n, Object r){
+        b_selected.findAndReplace(n, r);
     }
 
     public Boolean overlapping(Block b1, Block b2){
