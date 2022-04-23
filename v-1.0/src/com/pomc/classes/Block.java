@@ -51,11 +51,23 @@ public class Block {
     }
 
     public boolean allDate() {
+        LocalDate d = null;
         for (int i = 0; i < this.block[0].length; ++i) {
             for (int j = 0; j < this.block[0].length; ++j)
                 if (!this.block[i][j].isDate()) return false;
         }
+        return true;
+    }
 
+    public boolean isEqual(Block b) {
+
+        if (b.number_cols() != this.block[0].length || b.number_rows() != this.block.length) return false;
+
+        for (int i = 0; i < b.number_rows(); ++i) {
+            for (int j = 0; j < b.number_cols(); ++j) {
+                if (b.getCell(i,j).getInfo() != this.block[i][j].getInfo()) return false;
+            }
+        }
         return true;
     }
 
