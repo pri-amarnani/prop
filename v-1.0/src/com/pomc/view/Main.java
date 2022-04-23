@@ -10,7 +10,8 @@ public class Main {
 
 
     public static void menuTextFunctions(String docSheet, String sheetBlock){
-        while(true) {
+        boolean menu = true;
+        while(menu) {
             System.out.println("In Sheet " + docSheet);
             System.out.println("Select an action:");
             System.out.println("(1) Replace with Criteria");
@@ -21,6 +22,9 @@ public class Main {
             if (num != null) {
                 System.out.println("\n");
                 switch (num) {
+                    case 0:
+                        menu = false;
+                        break;
                     case 1:
                         System.out.println("(4) Delete a Sheet");
                         break;
@@ -31,7 +35,7 @@ public class Main {
                         System.out.println("e a Sheet");
                         break;
                     default:
-                        System.out.println("2222Sheet");
+                        System.out.println("\n");
                         break;
                 }
                 System.out.println("\n");
@@ -41,7 +45,8 @@ public class Main {
     }
 
     public static void menuDateFunctions(String docSheet, String sheetBlock){
-        while(true) {
+        boolean menu = true;
+        while(menu) {
             System.out.println("In Sheet " + docSheet);
             System.out.println("Select an action:");
             System.out.println("(1) Extract");
@@ -52,6 +57,9 @@ public class Main {
             if (num != null) {
                 System.out.println("\n");
                 switch (num) {
+                    case 0:
+                        menu = false;
+                        break;
                     case 1:
                         System.out.println("(4) Delete a Sheet");
                         break;
@@ -62,7 +70,7 @@ public class Main {
                         System.out.println("e a Sheet");
                         break;
                     default:
-                        System.out.println("2222Sheet");
+                        System.out.println("\n");
                         break;
                 }
                 System.out.println("\n");
@@ -72,7 +80,8 @@ public class Main {
     }
 
     public static void menuMathematicFunctions(String docSheet, String sheetBlock){
-        while(true) {
+        boolean menu = true;
+        while(menu) {
             System.out.println("In Sheet " + docSheet);
             System.out.println("Select an action:");
             System.out.println("(1) Addition");
@@ -91,6 +100,9 @@ public class Main {
             if (num != null) {
                 System.out.println("\n");
                 switch (num) {
+                    case 0:
+                        menu = false;
+                        break;
                     case 1:
                         System.out.println("(4) Delete a Sheet");
                         break;
@@ -122,7 +134,7 @@ public class Main {
                         System.out.println("e a Sheet");
                         break;
                     default:
-                        System.out.println("2222Sheet");
+                        System.out.println("\n");
                         break;
                 }
                 System.out.println("\n");
@@ -132,7 +144,8 @@ public class Main {
     }
 
     public static void menuFunctions(String docSheet, String sheetBlock){
-        while(true) {
+        boolean menu = true;
+        while(menu) {
             System.out.println("In Sheet " + docSheet);
             System.out.println("Select an action:");
             System.out.println("(1) Find Cell");
@@ -149,6 +162,9 @@ public class Main {
             if (num != null) {
                 System.out.println("\n");
                 switch (num) {
+                    case 0:
+                        menu = false;
+                        break;
                     case 1:
                         System.out.println("(4) Delete a Sheet");
                         break;
@@ -174,7 +190,7 @@ public class Main {
                         System.out.println("e a Sheet");
                         break;
                     default:
-                        System.out.println("2222Sheet");
+                        System.out.println("\n");
                         break;
                 }
                 System.out.println("\n");
@@ -183,7 +199,8 @@ public class Main {
     }
 
     public static void menuSheet(String docSheet){
-        while(true) {
+        boolean menu = true;
+        while(menu) {
             System.out.println("In Sheet " + docSheet);
             System.out.println("Select an action:");
             System.out.println("(1) Show Cells");
@@ -198,26 +215,56 @@ public class Main {
             if (num != null) {
                 System.out.println("\n");
                 switch (num) {
+                    case 0:
+                        menu = false;
+                        break;
                     case 1:
-                        System.out.println("(4) Delete a Sheet");
+                        String[][] cellsContents = DomainController.currentSheetCells();
+                        for(int i = 0; i < cellsContents.length ; ++i) {
+                            for (int j = 0; j < cellsContents[0].length ; ++j) {
+                                System.out.print(" | " + cellsContents[i][j]);
+                            }
+                            System.out.print(" | \n");
+                        }
                         break;
                     case 2:
-                        System.out.println("(4)2t");
+                        System.out.println("Input where to add the row:");
+                        Integer newRowPos = numberInsertion(DomainController.currentSheetRows(), 0);
+                        if (newRowPos == 0) newRowPos = DomainController.currentSheetRows();
+                        DomainController.currentSheetAddRow(newRowPos);
+                        System.out.println("Row in position " + newRowPos + " was added to the Sheet");
                         break;
                     case 3:
-                        System.out.println("e a Sheet");
+                        System.out.println("Input where to add the column:");
+                        Integer newColPos = numberInsertion(DomainController.currentSheetCols(), 0);
+                        if (newColPos == 0) newColPos = DomainController.currentSheetRows();
+                        DomainController.currentSheetAddCol(newColPos);
+                        System.out.println("Column in position " + newColPos + " was added to the Sheet");
                         break;
                     case 4:
-                        System.out.println("e a Sheet");
+                        System.out.println("Input the number of row to delete:");
+                        Integer rowPos = numberInsertion(DomainController.currentSheetRows(), 0);
+                        if (isUserSure()) {
+                            DomainController.currentSheetDeleteRow(rowPos);
+                            System.out.println("Row in position " + rowPos + " was deleted");
+                        }
+                        else System.out.println("No row was deleted.");
                         break;
                     case 5:
-                        System.out.println("e a Sheet");
+                        System.out.println("Input the number of column to delete:");
+                        Integer colPos = numberInsertion(DomainController.currentSheetCols(), 0);
+                        if (isUserSure()) {
+                            DomainController.currentSheetDeleteCol(colPos);
+                            System.out.println("Column in position " + colPos + " was deleted");
+                        }
+                        else System.out.println("No column was deleted.");
                         break;
                     case 6:
-                        System.out.println("e a Sheet");
+
+                        System.out.println("e aSheet");
                         break;
                     default:
-                        System.out.println("2222Sheet");
+                        System.out.println("\n");
                         break;
                 }
                 System.out.println("\n");
@@ -236,19 +283,32 @@ public class Main {
             System.out.println("\n \n Enter number:");
             Integer num = numberInsertion(4,1);
             if (num != null) {
-                System.out.println("\n");
                 switch (num) {
                     case 1:
-                        for(String name : sheetNames){
-                            System.out.println(name);
+                        for(int i = 0; i < sheetNames.length; ++i ){
+                            System.out.println((i+1)+". " + sheetNames[i]);
                         }
                         break;
                     case 2:
-                        System.out.println("(4)2t");
+                        if (sheetNames[0].equals("No Sheets")) System.out.println("The document has no sheets.");
+                        else {
+                            System.out.println("Input Sheet Name");
+                            String sheetName = userInput.nextLine();
+                            while (!foundIn(sheetName,sheetNames)) {
+                                System.out.println("Sheet name not found. Try again:");
+                                sheetName = userInput.nextLine();
+                            }
+                            DomainController.setDocSheet(sheetName);
+                            menuSheet(sheetName);
+                        }
                         break;
                     case 3:
                         System.out.println("Input Sheet Name");
                         String title = userInput.nextLine();
+                        while (foundIn(title,sheetNames)) {
+                            System.out.println("Sheet already exits. Try again:");
+                            title = userInput.nextLine();
+                        }
                         System.out.println("Input Sheet Rows");
                         Integer nRows = numberInsertion(30000,0);
                         System.out.println("Input Sheet Columns");
@@ -256,8 +316,8 @@ public class Main {
                         String newTitle = DomainController.addSheet(title,nRows,nCols);
                         System.out.println( newTitle + " sheet added to your Document");
                         break;
-                    default:
-                        if (sheetNames.length < 2) System.out.println("The document has no sheets.");
+                    case 4:
+                        if (sheetNames[0].equals("No Sheets")) System.out.println("The document has no sheets.");
                         else {
                             System.out.println("Input Sheet Name");
                             String sheet = userInput.nextLine();
@@ -265,16 +325,21 @@ public class Main {
                                 System.out.println("Sheet name not found. Try again:");
                                 sheet = userInput.nextLine();
                             }
-                            DomainController.deleteSheet(sheet);
-                            System.out.println("Sheet deleted");
+                            if (isUserSure()){
+                                DomainController.deleteSheet(sheet);
+                                System.out.println("The "+ sheet + " sheet was deleted");
+                            }
+                            else System.out.println("No sheets deleted");
                         }
                         break;
+                    default:
+                        System.out.println("\n");
+                        break;
                 }
-                System.out.println("\n");
             }
+            System.out.println("\n");
         }
     }
-
 
     public static boolean foundIn (String element, String[] array) {
         for(String i : array){
@@ -295,9 +360,22 @@ public class Main {
                 return num;
             }
         } catch (NumberFormatException e) {
-            System.out.println("Invalid character, enter a number. \n");
+            System.out.println("Invalid character, enter a number:");
+            return numberInsertion(max,min);
         }
         return null;
+    }
+
+    public static boolean isUserSure(){
+        System.out.println("Are you sure? (y/n)");
+        while(true) {
+            String userIn = userInput.nextLine();
+            if (userIn.equals("y") || userIn.equals("yes") ) return true;
+            else if (userIn.equals("n") || userIn.equals("no")) return false;
+            else {
+                System.out.println("Invalid answer. Are you sure ? (y/n)");
+            }
+        }
     }
 
     public static void main(String[] args) {
@@ -305,6 +383,7 @@ public class Main {
         System.out.println("------------------------------");
         System.out.println("Enter title for document:");
         String title = userInput.nextLine();
+        System.out.println("\n");
         DomainController.initializeDoc(title,"out/production/v-1.0/com/pomc");
         menuDocument();
     }
