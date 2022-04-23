@@ -109,7 +109,7 @@ public class Sheet {
 
         for (int i = 0; i < sh.getNumRows(); ++i) {
             for (int j = 0; j < sh.getNumCols(); ++j) {
-                if (!sh.getCell(i,j).getInfo().equals(this.getCell(i,j).getInfo())) return false;
+                if (this.getCell(i,j).getInfo() != sh.getCell(i,j).getInfo()) return false;
             }
         }
         return true;
@@ -126,9 +126,10 @@ public class Sheet {
             }
         }
         Object o1 = c.changeValue(o);
-        if(o1 != null){
+        if(o1 != null && id != -1 && id2 != -1){
             cells.elementAt(id2).setElementAt((Cell) o1, id);
         }
+        else System.out.println("Cell not found");
     }
 
     public void NewRow(int pos){
