@@ -12,6 +12,7 @@ public class CellStub extends Cell {
 
     private Object info;
     private String type = "";
+    private Map.Entry<String,Vector<Cell>> refInfo;
 
     /**
      * Creadora
@@ -55,16 +56,17 @@ public class CellStub extends Cell {
 
     @Override
     public Object getInfo() {
-        return null;
+        return this.info;
     }
 
     @Override
-    public Object changeValue(Object o) {
-        return null;
+    public void changeValue(Object o) {
+        this.info = o;
+        //if (hasRefs()) updateRefs();
     }
 
     @Override
     public void setRefInfo(Map.Entry<String, Vector<Cell>> refInfo) {
-
+        this.refInfo = refInfo;
     }
 }
