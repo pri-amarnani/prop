@@ -21,32 +21,32 @@ public class NumCell extends Cell {
     }
 
     public double truncar(){
-        return Math.floor(info*10)/100;
+        this.info= Math.floor(info*10)/10;
+        return info;
     }
 
     //metros kilometros centimetros
     //metro a inch
     public double conversion(String convFrom, String convTo) {
         UnitOf.Length length = new UnitOf.Length();
-        double result=-1;
         if (Objects.equals(convFrom, "m")) {
-            if (Objects.equals(convTo, "cm")) result= length.fromMeters(info).toCentimeters();
-            if (Objects.equals(convTo, "km")) result=length.fromMeters(info).toKilometers();
-            if (Objects.equals(convTo, "inches")) result=length.fromMeters(info).toInches();
+            if (Objects.equals(convTo, "cm")) this.info= length.fromMeters(info).toCentimeters();
+            if (Objects.equals(convTo, "km")) this.info=length.fromMeters(info).toKilometers();
+            if (Objects.equals(convTo, "inches")) this.info=length.fromMeters(info).toInches();
         }
 
-        if (Objects.equals(convFrom, "inches")) result=length.fromInches(info).toMeters();
+        if (Objects.equals(convFrom, "inches")) this.info=length.fromInches(info).toMeters();
 
         if (Objects.equals(convFrom, "km")) {
-            if (Objects.equals(convTo, "m")) result=length.fromKilometers(info).toMeters();
-            if (Objects.equals(convTo, "cm")) result=length.fromKilometers(info).toCentimeters();
+            if (Objects.equals(convTo, "m")) this.info=length.fromKilometers(info).toMeters();
+            if (Objects.equals(convTo, "cm")) this.info=length.fromKilometers(info).toCentimeters();
         }
 
         if (Objects.equals(convFrom, "cm")) {
-            if (Objects.equals(convTo, "m")) result=length.fromCentimeters(info).toMeters();
-            if (Objects.equals(convTo, "km")) result=length.fromMeters(info).toKilometers();
+            if (Objects.equals(convTo, "m")) this.info=length.fromCentimeters(info).toMeters();
+            if (Objects.equals(convTo, "km")) this.info=length.fromMeters(info).toKilometers();
         }
-        return result; //si devuelve -1 falla la conv
+        return info; //si devuelve -1 falla la conv
     }
 
 

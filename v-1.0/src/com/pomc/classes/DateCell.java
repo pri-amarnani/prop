@@ -38,7 +38,7 @@ public class DateCell extends Cell {
 
     @Override
     public String getType() {
-        return null;
+        return type;
     }
 
     @Override

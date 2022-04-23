@@ -22,7 +22,7 @@ public abstract class Cell {
     public Cell(int row,int column){ //debería quitar la creadora??????
         this.row=row;
         this.column=column;
-        //faltan el array de punteros para las referencias!!!
+        this.refs=null;
     }
 
     /**
