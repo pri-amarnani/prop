@@ -327,11 +327,13 @@ public class Block {
     public double median (Cell c, Boolean ref, Boolean val) {
         double [] arr = new double[this.block.length*this.block[0].length];
         Vector<Cell> s = new Vector<>();
-
+        int ii = 0;
         for (int i = 0; i < this.block.length; ++i) {
             for (int j = 0; j < this.block[0].length; ++j) {
-                arr[i+j] = (double) this.block[i][j].getInfo();
+                arr[ii] = (Double) this.block[i][j].getInfo();
                 s.add(this.block[i][j]);
+
+                ii += 1;
             }
         }
 
@@ -372,18 +374,36 @@ public class Block {
         double mean1 = this.mean(c,false,false);
         double mean2 = b.mean(c,false,false);
 
+        double mean_1 = 0;
+        double mean_2 = 0;
+
         double [] x = new double[this.block.length*this.block[0].length];
         double [] y = new double[this.block.length*this.block[0].length];
+
+        int ii = 0;
+        int jj = 0;
+
         Vector<Cell> s = new Vector<>();
 
         for (int i = 0; i < this.block.length; ++i) {
             for (int j = 0; j < this.block[0].length; ++j) {
-                x[i+j] = (double) this.block[i][j].getInfo();
+                System.out.println((double) b.getCell(i,j).getInfo());
+
+                mean_1 += (double) this.block[i][j].getInfo();
+                mean_2 += (double) b.getCell(i,j).getInfo();
+
+                x[ii] = (double) this.block[i][j].getInfo();
                 s.add(this.block[i][j]);
-                y[i+j] = (double) b.getCell(i,j).getInfo();
+                y[jj] = (double) b.getCell(i,j).getInfo();
                 s.add(b.getCell(i,j));
+
+                ii += 1;
+                jj += 1;
             }
         }
+
+        System.out.println(mean_1/x.length);
+        System.out.println(mean_2/x.length);
 
         double sum = 0;
 
@@ -391,7 +411,7 @@ public class Block {
             sum += (x[i] - mean1)*(y[i] - mean2);
         }
 
-        double cov = sum/x.length;
+        double cov = sum/(x.length-1);
 
         if (val) {
             c.changeValue(cov);
@@ -409,11 +429,14 @@ public class Block {
         double sum = 0, std = 0;
         double [] arr = new double[this.block.length*this.block[0].length];
         Vector<Cell> s = new Vector<>();
+        int ii = 0;
         for (int i = 0; i < this.block.length; ++i) {
             for (int j = 0; j < this.block[0].length; ++j) {
-                arr[i+j] = (double) this.block[i][j].getInfo();
+                arr[ii] = (double) this.block[i][j].getInfo();
                 s.add(this.block[i][j]);
                 sum += (double) this.block[i][j].getInfo();
+
+                ii += 1;
             }
         }
 
@@ -437,7 +460,13 @@ public class Block {
     }
 
     public double CPearson (Block b, Cell c, Boolean ref, Boolean val) {
-        double cp = this.covar(b,c,false, false)/(b.std(c,false,false)*this.std(c,false,false));
+        double d1 = b.std(c,false,false);
+        double d2 = this.std(c, false, false);
+
+        double cp;
+        if (d1 == 0 || d2 == 0) cp = 1;
+
+        else cp = this.covar(b,c,false, false)/(d1*d2);
 
         if (val) {
             c.changeValue(cp);
