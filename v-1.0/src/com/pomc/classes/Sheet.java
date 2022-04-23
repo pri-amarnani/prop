@@ -33,29 +33,17 @@ public class Sheet {
         return this.b_selected;
     }
 
+    public Vector<Vector<Cell>> getCells() {
+        return cells;
+    }
+
     public void setTitle (String title) {
         this.title = title;
     }
 
-    /*
-    public Sheet() {
-        this.title = s;
-        for(int i = 0; i < 60; ++i){
-            Vector<Cell> row = new Vector<>();
-            for(int j = 0; j < 60; ++j){
-                row.add(new NumCell(i, j, null));
-            }
-            cells.add(row);
-        }
-        num_cols = 60;
-        num_rows = 60;
-    }
-     */
-
     public Sheet(String title) {
-        if(title != null) this.title = title;
-        else this.title = "titulo por defecto"; // valor default depende del num de sheet
-        for(int i = 0; i < 64; ++i){  //default 60x60
+        this.title = title;
+        for(int i = 0; i < 64; ++i){
             Vector<Cell> row = new Vector<>();
             for(int j = 0; j < 64; ++j){
                 row.add(new NumCell(i, j, null));
@@ -66,9 +54,8 @@ public class Sheet {
         num_rows = 64;
     }
 
-    public Sheet(Vector<Vector<Cell>> cells, String title) {  //not sure
-        if(title != null) this.title = title;
-        else this.title = "titulo por defecto";
+    public Sheet(Vector<Vector<Cell>> cells, String title) {  //not sure //arrray to vector
+        this.title = title;
         this.cells = cells;
         num_rows = cells.size();
         num_cols = cells.elementAt(0).size();
