@@ -9,7 +9,6 @@ public class Document {
     String Title;
     Vector<Sheet> docSheets = new Vector<Sheet>();
     private File docFile;
-    private FileWriter docWriter;
     private static Scanner userInput = new Scanner(System.in);
 
     //constructor
@@ -58,10 +57,11 @@ public class Document {
         for (int i = 0; i < docSheets.size(); ++i) {
             if (docSheets.get(i).title.equals(title) ) {
                 docSheets.remove(i);
-                break;
+                return;
             }
         }
-        System.out.println("Sheet doesn't exist");
+        System.out.println("Unexistent Sheet");
+        return;
         //searches by object
     }
 

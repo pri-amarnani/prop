@@ -12,7 +12,7 @@ public class NumCell extends Cell {
     //truncament
     //conversio
     //aritmetiques *falta*
-    private double info;
+    private Double info;
     private final String type="N";
 
     public NumCell(int row, int column, Double info){
