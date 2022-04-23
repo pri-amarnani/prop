@@ -63,10 +63,19 @@ public class Block {
         // copy to clipboard
     }
 
-    public void ref(Block b, Boolean ref) {   //REVISAR!!!!
+    //copy values from one block to another
+    public void ref(Block b, Boolean ref) {
         for (int i = 0; i < this.block.length; ++i) {
             for (int j = 0; j < this.block[0].length; ++j) {
-                b.getCell(i,j).changeValue( this.block[i][j].getInfo());
+                b.getCell(i,j).changeValue(this.block[i][j].getInfo());
+
+                if (ref) {
+                    Vector<Cell> s = new Vector<>(1);
+                    s.add(this.block[i][j]);
+
+                    Map.Entry<String, Vector<Cell>> r = new AbstractMap.SimpleEntry<>("EQUAL", s);
+                    b.getCell(i, j).setRefInfo(r);
+                }
             }
         }
     }
