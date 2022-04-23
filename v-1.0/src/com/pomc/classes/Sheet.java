@@ -1,7 +1,10 @@
 package com.pomc.classes;
 
+import com.pomc.tests.stubs.CellStub;
+
 import java.time.LocalDate;
 import java.util.Vector;
+import java.util.Collections; //not sure
 
 public class Sheet {
 
@@ -36,6 +39,21 @@ public class Sheet {
     public Vector<Vector<Cell>> getCells() {
         return cells;
     }
+/*
+    public Cell[][] getArray_cells() {
+        Cell[][] b2 = new Cell[cells.size()][cells.elementAt(0).size()];
+
+        for(int i = 0; i < 11; ++i){
+            Vector<Cell> row = cells.elementAt(i);
+
+            for(int j = 0; j < 10; ++j){
+                b2[i][j] = row.elementAt(j);
+            }
+        }
+        return b2;
+    }
+
+ */
 
     public void setTitle (String title) {
         this.title = title;
@@ -54,11 +72,22 @@ public class Sheet {
         num_rows = 64;
     }
 
-    public Sheet(Vector<Vector<Cell>> cells, String title) {  //not sure //arrray to vector
+    public Sheet(Cell[][] cells, String title) {  //not sure //arrray to vector
+
+        Vector<Vector<Cell>> v_cells = new Vector<>();
+
+        for(int i = 0; i < cells.length; ++ i ){
+            Vector<Cell> row = new Vector<>();
+            for(int j = 0; j < cells[0].length; ++j){
+                row.add(cells[i][j]);   //cells[i][j]  quizas mejor paso a paso
+            }
+            v_cells.add(row);
+        }
+
         this.title = title;
-        this.cells = cells;
-        num_rows = cells.size();
-        num_cols = cells.elementAt(0).size();
+        this.cells = v_cells;
+        num_rows = v_cells.size();
+        num_cols = v_cells.elementAt(0).size();
     }
 
     public Sheet(int rows, int columns, String title){
@@ -234,18 +263,18 @@ public class Sheet {
         return null;
     }
 
-    public void findAndReplace(double n, double r){  //(n,r)
-        if(b_selected.allDouble()) b_selected.findAndReplace(n);
+    public void findAndReplace(double n, double r){
+        if(b_selected.allDouble()) b_selected.findAndReplace(n, r);
         else System.out.println("Error. Not all cells are of type Number.");
     }
 
-    public void findAndReplace(String s){ //pasar dos doubles
-        if(b_selected.allText()) b_selected.findAndReplace(s);
+    public void findAndReplace(String s, String r){
+        if(b_selected.allText()) b_selected.findAndReplace(s, r);
         else System.out.println("Error. Not all cells are of type String.");
     }
 
-    public void findAndReplace(LocalDate ld){ //pasar dos doubles
-        if(b_selected.allDate()) b_selected.findAndReplace(ld);
+    public void findAndReplace(LocalDate ld, LocalDate r){
+        if(b_selected.allDate()) b_selected.findAndReplace(ld, r);
         else System.out.println("Error. Not all cells are of type Date.");
 
     }
