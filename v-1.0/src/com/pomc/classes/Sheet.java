@@ -1,10 +1,7 @@
 package com.pomc.classes;
 
-import com.pomc.tests.stubs.CellStub;
-
 import java.time.LocalDate;
 import java.util.Vector;
-import java.util.Collections; //not sure
 
 public class Sheet {
 
@@ -14,6 +11,9 @@ public class Sheet {
     int num_cols;
     Block b_selected;
 
+    public boolean isEqual(Block b1, Block b2){
+        return b1.isEqual(b2);
+    }
 
     public int getNumRows () {
         return this.num_rows;
@@ -100,6 +100,34 @@ public class Sheet {
                 row.add(new NumCell(i, j, null));
             }
             cells.add(row);
+        }
+    }
+
+    public boolean isEqual(Sheet sh) {
+
+        if (sh.getNumCols() != this.getNumCols() || sh.getNumRows() != this.getNumRows()) return false;
+
+        for (int i = 0; i < sh.getNumRows(); ++i) {
+            for (int j = 0; j < sh.getNumCols(); ++j) {
+                if (!sh.getCell(i,j).getInfo().equals(this.getCell(i,j).getInfo())) return false;
+            }
+        }
+        return true;
+    }
+
+    public void change_value(Cell c, Object o){   //cambiar el valor de las celdas
+        Integer id = -1, id2 = -1;
+        for(int i = 0; i < cells.size(); ++i){
+            id2 = cells.elementAt(i).indexOf(c);
+            if(id2 != null){
+                id = id2;
+                id2 = i;
+                break;
+            }
+        }
+        Object o1 = c.changeValue(o);
+        if(o1 != null){
+            cells.elementAt(id2).setElementAt((Cell) o1, id);
         }
     }
 
@@ -240,7 +268,7 @@ public class Sheet {
         else System.out.println("Error. Not all cells are of type Date.");
     }
 
-    public void SortBlock(int n_col, String Criteria){   //solo se puede ordenar todo texto o todo double
+    public void SortBlock(int n_col, String Criteria){
         if(!b_selected.allText() || !b_selected.allDouble() || b_selected.allDate()) System.out.println("Error. Whole Block has to be of type number or type text.");
         else b_selected.SortBlock(b_selected ,n_col, Criteria);
     }
@@ -339,7 +367,7 @@ public class Sheet {
         b_selected.extract(b1, ref);
     }
 
-    public void dayOfTheWeek (Block b1, Cell c, Boolean ref){ //no se superponen? q hace la funcion
+    public void dayOfTheWeek (Block b1, Cell c, Boolean ref){
         if(b_selected.allDate()) b_selected.dayOfTheWeek(b1, ref);
         else System.out.println("Error. Not all cells are of type Date.");
     }
@@ -390,8 +418,7 @@ public class Sheet {
         else System.out.println("Error. Not all cells are of type Number.");
     }
 
-    //no ha de devolver nada en el bloque
-    public void CPearson(Block b, Cell c, Boolean ref, Boolean val){   //no se superponen?? q hace la funcion
+    public void CPearson(Block b, Cell c, Boolean ref, Boolean val){
         if(b_selected.allDouble() && b.allDouble()){
             System.out.println(b_selected.CPearson(b, c, ref, val));
         }
