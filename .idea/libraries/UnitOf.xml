@@ -2,6 +2,7 @@
   <library name="UnitOf">
     <CLASSES>
       <root url="jar://$USER_HOME$/Downloads/UnitOf-master/UnitOf.jar!/" />
+      <root url="jar://$PROJECT_DIR$/v-1.0/libs/UnitOf.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />
