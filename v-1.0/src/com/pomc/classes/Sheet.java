@@ -287,7 +287,7 @@ public class Sheet {
 
     public void floor(Block b, Boolean ref){
         if (b_selected.allDouble() && b.allDouble()){
-            if(overlapping(b_selected, b)) System.out.println("Error. The blocks selected are overlapped.");
+            if(ref && overlapping(b_selected, b)) System.out.println("Error. The blocks selected are overlapped.");
             else b_selected.floor(b, ref);
         }
         else System.out.println("Error. Not all cells are of type Number.");
@@ -301,8 +301,8 @@ public class Sheet {
 
     public void sum(Block b1, Block b2, Boolean ref){
         if (b_selected.allDouble() && b1.allDouble()){
-            if(overlapping(b_selected, b2)) System.out.println("Error. The blocks selected are overlapped.");
-            else if(overlapping(b1, b2)) System.out.println("Error. The blocks selected are overlapped.");
+            if(ref && overlapping(b_selected, b2)) System.out.println("Error. The blocks selected are overlapped.");
+            else if(ref && overlapping(b1, b2)) System.out.println("Error. The blocks selected are overlapped.");
             else b_selected.sum(b1, b2, ref);
         }
         else System.out.println("Error. Not all cells are of type Number.");
@@ -311,8 +311,8 @@ public class Sheet {
 
     public void mult(Block b1, Block b2, Boolean ref){
         if (b_selected.allDouble() && b1.allDouble()){
-            if(overlapping(b_selected, b2)) System.out.println("Error. The blocks selected are overlapped.");
-            else if(overlapping(b1, b2)) System.out.println("Error. The blocks selected are overlapped.");
+            if(ref && overlapping(b_selected, b2)) System.out.println("Error. The blocks selected are overlapped.");
+            else if(ref && overlapping(b1, b2)) System.out.println("Error. The blocks selected are overlapped.");
             else b_selected.mult(b1, b2, ref);
         }
         else System.out.println("Error. Not all cells are of type Number.");
@@ -321,8 +321,8 @@ public class Sheet {
 
     public void div(Block b1, Block b2, Boolean ref){
         if (b_selected.allDouble() && b1.allDouble()) {
-            if(overlapping(b_selected, b2)) System.out.println("Error. The blocks selected are overlapped.");
-            else if(overlapping(b1, b2)) System.out.println("Error. The blocks selected are overlapped.");
+            if(ref && overlapping(b_selected, b2)) System.out.println("Error. The blocks selected are overlapped.");
+            else if(ref && overlapping(b1, b2)) System.out.println("Error. The blocks selected are overlapped.");
             else b_selected.div(b1, b2, ref);
         }
         else System.out.println("Error. Not all cells are of type Number.");
@@ -331,8 +331,8 @@ public class Sheet {
 
     public void substract(Block b1, Block b2, Boolean ref){
         if (b_selected.allDouble() && b1.allDouble() ){
-            if(overlapping(b_selected, b2)) System.out.println("Error. The blocks selected are overlapped.");
-            else if(overlapping(b1, b2)) System.out.println("Error. The blocks selected are overlapped.");
+            if(ref && overlapping(b_selected, b2)) System.out.println("Error. The blocks selected are overlapped.");
+            else if(ref && overlapping(b1, b2)) System.out.println("Error. The blocks selected are overlapped.");
             else b_selected.substract(b1, b2, ref);
         }
         else System.out.println("Error. Not all cells are of type Number.");
