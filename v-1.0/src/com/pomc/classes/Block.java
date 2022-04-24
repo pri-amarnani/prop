@@ -128,6 +128,15 @@ public class Block {
                 Arrays.sort(block, (a, b) -> ((String) b[n_col].getInfo()).compareTo((String) a[n_col].getInfo()));
             }
         }
+
+        for (int i = 0; i < size_r; ++i) {
+            for (int j = 0; j < size_c; ++j) {
+                this.block[i][j].setRow(i);
+                this.block[i][j].setColumn(j);
+            }
+        }
+        ul = this.block[0][0];
+        dr = this.block[size_r-1][size_c-1];
     }
 
     public Cell find (Object n) {
