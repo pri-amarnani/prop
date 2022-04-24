@@ -68,7 +68,7 @@ public class DateCell extends Cell {
             return n;
         }
         if (hasRefs()) updateRefs();
-        return null;
+        return this;
     }
 
     @Override

@@ -75,7 +75,7 @@ public class NumCell extends Cell {
         }
         else if(o.getClass()== LocalDate.class){
             DateCell d=new DateCell(getRow(),getColumn(),(LocalDate)o);
-            this.info= null;
+            this.info=null;
             this.setRow(null);
             this.setColumn(null);
             System.gc();
@@ -83,7 +83,7 @@ public class NumCell extends Cell {
         }
 
         if (hasRefs()) updateRefs();
-        return null;
+        return this;
     }
 
     @Override

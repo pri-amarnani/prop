@@ -83,7 +83,7 @@ public class TextCell extends Cell {
             return d;
         }
         if (hasRefs()) updateRefs();
-        return null;
+        return this;
     }
 
     @Override
