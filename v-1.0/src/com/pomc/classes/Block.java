@@ -376,7 +376,7 @@ public class Block {
                     cells[j] = n;
                 }
 
-                else if (Objects.equals(criteria, "cap_first_letter")) {
+                else if (Objects.equals(criteria, "cap first letter")) {
                     Cell n = (Cell) cells[j].changeValue(s.substring(0, 1).toUpperCase(Locale.ROOT)
                             + s.substring(1));
                     cells[j] = n;
