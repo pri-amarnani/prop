@@ -149,6 +149,7 @@ public class Sheet {
             pos_row.add(c);
         }
         cells.insertElementAt(pos_row, pos);
+        /*
         for(int i = pos + 1; i < num_rows; ++i){
             Vector<Cell> row = cells.elementAt(i);
             for(int j = 0; j < num_cols; ++j){
@@ -158,6 +159,8 @@ public class Sheet {
             }
             cells.setElementAt(row,i);
         }
+
+         */
     }
 
     public void NewColumn(int pos){
@@ -165,11 +168,14 @@ public class Sheet {
         for(int i = 0; i < num_rows; ++i){
             Vector<Cell> row = cells.elementAt(i);
             row.insertElementAt(new NumCell(i,pos,null), pos);
+            /*
             for(int j = pos + 1; j < num_cols; ++j ) {
                 Cell c = row.elementAt(j);
                 c.setColumn(j);
                 row.setElementAt(c,j);
             }
+
+             */
             cells.setElementAt(row,i);
         }
     }
@@ -179,6 +185,7 @@ public class Sheet {
         else{
             --num_rows;
             cells.removeElement(pos);
+            /*
             for(int i = pos; i < num_rows; ++i){
                 Vector<Cell> row = cells.elementAt(i);
                 for(int j = 0; j < num_cols; ++j){
@@ -188,6 +195,8 @@ public class Sheet {
                 }
                 cells.setElementAt(row,i);
             }
+
+             */
         }
     }
 
@@ -198,11 +207,14 @@ public class Sheet {
             for(int i = 0; i < num_rows; ++i){
                 Vector<Cell> row = cells.elementAt(i);
                 row.removeElementAt(pos);
+                /*
                 for(int j = pos; j < num_cols; ++j ) {
                     Cell c = row.elementAt(j);
                     c.setColumn(j);
                     row.setElementAt(c,j);
                 }
+
+                 */
                 cells.setElementAt(row,i);
             }
         }
@@ -270,8 +282,12 @@ public class Sheet {
     }
 
     public void SortBlock(int n_col, String Criteria){
-        if(!b_selected.allText() || !b_selected.allDouble() || b_selected.allDate()) System.out.println("Error. Whole Block has to be of type number or type text.");
-        else b_selected.SortBlock(b_selected ,n_col, Criteria);
+        Vector<Cell> v = cells.firstElement();
+        Vector<Cell> v2 = cells.lastElement();
+        Block b = create_block(v.elementAt(n_col), v2.elementAt(n_col));
+
+        if(!b.allText() || !b.allDouble()) System.out.println("Error. Whole Block has to be of type number or type text.");
+        //else b_selected.SortBlock(n_col, Criteria);
         update(b_selected);
     }
 
