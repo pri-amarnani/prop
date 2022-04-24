@@ -11,6 +11,18 @@ public class Sheet {
     int num_cols;
     Block b_selected;
 
+
+    public void update(Block b){
+
+        Cell ul = b.ul;
+        Cell dr = b.dr;
+        for(int i = 0; i < b.number_rows(); ++ i){
+            for(int j = 0; j < b.number_cols(); ++j){
+                getCells().elementAt(ul.getRow() + i).setElementAt(b.getCell(i,j),ul.getColumn() + j); //seguro?
+            }
+        }
+    }
+
     public boolean isEqual(Block b1, Block b2){
         return b1.isEqual(b2);
     }
@@ -115,11 +127,11 @@ public class Sheet {
         return true;
     }
 
-    public void change_value(Cell c, Object o){   //cambiar el valor de las celdas
+    public void change_value(Cell c, Object o){
         Integer id = -1, id2 = -1;
-        for(int i = 0; i < num_rows; ++i){
+        for(int i = 0; i < num_rows; ++i) {
             id = cells.elementAt(i).indexOf(c);
-            if(id != -1 && id != null){
+            if (id != -1 && id != null) {
                 id2 = i;
                 break;
             }
@@ -251,26 +263,18 @@ public class Sheet {
             else b_selected.ref(b, ref);
         }
         else System.out.println("Error. The blocks selected have different sizes.");
+        update(b);
     }
 
-    public void ModifyBlock(double n){
-        if(b_selected.allDate()) b_selected.ModifyBlock(n);
-        else System.out.println("Error. Not all cells are of type Number.");
-    }
-
-    public void ModifyBlock(String s){
-        if(b_selected.allDate()) b_selected.ModifyBlock(s);
-        else System.out.println("Error. Not all cells are of type String.");
-    }
-
-    public void ModifyBlock(LocalDate ld){
-        if(b_selected.allDate()) b_selected.ModifyBlock(ld);
-        else System.out.println("Error. Not all cells are of type Date.");
+    public void ModifyBlock(Object o){
+        b_selected.ModifyBlock(o);
+        update(b_selected);
     }
 
     public void SortBlock(int n_col, String Criteria){
         if(!b_selected.allText() || !b_selected.allDouble() || b_selected.allDate()) System.out.println("Error. Whole Block has to be of type number or type text.");
         else b_selected.SortBlock(b_selected ,n_col, Criteria);
+        update(b_selected);
     }
 
     public Cell find(Object o){
@@ -279,6 +283,7 @@ public class Sheet {
 
     public void findAndReplace(Object n, Object r){
         b_selected.findAndReplace(n, r);
+        update(b_selected);
     }
 
     public Boolean overlapping(Block b1, Block b2){
@@ -295,10 +300,12 @@ public class Sheet {
             else b_selected.floor(b, ref);
         }
         else System.out.println("Error. Not all cells are of type Number.");
+        update(b);
     }
 
     public void convert(Cell c, Boolean ref){ //falta acabar
         b_selected.convert(b_selected, ref);
+        update(b_selected);
     }
 
     public void sum(Block b1, Block b2, Boolean ref){
@@ -308,6 +315,7 @@ public class Sheet {
             else b_selected.sum(b1, b2, ref);
         }
         else System.out.println("Error. Not all cells are of type Number.");
+        update(b2);
     }
 
     public void mult(Block b1, Block b2, Boolean ref){
@@ -317,6 +325,7 @@ public class Sheet {
             else b_selected.mult(b1, b2, ref);
         }
         else System.out.println("Error. Not all cells are of type Number.");
+        update(b2);
     }
 
     public void div(Block b1, Block b2, Boolean ref){
@@ -326,6 +335,7 @@ public class Sheet {
             else b_selected.div(b1, b2, ref);
         }
         else System.out.println("Error. Not all cells are of type Number.");
+        update(b2);
     }
 
     public void substract(Block b1, Block b2, Boolean ref){
@@ -335,6 +345,7 @@ public class Sheet {
             else b_selected.substract(b1, b2, ref);
         }
         else System.out.println("Error. Not all cells are of type Number.");
+        update(b2);
     }
 
     public void extract(Block b1,Cell c, Boolean ref){      //falta acabar
@@ -344,11 +355,13 @@ public class Sheet {
     public void dayOfTheWeek (Block b1, Cell c, Boolean ref){
         if(b_selected.allDate()) b_selected.dayOfTheWeek(b1, ref);
         else System.out.println("Error. Not all cells are of type Date.");
+        update(b1);
     }
 
     public void replaceWithCriteriaText(String criteria){
         if (b_selected.allText()) b_selected.replaceWithCriteriaText(criteria);
         else System.out.println("Error. Not all cells are of type Text.");
+        update(b_selected);
     }
 
     public int length(TextCell c, String criteria){
@@ -357,46 +370,65 @@ public class Sheet {
         return -1;
     }
 
-    public void mean(Cell c, Boolean ref, Boolean val){
+    public Double mean(Cell c, Boolean ref, Boolean val){
         if(b_selected.allDouble()){
-            b_selected.mean(c, ref, val);
+            Cell m = b_selected.mean(c, ref);
+            if(val) cells.elementAt(m.getRow()).setElementAt(m, m.getColumn());    //change_value(c,m);
+            return (Double) m.getInfo();
         }
         else System.out.println("Error. Not all cells are of type Number.");
+
+        return null;
     }
 
-    public void median(Cell c, Boolean ref, Boolean val){
+    public Double median(Cell c, Boolean ref, Boolean val){
         if(b_selected.allDouble()){
-            b_selected.median(c, ref, val);
+            Cell m = b_selected.median(c, ref);
+            if(val) cells.elementAt(m.getRow()).setElementAt(m, m.getColumn());    //change_value(c,m);
+            return (Double) m.getInfo();
         }
         else System.out.println("Error. Not all cells are of type Number.");
+        return null;
     }
 
-    public void var(Cell c, Boolean ref, Boolean val){
+    public Double var(Cell c, Boolean ref, Boolean val){
         if(b_selected.allDouble()){
-            b_selected.var(c, ref, val);
+            Cell m = b_selected.var(c, ref);
+            if(val) cells.elementAt(m.getRow()).setElementAt(m, m.getColumn());    //change_value(c,m);
+            return (Double) m.getInfo();
         }
         else System.out.println("Error. Not all cells are of type Number.");
+        return null;
     }
 
-    public void covar(Block b, Cell c, Boolean ref, Boolean val){ //sii
+    public Double covar(Block b, Cell c, Boolean ref, Boolean val){ //sii
         if(b_selected.allDouble() && b.allDouble()){
-            b_selected.covar(b, c, ref, val);
+            Cell m = b_selected.covar(b, c, ref);
+            if(val) cells.elementAt(m.getRow()).setElementAt(m, m.getColumn());    //change_value(c,m);
+            return (Double) m.getInfo();
         }
         else System.out.println("Error. Not all cells are of type Number.");
+        return null;
     }
 
-    public void std(Cell c, Boolean ref, Boolean val){
+    public Double std(Cell c, Boolean ref, Boolean val){
         if(b_selected.allDouble()){
-            b_selected.std(c, ref, val);
+            Cell m = b_selected.std(c, ref);
+            if(val) cells.elementAt(m.getRow()).setElementAt(m, m.getColumn());    //change_value(c,m);
+            return (Double) m.getInfo();
         }
         else System.out.println("Error. Not all cells are of type Number.");
+        return null;
     }
 
-    public void CPearson(Block b, Cell c, Boolean ref, Boolean val){
+    public Double CPearson(Block b, Cell c, Boolean ref, Boolean val){
         if(b_selected.allDouble() && b.allDouble()){
-            System.out.println(b_selected.CPearson(b, c, ref, val));
+            Cell m = b_selected.CPearson(b, c, ref);
+            if(val) cells.elementAt(m.getRow()).setElementAt(m, m.getColumn());    //change_value(c,m);
+            return (Double) m.getInfo();
         }
         else System.out.println("Error. Not all cells are of type Number.");
+        return null;
     }
 
 }
