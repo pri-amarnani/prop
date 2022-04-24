@@ -51,21 +51,6 @@ public class Sheet {
     public Vector<Vector<Cell>> getCells() {
         return cells;
     }
-/*
-    public Cell[][] getArray_cells() {
-        Cell[][] b2 = new Cell[cells.size()][cells.elementAt(0).size()];
-
-        for(int i = 0; i < 11; ++i){
-            Vector<Cell> row = cells.elementAt(i);
-
-            for(int j = 0; j < 10; ++j){
-                b2[i][j] = row.elementAt(j);
-            }
-        }
-        return b2;
-    }
-
- */
 
     public void setTitle (String title) {
         this.title = title;
@@ -339,7 +324,7 @@ public class Sheet {
         update(b2);
     }
 
-    public void extract(Block b1,Boolean ref, String ex){      //falta acabar
+    public void extract(Block b1,Boolean ref, String ex){
         b_selected.extract(b1, ref, ex);
     }
 
@@ -439,5 +424,4 @@ public class Sheet {
         else System.out.println("Error. Not all cells are of type Number.");
         return null;
     }
-
 }
