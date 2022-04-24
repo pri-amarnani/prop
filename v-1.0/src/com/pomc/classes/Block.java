@@ -33,6 +33,7 @@ public class Block {
     }
 
     public void setCell(int i, int j, Cell c) {
+        System.out.println(c.getClass());
         this.block[i][j] = c;
     }
 
@@ -166,19 +167,19 @@ public class Block {
 
                 if (this.block[i][j].isNum()) {
                     Cell n = (Cell) b.getCell(i, j).changeValue(Math.floor((double) this.block[i][j].getInfo()));
-                    ReferencedCell rc = new ReferencedCell(n.getRow(),n.getColumn(),"=floor1");
-                    rc.setContent(n.getInfo());
-                    b.setCell(i, j, (Cell)rc);
                     if (ref) {
-                        //System.out.println("REF!");
+                        ReferencedCell rc = new ReferencedCell(n.getRow(),n.getColumn(),"=floor1");
+                        rc.setContent(n.getInfo());
+                        b.setCell(i, j, rc);
                         Vector<Cell> s = new Vector<>(1);
                         s.add(this.block[i][j]);
                         this.block[i][j].AddRef((ReferencedCell) b.getCell(i, j));
                         Map.Entry<String, Vector<Cell>> r = new AbstractMap.SimpleEntry<>("floor", s);
 
                         b.getCell(i, j).setRefInfo(r);
+
+                        n = null;
                     }
-                    n = null;
                 }
             }
         }
@@ -190,18 +191,19 @@ public class Block {
                 NumCell N = (NumCell) this.block[i][j];
 
                 Cell n = (Cell) b.getCell(i, j).changeValue(N.conversion(from,to));
-                ReferencedCell rc = new ReferencedCell(n.getRow(),n.getColumn(),"=convert");
-                rc.setContent(n.getInfo());
-                b.setCell(i,j,rc);
 
                 if (ref) {
+                    ReferencedCell rc = new ReferencedCell(n.getRow(),n.getColumn(),"=convert");
+                    rc.setContent(n.getInfo());
+                    b.setCell(i,j,rc);
                     Vector<Cell> s = new Vector<>(1);
-                    s.add(N); //s.add(n)???
+                    s.add(N);
                     N.AddRef((ReferencedCell) b.getCell(i,j));
                      Map.Entry<String, Vector<Cell>> r = new AbstractMap.SimpleEntry<>(from + "TO" + to, s);
                      b.getCell(i, j).setRefInfo(r);
+
+                    n=null;
                 }
-                n=null;
             }
         }
     }
@@ -211,12 +213,11 @@ public class Block {
             for (int j = 0; j < this.block[0].length; ++j) {
 
                 Cell n = (Cell) b2.getCell(i, j).changeValue((double) this.block[i][j].getInfo() + (double) b1.getCell(i, j).getInfo());
-                ReferencedCell rc = new ReferencedCell(n.getRow(),n.getColumn(),"=sum");
-                rc.setContent(n.getInfo());
-                b2.setCell(i,j,rc);
 
                 if (ref) {
-
+                    ReferencedCell rc = new ReferencedCell(n.getRow(),n.getColumn(),"=sum");
+                    rc.setContent(n.getInfo());
+                    b2.setCell(i,j,rc);
                     Vector<Cell> s = new Vector<>(2);
                     s.add(this.block[i][j]);
                     s.add(b1.getCell(i, j));
@@ -225,8 +226,9 @@ public class Block {
                     Map.Entry<String, Vector<Cell>> r = new AbstractMap.SimpleEntry<>("sum", s);
 
                     b2.getCell(i, j).setRefInfo(r);
+
+                    n=null;
                 }
-                n=null;
             }
         }
     }
@@ -236,12 +238,11 @@ public class Block {
             for (int j = 0; j < this.block[0].length; ++j) {
 
                 Cell n = (Cell) b2.getCell(i, j).changeValue((double) this.block[i][j].getInfo() * (double) b1.getCell(i, j).getInfo());
-                ReferencedCell rc = new ReferencedCell(n.getRow(),n.getColumn(),"=mult");
-                rc.setContent(n.getInfo());
-                b2.setCell(i,j,rc);
 
                 if (ref) {
-
+                    ReferencedCell rc = new ReferencedCell(n.getRow(),n.getColumn(),"=mult");
+                    rc.setContent(n.getInfo());
+                    b2.setCell(i,j,rc);
                     Vector<Cell> s = new Vector<>(2);
                     s.add(this.block[i][j]);
                     s.add(b1.getCell(i, j));
@@ -250,8 +251,9 @@ public class Block {
                     Map.Entry<String, Vector<Cell>> r = new AbstractMap.SimpleEntry<>("mult", s);
 
                     b2.getCell(i, j).setRefInfo(r);
+
+                    n=null;
                 }
-                n=null;
             }
         }
     }
@@ -261,12 +263,11 @@ public class Block {
             for (int j = 0; j < this.block[0].length; ++j) {
 
                 Cell n = (Cell) b2.getCell(i, j).changeValue((double) this.block[i][j].getInfo() / (double) b1.getCell(i, j).getInfo());
-                ReferencedCell rc = new ReferencedCell(n.getRow(),n.getColumn(),"=div");
-                rc.setContent(n.getInfo());
-                b2.setCell(i,j,rc);
 
                 if (ref) {
-
+                    ReferencedCell rc = new ReferencedCell(n.getRow(),n.getColumn(),"=div");
+                    rc.setContent(n.getInfo());
+                    b2.setCell(i,j,rc);
                     Vector<Cell> s = new Vector<>(2);
                     s.add(this.block[i][j]);
                     s.add(b1.getCell(i, j));
@@ -275,8 +276,9 @@ public class Block {
                     Map.Entry<String, Vector<Cell>> r = new AbstractMap.SimpleEntry<>("div", s);
 
                     b2.getCell(i, j).setRefInfo(r);
+
+                    n=null;
                 }
-                n=null;
             }
         }
     }
@@ -285,11 +287,11 @@ public class Block {
         for (int i = 0; i < this.block.length; ++i) {
             for (int j = 0; j < this.block[0].length; ++j) {
                 Cell n = (Cell) b2.getCell(i, j).changeValue((double) this.block[i][j].getInfo() - (double) b1.getCell(i, j).getInfo());
-                ReferencedCell rc = new ReferencedCell(n.getRow(),n.getColumn(),"=div");
-                rc.setContent(n.getInfo());
-                b2.setCell(i,j,rc);
 
                 if (ref) {
+                    ReferencedCell rc = new ReferencedCell(n.getRow(),n.getColumn(),"=div");
+                    rc.setContent(n.getInfo());
+                    b2.setCell(i,j,rc);
                     Vector<Cell> s = new Vector<>(2);
                     s.add(this.block[i][j]);
                     s.add(b1.getCell(i, j));
@@ -297,7 +299,8 @@ public class Block {
                     b1.getCell(i, j).AddRef(rc);
                     Map.Entry<String, Vector<Cell>> r = new AbstractMap.SimpleEntry<>("sub", s);
                     b2.getCell(i, j).setRefInfo(r);
-                } n=null;
+                    n=null;
+                }
             }
         }
     }
@@ -308,17 +311,18 @@ public class Block {
                 DateCell N = (DateCell) this.block[i][j];
 
                 Cell n = (Cell) b.getCell(i, j).changeValue(N.extract(ex));
-                ReferencedCell rc = new ReferencedCell(n.getRow(),n.getColumn(),"=extrat");
-                rc.setContent(n.getInfo());
-                b.setCell(i,j,rc);
 
                 if (ref) {
+                    ReferencedCell rc = new ReferencedCell(n.getRow(),n.getColumn(),"=extrat");
+                    rc.setContent(n.getInfo());
+                    b.setCell(i,j,rc);
                     Vector<Cell> s = new Vector<>(1);
                     s.add(N);
                     N.AddRef(rc);
                     Map.Entry<String, Vector<Cell>> r = new AbstractMap.SimpleEntry<>(ex, s);
                     b.getCell(i, j).setRefInfo(r);
-                } n=null;
+                    n=null;
+                }
             }
         }
     }
@@ -330,17 +334,18 @@ public class Block {
                 DateCell N = (DateCell) this.block[i][j];
 
                 Cell n = (Cell) b.getCell(i, j).changeValue(N.extract(d));
-                ReferencedCell rc = new ReferencedCell(n.getRow(),n.getColumn(),"=dayoftheWeek");
-                rc.setContent(n.getInfo());
-                b.setCell(i,j,rc);
 
                 if (ref) {
+                    ReferencedCell rc = new ReferencedCell(n.getRow(),n.getColumn(),"=dayoftheWeek");
+                    rc.setContent(n.getInfo());
+                    b.setCell(i,j,rc);
                     Vector<Cell> s = new Vector<>(1);
                     s.add(N);
                     N.AddRef(rc);
                     Map.Entry<String, Vector<Cell>> r = new AbstractMap.SimpleEntry<>("dayoftheWeek", s);
                     b.getCell(i, j).setRefInfo(r);
-                } n=null;
+                    n=null;
+                }
             }
         }
     }
