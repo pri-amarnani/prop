@@ -453,7 +453,7 @@ public class Block {
         return c;
     }
 
-    public Cell CPearson (Block b, Cell c, Boolean ref, Boolean val) {
+    public Cell CPearson (Block b, Cell c, Boolean ref) {
         double d1 = (double) b.std(c,false).getInfo();
         double d2 = (double) this.std(c, false).getInfo();
 
