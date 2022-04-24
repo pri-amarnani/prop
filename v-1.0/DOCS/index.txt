@@ -1,0 +1,10 @@
+    Contiene la documentación del proyecto:
+        - Documentación de los casos de uso:
+            · Diagrama de casos de uso
+            · Descripción de los casos de uso
+        - Documentación del modelos conceptual de los datos:
+            ·Diagrama UML
+            ·Descripción de las clases
+        - Breve explicación de la estructura de datos
+        - Breve explicación de las librerías externas utilizadas
+        - Relación de las clases implementadas

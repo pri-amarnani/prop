@@ -1,0 +1,7 @@
+Esta carpeta contiene el código principal del proyecto. (src>com>pomc)
+Dentro de esta carpeta hay 5 subcarpetas:
+    - Classes: contiene la implementación de todas las clases y subclases de nuestro proyecto.
+    - Controller: contiene el Domain Controller.
+    - Persistence: contiene el Persistence Controller.
+    - Tests: contiene la implementación de los tests para todo el proyecto. Esta carpeta contiene una subcarpeta stubs con el código de los stubs usados en los tests.
+    - View: contiene el archivo java Main.

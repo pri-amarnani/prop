@@ -1,0 +1,7 @@
+En esta carpeta (out>production>v-1.0>com>pomc) se encuentran los ejecutables del proyecto:
+En esta carpeta hay diferentes subcarpetas:
+    - Classes, con los ejecutables de todas las clases.
+    - Controller, con el ejecutable del Domain Controller.
+    - Persistence, con el Persistence Controller.
+    - Tests, con los ejecutables de todos los tests para el programa. Esta carpeta tiene una subcarpeta stubs con los ejecutables de los stubs que hemos usado para los diferentes tests.
+    - View, que contiene el ejecutable del archivo Main.
