@@ -163,7 +163,11 @@ public class DomainController {
                 if (cell.getInfo() == null) { content = " - "; }
                 else if (cell.getInfo().getClass() == Double.class) content = String.valueOf(cell.getInfo());
                 else if (cell.getInfo().getClass()== LocalDate.class) content = cell.getInfo().toString();
-                else content = (String) cell.getInfo();
+                else if (cell.getInfo().getClass() == String.class) content = (String) cell.getInfo();
+                else {
+                    ReferencedCell rc = (ReferencedCell) cell;
+                    content = (String) rc.getContent();
+                }
                 Contents.get(i).add(j,content);
             }
         }
@@ -211,6 +215,12 @@ public class DomainController {
     }
     //-----------------------------FUNCTIONS--------------------------------
 
+
+
+
+
+
+    //-----------------------------------AUXILIAR----------------------
     public static Object Parse(String input) {
        try{
            Double isDouble = Double.parseDouble(input);
@@ -227,6 +237,8 @@ public class DomainController {
 
 
     }
+
+
 
 
 }

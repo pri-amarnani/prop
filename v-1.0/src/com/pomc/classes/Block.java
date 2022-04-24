@@ -165,9 +165,12 @@ public class Block {
 
                 if (this.block[i][j].isNum()) {
                     Cell n = (Cell) b.getCell(i, j).changeValue(Math.floor((double) this.block[i][j].getInfo()));
-                    b.setCell(i, j, n);
-
+                    ReferencedCell rc = new ReferencedCell(n.getRow(),n.getColumn(),"=floor1");
+                    rc.setContent(n.getInfo());
+                    b.setCell(i, j, rc);
+                    n = null;
                     if (ref) {
+                        System.out.println("REF!");
                         Vector<Cell> s = new Vector<>(1);
                         s.add(this.block[i][j]);
 

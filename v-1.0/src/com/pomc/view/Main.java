@@ -218,27 +218,112 @@ public class Main {
                     case 5:
                         System.out.println("First define the block.");
                         Integer[] blockCells = requireBlock();
-                        if (blockCells.length == 0) break;
-                        else {
-                            System.out.println("Do you want the result to be a reference to the operation? (y/n)");
-                            String refFloor = userInput.nextLine();
-                            if (refFloor.equals("y") || refFloor.equals("yes") ) {
-                                DomainController.currentBlockFloor(blockCells, true);
-                                System.out.println("Result floored!");
-                            }
-                            else if (refFloor.equals("n") || refFloor.equals("no")) {
-                                DomainController.currentBlockFloor(blockCells, false);
-                            }
-                            else {
-                                System.out.println("Invalid character.");
-                            }
+                        if (blockCells.length == 0) {
+                            System.out.println("Invalid block");
+                            break;
                         }
+                        else DomainController.currentBlockFloor(blockCells,isReferencing());
+                        System.out.println("Result Floored!");
                         break;
+
                     case 6:
                         System.out.println("First define the block.");
                         Integer[] blockCells1 = requireBlock();
                         if (blockCells1.length == 0) break;
-
+                        else {
+                            System.out.println("Select measurement unit to transform from:");
+                            System.out.println(" (1) Meters \n (2) Inches \n (3) Kilometers \n (4) Centimeters");
+                            Integer unit = numberInsertion(4,1);
+                            if (unit != null) {
+                                Integer to;
+                                String from;
+                                switch (unit) {
+                                    case 1:
+                                        from = "m";
+                                        System.out.println("\n Select measurement unit to transform to:");
+                                        System.out.println(" (1) Centimeters \n (2) Kilometers \n (3) Inches");
+                                        to = numberInsertion(3,1);
+                                        if (to != null) {
+                                            switch (to){
+                                                case 1:
+                                                    DomainController.currentBlockConvert(blockCells1,isReferencing(),from,"cm");
+                                                    break;
+                                                case 2:
+                                                    DomainController.currentBlockConvert(blockCells1,isReferencing(),from,"km");
+                                                    break;
+                                                case 3:
+                                                    DomainController.currentBlockConvert(blockCells1,isReferencing(),from,"inches");
+                                                    break;
+                                                default:
+                                                    System.out.println("\n Invalid Conversion");
+                                                    break;
+                                            }
+                                        }
+                                        else System.out.println("\n Invalid Conversion");
+                                        break;
+                                    case 2:
+                                        from = "inches";
+                                        System.out.println("\n Select measurement unit to transform to:");
+                                        System.out.println(" (1) Meters");
+                                        to = numberInsertion(1,1);
+                                        if (to != null) {
+                                            switch (to){
+                                                case 1:
+                                                    DomainController.currentBlockConvert(requireBlock(),isReferencing(),from,"m");
+                                                    break;
+                                                default:
+                                                    System.out.println("\n Invalid Conversion");
+                                                    break;
+                                            }
+                                        }
+                                        else System.out.println("\n Invalid Conversion");
+                                        break;
+                                    case 3:
+                                        from = "km";
+                                        System.out.println("\n Select measurement unit to transform to:");
+                                        System.out.println(" (1) Meters \n (2) Centimeters ");
+                                        to = numberInsertion(1,1);
+                                        if (to != null) {
+                                            switch (to){
+                                                case 1:
+                                                    DomainController.currentBlockConvert(requireBlock(),isReferencing(),from,"m");
+                                                    break;
+                                                case 2:
+                                                    DomainController.currentBlockConvert(requireBlock(),isReferencing(),from,"cm");
+                                                    break;
+                                                default:
+                                                    System.out.println("\n Invalid Conversion");
+                                                    break;
+                                            }
+                                        }
+                                        else System.out.println("\n Invalid Conversion");
+                                        break;
+                                    case 4:
+                                        from = "cm";
+                                        System.out.println("\n Select measurement unit to transform to:");
+                                        System.out.println(" (1) Meters \n (2) Kilometers ");
+                                        to = numberInsertion(1,1);
+                                        if (to != null) {
+                                            switch (to){
+                                                case 1:
+                                                    DomainController.currentBlockConvert(requireBlock(),isReferencing(),from,"m");
+                                                    break;
+                                                case 2:
+                                                    DomainController.currentBlockConvert(requireBlock(),isReferencing(),from,"km");
+                                                    break;
+                                                default:
+                                                    System.out.println("\n Invalid Conversion");
+                                                    break;
+                                            }
+                                        }
+                                        else System.out.println("\n Invalid Conversion");
+                                        break;
+                                    default:
+                                        System.out.println("\n Invalid Conversion");
+                                        break;
+                                    }
+                            }
+                        }
                         break;
                     case 7:
                         menuMathematicFunctions(docSheet);
@@ -291,7 +376,7 @@ public class Main {
                     case 2:
                         System.out.println("Input the row of the Cell to edit:");
                         Integer cellI = numberInsertion(DomainController.currentSheetRows(), 1);
-                        System.out.println("Input the column of the Cell to edit:");                     //TODO no va con strings ni dates
+                        System.out.println("Input the column of the Cell to edit:");
                         Integer cellJ = numberInsertion(DomainController.currentSheetCols(), 1);
                         if (cellI > 0 && cellJ > 0) {
                             System.out.println("Input the value:");
@@ -366,6 +451,7 @@ public class Main {
             System.out.println("\n \n Enter number:");
             Integer num = numberInsertion(5,1);
             if (num != null) {
+                System.out.println("\n");
                 switch (num) {
                     case 1:
                         for(int i = 0; i < sheetNames.length; ++i ){
@@ -479,6 +565,18 @@ public class Main {
             return new Integer[]{};
         }
     }
+
+    public static boolean isReferencing (){
+        System.out.println("Do you want the result to be a reference to the operation? (y/n)");
+        String ref = userInput.nextLine();
+        if (ref.equals("y") || ref.equals("yes") ) return true;
+        else if (ref.equals("n") || ref.equals("no")) return false;
+        else {
+            System.out.println("Invalid character.");
+            return isReferencing();
+        }
+    }
+
 
     public static void main(String[] args) {
         System.out.println("\n POMC WORKSHEETS");
