@@ -184,15 +184,15 @@ public class BlockTest {
     @Test
     @DisplayName("Test modify block num, true")
     void testModifyBlockNumT() {
-        testing2.ModifyBlock(10);
-        testing.ModifyBlock(10);
+        testing2.ModifyBlock(10.0);
+        testing.ModifyBlock(10.0);
         assertTrue(testing2.isEqual(testing));
     }
 
     @Test
     @DisplayName("Test modify block num, false")
     void testModifyBlockNumF() {
-        testing.ModifyBlock(20);
+        testing.ModifyBlock(20.0);
         testing2.ModifyBlock("ststst");
 
         assertFalse(testing2.isEqual(testing));

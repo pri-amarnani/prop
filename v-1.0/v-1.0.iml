@@ -7,7 +7,6 @@
       <sourceFolder url="file://$MODULE_DIR$/persistencia" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src" isTestSource="false" />
       <excludeFolder url="file://$MODULE_DIR$/src/com/pomc/persistence" />
-      <excludeFolder url="file://$MODULE_DIR$/src/com/pomc/tests" />
     </content>
     <orderEntry type="jdk" jdkName="corretto-11" jdkType="JavaSDK" />
     <orderEntry type="sourceFolder" forTests="false" />
