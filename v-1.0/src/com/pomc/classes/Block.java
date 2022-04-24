@@ -168,16 +168,16 @@ public class Block {
                     ReferencedCell rc = new ReferencedCell(n.getRow(),n.getColumn(),"=floor1");
                     rc.setContent(n.getInfo());
                     b.setCell(i, j, rc);
-                    n = null;
                     if (ref) {
                         System.out.println("REF!");
                         Vector<Cell> s = new Vector<>(1);
                         s.add(this.block[i][j]);
-
+                        this.block[i][j].AddRef((ReferencedCell) b.getCell(i, j));
                         Map.Entry<String, Vector<Cell>> r = new AbstractMap.SimpleEntry<>("floor", s);
 
                         b.getCell(i, j).setRefInfo(r);
                     }
+                    n = null;
                 }
             }
         }

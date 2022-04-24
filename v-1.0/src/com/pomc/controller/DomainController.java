@@ -93,9 +93,8 @@ public class DomainController {
                 String content;
                 Cell cell = docSheet.getCells().get(i).get(j);
                 if (cell.getInfo() == null) { content = " - "; }
-                else if (cell.getInfo().getClass() == Double.class) content = String.valueOf(cell.getInfo());
-                else if (cell.getInfo().getClass()== LocalDate.class) content = cell.getInfo().toString();
-                else content = (String) cell.getInfo();
+                else if (cell.getType().equals("R")) content = AntiParse(cell.getContent());
+                else content = AntiParse(cell.getInfo());
                 Contents.get(i).add(j,content);
             }
         }
@@ -161,13 +160,8 @@ public class DomainController {
                 String content;
                 Cell cell = docSheet.getSelectedBlock().getCell(i,j);
                 if (cell.getInfo() == null) { content = " - "; }
-                else if (cell.getInfo().getClass() == Double.class) content = String.valueOf(cell.getInfo());
-                else if (cell.getInfo().getClass()== LocalDate.class) content = cell.getInfo().toString();
-                else if (cell.getInfo().getClass() == String.class) content = (String) cell.getInfo();
-                else {
-                    ReferencedCell rc = (ReferencedCell) cell;
-                    content = (String) rc.getContent();
-                }
+                else if (cell.getType().equals("R")) content = AntiParse(cell.getContent());
+                else content = AntiParse(cell.getInfo());
                 Contents.get(i).add(j,content);
             }
         }
@@ -220,7 +214,7 @@ public class DomainController {
 
 
 
-    //-----------------------------------AUXILIAR----------------------
+    //-----------------------------------AUXILIAR-----------------------------
     public static Object Parse(String input) {
        try{
            Double isDouble = Double.parseDouble(input);
@@ -236,6 +230,11 @@ public class DomainController {
        }
 
 
+    }
+    public static String AntiParse(Object o) {
+        if (o.getClass() == Double.class) return String.valueOf(o);
+        else if (o.getClass()== LocalDate.class) return o.toString();
+        else return (String) o;
     }
 
 
