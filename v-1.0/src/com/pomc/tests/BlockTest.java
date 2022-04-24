@@ -187,7 +187,6 @@ public class BlockTest {
     void testModifyBlockNumT() {
         testing2.ModifyBlock(10.0);
         testing.ModifyBlock(10.0);
-        //System.out.println(testing.getCell(2,2));
         assertTrue(testing2.isEqual(testing));
     }
 
@@ -240,24 +239,47 @@ public class BlockTest {
     @Test
     @DisplayName("Test sort")
     void testSort() {
+        CellStub [][] result = new CellStub[5][5];
+
+        result[0][0] = new CellStub(1,0,1.0,"N");
+        result[0][1] = new CellStub(1,1,"Celda:6","T");
+        result[0][2] = new CellStub(1,2,3.0,"N");
+        result[0][3] = new CellStub(1,3,"Celda:8","T");
+        result[0][4] = new CellStub(1,4,5.0,"N");
+
+        result[1][0] = new CellStub(3,0,"Celda:20","T");
+        result[1][1] = new CellStub(3,1,"Celda:21","T");
+        result[1][2] = new CellStub(3,2,"Celda:22","T");
+        result[1][3] = new CellStub(3,3,7.0,"N");
+        result[1][4] = new CellStub(3,4,"Celda:24","T");
+
+        result[2][0] = new CellStub(3,0,3.0,"N");
+        result[2][1] = new CellStub(3,1,"Celda:16","T");
+        result[2][2] = new CellStub(3,2,5.0,"N");
+        result[2][3] = new CellStub(3,3,"Celda:18","T");
+        result[2][4] = new CellStub(3,4,7.0,"N");
+
+        result[3][0] = new CellStub(2,0,"Celda:10","T");
+        result[3][1] = new CellStub(2,1,"Celda:11","T");
+        result[3][2] = new CellStub(2,2,"Celda:12","T");
+        result[3][3] = new CellStub(2,3,5.0,"N");
+        result[3][4] = new CellStub(2,4,"Celda:14","T");
+
+        result[4][0] = new CellStub(0,0,"Celda:0","T");
+        result[4][1] = new CellStub(0,1,"Celda:1","T");
+        result[4][2] = new CellStub(0,2,"Celda:2","T");
+        result[4][3] = new CellStub(0,3,3.0,"N");
+        result[4][4] = new CellStub(0,4,"Celda:4","T");
+
+        n_t.SortBlock(1,">","T");
 
         for (int i = 0; i < bN.number_rows(); ++i) {
             for (int j = 0; j < bN.number_cols(); ++j) {
-                System.out.print(n_t.getCell(i,j).getInfo() + " ");
+                if (!result[i][j].getInfo().equals(n_t.getCell(i,j).getInfo())) assertTrue(false);
             }
-            System.out.println("\n");
-        }
-        System.out.println("----------");
-        n_t.SortBlock(1,">", "T");
-        for (int i = 0; i < bN.number_rows(); ++i) {
-            for (int j = 0; j < bN.number_cols(); ++j) {
-                System.out.print(n_t.getCell(i,j).getInfo() + " ");
-            }
-            System.out.println("\n");
         }
 
-
-
+        assertTrue(true);
     }
 
     @Test
@@ -286,7 +308,6 @@ public class BlockTest {
     void testFindReplaceN() {
         bN.findAndReplace(7.0,1000.0);
         CellStub c = (CellStub) bN.getCell(3,4);
-        System.out.println(c);
         assertEquals(1000.0, c.getInfo());
     }
 
@@ -313,6 +334,14 @@ public class BlockTest {
         testingStadistics.floor(testing, false);
 
         assertEquals(5.0, testing.getCell(1,2).getInfo());
+    }
+
+    @Test
+    @DisplayName("Test floor, mixed values")
+    void testFloorMIX() {
+        bMIX.floor(bMIX, false);
+
+        assertEquals(3.0, bMIX.getCell(1,2).getInfo());
     }
 
     @Test
@@ -359,30 +388,10 @@ public class BlockTest {
         assertTrue(bN.isEqual(testing2));
     }
 
-
-    @Test
-    @DisplayName("Test extract")
-    void testExtract() {
-        assertTrue(false);
-    }
-
-    @Test
-    @DisplayName("Test day of the week")
-    void testDOW() {
-        assertTrue(false);
-    }
-
-    @Test
-    @DisplayName("Test replace with criteria")
-    void testReplaceWithCriteria() {
-        assertTrue(false);
-    }
-
     @Test
     @DisplayName("Test mean with value")
     void testMeanVal() {
         CellStub c2 = (CellStub) testing2.getCell(4,4);
-        System.out.println(c2.getInfo());
         CellStub c = (CellStub) bN.mean(c2,false);
 
         assertEquals(4.0, c.getInfo());

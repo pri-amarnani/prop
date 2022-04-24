@@ -1,8 +1,5 @@
 package com.pomc.classes;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.time.LocalDate;
 import java.util.*;
 
 public class Block {
@@ -57,7 +54,6 @@ public class Block {
     }
 
     public boolean allDate() {
-        LocalDate d = null;
         for (int i = 0; i < this.block[0].length; ++i) {
             for (int j = 0; j < this.block[0].length; ++j)
                 if (!this.block[i][j].isDate()) return false;
@@ -113,6 +109,7 @@ public class Block {
     }
 
     public void SortBlock (int n_col, String criteria, String type) {
+
         if (Objects.equals(criteria, "<")) {
             if (Objects.equals(type, "N")) {
                 Arrays.sort(block, (a, b) -> Double.compare((double) a[n_col].getInfo(), (double) b[n_col].getInfo()));
@@ -131,6 +128,15 @@ public class Block {
                 Arrays.sort(block, (a, b) -> ((String) b[n_col].getInfo()).compareTo((String) a[n_col].getInfo()));
             }
         }
+
+        for (int i = 0; i < size_r; ++i) {
+            for (int j = 0; j < size_c; ++j) {
+                this.block[i][j].setRow(i);
+                this.block[i][j].setColumn(j);
+            }
+        }
+        ul = this.block[0][0];
+        dr = this.block[size_r-1][size_c-1];
     }
 
     public Cell find (Object n) {
@@ -157,23 +163,40 @@ public class Block {
         for (int i = 0; i < this.block.length; ++i) {
             for (int j = 0; j < this.block[0].length; ++j) {
 
-                Cell n = (Cell) b.getCell(i,j).changeValue(Math.floor((double) this.block[i][j].getInfo()));
-                b.setCell(i,j,n);
+                if (this.block[i][j].isNum()) {
+                    Cell n = (Cell) b.getCell(i, j).changeValue(Math.floor((double) this.block[i][j].getInfo()));
+                    b.setCell(i, j, n);
 
-                if (ref) {
-                    Vector<Cell> s = new Vector<>(1);
-                    s.add(this.block[i][j]);
+                    if (ref) {
+                        Vector<Cell> s = new Vector<>(1);
+                        s.add(this.block[i][j]);
 
-                    Map.Entry<String, Vector<Cell>> r = new AbstractMap.SimpleEntry<>("floor", s);
+                        Map.Entry<String, Vector<Cell>> r = new AbstractMap.SimpleEntry<>("floor", s);
 
-                    b.getCell(i,j).setRefInfo(r);
+                        b.getCell(i, j).setRefInfo(r);
+                    }
                 }
             }
         }
     }
 
-    public void convert (Block b, Boolean ref) {
+    public void convert (Block b, Boolean ref, String from, String to) {
+        for (int i = 0; i < b.number_rows(); ++i) {
+            for (int j = 0; j < b.number_cols(); ++j) {
+                NumCell N = (NumCell) this.block[i][j];
 
+                Cell n = (Cell) b.getCell(i, j).changeValue(N.conversion(from,to));
+                b.setCell(i,j,n);
+
+                if (ref) {
+
+                    Vector<Cell> s = new Vector<>(1);
+                    s.add(n);
+                     Map.Entry<String, Vector<Cell>> r = new AbstractMap.SimpleEntry<>(from + "TO" + to, s);
+                     b.getCell(i, j).setRefInfo(r);
+                }
+            }
+        }
     }
 
     public void sum (Block b1, Block b2, Boolean ref) {
@@ -246,34 +269,52 @@ public class Block {
                 b2.setCell(i,j,n);
 
                 if (ref) {
-
                     Vector<Cell> s = new Vector<>(2);
                     s.add(this.block[i][j]);
                     s.add(b1.getCell(i, j));
 
                     Map.Entry<String, Vector<Cell>> r = new AbstractMap.SimpleEntry<>("sub", s);
-
-
                     b2.getCell(i, j).setRefInfo(r);
                 }
             }
         }
     }
 
-    //FINISH
-    public void extract (Block b, Boolean ref) {
+    public void extract (Block b, Boolean ref, String ex) {
+        for (int i = 0; i < b.number_rows(); ++i) {
+            for (int j = 0; j < b.number_cols(); ++j) {
+                DateCell N = (DateCell) this.block[i][j];
 
+                Cell n = (Cell) b.getCell(i, j).changeValue(N.extract(ex));
+                b.setCell(i,j,n);
+
+                if (ref) {
+                    Vector<Cell> s = new Vector<>(1);
+                    s.add(n);
+                    Map.Entry<String, Vector<Cell>> r = new AbstractMap.SimpleEntry<>(ex, s);
+                    b.getCell(i, j).setRefInfo(r);
+                }
+            }
+        }
     }
 
     //FINISH
-    public void dayOfTheWeek (Block b, Boolean ref) {
-        for (int i = 0; i < this.block.length; ++i) {
-            for (int j = 0; j < this.block[0].length; ++j) {
-                LocalDate aux = (LocalDate) getCell(i,j).getInfo();
+    public void dayOfTheWeek (Block b, Boolean ref, String d) {
+        for (int i = 0; i < b.number_rows(); ++i) {
+            for (int j = 0; j < b.number_cols(); ++j) {
+                DateCell N = (DateCell) this.block[i][j];
 
+                Cell n = (Cell) b.getCell(i, j).changeValue(N.extract(d));
+                b.setCell(i,j,n);
+
+                if (ref) {
+                    Vector<Cell> s = new Vector<>(1);
+                    s.add(n);
+                    Map.Entry<String, Vector<Cell>> r = new AbstractMap.SimpleEntry<>("dayoftheWeek", s);
+                    b.getCell(i, j).setRefInfo(r);
+                }
             }
         }
-
     }
 
     // criteria == mayus or criteria == minus
@@ -378,9 +419,6 @@ public class Block {
 
         for (int i = 0; i < this.block.length; ++i) {
             for (int j = 0; j < this.block[0].length; ++j) {
-                //System.out.println((double) b.getCell(i,j).getInfo());
-                //System.out.println((double) this.block[i][j].getInfo());
-
                 x[ii] = (double) this.block[i][j].getInfo();
                 s.add(this.block[i][j]);
                 y[jj] = (double) b.getCell(i,j).getInfo();
@@ -451,7 +489,6 @@ public class Block {
         if (d1 == 0 || d2 == 0) cp = 1;
         else cp = covv/(d1*d2);
 
-        // decimal rectification
         if (cp > 1.0) cp = 1.0;
         if (cp < -1) cp = -1.0;
 

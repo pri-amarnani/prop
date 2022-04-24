@@ -18,7 +18,7 @@ public class Sheet {
         Cell dr = b.dr;
         for(int i = 0; i < b.number_rows(); ++ i){
             for(int j = 0; j < b.number_cols(); ++j){
-                getCells().elementAt(ul.getRow() + i).setElementAt(b.getCell(i,j),ul.getColumn() + j); //seguro?
+                cells.elementAt(ul.getRow() + i).setElementAt(b.getCell(i,j),ul.getColumn() + j); //seguro?
             }
         }
     }
@@ -117,11 +117,14 @@ public class Sheet {
 
     public boolean isEqual(Sheet sh) {
 
-        if (sh.getNumCols() != this.getNumCols() || sh.getNumRows() != this.getNumRows()) return false;
 
+        if (sh.getNumCols() != this.getNumCols() || sh.getNumRows() != this.getNumRows()) return false;
         for (int i = 0; i < sh.getNumRows(); ++i) {
             for (int j = 0; j < sh.getNumCols(); ++j) {
-                if (this.getCell(i,j).getInfo() != sh.getCell(i,j).getInfo()) return false;
+                if (this.getCell(i,j).getInfo() == null && sh.getCell(i,j).getInfo() != null) return false;
+                if (sh.getCell(i,j).getInfo() == null && this.getCell(i,j).getInfo() != null) return false;
+
+                if (!(this.getCell(i,j).getInfo() == null) && !(sh.getCell(i,j).getInfo() == null) && !this.getCell(i,j).getInfo().equals(sh.getCell(i,j).getInfo())) return false;
             }
         }
         return true;
@@ -149,7 +152,7 @@ public class Sheet {
             pos_row.add(c);
         }
         cells.insertElementAt(pos_row, pos);
-        /*
+
         for(int i = pos + 1; i < num_rows; ++i){
             Vector<Cell> row = cells.elementAt(i);
             for(int j = 0; j < num_cols; ++j){
@@ -159,8 +162,6 @@ public class Sheet {
             }
             cells.setElementAt(row,i);
         }
-
-         */
     }
 
     public void NewColumn(int pos){
@@ -168,14 +169,12 @@ public class Sheet {
         for(int i = 0; i < num_rows; ++i){
             Vector<Cell> row = cells.elementAt(i);
             row.insertElementAt(new NumCell(i,pos,null), pos);
-            /*
+
             for(int j = pos + 1; j < num_cols; ++j ) {
                 Cell c = row.elementAt(j);
                 c.setColumn(j);
                 row.setElementAt(c,j);
             }
-
-             */
             cells.setElementAt(row,i);
         }
     }
@@ -185,7 +184,6 @@ public class Sheet {
         else{
             --num_rows;
             cells.removeElement(pos);
-            /*
             for(int i = pos; i < num_rows; ++i){
                 Vector<Cell> row = cells.elementAt(i);
                 for(int j = 0; j < num_cols; ++j){
@@ -195,8 +193,6 @@ public class Sheet {
                 }
                 cells.setElementAt(row,i);
             }
-
-             */
         }
     }
 
@@ -207,14 +203,11 @@ public class Sheet {
             for(int i = 0; i < num_rows; ++i){
                 Vector<Cell> row = cells.elementAt(i);
                 row.removeElementAt(pos);
-                /*
                 for(int j = pos; j < num_cols; ++j ) {
                     Cell c = row.elementAt(j);
                     c.setColumn(j);
                     row.setElementAt(c,j);
                 }
-
-                 */
                 cells.setElementAt(row,i);
             }
         }
@@ -222,42 +215,21 @@ public class Sheet {
 
 
     public Block create_block(Cell c1, Cell c2){
-        Vector<Vector<Cell>> vec_block = new Vector<>();
+        Cell [][] arr_block = new Cell[c2.getRow()-c1.getRow()+1][c2.getColumn()-c1.getColumn()+1];
 
-        Cell ul;
-        Cell dr;
-
-        for(int i = c1.getRow(); i <= c2.getRow(); ++i){
-            Vector<Cell> row = cells.elementAt(i);
-            Vector<Cell> row2 = new Vector<>();
-            for(int j = c1.getColumn(); j <= c2.getColumn(); ++j){
-                Cell c = row.elementAt(j);
-                row2.add(c);
+        for(int i =0 ; i <= c2.getRow()-c1.getRow(); ++i){
+            for(int j = 0; j <= c2.getColumn()-c1.getColumn(); ++j){
+                arr_block[i][j] = cells.elementAt(c1.getRow()+ i).elementAt(c1.getRow()+j);
             }
-            vec_block.add(row2);
         }
-
-        Vector<Cell[]> b = new Vector<>();
-
-        for(int i = 0 ; i < vec_block.size(); ++i){
-            Vector<Cell> row_i = vec_block.elementAt(i);
-            Cell[] r = row_i.toArray(new Cell[row_i.size()]);
-            b.add(r);
-        }
-
-        Vector<Cell> first_row = cells.elementAt(0);
-        ul = first_row.firstElement();
-        Vector<Cell> last_row = cells.lastElement();
-        dr = last_row.lastElement();
-
-        Cell[][] arr_block;
-        arr_block = b.toArray(new Cell[b.size()][]);
-
-        Block block = new Block(arr_block, ul, dr);
+        Block block = new Block(arr_block, c1, c2);
         return block;
     }
 
     public Block SelectBlock(Cell c1, Cell c2){
+        System.out.println(c1.getRow() + " " + c2.getRow());
+        System.out.println(c1.getInfo() + " " + c2.getInfo());
+        b_selected = null;
         Block b = create_block(c1,c2);
         b_selected = b;
         return b;
@@ -281,14 +253,19 @@ public class Sheet {
         update(b_selected);
     }
 
-    public void SortBlock(int n_col, String Criteria){
-        Vector<Cell> v = cells.firstElement();
-        Vector<Cell> v2 = cells.lastElement();
-        Block b = create_block(v.elementAt(n_col), v2.elementAt(n_col));
+    public boolean SortBlock(int n_col, String Criteria){
+        Cell c = b_selected.getCell(0,n_col);
+        Cell c2 = b_selected.getCell(b_selected.number_rows()-1,n_col);
 
-        if(!b.allText() || !b.allDouble()) System.out.println("Error. Whole Block has to be of type number or type text.");
-        //else b_selected.SortBlock(n_col, Criteria);
+        Block b = create_block(c, c2);
+
+        if(!b.allText() && !b.allDouble()){
+            System.out.println("Error. Whole column has to be of type number or type text.");
+            return false;
+        }
+        else b_selected.SortBlock(n_col, Criteria, c.getType());
         update(b_selected);
+        return true;
     }
 
     public Cell find(Object o){
@@ -317,8 +294,8 @@ public class Sheet {
         update(b);
     }
 
-    public void convert(Cell c, Boolean ref){ //falta acabar
-        b_selected.convert(b_selected, ref);
+    public void convert(Block b, Boolean ref, String from, String to){ //falta acabar
+        b_selected.convert(b, ref, from, to);
         update(b_selected);
     }
 
@@ -362,14 +339,14 @@ public class Sheet {
         update(b2);
     }
 
-    public void extract(Block b1,Cell c, Boolean ref){      //falta acabar
-        b_selected.extract(b1, ref);
+    public void extract(Block b1,Cell c, Boolean ref, String ex){      //falta acabar
+        b_selected.extract(b1, ref, ex);
     }
 
-    public void dayOfTheWeek (Block b1, Cell c, Boolean ref){
-        if(b_selected.allDate()) b_selected.dayOfTheWeek(b1, ref);
+    public void dayOfTheWeek (Block b, Boolean ref, String d){
+        if(b_selected.allDate()) b_selected.dayOfTheWeek(b, ref, d);
         else System.out.println("Error. Not all cells are of type Date.");
-        update(b1);
+        update(b);
     }
 
     public void replaceWithCriteriaText(String criteria){

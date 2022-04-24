@@ -1,13 +1,5 @@
 package com.pomc.tests.stubs;
-
 import com.pomc.classes.Block;
-//import com.pomc.classes.Cell;
-//import com.pomc.tests.stubs.CellStub;
-
-//import java.time.LocalDate;
-//import java.util.*;
-
-//import java.util.Vector;
 
 public class BlockStub extends Block {
     CellStub [][] block;
@@ -36,7 +28,6 @@ public class BlockStub extends Block {
         return true;
     }
 
-    //@Override
     public boolean isEqual(BlockStub b) {
 
         if (b.number_cols() != this.block[0].length || b.number_rows() != this.block.length) return false;
