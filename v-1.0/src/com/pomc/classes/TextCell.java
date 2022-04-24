@@ -91,4 +91,14 @@ public class TextCell extends Cell {
 
     }
 
+    @Override
+    public Object getContent() {
+        return null;
+    }
+
+    @Override
+    public void setContent(Object o) {
+
+    }
+
 }

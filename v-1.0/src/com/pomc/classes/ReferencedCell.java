@@ -16,12 +16,12 @@ public class ReferencedCell extends Cell {
 
     @Override
     public String getType() {
-        return type;
+        return this.type;
     }
 
     @Override
     public Object getInfo() {
-        return info;
+        return this.info;
     }
 
     @Override
@@ -31,11 +31,11 @@ public class ReferencedCell extends Cell {
 
 
     public Map.Entry<String, Vector<Cell>> getRefInfo() {
-        return refInfo;
+        return this.refInfo;
     }
 
     public Object getContent(){
-        return content;
+        return this.content;
     }
 
     public void setRefInfo(Map.Entry<String, Vector<Cell>> refInfo) {

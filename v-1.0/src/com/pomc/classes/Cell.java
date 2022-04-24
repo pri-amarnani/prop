@@ -333,6 +333,9 @@ public abstract class Cell {
 
     public abstract void setRefInfo(Map.Entry<String, Vector<Cell>> refInfo);
 
+    public abstract Object getContent();
+    public abstract void setContent(Object o);
+
     public Double calcstd (Vector<Cell> vcells){
 
         Double sum=0.0;

@@ -75,4 +75,14 @@ public class DateCell extends Cell {
     public void setRefInfo(Map.Entry<String, Vector<Cell>> refInfo) {
 
     }
+
+    @Override
+    public Object getContent() {
+        return null;
+    }
+
+    @Override
+    public void setContent(Object o) {
+
+    }
 }
