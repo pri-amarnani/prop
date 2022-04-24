@@ -209,7 +209,48 @@ public class DomainController {
     }
     //-----------------------------FUNCTIONS--------------------------------
 
+    public static void funcAddition(Integer[] Block1, Integer[] Block2, boolean ref) {
+        Block b1 = createBlock(Block1);
+        Block b2 = createBlock(Block2);
+        docSheet.sum(b1,b2,ref);
+    }
 
+    public static void funcSubstraction(Integer[] Block1, Integer[] Block2, boolean ref) {
+        Block b1 = createBlock(Block1);
+        Block b2 = createBlock(Block2);
+        docSheet.substract(b1,b2,ref);
+    }
+
+    public static void funcMultiply(Integer[] Block1, Integer[] Block2, boolean ref) {
+        Block b1 = createBlock(Block1);
+        Block b2 = createBlock(Block2);
+        docSheet.mult(b1,b2,ref);
+    }
+
+    public static void funcDivide(Integer[] Block1, Integer[] Block2, boolean ref) {
+        Block b1 = createBlock(Block1);
+        Block b2 = createBlock(Block2);
+        docSheet.div(b1,b2,ref);
+    }
+
+    public static Double funcMean(Integer i, Integer j,boolean val, boolean ref ){
+        Cell cell = docSheet.getCells().get(i-1).get(j-1);
+        return docSheet.mean(cell,ref,val);
+    }
+    public static Double funcMedian(Integer i, Integer j,boolean val, boolean ref ){
+        Cell cell = docSheet.getCells().get(i-1).get(j-1);
+        return docSheet.median(cell,ref,val);
+    }
+    public static Double funcVariance(Integer i, Integer j,boolean val, boolean ref ){
+        Cell cell = docSheet.getCells().get(i-1).get(j-1);
+        return docSheet.var(cell,ref,val);
+    }
+
+
+    public static Double funcStandardDeviation(Integer i, Integer j,boolean val, boolean ref ){
+        Cell cell = docSheet.getCells().get(i-1).get(j-1);
+        return docSheet.std(cell,ref,val);
+    }
 
 
 

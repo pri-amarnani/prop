@@ -141,6 +141,7 @@ public class Sheet {
         Object o1 = c.changeValue(o);
         if(id != null && id != -1) cells.elementAt(id2).setElementAt((Cell) o1, id);
         else System.out.println("Cell not found");
+        System.out.println(cells.elementAt(id2).elementAt(id).getType());
     }
 
     public void NewRow(int pos){
