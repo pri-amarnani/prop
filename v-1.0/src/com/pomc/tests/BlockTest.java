@@ -6,6 +6,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -23,6 +25,16 @@ public class BlockTest {
     Block testing2;
     Block testingStadistics;
 
+    Block n_t;
+
+    public static double round(double value, int places) {
+        if (places < 0) throw new IllegalArgumentException();
+
+        BigDecimal bd = BigDecimal.valueOf(value);
+        bd = bd.setScale(places, RoundingMode.HALF_UP);
+        return bd.doubleValue();
+    }
+
     @BeforeEach
     void setUp() {
         CellStub blockN[][] = new CellStub[5][5];
@@ -30,6 +42,7 @@ public class BlockTest {
         CellStub blockT[][] = new CellStub[5][5];
         CellStub blockMIX[][] = new CellStub[5][5];
         CellStub blockS[][] = new CellStub[5][5];
+        CellStub blockNT[][] = new CellStub[5][5];
 
         int in = 0;
         double c = 0.3;
@@ -45,9 +58,13 @@ public class BlockTest {
                 blockD[i][j] = cD;
                 blockT[i][j] = cT;
                 blockS[i][j] = cS;
-                if ((i+j)%3 == 0) blockMIX[i][j] = cN;
-                else if ((i+j)%3 == 1) blockMIX[i][j] = cD;
-                else blockMIX[i][j] = cT;
+                if ((i+j)%3 == 0) blockMIX[i][j] = new CellStub(i,j,(i+j)*1.0,"N");
+                else if ((i+j)%3 == 1) blockMIX[i][j] = new CellStub(i,j,LocalDate.of(2001,8,in+1),"D");
+                else blockMIX[i][j] = new CellStub(i,j,"Celda:"+in,"T");
+
+                //new CellStub(i,j,"Celda:"+in,"T");
+                if ((i+j)%2 == 0 || j == 1) blockNT[i][j] = new CellStub(i,j,"Celda:"+in,"T");
+                else blockNT[i][j] = new CellStub(i,j,(i+j)*1.0,"N");
 
                 ++in;
                 c += 0.6;
@@ -61,6 +78,7 @@ public class BlockTest {
         testing = new Block(blockMIX, blockMIX[0][0], blockMIX[4][4]);
         testing2 = new Block(blockN, blockN[0][0], blockN[4][4]);
         testingStadistics = new Block(blockS, blockN[0][0], blockN[4][4]);
+        n_t = new Block(blockNT, blockNT[0][0], blockNT[4][4]);
     }
 
 
@@ -222,7 +240,24 @@ public class BlockTest {
     @Test
     @DisplayName("Test sort")
     void testSort() {
-        assertFalse(true);
+
+        for (int i = 0; i < bN.number_rows(); ++i) {
+            for (int j = 0; j < bN.number_cols(); ++j) {
+                System.out.print(n_t.getCell(i,j).getInfo() + " ");
+            }
+            System.out.println("\n");
+        }
+        System.out.println("----------");
+        n_t.SortBlock(1,">", "T");
+        for (int i = 0; i < bN.number_rows(); ++i) {
+            for (int j = 0; j < bN.number_cols(); ++j) {
+                System.out.print(n_t.getCell(i,j).getInfo() + " ");
+            }
+            System.out.println("\n");
+        }
+
+
+
     }
 
     @Test
@@ -346,80 +381,89 @@ public class BlockTest {
     @Test
     @DisplayName("Test mean with value")
     void testMeanVal() {
-        /*testing.ModifyBlock(10.0);
-        CellStub c = (CellStub) testing2.getCell(2,2);
-        bN.mean(c,false,true);
+        CellStub c2 = (CellStub) testing2.getCell(4,4);
+        System.out.println(c2.getInfo());
+        CellStub c = (CellStub) bN.mean(c2,false);
 
-        assertEquals(6.0, c.getInfo());*/
+        assertEquals(4.0, c.getInfo());
     }
 
     @Test
     @DisplayName("Test median with value")
     void testMedianVal() {
-        /*testing.ModifyBlock(10.0);
-        CellStub c = (CellStub) testing2.getCell(2,2);
+        CellStub c2 = (CellStub) testing2.getCell(2,2);
+        CellStub c = (CellStub) bN.median(c2,false);
 
-        bN.median(c,false,true);
-        assertEquals(5.0, c.getInfo());*/
+        assertEquals(4.0, c.getInfo());
     }
 
     @Test
     @DisplayName("Test std with value")
     void testStdVal() {
-        /*
-        CellStub c = (CellStub) testing2.getCell(2,2);
+        CellStub c2 = (CellStub) testing2.getCell(2,2);
+        CellStub c = (CellStub) bN.std(c2,false);
 
-        bN.std(c,false,true);
-        assertEquals(2.0, c.getInfo());*/
+        assertEquals(2.0, c.getInfo());
     }
 
     @Test
     @DisplayName("Test var with value")
     void testVarVal() {
-        /*
-        CellStub c = (CellStub) testing2.getCell(2,2);
+        CellStub c2 = (CellStub) testing2.getCell(2,2);
+        CellStub c = (CellStub) bN.var(c2,false);
 
-        bN.var(c,false,true);
-        assertEquals(4.0, c.getInfo());*/
+        assertEquals(4.0, c.getInfo());
     }
 
     @Test
     @DisplayName("Test covar with value")
     void testCovarVal() {
-        /*
-        testing.ModifyBlock(10.0);
-        testing2.ModifyBlock(10.0);
 
-        CellStub c = (CellStub) testing.getCell(4,4);
-        CellStub c2 = (CellStub) testing2.getCell(4,4);
+        bMIX.ModifyBlock(10.0);
+        bN.ModifyBlock(10.0);
 
-        c.changeValue(50.0);
-        c2.changeValue(25.0);
+        CellStub c = (CellStub) bMIX.getCell(4,4);
+        CellStub c2 = (CellStub) bN.getCell(4,4);
 
-        assertEquals(24.0, testing.covar(testing2, c, false, true));*/
+        c = (CellStub) c.changeValue(190.0);
+        c2 = (CellStub) c2.changeValue(1.0);
+
+        CellStub c3 = (CellStub) bMIX.getCell(0,0);
+        CellStub c4 = (CellStub) bN.getCell(0,0);
+
+        c3 = (CellStub) c3.changeValue(230.0);
+        c4 = (CellStub) c4.changeValue(2.0);
+
+        assertEquals(-129.50, round((double) bN.covar(bMIX, bT.getCell(0,0), false).getInfo(),2));
     }
 
     @Test
     @DisplayName("Test cpearson with std equals to 0")
     void testCPValZ() {
-        testing.ModifyBlock(10.0);
-        CellStub c = (CellStub) bN.getCell(2,2);
+        bMIX.ModifyBlock(10.0);
+        bN.ModifyBlock(10.0);
 
-        assertEquals(1.0, testing.CPearson(testing, c, false, true));
+        assertEquals(1.0, bN.CPearson(bMIX, bT.getCell(0,0), false).getInfo());
     }
 
     @Test
     @DisplayName("Test cpearson with std")
     void testCPVal() {
-        testing.ModifyBlock(10.0);
-        testing2.ModifyBlock(10.0);
+        bMIX.ModifyBlock(10.0);
+        bN.ModifyBlock(10.0);
 
-        CellStub c = (CellStub) testing.getCell(4,4);
-        CellStub c2 = (CellStub) testing.getCell(3,4);
+        CellStub c = (CellStub) bMIX.getCell(4,4);
+        CellStub c2 = (CellStub) bN.getCell(4,4);
 
-        c.changeValue(18827222.0);
-        c2.changeValue(20000.0);
+        c = (CellStub) c.changeValue(190.0);
+        c2 = (CellStub) c2.changeValue(1.0);
 
-        assertEquals(1.0, testing.CPearson(testing2, c, false, true));
+        CellStub c3 = (CellStub) bMIX.getCell(0,0);
+        CellStub c4 = (CellStub) bN.getCell(0,0);
+
+        c3 = (CellStub) c3.changeValue(230.0);
+        c4 = (CellStub) c4.changeValue(2.0);
+
+        assertEquals(-1.0, round( (double) bN.CPearson(bMIX, bT.getCell(0,0), false).getInfo(),4));
     }
 }

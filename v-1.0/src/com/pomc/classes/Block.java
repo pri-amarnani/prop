@@ -1,5 +1,7 @@
 package com.pomc.classes;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -94,7 +96,7 @@ public class Block {
                     Vector<Cell> s = new Vector<>(1);
                     s.add(this.block[i][j]);
 
-                    Map.Entry<String, Vector<Cell>> r = new AbstractMap.SimpleEntry<>("EQUAL", s);
+                    Map.Entry<String, Vector<Cell>> r = new AbstractMap.SimpleEntry<>("=", s);
                     b.getCell(i, j).setRefInfo(r);
                 }
             }
@@ -110,23 +112,23 @@ public class Block {
         }
     }
 
-    public void SortBlock (Block col, int n_col, String criteria) {
+    public void SortBlock (int n_col, String criteria, String type) {
         if (Objects.equals(criteria, "<")) {
-            if (col.allDouble()) {
+            if (Objects.equals(type, "N")) {
                 Arrays.sort(block, (a, b) -> Double.compare((double) a[n_col].getInfo(), (double) b[n_col].getInfo()));
             }
-            else if (col.allText()) {
-                Arrays.sort(block, (a, b) -> ((String) a[0].getInfo()).compareTo((String) b[0].getInfo()));
+            else if (Objects.equals(type, "T")) {
+                Arrays.sort(block, (a, b) -> ((String) a[n_col].getInfo()).compareTo((String) b[n_col].getInfo()));
             }
         }
 
         // >
         else {
-            if (col.allDouble()) {
+            if (Objects.equals(type, "N")) {
                 Arrays.sort(block, (a, b) -> Double.compare((double) b[n_col].getInfo(), (double) a[n_col].getInfo()));
             }
-            else if (col.allText()) {
-                Arrays.sort(block, (a, b) -> ((String) b[0].getInfo()).compareTo((String) a[0].getInfo()));
+            else if (Objects.equals(type, "T")) {
+                Arrays.sort(block, (a, b) -> ((String) b[n_col].getInfo()).compareTo((String) a[n_col].getInfo()));
             }
         }
     }
@@ -162,7 +164,7 @@ public class Block {
                     Vector<Cell> s = new Vector<>(1);
                     s.add(this.block[i][j]);
 
-                    Map.Entry<String, Vector<Cell>> r = new AbstractMap.SimpleEntry<>("FLOOR", s);
+                    Map.Entry<String, Vector<Cell>> r = new AbstractMap.SimpleEntry<>("floor", s);
 
                     b.getCell(i,j).setRefInfo(r);
                 }
@@ -187,8 +189,7 @@ public class Block {
                     s.add(this.block[i][j]);
                     s.add(b1.getCell(i, j));
 
-                    Map.Entry<String, Vector<Cell>> r = new AbstractMap.SimpleEntry<>("SUM", s);
-
+                    Map.Entry<String, Vector<Cell>> r = new AbstractMap.SimpleEntry<>("sum", s);
 
                     b2.getCell(i, j).setRefInfo(r);
                 }
@@ -200,7 +201,7 @@ public class Block {
         for (int i = 0; i < this.block.length; ++i) {
             for (int j = 0; j < this.block[0].length; ++j) {
 
-                Cell n = (Cell) b2.getCell(i, j).changeValue((double) this.block[i][j].getInfo() * (double) b1.getCell(i, j).getInfo());
+                Cell n = (Cell) b2.getCell(i, j).changeValue((double) this.block[i][j].getInfo()*(double) b1.getCell(i, j).getInfo());
                 b2.setCell(i,j,n);
 
                 if (ref) {
@@ -209,8 +210,7 @@ public class Block {
                     s.add(this.block[i][j]);
                     s.add(b1.getCell(i, j));
 
-                    Map.Entry<String, Vector<Cell>> r = new AbstractMap.SimpleEntry<>("MULT", s);
-
+                    Map.Entry<String, Vector<Cell>> r = new AbstractMap.SimpleEntry<>("mult", s);
 
                     b2.getCell(i, j).setRefInfo(r);
                 }
@@ -230,7 +230,7 @@ public class Block {
                     s.add(this.block[i][j]);
                     s.add(b1.getCell(i, j));
 
-                    Map.Entry<String, Vector<Cell>> r = new AbstractMap.SimpleEntry<>("DIV", s);
+                    Map.Entry<String, Vector<Cell>> r = new AbstractMap.SimpleEntry<>("div", s);
 
 
                     b2.getCell(i, j).setRefInfo(r);
@@ -251,7 +251,7 @@ public class Block {
                     s.add(this.block[i][j]);
                     s.add(b1.getCell(i, j));
 
-                    Map.Entry<String, Vector<Cell>> r = new AbstractMap.SimpleEntry<>("SUB", s);
+                    Map.Entry<String, Vector<Cell>> r = new AbstractMap.SimpleEntry<>("sub", s);
 
 
                     b2.getCell(i, j).setRefInfo(r);
@@ -281,17 +281,17 @@ public class Block {
         for (Cell[] cells : this.block) {
             for (int j = 0; j < this.block[0].length; ++j) {
                 String s = (String) cells[j].getInfo();
-                if (Objects.equals(criteria, "ALL CAPS")) {
+                if (Objects.equals(criteria, "all caps")) {
                     Cell n = (Cell) cells[j].changeValue(s.toUpperCase(Locale.ROOT));
                     cells[j] = n;
                 }
 
-                else if (Objects.equals(criteria, "ALL NOT CAPS")) {
+                else if (Objects.equals(criteria, "all not caps")) {
                     Cell n = (Cell) cells[j].changeValue(s.toLowerCase(Locale.ROOT));
                     cells[j] = n;
                 }
 
-                else if (Objects.equals(criteria, "CAP_FIRST_LETTER")) {
+                else if (Objects.equals(criteria, "cap_first_letter")) {
                     Cell n = (Cell) cells[j].changeValue(s.substring(0, 1).toUpperCase(Locale.ROOT)
                             + s.substring(1));
                     cells[j] = n;
@@ -314,7 +314,7 @@ public class Block {
         c = (Cell) c.changeValue(sum/s.size());
 
         if (ref) {
-            Map.Entry<String, Vector<Cell>> r = new AbstractMap.SimpleEntry<>("MEAN", s);
+            Map.Entry<String, Vector<Cell>> r = new AbstractMap.SimpleEntry<>("mean", s);
             c.setRefInfo(r);
         }
 
@@ -339,7 +339,7 @@ public class Block {
         c = (Cell) c.changeValue(arr[arr.length/2]);
 
         if (ref) {
-            Map.Entry<String, Vector<Cell>> r = new AbstractMap.SimpleEntry<>("MEDIAN", s);
+            Map.Entry<String, Vector<Cell>> r = new AbstractMap.SimpleEntry<>("median", s);
             c.setRefInfo(r);
         }
 
@@ -358,7 +358,7 @@ public class Block {
                 s.addAll(Arrays.asList(cells).subList(0, this.block[0].length));
             }
 
-            Map.Entry<String, Vector<Cell>> r = new AbstractMap.SimpleEntry<>("VAR", s);
+            Map.Entry<String, Vector<Cell>> r = new AbstractMap.SimpleEntry<>("var", s);
             c.setRefInfo(r);
         }
         return c;
@@ -378,8 +378,8 @@ public class Block {
 
         for (int i = 0; i < this.block.length; ++i) {
             for (int j = 0; j < this.block[0].length; ++j) {
-                System.out.println((double) b.getCell(i,j).getInfo());
-
+                //System.out.println((double) b.getCell(i,j).getInfo());
+                //System.out.println((double) this.block[i][j].getInfo());
 
                 x[ii] = (double) this.block[i][j].getInfo();
                 s.add(this.block[i][j]);
@@ -402,7 +402,7 @@ public class Block {
         c = (Cell) c.changeValue(cov);
 
         if (ref) {
-            Map.Entry<String, Vector<Cell>> r = new AbstractMap.SimpleEntry<>("COVAR", s);
+            Map.Entry<String, Vector<Cell>> r = new AbstractMap.SimpleEntry<>("covar", s);
             c.setRefInfo(r);
         }
 
@@ -434,7 +434,7 @@ public class Block {
         c = (Cell) c.changeValue(stdd);
 
         if (ref) {
-            Map.Entry<String, Vector<Cell>> r = new AbstractMap.SimpleEntry<>("VAR", s);
+            Map.Entry<String, Vector<Cell>> r = new AbstractMap.SimpleEntry<>("std", s);
             c.setRefInfo(r);
         }
 
@@ -446,9 +446,14 @@ public class Block {
         double d2 = (double) this.std(c, false).getInfo();
 
         double cp;
-        if (d1 == 0 || d2 == 0) cp = 1;
+        double covv = (double) this.covar(b,c,false).getInfo();
 
-        else cp = (double) this.covar(b,c,false).getInfo()/(d1*d2);
+        if (d1 == 0 || d2 == 0) cp = 1;
+        else cp = covv/(d1*d2);
+
+        // decimal rectification
+        if (cp > 1.0) cp = 1.0;
+        if (cp < -1) cp = -1.0;
 
         c = (Cell) c.changeValue(cp);
 
@@ -463,7 +468,7 @@ public class Block {
                 }
             }
 
-            Map.Entry<String, Vector<Cell>> r = new AbstractMap.SimpleEntry<>("CP", s);
+            Map.Entry<String, Vector<Cell>> r = new AbstractMap.SimpleEntry<>("cp", s);
             c.setRefInfo(r);
         }
 
