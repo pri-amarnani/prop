@@ -96,7 +96,7 @@ public class Main {
             System.out.println("(10) Pearson Coefficient");
             System.out.println("(0) Go back");
             System.out.println("\n \n Enter number:");
-            Integer num = numberInsertion(4,0);
+            Integer num = numberInsertion(10,0);
             if (num != null) {
                 System.out.println("\n");
                 switch (num) {
@@ -104,31 +104,139 @@ public class Main {
                         menu = false;
                         break;
                     case 1:
-                        System.out.println("(4) Delete a Sheet");
+                        System.out.println("Insert block to add with:");
+                        Integer[] blockCellsA = requireBlock();
+                        if (blockCellsA.length == 0) break;
+                        else {
+                          System.out.println("Insert block to print results:");
+                          Integer[] blockCellsA2 = requireBlock();
+                          if (blockCellsA2.length == 0) break;
+                          else {
+                              DomainController.funcAddition(blockCellsA,blockCellsA2,isReferencing());
+                              System.out.println("\n Blocks added!");
+                          }
+                        }
                         break;
                     case 2:
-                        System.out.println("(4)2t");
+                        System.out.println("Insert block to substract with:");
+                        Integer[] blockCellsS = requireBlock();
+                        if (blockCellsS.length == 0) break;
+                        else {
+                            System.out.println("Insert block to print results:");
+                            Integer[] blockCellsS2 = requireBlock();
+                            if (blockCellsS2.length == 0) break;
+                            else {
+                                DomainController.funcSubstraction(blockCellsS,blockCellsS2,isReferencing());
+                                System.out.println("\n Blocks substracted!");
+                            }
+                        }
                         break;
                     case 3:
-                        System.out.println("e a Sheet");
+                        System.out.println("Insert block to multiply with:");
+                        Integer[] blockCellsM = requireBlock();
+                        if (blockCellsM.length == 0) break;
+                        else {
+                            System.out.println("Insert block to print results:");
+                            Integer[] blockCellsM2 = requireBlock();
+                            if (blockCellsM2.length == 0) break;
+                            else {
+                                DomainController.funcMultiply(blockCellsM,blockCellsM2,isReferencing());
+                                System.out.println("\n Blocks multiplied!");
+                            }
+                        }
                         break;
                     case 4:
-                        System.out.println("e a Sheet");
+                        System.out.println("Insert block to divide with:");
+                        Integer[] blockCellsD = requireBlock();
+                        if (blockCellsD.length == 0) break;
+                        else {
+                            System.out.println("Insert block to print results:");
+                            Integer[] blockCellsD2 = requireBlock();
+                            if (blockCellsD2.length == 0) break;
+                            else {
+                                DomainController.funcDivide(blockCellsD,blockCellsD2,isReferencing());
+                                System.out.println("\n Blocks divided!");
+                            }
+                        }
                         break;
                     case 5:
-                        System.out.println("e a Sheet");
+                        System.out.println("Want to print the result in a cell? (y/n)");
+                        String userInM = userInput.nextLine();
+                        if (userInM.equals("y") || userInM.equals("yes") )  {
+                            System.out.println("Input the row of the Cell to print the result:");
+                            Integer cellIM = numberInsertion(DomainController.currentSheetRows(), 1);
+                            System.out.println("Input the column of the Cell to print the result:");
+                            Integer cellJM = numberInsertion(DomainController.currentSheetCols(), 1);
+                            if (cellIM > 0 && cellJM > 0) {
+                                Double result = DomainController.funcMean(cellIM,cellJM,true,isReferencing());
+                                System.out.println("The mean of the block is " + result + " and it was printed!");
+                            }
+                            else System.out.println("Cell not found");
+                        }
+                        else if (userInM.equals("n") || userInM.equals("no")){
+                            System.out.println("The mean of the block is " + DomainController.funcMean(0,0,false,false));
+                        }
+                        else System.out.println("Invalid answer");
                         break;
                     case 6:
-                        System.out.println("e a Sheet");
+                        System.out.println("Want to print the result in a cell? (y/n)");
+                        String userInm = userInput.nextLine();
+                        if (userInm.equals("y") || userInm.equals("yes") )  {
+                            System.out.println("Input the row of the Cell to print the result:");
+                            Integer cellIm = numberInsertion(DomainController.currentSheetRows(), 1);
+                            System.out.println("Input the column of the Cell to print the result:");
+                            Integer cellJm = numberInsertion(DomainController.currentSheetCols(), 1);
+                            if (cellIm > 0 && cellJm > 0) {
+                                Double result = DomainController.funcMedian(cellIm,cellJm,true,isReferencing());
+                                System.out.println("The median of the block is " + result + " and it was printed!");
+                            }
+                            else System.out.println("Cell not found");
+                        }
+                        else if (userInm.equals("n") || userInm.equals("no")){
+                            System.out.println("The median of the block is " + DomainController.funcMedian(0,0,false,false));
+                        }
+                        else System.out.println("Invalid answer");
                         break;
                     case 7:
-                        System.out.println("e a Sheet");
+                        System.out.println("Want to print the result in a cell? (y/n)");
+                        String userInV = userInput.nextLine();
+                        if (userInV.equals("y") || userInV.equals("yes") )  {
+                            System.out.println("Input the row of the Cell to print the result:");
+                            Integer cellIV = numberInsertion(DomainController.currentSheetRows(), 1);
+                            System.out.println("Input the column of the Cell to print the result:");
+                            Integer cellJV = numberInsertion(DomainController.currentSheetCols(), 1);
+                            if (cellIV > 0 && cellJV > 0) {
+                                Double result = DomainController.funcVariance(cellIV,cellJV,true,isReferencing());
+                                System.out.println("The variance of the block is " + result + " and it was printed!");
+                            }
+                            else System.out.println("Cell not found");
+                        }
+                        else if (userInV.equals("n") || userInV.equals("no")){
+                            System.out.println("The variance of the block is " + DomainController.funcVariance(0,0,false,false));
+                        }
+                        else System.out.println("Invalid answer");
                         break;
                     case 8:
                         System.out.println("e a Sheet");
                         break;
                     case 9:
-                        System.out.println("e a Sheet");
+                        System.out.println("Want to print the result in a cell? (y/n)");
+                        String userInS = userInput.nextLine();
+                        if (userInS.equals("y") || userInS.equals("yes") )  {
+                            System.out.println("Input the row of the Cell to print the result:");
+                            Integer cellIS = numberInsertion(DomainController.currentSheetRows(), 1);
+                            System.out.println("Input the column of the Cell to print the result:");
+                            Integer cellJS = numberInsertion(DomainController.currentSheetCols(), 1);
+                            if (cellIS > 0 && cellJS > 0) {
+                                Double result = DomainController.funcStandardDeviation(cellIS,cellJS,true,isReferencing());
+                                System.out.println("The Standard Deviation of the block is " + result + " and it was printed!");
+                            }
+                            else System.out.println("Cell not found");
+                        }
+                        else if (userInS.equals("n") || userInS.equals("no")){
+                            System.out.println("The Standard Deviation of the block is " + DomainController.funcStandardDeviation(0,0,false,false));
+                        }
+                        else System.out.println("Invalid answer");
                         break;
                     case 10:
                         System.out.println("e a Sheet");
