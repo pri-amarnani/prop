@@ -19,12 +19,6 @@ public class DateCellTest {
     }
 
     @Test
-    @DisplayName("extract should work")
-    public void test_extract(){
-        assertEquals( dcell.extract("DAY"),16);
-    }
-
-    @Test
     @DisplayName("getDayofTheWeek should work")
     public void test_getDayfTheWeek(){
         assertEquals( dcell.getDayofTheWeek(),"Friday");

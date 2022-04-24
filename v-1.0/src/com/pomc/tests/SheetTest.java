@@ -16,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 
 public class SheetTest {
-    /*
+
     private Sheet sheet;
     private CellStub[][] b ;
 
@@ -58,23 +58,6 @@ public class SheetTest {
         CellStub c = (CellStub) sheet.getCell(2,2);
         assertEquals(3.0, c.getVal());
     }
-
-    @Test
-    @DisplayName("create_block")
-    public void create_blockTest() {
-
-        CellStub[][] b2 = new CellStub[3][3];
-
-        for(int i = 0; i < 3; ++i){
-            for(int j = 0; j < 3; ++j){
-                b2[i][j] = new CellStub(i, j, 3.0, "N");
-            }
-        }
-
-        BlockStub b1 = new BlockStub(b2, b2[0][0], b2[2][2]);
-        assertTrue(b1.isEqual(sheet.create_block(sheet.getCell(0,0), sheet.getCell(2,2))));
-    }
-
 
     @Test
     @DisplayName("SelectBlock saves in b_selected the selected bloc")
@@ -448,6 +431,6 @@ public class SheetTest {
         BlockStub bs2 = new BlockStub(b2, b2[0][0], b2[3][3]);
 
         assertFalse(sheet.overlapping(bs1,bs2));
-    }*/
+    }
 
 }

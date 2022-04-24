@@ -40,13 +40,13 @@ public class Block {
     public boolean allDouble() {
         for (int i = 0; i < this.block.length; ++i) {
             for (int j = 0; j < this.block[0].length; ++j) {
-                System.out.println(this.block[i][j].getRow() +" "+this.block[i][j].getColumn());
+                //System.out.println(this.block[i][j].getRow() +" "+this.block[i][j].getColumn());
                 if (this.block[i][j].getInfo() == null){
-                    System.out.println(this.block[i][j].getRow() +" ola "+this.block[i][j].getColumn() + " " + this.block[i][j].getType());
+                    //System.out.println(this.block[i][j].getRow() +" ola "+this.block[i][j].getColumn() + " " + this.block[i][j].getType());
                     return false;
                 }
                 else if (!this.block[i][j].isNum()) {
-                    System.out.println(this.block[i][j].getRow() +" qw1 "+this.block[i][j].getColumn());
+                    //System.out.println(this.block[i][j].getRow() +" qw1 "+this.block[i][j].getColumn());
                     return false;
                 }
             }
@@ -222,7 +222,7 @@ public class Block {
     public void sum (Block b1, Block b2, Boolean ref) {
         for (int i = 0; i < this.block.length; ++i) {
             for (int j = 0; j < this.block[0].length; ++j) {
-                System.out.println("suma");
+                //System.out.println("suma");
                 Cell n = (Cell) b2.getCell(i, j).changeValue((double) this.block[i][j].getInfo() + (double) b1.getCell(i, j).getInfo());
 
                 if (ref) {
