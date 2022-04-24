@@ -102,18 +102,10 @@ public class Block {
     }
 
     public void ModifyBlock(Object n) {
-        System.out.println(n.getClass());
         for (Cell[] cells : block) {
             for (int j = 0; j < block[0].length; ++j) {
-
-                if (n.getClass() == cells[j].getInfo().getClass()) {
-                    cells[j].changeValue(n);
-                }
-                else {
-                    System.out.println(cells[j].getInfo().getClass());
-                    Cell nw = (Cell) cells[j].changeValue(n);
-                    cells[j] = nw;
-                }
+                Cell nw = (Cell) cells[j].changeValue(n);
+                cells[j] = nw;
             }
         }
     }
@@ -152,7 +144,7 @@ public class Block {
         for (Cell[] cells : block) {
             for (int j = 0; j < block[0].length; ++j) {
                 if (Objects.equals(cells[j].getInfo(), n)) {
-                    Cell nw = (Cell) cells[j].changeValue(cells[j].getInfo());
+                    Cell nw = (Cell) cells[j].changeValue(change);
                     cells[j] = nw;
                 }
             }
@@ -163,7 +155,7 @@ public class Block {
         for (int i = 0; i < this.block.length; ++i) {
             for (int j = 0; j < this.block[0].length; ++j) {
 
-                Cell n = (Cell) b.getCell(i,j).changeValue(this.block[i][j].getInfo());
+                Cell n = (Cell) b.getCell(i,j).changeValue(Math.floor((double) this.block[i][j].getInfo()));
                 b.setCell(i,j,n);
 
                 if (ref) {
@@ -207,7 +199,8 @@ public class Block {
     public void mult (Block b1, Block b2, Boolean ref) {
         for (int i = 0; i < this.block.length; ++i) {
             for (int j = 0; j < this.block[0].length; ++j) {
-                Cell n = (Cell) b2.getCell(i, j).changeValue((double) this.block[i][j].getInfo() + (double) b1.getCell(i, j).getInfo());
+
+                Cell n = (Cell) b2.getCell(i, j).changeValue((double) this.block[i][j].getInfo() * (double) b1.getCell(i, j).getInfo());
                 b2.setCell(i,j,n);
 
                 if (ref) {
@@ -228,7 +221,7 @@ public class Block {
     public void div (Block b1, Block b2, Boolean ref) {
         for (int i = 0; i < this.block.length; ++i) {
             for (int j = 0; j < this.block[0].length; ++j) {
-                Cell n = (Cell) b2.getCell(i, j).changeValue((double) this.block[i][j].getInfo() + (double) b1.getCell(i, j).getInfo());
+                Cell n = (Cell) b2.getCell(i, j).changeValue((double) this.block[i][j].getInfo() / (double) b1.getCell(i, j).getInfo());
                 b2.setCell(i,j,n);
 
                 if (ref) {
@@ -249,7 +242,7 @@ public class Block {
     public void substract (Block b1, Block b2, Boolean ref) {
         for (int i = 0; i < this.block.length; ++i) {
             for (int j = 0; j < this.block[0].length; ++j) {
-                Cell n = (Cell) b2.getCell(i, j).changeValue((double) this.block[i][j].getInfo() + (double) b1.getCell(i, j).getInfo());
+                Cell n = (Cell) b2.getCell(i, j).changeValue((double) this.block[i][j].getInfo() - (double) b1.getCell(i, j).getInfo());
                 b2.setCell(i,j,n);
 
                 if (ref) {
@@ -318,8 +311,7 @@ public class Block {
             }
         }
 
-        if (c.isNum()) c.changeValue(sum/s.size());
-        else c = (Cell) c.changeValue(sum/s.size());
+        c = (Cell) c.changeValue(sum/s.size());
 
         if (ref) {
             Map.Entry<String, Vector<Cell>> r = new AbstractMap.SimpleEntry<>("MEAN", s);
@@ -344,8 +336,7 @@ public class Block {
 
         Arrays.sort(arr);
 
-        if (c.isNum()) c.changeValue(arr[arr.length/2]);
-        else c = (Cell) c.changeValue(arr[arr.length/2]);
+        c = (Cell) c.changeValue(arr[arr.length/2]);
 
         if (ref) {
             Map.Entry<String, Vector<Cell>> r = new AbstractMap.SimpleEntry<>("MEDIAN", s);
@@ -358,8 +349,7 @@ public class Block {
     public Cell var (Cell c, Boolean ref) {
         double d = Math.pow((double) this.std(c, false).getInfo(), 2);
 
-        if (c.isNum()) c.changeValue(d);
-        else c = (Cell) c.changeValue(d);
+        c = (Cell) c.changeValue(d);
 
         if (ref) {
             Vector<Cell> s = new Vector<>();
@@ -409,8 +399,7 @@ public class Block {
 
         double cov = sum/(x.length-1);
 
-        if (c.isNum()) c.changeValue(cov);
-        else c = (Cell) c.changeValue(cov);
+        c = (Cell) c.changeValue(cov);
 
         if (ref) {
             Map.Entry<String, Vector<Cell>> r = new AbstractMap.SimpleEntry<>("COVAR", s);
@@ -442,8 +431,7 @@ public class Block {
         }
         double stdd = Math.sqrt(std/arr.length);
 
-        if (c.isNum()) c.changeValue(stdd);
-        else c = (Cell) c.changeValue(stdd);
+        c = (Cell) c.changeValue(stdd);
 
         if (ref) {
             Map.Entry<String, Vector<Cell>> r = new AbstractMap.SimpleEntry<>("VAR", s);
@@ -462,8 +450,7 @@ public class Block {
 
         else cp = (double) this.covar(b,c,false).getInfo()/(d1*d2);
 
-        if (c.isNum()) c.changeValue(cp);
-        else c = (Cell) c.changeValue(cp);
+        c = (Cell) c.changeValue(cp);
 
         if (ref) {
 
