@@ -118,7 +118,6 @@ public class Sheet {
     public boolean isEqual(Sheet sh) {
 
         if (sh.getNumCols() != this.getNumCols() || sh.getNumRows() != this.getNumRows()) return false;
-
         for (int i = 0; i < sh.getNumRows(); ++i) {
             for (int j = 0; j < sh.getNumCols(); ++j) {
                 if (this.getCell(i,j).getInfo() != sh.getCell(i,j).getInfo()) return false;
@@ -149,7 +148,7 @@ public class Sheet {
             pos_row.add(c);
         }
         cells.insertElementAt(pos_row, pos);
-        /*
+
         for(int i = pos + 1; i < num_rows; ++i){
             Vector<Cell> row = cells.elementAt(i);
             for(int j = 0; j < num_cols; ++j){
@@ -159,8 +158,6 @@ public class Sheet {
             }
             cells.setElementAt(row,i);
         }
-
-         */
     }
 
     public void NewColumn(int pos){
@@ -168,14 +165,12 @@ public class Sheet {
         for(int i = 0; i < num_rows; ++i){
             Vector<Cell> row = cells.elementAt(i);
             row.insertElementAt(new NumCell(i,pos,null), pos);
-            /*
+
             for(int j = pos + 1; j < num_cols; ++j ) {
                 Cell c = row.elementAt(j);
                 c.setColumn(j);
                 row.setElementAt(c,j);
             }
-
-             */
             cells.setElementAt(row,i);
         }
     }
@@ -185,7 +180,6 @@ public class Sheet {
         else{
             --num_rows;
             cells.removeElement(pos);
-            /*
             for(int i = pos; i < num_rows; ++i){
                 Vector<Cell> row = cells.elementAt(i);
                 for(int j = 0; j < num_cols; ++j){
@@ -195,8 +189,6 @@ public class Sheet {
                 }
                 cells.setElementAt(row,i);
             }
-
-             */
         }
     }
 
@@ -207,14 +199,11 @@ public class Sheet {
             for(int i = 0; i < num_rows; ++i){
                 Vector<Cell> row = cells.elementAt(i);
                 row.removeElementAt(pos);
-                /*
                 for(int j = pos; j < num_cols; ++j ) {
                     Cell c = row.elementAt(j);
                     c.setColumn(j);
                     row.setElementAt(c,j);
                 }
-
-                 */
                 cells.setElementAt(row,i);
             }
         }
