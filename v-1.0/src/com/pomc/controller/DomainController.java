@@ -96,6 +96,7 @@ public class DomainController {
                 else if (cell.getType().equals("R")) content = AntiParse(cell.getContent());
                 else content = AntiParse(cell.getInfo());
                 Contents.get(i).add(j,content);
+                //System.out.println(cell);
             }
         }
         Vector<String[]> cellsContents = new Vector<String[]>();
@@ -233,8 +234,9 @@ public class DomainController {
         docSheet.div(b1,b2,ref);
     }
 
-    public static Double funcMean(Integer i, Integer j,boolean val, boolean ref ){
-        Cell cell = docSheet.getCells().get(i-1).get(j-1);
+    public static Double funcMean(Integer i, Integer j, boolean val, boolean ref ){
+        Cell cell = null;
+        if (val) cell = docSheet.getCells().get(i-1).get(j-1);
         return docSheet.mean(cell,ref,val);
     }
     public static Double funcMedian(Integer i, Integer j,boolean val, boolean ref ){

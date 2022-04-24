@@ -9,7 +9,7 @@ public class ReferencedCell extends Cell {
     private Map.Entry<String,Vector<Cell>> refInfo; //celdas y operaciones (la información que yo guardo).
 
 
-    public ReferencedCell (int row, int col,String info){
+    public ReferencedCell (int row, int col, String info){
         super(row,col);
         this.info= info;
     }

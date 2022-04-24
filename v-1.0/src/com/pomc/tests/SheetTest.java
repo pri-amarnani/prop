@@ -16,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 
 public class SheetTest {
-
+    /*
     private Sheet sheet;
     private CellStub[][] b ;
 
@@ -448,6 +448,6 @@ public class SheetTest {
         BlockStub bs2 = new BlockStub(b2, b2[0][0], b2[3][3]);
 
         assertFalse(sheet.overlapping(bs1,bs2));
-    }
+    }*/
 
 }

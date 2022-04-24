@@ -13,6 +13,4 @@ public class SheetStub extends Sheet {
     public String getTitle() {
         return title;
     }
-
-
 }

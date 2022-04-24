@@ -59,13 +59,13 @@ public class Main {
                             if (criterio != null) {
                                 switch (criterio) {
                                     case 1:
-                                        DomainController.funcLength(cellI,cellJ,"words");
+                                        System.out.println("The number of words is " + DomainController.funcLength(cellI,cellJ,"words"));
                                         break;
                                     case 2:
-                                        DomainController.funcLength(cellI,cellJ,"letters");
+                                        System.out.println("The number of letters is " + DomainController.funcLength(cellI,cellJ,"letters"));
                                         break;
                                     case 3:
-                                        DomainController.funcLength(cellI,cellJ,"characters");
+                                        System.out.println("The number of characters is " + DomainController.funcLength(cellI,cellJ,"characters"));
                                         break;
                                     default:
                                         System.out.println("Could find criteria");

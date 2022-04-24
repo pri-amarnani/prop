@@ -49,6 +49,4 @@ public class DocumentTest {
         doc.deleteSheet("Sheet1");
         assertEquals("Sheet2",doc.getDocSheets().lastElement().getTitle());
     }
-
-
 }

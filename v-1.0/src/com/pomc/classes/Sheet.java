@@ -1,4 +1,6 @@
 package com.pomc.classes;
+
+import java.time.LocalDate;
 import java.util.Vector;
 
 public class Sheet {
@@ -115,13 +117,13 @@ public class Sheet {
         Integer id = -1, id2 = -1;
         for(int i = 0; i < num_rows; ++i) {
             id = cells.elementAt(i).indexOf(c);
-            if (id != null && id != -1) {
+            if (id != -1) {
                 id2 = i;
                 break;
             }
         }
         Object o1 = c.changeValue(o);
-        if(id != null && id != -1) cells.elementAt(id2).setElementAt((Cell) o1, id);
+        if(id != -1) cells.elementAt(id2).setElementAt((Cell) o1, id);
         else System.out.println("Cell not found");
         System.out.println(cells.elementAt(id2).elementAt(id).getType());
     }
@@ -198,13 +200,14 @@ public class Sheet {
 
     public Block create_block(Cell c1, Cell c2){
         Cell [][] arr_block = new Cell[c2.getRow()-c1.getRow()+1][c2.getColumn()-c1.getColumn()+1];
-
+        System.out.println(c2.getRow()-c1.getRow()+1 + " " + (c2.getColumn()-c1.getColumn()+1));
         for(int i =0 ; i <= c2.getRow()-c1.getRow(); ++i){
             for(int j = 0; j <= c2.getColumn()-c1.getColumn(); ++j){
-                arr_block[i][j] = cells.elementAt(c1.getRow()+ i).elementAt(c1.getRow()+j);
+                arr_block[i][j] = cells.elementAt(c1.getRow()+ i).elementAt(c1.getColumn()+j);
             }
         }
-        return new Block(arr_block, c1, c2);
+        Block block = new Block(arr_block, c1, c2);
+        return block;
     }
 
     public Block SelectBlock(Cell c1, Cell c2){
@@ -344,7 +347,7 @@ public class Sheet {
 
     public Double mean(Cell c, Boolean ref, Boolean val){
         if(b_selected.allDouble()){
-            if(ref && overlapping(b_selected, create_block(c,c))) System.out.println("Error. Cell contained in the block.");
+            if (ref && overlapping(b_selected, create_block(c,c))) System.out.println("Error. Cell contained in the block.");
             else{
                 Cell m = b_selected.mean(c, ref);
                 if(val) cells.elementAt(m.getRow()).setElementAt(m, m.getColumn());
@@ -420,4 +423,5 @@ public class Sheet {
         else System.out.println("Error. Not all cells are of type Number.");
         return null;
     }
+
 }

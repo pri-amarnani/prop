@@ -33,7 +33,7 @@ public class Block {
     }
 
     public void setCell(int i, int j, Cell c) {
-        System.out.println(c.getClass());
+        //System.out.println(c.getClass());
         this.block[i][j] = c;
     }
 
@@ -42,7 +42,7 @@ public class Block {
             for (int j = 0; j < this.block[0].length; ++j) {
                 System.out.println(this.block[i][j].getRow() +" "+this.block[i][j].getColumn());
                 if (this.block[i][j].getInfo() == null){
-                    System.out.println(this.block[i][j].getRow() +" ola "+this.block[i][j].getColumn());
+                    System.out.println(this.block[i][j].getRow() +" ola "+this.block[i][j].getColumn() + " " + this.block[i][j].getType());
                     return false;
                 }
                 else if (!this.block[i][j].isNum()) {
@@ -300,7 +300,7 @@ public class Block {
                 Cell n = (Cell) b2.getCell(i, j).changeValue((double) this.block[i][j].getInfo() - (double) b1.getCell(i, j).getInfo());
 
                 if (ref) {
-                    ReferencedCell rc = new ReferencedCell(n.getRow(),n.getColumn(),"=div");
+                    ReferencedCell rc = new ReferencedCell(n.getRow(),n.getColumn(),"=sub");
                     rc.setContent(n.getInfo());
                     b2.setCell(i,j,rc);
                     Vector<Cell> s = new Vector<>(2);
@@ -388,7 +388,6 @@ public class Block {
     // val = true means we want to put value in cell, else just show value.
     public Cell mean (Cell c, Boolean ref) {
 
-
         double sum = 0;
         Vector<Cell> s = new Vector<>();
         for (Cell[] cells : this.block) {
@@ -403,14 +402,13 @@ public class Block {
         if (ref) {
             ReferencedCell rc = new ReferencedCell(c.getRow(),c.getColumn(),"=mean");
             rc.setContent(c.getInfo());
-            this.setCell(c.getRow(),c.getColumn(),rc);
+            c = rc;
             Map.Entry<String, Vector<Cell>> r = new AbstractMap.SimpleEntry<>("mean", s);
             c.setRefInfo(r);
             for (int x=0;x<s.size();x++){
                 Cell a= s.elementAt(x);
                 a.AddRef(rc);
             }
-            c=null;
         }
 
         return c;
