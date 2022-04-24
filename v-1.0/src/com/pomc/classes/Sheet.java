@@ -1,6 +1,4 @@
 package com.pomc.classes;
-
-import java.time.LocalDate;
 import java.util.Vector;
 
 public class Sheet {
@@ -15,10 +13,9 @@ public class Sheet {
     public void update(Block b){
 
         Cell ul = b.ul;
-        Cell dr = b.dr;
         for(int i = 0; i < b.number_rows(); ++ i){
             for(int j = 0; j < b.number_cols(); ++j){
-                cells.elementAt(ul.getRow() + i).setElementAt(b.getCell(i,j),ul.getColumn() + j); //seguro?
+                cells.elementAt(ul.getRow() + i).setElementAt(b.getCell(i,j),ul.getColumn() + j);
             }
         }
     }
@@ -69,14 +66,14 @@ public class Sheet {
         num_rows = 64;
     }
 
-    public Sheet(Cell[][] cells, String title) {  //not sure //arrray to vector
+    public Sheet(Cell[][] cells, String title) {
 
         Vector<Vector<Cell>> v_cells = new Vector<>();
 
         for(int i = 0; i < cells.length; ++ i ){
             Vector<Cell> row = new Vector<>();
             for(int j = 0; j < cells[0].length; ++j){
-                row.add(cells[i][j]);   //cells[i][j]  quizas mejor paso a paso
+                row.add(cells[i][j]);
             }
             v_cells.add(row);
         }
@@ -207,8 +204,7 @@ public class Sheet {
                 arr_block[i][j] = cells.elementAt(c1.getRow()+ i).elementAt(c1.getRow()+j);
             }
         }
-        Block block = new Block(arr_block, c1, c2);
-        return block;
+        return new Block(arr_block, c1, c2);
     }
 
     public Block SelectBlock(Cell c1, Cell c2){
@@ -220,7 +216,7 @@ public class Sheet {
         return b;
     }
 
-    public void CopyB(){ //falta acabar
+    public void CopyB(){
         b_selected.CopyB();
     }
 
@@ -279,7 +275,7 @@ public class Sheet {
         update(b);
     }
 
-    public void convert(Block b, Boolean ref, String from, String to){ //falta acabar
+    public void convert(Block b, Boolean ref, String from, String to){
         b_selected.convert(b, ref, from, to);
         update(b_selected);
     }
