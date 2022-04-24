@@ -338,7 +338,7 @@ public class Sheet {
         update(b2);
     }
 
-    public void extract(Block b1,Cell c, Boolean ref, String ex){      //falta acabar
+    public void extract(Block b1,Boolean ref, String ex){      //falta acabar
         b_selected.extract(b1, ref, ex);
     }
 
