@@ -328,8 +328,8 @@ public class Sheet {
         b_selected.extract(b1, ref, ex);
     }
 
-    public void dayOfTheWeek (Block b, Boolean ref, String d){
-        if(b_selected.allDate()) b_selected.dayOfTheWeek(b, ref, d);
+    public void dayOfTheWeek (Block b, Boolean ref){
+        if(b_selected.allDate()) b_selected.dayOfTheWeek(b, ref);
         else System.out.println("Error. Not all cells are of type Date.");
         update(b);
     }

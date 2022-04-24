@@ -339,12 +339,12 @@ public class Block {
     }
 
     //FINISH
-    public void dayOfTheWeek (Block b, Boolean ref, String d) {
+    public void dayOfTheWeek (Block b, Boolean ref) {
         for (int i = 0; i < b.number_rows(); ++i) {
             for (int j = 0; j < b.number_cols(); ++j) {
                 DateCell N = (DateCell) this.block[i][j];
 
-                Cell n = (Cell) b.getCell(i, j).changeValue(N.extract(d));
+                Cell n = (Cell) b.getCell(i, j).changeValue(N.getDayofTheWeek());
 
                 if (ref) {
                     ReferencedCell rc = new ReferencedCell(n.getRow(),n.getColumn(),"=dayoftheWeek");
