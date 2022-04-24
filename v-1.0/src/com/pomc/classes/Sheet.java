@@ -200,7 +200,7 @@ public class Sheet {
 
     public Block create_block(Cell c1, Cell c2){
         Cell [][] arr_block = new Cell[c2.getRow()-c1.getRow()+1][c2.getColumn()-c1.getColumn()+1];
-        System.out.println(c2.getRow()-c1.getRow()+1 + " " + (c2.getColumn()-c1.getColumn()+1));
+        //System.out.println(c2.getRow()-c1.getRow()+1 + " " + (c2.getColumn()-c1.getColumn()+1));
         for(int i =0 ; i <= c2.getRow()-c1.getRow(); ++i){
             for(int j = 0; j <= c2.getColumn()-c1.getColumn(); ++j){
                 arr_block[i][j] = cells.elementAt(c1.getRow()+ i).elementAt(c1.getColumn()+j);
