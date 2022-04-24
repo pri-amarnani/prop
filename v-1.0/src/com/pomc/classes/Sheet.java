@@ -117,10 +117,14 @@ public class Sheet {
 
     public boolean isEqual(Sheet sh) {
 
+
         if (sh.getNumCols() != this.getNumCols() || sh.getNumRows() != this.getNumRows()) return false;
         for (int i = 0; i < sh.getNumRows(); ++i) {
             for (int j = 0; j < sh.getNumCols(); ++j) {
-                if (this.getCell(i,j).getInfo() != sh.getCell(i,j).getInfo()) return false;
+                if (this.getCell(i,j).getInfo() == null && sh.getCell(i,j).getInfo() != null) return false;
+                if (sh.getCell(i,j).getInfo() == null && this.getCell(i,j).getInfo() != null) return false;
+
+                if (!(this.getCell(i,j).getInfo() == null) && !(sh.getCell(i,j).getInfo() == null) && !this.getCell(i,j).getInfo().equals(sh.getCell(i,j).getInfo())) return false;
             }
         }
         return true;
@@ -270,14 +274,19 @@ public class Sheet {
         update(b_selected);
     }
 
-    public void SortBlock(int n_col, String Criteria){
-        Vector<Cell> v = cells.firstElement();
-        Vector<Cell> v2 = cells.lastElement();
-        Block b = create_block(v.elementAt(n_col), v2.elementAt(n_col));
+    public boolean SortBlock(int n_col, String Criteria){
+        Cell c = b_selected.getCell(0,n_col);
+        Cell c2 = b_selected.getCell(b_selected.number_rows()-1,n_col);
 
-        if(!b.allText() || !b.allDouble()) System.out.println("Error. Whole Block has to be of type number or type text.");
-        //else b_selected.SortBlock(n_col, Criteria);
+        Block b = create_block(c, c2);
+
+        if(!b.allText() || !b.allDouble()){
+            System.out.println("Error. Whole column has to be of type number or type text.");
+            return false;
+        }
+        else b_selected.SortBlock(n_col, Criteria, c.getType());
         update(b_selected);
+        return true;
     }
 
     public Cell find(Object o){
