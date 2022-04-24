@@ -36,6 +36,19 @@ public class BlockStub extends Block {
         return true;
     }
 
+    //@Override
+    public boolean isEqual(BlockStub b) {
+
+        if (b.number_cols() != this.block[0].length || b.number_rows() != this.block.length) return false;
+
+        for (int i = 0; i < b.number_rows(); ++i) {
+            for (int j = 0; j < b.number_cols(); ++j) {
+                if (!b.getCell(i,j).getInfo().equals(this.block[i][j].getInfo())) return false;
+            }
+        }
+        return true;
+    }
+
 
 }
 

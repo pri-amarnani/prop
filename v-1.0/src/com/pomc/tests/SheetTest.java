@@ -1,8 +1,8 @@
 package com.pomc.tests;
 
-import com.pomc.classes.Block;
 import com.pomc.classes.Cell;
 import com.pomc.classes.Sheet;
+import com.pomc.classes.TextCell;
 import com.pomc.tests.stubs.CellStub;
 import com.pomc.tests.stubs.BlockStub;
 import org.junit.jupiter.api.BeforeEach;
@@ -32,15 +32,12 @@ public class SheetTest {
         }
 
         sheet = new Sheet( b ,"hoja");
-        //array to vector, cambiar constructora
-
 
     }
 
     @Test
     @DisplayName("getNumRows should get the number of rows")
-    public void getNumRowsTest () {
-
+    public void getNumRowsTest (){
         assertEquals(sheet.getNumRows(), 10);
     }
 
@@ -51,7 +48,7 @@ public class SheetTest {
     }
 
     @Test
-    @DisplayName("getTitle should get the title of the sheet")
+    @DisplayName("getTitle should get the title of the sheet")  //falla
     public void getTitleTest () {
         assertEquals(sheet.getTitle(), "hoja");
     }
@@ -61,6 +58,42 @@ public class SheetTest {
     public void getCellTest() {
         CellStub c = (CellStub) sheet.getCell(2,2);
         assertEquals(3.0, c.getVal());
+    }
+
+    @Test
+    @DisplayName("create_block")
+    public void create_blockTest() {
+
+        CellStub[][] b2 = new CellStub[3][3];
+
+        for(int i = 0; i < 3; ++i){
+            for(int j = 0; j < 3; ++j){
+                b2[i][j] = new CellStub(i, j, 3.0, "N");
+            }
+        }
+
+        BlockStub b1 = new BlockStub(b2, b2[0][0], b2[2][2]);
+
+        assertTrue(b1.isEqual(sheet.create_block(sheet.getCell(0,0), sheet.getCell(2,2))));
+    }
+
+    @Test
+    @DisplayName("SelectBlock saves in b_selected the selected bloc")
+    public void SelectBlockTest() {
+        CellStub c1;
+        c1 = (CellStub) sheet.getCell(0,0);
+
+        CellStub[][] b1 = new CellStub[1][1];
+
+        for(int i = 0; i < 1; ++i){
+            for(int j = 0; j < 1; ++j){
+                b1[i][j] = new CellStub(i, j, 3.0, "N");
+            }
+        }
+
+        BlockStub b2 = new BlockStub(b1, b1[0][0],b1[0][0]);
+
+        assertTrue(b2.isEqual(sheet.SelectBlock(c1,c1)));
     }
 
     @Test
@@ -80,12 +113,23 @@ public class SheetTest {
 
         //BlockStub b2 = null;
         //assertNotEquals(b2 , b);
+        for(int i = 0; i < b.length; ++i){
+            for(int j = 0; j < b[0].length; ++j){
+
+            }
+        }
     }
 
     @Test
     @DisplayName("Test if getCells returns all the cells of the sheet")  //falta hacerla
     public void getCellsTest() {
 
+        for(int i = 0; i < 10; ++i){
+            for(int j = 0; j < 10; ++j){
+                CellStub c = (CellStub) sheet.getCells().elementAt(i).elementAt(j);
+                assertEquals(3.0, c.getVal());
+            }
+        }
     }
 
     @Test
@@ -96,8 +140,90 @@ public class SheetTest {
     }
 
     @Test
+    @DisplayName("isEqual should tell either or not two sheets contain the same information")
+    public void isEqualTest (){
+
+        CellStub[][] b2 = new CellStub[10][10];
+
+        for(int i = 0; i < 10; ++i){
+            for(int j = 0; j < 10; ++j){
+                b2[i][j] = new CellStub(i, j, 3.0, "N");
+            }
+        }
+
+        Sheet sh = new Sheet( b2 ,"hoja");
+
+        CellStub[][] b3 = new CellStub[10][10];
+
+        for(int i = 0; i < 10; ++i){
+            for(int j = 0; j < 10; ++j){
+                b3[i][j] = new CellStub(i, j, 3.0, "N");
+            }
+        }
+
+        Sheet sh2 = new Sheet( b3 ,"hoja 2");
+
+        assert(sh.isEqual(sh2));
+    }
+
+    @Test
+    @DisplayName("isEqual should tell either or not two sheets contain the same information")
+    public void isEqual2Test(){
+
+        CellStub[][] b2 = new CellStub[10][10];
+
+        for(int i = 0; i < 10; ++i){
+            for(int j = 0; j < 10; ++j){
+                b2[i][j] = new CellStub(i, j, 3.0, "N");
+            }
+        }
+
+        Sheet sh = new Sheet( b2 ,"hoja");
+
+        CellStub[][] b3 = new CellStub[10][10];
+
+        for(int i = 0; i < 10; ++i){
+            for(int j = 0; j < 10; ++j){
+                b3[i][j] = new CellStub(i, j, "c", "T");
+            }
+        }
+
+        Sheet sh2 = new Sheet( b3 ,"hoja 2");
+
+        assertEquals(false, sh.isEqual(sh2));
+    }
+
+    @Test
+    @DisplayName("isEqual should tell either or not two sheets contain the same information")
+    public void isEqual3Test(){
+
+        CellStub[][] b2 = new CellStub[10][10];
+
+        for(int i = 0; i < 10; ++i){
+            for(int j = 0; j < 10; ++j){
+                b2[i][j] = new CellStub(i, j, 3.0, "N");
+            }
+        }
+
+        Sheet sh = new Sheet( b2 ,"hoja");
+
+        CellStub[][] b3 = new CellStub[5][5];
+
+        for(int i = 0; i < 5; ++i){
+            for(int j = 0; j < 5; ++j){
+                b3[i][j] = new CellStub(i, j, 3.0, "N");
+            }
+        }
+
+        Sheet sh2 = new Sheet( b3 ,"hoja 2");
+
+
+        assertEquals(false, sh.isEqual(sh2));
+    }
+
+    @Test
     @DisplayName("NewRow should increase in one unit the numer of rows")
-    public void testNewRow() {
+    public void NewRowTest() {
         sheet.NewRow(0);
         assertEquals(11,sheet.getNumRows());
         assertEquals(10,sheet.getNumCols());
@@ -105,37 +231,7 @@ public class SheetTest {
 
     @Test
     @DisplayName("The value on the new row has to be null, the others stay the same") //isEqual
-    public void testNewRow2() {
-        //Vector<Vector<CellStub>> cells = sheet.getCells();
-
-        /*
-        for(int i = 0; i < 10; ++i){
-            Vector<CellStub> row = new Vector<>();
-            for(int j = 0; j < 10; ++j){
-                b[i][j] = new CellStub(i, j, 3.0, "N");
-            }
-        }
-
-        sheet = new Sheet( b ,"hoja");
-
-         */
-
-        sheet.NewRow(2);
-
-        //cells por alguna razon esta vacio
-        /*
-        CellStub[][] b1 = new CellStub[cells.size()][(cells.firstElement()).size()];
-
-        for(int i = 0; i < cells.size(); ++i){
-            Vector<CellStub> row = cells.elementAt(i);
-
-            for(int j = 0; j < cells.elementAt(0).size(); ++j){
-                b1[i][j] = row.elementAt(j);
-            }
-        }
-
-         */
-
+    public void NewRow2Test() {
 
         CellStub[][] b2 = new CellStub[11][10];
 
@@ -145,20 +241,102 @@ public class SheetTest {
                 else b2[i][j] = new CellStub(i, j, 3.0, "N");
             }
         }
+        Sheet sh = new Sheet( b2 ,"hoja");
+        sheet.NewRow(2);
+        assert(sheet.isEqual(sh));
+    }
 
-        assertEquals(b, b2);
+    @Test
+    @DisplayName("NewColumn should increase in one unit the numer of columns")
+    public void NewColumnTest() {
+        sheet.NewColumn(0);
+        assertEquals(11,sheet.getNumCols());
+        assertEquals(10,sheet.getNumRows());
+    }
 
+    @Test
+    @DisplayName("The value on the new column has to be null, the others stay the same")
+    public void NewColumn2Test() {
 
+        CellStub[][] b2 = new CellStub[10][11];
 
-        /*
-        for(int i = 0; i < 11; ++i){
-            for(int j = 0; j < 10; ++j){
-
-                assertEquals(b1, b2);
+        for(int i = 0; i < 10; ++i){
+            Vector<CellStub> row = new Vector<>();
+            for(int j = 0; j < 11; ++j){
+                if(j == 2) b2[i][j] = new CellStub(i, j, null, null);
+                else b2[i][j] = new CellStub(i, j, 3.0, "N");
             }
         }
 
-         */
+        Sheet sh = new Sheet(b2, "hoja 1");
+        sheet.NewColumn(2);
+        assert(sheet.isEqual(sh));
+    }
+
+    @Test
+    @DisplayName("DeleteRow should decrease in one unit the numer of rows")
+    public void DeleteRowTest() {
+        sheet.DeleteRow(0);
+        assertEquals(9,sheet.getNumRows());
+        assertEquals(10,sheet.getNumCols());
+    }
+
+    @Test
+    @DisplayName("The value on the new row has to be null, the others stay the same")
+    public void DeleteRow2Test() {
+
+        CellStub[][] b2 = new CellStub[9][10];
+
+        for(int i = 0; i < 9; ++i){
+            Vector<CellStub> row = new Vector<>();
+            for(int j = 0; j < 10; ++j){
+                b2[i][j] = new CellStub(i, j, 3.0, "N");
+            }
+        }
+
+        Sheet sh = new Sheet(b2, "hoja 1");
+        sheet.DeleteRow(2);
+        assert(sheet.isEqual(sh));
+    }
+
+    @Test
+    @DisplayName("DeleteColumn should decrease in one unit the numer of columns")
+    public void DeleteColumnTest() {
+        sheet.DeleteColumn(0);
+        assertEquals(9,sheet.getNumCols());
+        assertEquals(10,sheet.getNumRows()); //for para ver si todos los valores son null
+    }
+
+    @Test
+    @DisplayName("The value after deleting a column should change (the position of each cell)")
+    public void DeleteColumn2Test() {
+        CellStub[][] b2 = new CellStub[10][9];
+
+        for(int i = 0; i < 10; ++i){
+            Vector<CellStub> row = new Vector<>();
+            for(int j = 0; j < 9; ++j){
+                b2[i][j] = new CellStub(i, j, 3.0, "N");
+            }
+        }
+
+        Sheet sh = new Sheet(b2, "hoja 1");
+        sheet.DeleteColumn(2);
+        assert(sheet.isEqual(sh));
+    }
+
+
+
+
+
+
+    @Test
+    @DisplayName("The cell values are replaced by the given one")   //no funciona
+    public void change_valueTest(){
+        CellStub c = (CellStub) sheet.getCell(0,0);
+        sheet.change_value(c, "hola");
+        //CellStub c2 = (CellStub) sheet.getCell(0,0);
+
+        assertEquals("hola", ((CellStub) sheet.getCell(0,0)).getVal());
     }
 
 
@@ -168,48 +346,77 @@ public class SheetTest {
 
 
 
-
-
     @Test
-    @DisplayName("create_block")
-    public void testCreate_block() { //llamar a cell  ES CREADORA!!! se comprueba?
-        //Cell c = sheet.getCell();
+    @DisplayName("overlapping should tell either or not two blocks collide")
+    public void OverlappingTest(){
+
+        CellStub[][] b1 = new CellStub[5][5];
+
+        for(int i = 0; i < 5; ++i){
+            Vector<CellStub> row = new Vector<>();
+            for(int j = 0; j < 5; ++j){
+                b1[i][j] = (CellStub) sheet.getCell(i, j);
+            }
+        }
+
+        CellStub[][] b2 = new CellStub[4][4];
+
+        for(int i = 0; i < 4; ++i){
+            Vector<CellStub> row = new Vector<>();
+            for(int j = 0; j < 4; ++j){
+                b2[i][j] = (CellStub) sheet.getCell(i+4, j+4);
+            }
+        }
+
+        BlockStub bs1 = new BlockStub(b1, b1[0][0], b1[4][4]);
+        BlockStub bs2 = new BlockStub(b2, b2[0][0], b2[3][3]);
+
+        assert(sheet.overlapping(bs1,bs2));
     }
 
     @Test
-    @DisplayName("SelectBlock saves in b_selected the selected bloc") //depende de celda
-    public void testSelectBlock() { //llamar cell
-        //CellStub c1, c2;
-        //c1 = new CellStub(0,0);
-        //c2 = new CellStub();
-        //assertEquals(sheet.SelectBlock(c1,c1),sheet.getSelectedBlock());
-    }
+    @DisplayName("overlapping should tell either or not two blocks collide")
+    public void Overlapping2Test(){
 
+        CellStub[][] b1 = new CellStub[3][3];
 
+        for(int i = 0; i < 3; ++i){
+            Vector<CellStub> row = new Vector<>();
+            for(int j = 0; j < 3; ++j){
+                b1[i][j] = (CellStub) sheet.getCell(i, j);
+            }
+        }
 
+        CellStub[][] b2 = new CellStub[4][4];
 
+        for(int i = 0; i < 4; ++i){
+            Vector<CellStub> row = new Vector<>();
+            for(int j = 0; j < 4; ++j){
+                b2[i][j] = (CellStub) sheet.getCell(i+4, j+4);
+            }
+        }
 
+        BlockStub bs1 = new BlockStub(b1, b1[0][0], b1[2][2]);
+        BlockStub bs2 = new BlockStub(b2, b2[0][0], b2[3][3]);
 
-
-
-
-
-    @Test
-    @DisplayName("find")
-    public void testFind() {
-
-    }
-
-    @Test
-    @DisplayName("overlapping")
-    public Boolean testOverlapping(){
-        return true; //nope
+        assertFalse(sheet.overlapping(bs1,bs2));
     }
 
     @Test
-    @DisplayName("length")
+    @DisplayName("length")  //no cal ??
     public void testLength() {
+        CellStub[][] b2 = new CellStub[10][10];
 
+        for(int i = 0; i < 10; ++i){
+            for(int j = 0; j < 10; ++j){
+                if(i == 2) b2[i][j] = new CellStub(i, j, null, "N");
+                else b2[i][j] = new CellStub(i, j, "hola", "T");
+            }
+        }
+        sheet = new Sheet( b2 ,"hoja 2");
+        int x = sheet.length((TextCell) sheet.getCell(0,0), "letters");  //ERROR
+
+        assertEquals(4,x);
     }
 
 }

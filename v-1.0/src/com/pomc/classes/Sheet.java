@@ -131,15 +131,13 @@ public class Sheet {
         Integer id = -1, id2 = -1;
         for(int i = 0; i < num_rows; ++i) {
             id = cells.elementAt(i).indexOf(c);
-            if (id != -1 && id != null) {
+            if (id != null && id != -1) {
                 id2 = i;
                 break;
             }
         }
         Object o1 = c.changeValue(o);
-        if(o1 != null && id != -1 && id2 != -1){
-            cells.elementAt(id2).setElementAt((Cell) o1, id);
-        }
+        if(id != null && id != -1) cells.elementAt(id2).setElementAt((Cell) o1, id);
         else System.out.println("Cell not found");
     }
 
@@ -373,7 +371,7 @@ public class Sheet {
     public Double mean(Cell c, Boolean ref, Boolean val){
         if(b_selected.allDouble()){
             Cell m = b_selected.mean(c, ref);
-            if(val) cells.elementAt(m.getRow()).setElementAt(m, m.getColumn());    //change_value(c,m);
+            if(val) cells.elementAt(m.getRow()).setElementAt(m, m.getColumn());
             return (Double) m.getInfo();
         }
         else System.out.println("Error. Not all cells are of type Number.");
@@ -384,7 +382,7 @@ public class Sheet {
     public Double median(Cell c, Boolean ref, Boolean val){
         if(b_selected.allDouble()){
             Cell m = b_selected.median(c, ref);
-            if(val) cells.elementAt(m.getRow()).setElementAt(m, m.getColumn());    //change_value(c,m);
+            if(val) cells.elementAt(m.getRow()).setElementAt(m, m.getColumn());
             return (Double) m.getInfo();
         }
         else System.out.println("Error. Not all cells are of type Number.");
@@ -394,7 +392,7 @@ public class Sheet {
     public Double var(Cell c, Boolean ref, Boolean val){
         if(b_selected.allDouble()){
             Cell m = b_selected.var(c, ref);
-            if(val) cells.elementAt(m.getRow()).setElementAt(m, m.getColumn());    //change_value(c,m);
+            if(val) cells.elementAt(m.getRow()).setElementAt(m, m.getColumn());
             return (Double) m.getInfo();
         }
         else System.out.println("Error. Not all cells are of type Number.");
@@ -404,7 +402,7 @@ public class Sheet {
     public Double covar(Block b, Cell c, Boolean ref, Boolean val){ //sii
         if(b_selected.allDouble() && b.allDouble()){
             Cell m = b_selected.covar(b, c, ref);
-            if(val) cells.elementAt(m.getRow()).setElementAt(m, m.getColumn());    //change_value(c,m);
+            if(val) cells.elementAt(m.getRow()).setElementAt(m, m.getColumn());
             return (Double) m.getInfo();
         }
         else System.out.println("Error. Not all cells are of type Number.");
@@ -414,7 +412,7 @@ public class Sheet {
     public Double std(Cell c, Boolean ref, Boolean val){
         if(b_selected.allDouble()){
             Cell m = b_selected.std(c, ref);
-            if(val) cells.elementAt(m.getRow()).setElementAt(m, m.getColumn());    //change_value(c,m);
+            if(val) cells.elementAt(m.getRow()).setElementAt(m, m.getColumn());
             return (Double) m.getInfo();
         }
         else System.out.println("Error. Not all cells are of type Number.");
@@ -424,7 +422,7 @@ public class Sheet {
     public Double CPearson(Block b, Cell c, Boolean ref, Boolean val){
         if(b_selected.allDouble() && b.allDouble()){
             Cell m = b_selected.CPearson(b, c, ref);
-            if(val) cells.elementAt(m.getRow()).setElementAt(m, m.getColumn());    //change_value(c,m);
+            if(val) cells.elementAt(m.getRow()).setElementAt(m, m.getColumn());
             return (Double) m.getInfo();
         }
         else System.out.println("Error. Not all cells are of type Number.");
