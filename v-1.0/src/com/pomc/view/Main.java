@@ -181,7 +181,7 @@ public class Main {
                         String[] cellPos= DomainController.currentBlockFind(value);
                         if(cellPos[0] == "Not Found") System.out.println("Value not found");
                         else {
-                            System.out.println("The cell is located at the row " +(cellPos[0]+1)+" and the column "+(cellPos[1]+1));
+                            System.out.println("The cell is located at the row " + cellPos[0] + " and the column " + cellPos[1] );
                         }
                         break;
                     case 3:
@@ -196,14 +196,49 @@ public class Main {
                         }
                         break;
                     case 4:
-                        System.out.println("Input order criteria");
-                        String criteria = userInput.nextLine();
+                        System.out.println("Input reference column to order");
+                        Integer nCol = numberInsertion(DomainController.currentBlockColumns() , 0);
+                        while (true) {
+                            System.out.println("Input order criteria (</>)");
+                            String criteria = userInput.nextLine();
+                            if (!criteria.equals("<") && !criteria.equals(">")) {
+                                System.out.println("Invalid criteria.");
+                            }
+                            else {
+                                if (DomainController.currentBlockSort(nCol,criteria)) {
+                                    System.out.println("Block sorted.");
+                                }
+                                else {
+                                    System.out.println("Couldn't sort block (Invalid values in reference column)");
+                                }
+                                break;
+                            }
+                        }
                         break;
                     case 5:
-                        System.out.println("e a Sheet");
+                        System.out.println("First define the block.");
+                        Integer[] blockCells = requireBlock();
+                        if (blockCells.length == 0) break;
+                        else {
+                            System.out.println("Do you want the result to be a reference to the operation? (y/n)");
+                            String refFloor = userInput.nextLine();
+                            if (refFloor.equals("y") || refFloor.equals("yes") ) {
+                                DomainController.currentBlockFloor(blockCells, true);
+                                System.out.println("Result floored!");
+                            }
+                            else if (refFloor.equals("n") || refFloor.equals("no")) {
+                                DomainController.currentBlockFloor(blockCells, false);
+                            }
+                            else {
+                                System.out.println("Invalid character.");
+                            }
+                        }
                         break;
                     case 6:
-                        System.out.println("e a Sheet");
+                        System.out.println("First define the block.");
+                        Integer[] blockCells1 = requireBlock();
+                        if (blockCells1.length == 0) break;
+
                         break;
                     case 7:
                         menuMathematicFunctions(docSheet);
@@ -299,27 +334,19 @@ public class Main {
                         else System.out.println("No column was deleted.");
                         break;
                     case 7:
-                        System.out.println("Input the row of the upper left cell of the block:");
-                        Integer ulCelli = numberInsertion(DomainController.currentSheetRows(), 1);
-                        System.out.println("Input the column of the upper left cell of the block:");
-                        Integer ulCellj = numberInsertion(DomainController.currentSheetCols(), 1);
-                        System.out.println("Input the row of the lower right cell of the block:");
-                        Integer lrCelli = numberInsertion(DomainController.currentSheetRows(), 1);
-                        System.out.println("Input the column of the lower right cell of the block:");
-                        Integer lrCellj = numberInsertion(DomainController.currentSheetCols(), 1);
-
-                        if (ulCelli > 0 && ulCellj > 0 && lrCelli > 0 && lrCellj > 0 ) {
-                            DomainController.initializeBlock(ulCelli,ulCellj,lrCelli,lrCellj);
-                            System.out.println("Block created");
-                            System.out.println("\n");
-                            menuFunctions(docSheet);
-                        }
-                        else System.out.println("No Block created");
-
-                        System.out.println("e aSheet");
-                        break;
+                            Integer[] blockCells = requireBlock();
+                            if (blockCells.length == 0) break;
+                            else {
+                            if (!DomainController.initializeBlock(blockCells))System.out.println("Couldn't create block");
+                            else {
+                                System.out.println("Block created");
+                                System.out.println("\n");
+                                menuFunctions(docSheet);
+                            }
+                                break;
+                            }
                     default:
-                        System.out.println("\n");
+                    System.out.println("\n");
                         break;
                 }
                 System.out.println("\n");
@@ -335,8 +362,9 @@ public class Main {
             System.out.println("(2) Select a Sheet");
             System.out.println("(3) Create a Sheet");
             System.out.println("(4) Delete a Sheet");
+            System.out.println("(5) Help!");            //TODO ola
             System.out.println("\n \n Enter number:");
-            Integer num = numberInsertion(4,1);
+            Integer num = numberInsertion(5,1);
             if (num != null) {
                 switch (num) {
                     case 1:
@@ -388,6 +416,8 @@ public class Main {
                             else System.out.println("No sheets deleted");
                         }
                         break;
+                    case 5:
+                        System.out.println("Press buttons");
                     default:
                         System.out.println("\n");
                         break;
@@ -434,10 +464,26 @@ public class Main {
         }
     }
 
+    public static Integer[] requireBlock(){
+        System.out.println("Input the row of the upper left cell of the block:");
+        Integer ulCelli = numberInsertion(DomainController.currentSheetRows(), 1);
+        System.out.println("Input the column of the upper left cell of the block:");
+        Integer ulCellj = numberInsertion(DomainController.currentSheetCols(), 1);
+        System.out.println("Input the row of the lower right cell of the block:");
+        Integer lrCelli = numberInsertion(DomainController.currentSheetRows(), 1);
+        System.out.println("Input the column of the lower right cell of the block:");
+        Integer lrCellj = numberInsertion(DomainController.currentSheetCols(), 1);
+        if (ulCelli > 0 && ulCellj > 0 && lrCelli > 0 && lrCellj > 0 ) return new Integer[]{ulCelli, ulCellj, lrCelli, lrCellj};
+        else {
+            System.out.println("No Block created");
+            return new Integer[]{};
+        }
+    }
+
     public static void main(String[] args) {
         System.out.println("\n POMC WORKSHEETS");
         System.out.println("------------------------------");
-        System.out.println("Enter title for document:");
+        System.out.println("Enter title for document:");                //TODO nombre default y unico
         String title = userInput.nextLine();
         System.out.println("\n");
         DomainController.initializeDoc(title);

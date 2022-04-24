@@ -5,7 +5,6 @@ import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.Vector;
 
-import static java.lang.Double.parseDouble;
 import static java.lang.String.valueOf;
 
 public class DomainController {
@@ -42,7 +41,7 @@ public class DomainController {
     public static String addSheet(String title, Integer rows, Integer cols) {
 
         String newSheetTitle = title;
-        Integer newSheetRows = rows;
+        Integer newSheetRows = rows;        //TODO comprobar sheet existente
         Integer newSheetCols = cols;
         if (title.equals("")) {
             newSheetTitle = "Sheet " + (doc.getDocSheets().size()+1);
@@ -136,19 +135,31 @@ public class DomainController {
     //-----------------------------------BLOCK FUNCTIONS------------------------------
 
     //Current block initialized, as it's minimum is 1
-    public static void initializeBlock(int Cell1i, int Cell1j, int Cell2i, int Cell2j) {
-        Cell c1 = docSheet.getCell(Cell1i-1, Cell1j-1);
-        Cell c2 = docSheet.getCell(Cell2i-1, Cell2j-1);
-        block = docSheet.SelectBlock(c1,c2);
+    public static Boolean initializeBlock(Integer[] blockCells) {
+        if (blockCells[0] <= blockCells[2]  && blockCells[1]  <= blockCells[3] ) {
+            Cell c1 = docSheet.getCell(blockCells[0] -1, blockCells[1] -1);
+            Cell c2 = docSheet.getCell(blockCells[2] -1, blockCells[3] -1);
+            block = docSheet.SelectBlock(c1,c2);
+            return true;
+        }
+            return false;
+    }
+    public static Block createBlock(Integer[] blockCells) {
+        if (blockCells[0] <= blockCells[2]  && blockCells[1]  <= blockCells[3] ) {
+            Cell c1 = docSheet.getCell(blockCells[0] -1, blockCells[1] -1);
+            Cell c2 = docSheet.getCell(blockCells[2] -1, blockCells[3] -1);
+            return docSheet.create_block(c1,c2);
+        }
+            return null;
     }
 
     public static String[][] currentBlockCells(){
         Vector<Vector<String>> Contents = new Vector<Vector<String>>();
-        for(int i = 0; i < block.number_rows(); ++i) {
+        for(int i = 0; i < docSheet.getSelectedBlock().number_rows(); ++i) {
             Contents.add(i,new Vector<String>());
-            for (int j = 0; j < block.number_cols(); ++j) {
+            for (int j = 0; j < docSheet.getSelectedBlock().number_cols(); ++j) {
                 String content;
-                Cell cell = block.getCell(i,j);
+                Cell cell = docSheet.getSelectedBlock().getCell(i,j);
                 if (cell.getInfo() == null) { content = " - "; }
                 else if (cell.getInfo().getClass() == Double.class) content = String.valueOf(cell.getInfo());
                 else if (cell.getInfo().getClass()== LocalDate.class) content = cell.getInfo().toString();
@@ -166,28 +177,38 @@ public class DomainController {
     public static String[] currentBlockFind(String value) {
         Object parsedValue = Parse(value);
         if (docSheet.find(parsedValue) != null) {
-            Cell searchedCell = docSheet.find(value);
-            return new String[]{String.valueOf(searchedCell.getRow()), String.valueOf(searchedCell.getColumn())};
+            Cell searchedCell = docSheet.find(parsedValue);
+            return new String[]{String.valueOf(searchedCell.getRow() +1), String.valueOf(searchedCell.getColumn() +1)};
         }
         else return new String[]{"Not Found"};
     }
 
-    public static void currentBlockFindAndReplace(Object find,Object replace) {
-        //docSheet.findAndReplace(find,replace);
+    public static void currentBlockFindAndReplace(String find,String replace) {
+        Object parsedFind = Parse(find);
+        Object parsedReplace = Parse(replace);
+        docSheet.findAndReplace(parsedFind,parsedReplace);
     }
 
-    public static void currentBlockSort(){
-        //block.SortBlock();
+    public static boolean currentBlockSort(int nCol, String Criteria){
+        return (docSheet.SortBlock(nCol-1,Criteria));
     }
 
-    public static void currentBlockFloor(){
-        //block.floor();
+    public static void currentBlockFloor(Integer[] blockCells, boolean ref){
+        Block block = createBlock(blockCells);
+        docSheet.floor(block,ref);
     }
 
-    public static void currentBlockConvert(){
-        //block.convert();
+    public static void currentBlockConvert(Integer[] blockCells, boolean ref, String from, String to){
+        Block block = createBlock(blockCells);
+        docSheet.convert(block, ref, from, to);
     }
 
+    public static int currentBlockColumns() {
+        return docSheet.getSelectedBlock().number_cols();
+    }
+    public static int currentBlockRows() {
+        return docSheet.getSelectedBlock().number_rows();
+    }
     //-----------------------------FUNCTIONS--------------------------------
 
     public static Object Parse(String input) {
@@ -206,4 +227,6 @@ public class DomainController {
 
 
     }
+
+
 }
