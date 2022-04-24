@@ -187,7 +187,6 @@ public class BlockTest {
     void testModifyBlockNumT() {
         testing2.ModifyBlock(10.0);
         testing.ModifyBlock(10.0);
-        //System.out.println(testing.getCell(2,2));
         assertTrue(testing2.isEqual(testing));
     }
 
@@ -276,11 +275,7 @@ public class BlockTest {
 
         for (int i = 0; i < bN.number_rows(); ++i) {
             for (int j = 0; j < bN.number_cols(); ++j) {
-                if (!result[i][j].getInfo().equals(n_t.getCell(i,j).getInfo())) {
-                    System.out.println(result[i][j].getInfo());
-                    System.out.println(n_t.getCell(i,j).getInfo());
-                    assertTrue(false);
-                }
+                if (!result[i][j].getInfo().equals(n_t.getCell(i,j).getInfo())) assertTrue(false);
             }
         }
 
@@ -313,7 +308,6 @@ public class BlockTest {
     void testFindReplaceN() {
         bN.findAndReplace(7.0,1000.0);
         CellStub c = (CellStub) bN.getCell(3,4);
-        System.out.println(c);
         assertEquals(1000.0, c.getInfo());
     }
 
@@ -340,6 +334,14 @@ public class BlockTest {
         testingStadistics.floor(testing, false);
 
         assertEquals(5.0, testing.getCell(1,2).getInfo());
+    }
+
+    @Test
+    @DisplayName("Test floor, mixed values")
+    void testFloorMIX() {
+        bMIX.floor(bMIX, false);
+
+        assertEquals(3.0, bMIX.getCell(1,2).getInfo());
     }
 
     @Test
@@ -387,16 +389,9 @@ public class BlockTest {
     }
 
     @Test
-    @DisplayName("Test replace with criteria")
-    void testReplaceWithCriteria() {
-        assertTrue(false);
-    }
-
-    @Test
     @DisplayName("Test mean with value")
     void testMeanVal() {
         CellStub c2 = (CellStub) testing2.getCell(4,4);
-        System.out.println(c2.getInfo());
         CellStub c = (CellStub) bN.mean(c2,false);
 
         assertEquals(4.0, c.getInfo());

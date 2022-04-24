@@ -1,18 +1,11 @@
 package com.pomc.tests;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.pomc.classes.Document;
-import com.pomc.classes.Sheet;
-import com.pomc.tests.stubs.SheetStub;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-
-import java.util.Arrays;
-import java.util.Vector;
-
 
 public class DocumentTest {
 
@@ -29,6 +22,7 @@ public class DocumentTest {
     {
         assertEquals("testDoc",doc.getTitle());
     }
+
     @Test
     @DisplayName("Should change the title of the document")
     public void testSetTitle()
@@ -36,6 +30,7 @@ public class DocumentTest {
         doc.setTitle("testDoc2");
         assertEquals("testDoc2",doc.getTitle());
     }
+
     @Test
     @DisplayName("Should add a new Sheet to the Document")
     public void testAddSheet()
@@ -44,6 +39,16 @@ public class DocumentTest {
        assertEquals("Sheet1",doc.getDocSheets().lastElement().getTitle());
     }
 
+    @Test
+    @DisplayName("Should delete the sheet with the title given")
+    public void testDeleteSheet()
+    {
+        doc.createSheet("Sheet1");
+        doc.createSheet("Sheet2");
+
+        doc.deleteSheet("Sheet1");
+        assertEquals("Sheet2",doc.getDocSheets().lastElement().getTitle());
+    }
 
 
 }

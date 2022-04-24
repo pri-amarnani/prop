@@ -1,7 +1,5 @@
 package com.pomc.classes;
 
-import javax.swing.*;
-import java.time.LocalDate;
 import java.util.*;
 
 public class Block {
@@ -56,7 +54,6 @@ public class Block {
     }
 
     public boolean allDate() {
-        LocalDate d = null;
         for (int i = 0; i < this.block[0].length; ++i) {
             for (int j = 0; j < this.block[0].length; ++j)
                 if (!this.block[i][j].isDate()) return false;
@@ -112,6 +109,7 @@ public class Block {
     }
 
     public void SortBlock (int n_col, String criteria, String type) {
+
         if (Objects.equals(criteria, "<")) {
             if (Objects.equals(type, "N")) {
                 Arrays.sort(block, (a, b) -> Double.compare((double) a[n_col].getInfo(), (double) b[n_col].getInfo()));
@@ -156,16 +154,18 @@ public class Block {
         for (int i = 0; i < this.block.length; ++i) {
             for (int j = 0; j < this.block[0].length; ++j) {
 
-                Cell n = (Cell) b.getCell(i,j).changeValue(Math.floor((double) this.block[i][j].getInfo()));
-                b.setCell(i,j,n);
+                if (this.block[i][j].isNum()) {
+                    Cell n = (Cell) b.getCell(i, j).changeValue(Math.floor((double) this.block[i][j].getInfo()));
+                    b.setCell(i, j, n);
 
-                if (ref) {
-                    Vector<Cell> s = new Vector<>(1);
-                    s.add(this.block[i][j]);
+                    if (ref) {
+                        Vector<Cell> s = new Vector<>(1);
+                        s.add(this.block[i][j]);
 
-                    Map.Entry<String, Vector<Cell>> r = new AbstractMap.SimpleEntry<>("floor", s);
+                        Map.Entry<String, Vector<Cell>> r = new AbstractMap.SimpleEntry<>("floor", s);
 
-                    b.getCell(i,j).setRefInfo(r);
+                        b.getCell(i, j).setRefInfo(r);
+                    }
                 }
             }
         }
