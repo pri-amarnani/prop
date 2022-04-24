@@ -1,12 +1,12 @@
 package com.pomc.classes;
 
+import com.digidemic.unitof.D;
 import com.digidemic.unitof.UnitOf;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Vector;
+import java.util.*;
+
 public abstract class Cell {
     private Integer row;
     private Integer column;
@@ -22,6 +22,7 @@ public abstract class Cell {
     public Cell(int row,int column){ //debería quitar la creadora??????
         this.row=row;
         this.column=column;
+        this.refs = new Vector<>();
     }
 
     /**
@@ -30,7 +31,7 @@ public abstract class Cell {
      */
 
     public int getRow(){
-        return row;
+        return this.row;
     }
 
     /**
@@ -39,7 +40,7 @@ public abstract class Cell {
      */
 
     public int getColumn(){
-        return column;
+        return this.column;
     }
 
     /**
@@ -55,7 +56,7 @@ public abstract class Cell {
      * @return vector refs
      */
     public Vector<ReferencedCell> getRefs(){
-        return refs;
+        return this.refs;
     }
 
 
@@ -115,7 +116,7 @@ public abstract class Cell {
      */
     public abstract Object changeValue(Object o);
 
-    public void AddRef (ReferencedCell c){refs.add(c);}
+    public void AddRef (ReferencedCell c){this.refs.add(c);}
 
     public void EliminateRef(ReferencedCell c){
         refs.removeElement(c);
@@ -126,125 +127,188 @@ public abstract class Cell {
     }
 
     public void updateRefs(){
-        for (int i=0; i<refs.size();i++){
-            ReferencedCell c= refs.elementAt(i);
+
+        for (int i=0; i<this.refs.size();i++){
+            ReferencedCell c= this.refs.elementAt(i);
             Map.Entry<String,Vector<Cell>> s= c.getRefInfo();
             //Volver a hacer esa operación con los nuevos valores
             String op= s.getKey();
             Vector<Cell> cellsref= s.getValue();
 //sum(c1,c2.c3)
             if (Objects.equals(op, "sum")) {
-                double newvalue = 0;
+                Double newvalue = 0.0;
                 for (int j=0;j<cellsref.size();j++){
-                    newvalue= newvalue+ (double) (cellsref.elementAt(j)).getInfo();
+                    newvalue= newvalue+ (Double) ((cellsref.elementAt(j)).getInfo());
                 }
-                c.changeValue(newvalue);
+                c.setContent(newvalue);
             }
 
             else if (Objects.equals(op, "sub")) {
-                double newvalue = (double) cellsref.elementAt(0).getInfo();
+                Double newvalue = (Double) cellsref.elementAt(0).getInfo();
                 for (int j=1;j<cellsref.size();j++){
-                    newvalue= newvalue- (double) (cellsref.elementAt(j)).getInfo();
+                    newvalue= newvalue- (Double) (cellsref.elementAt(j)).getInfo();
                 }
-                c.changeValue(newvalue);
+                c.setContent(newvalue);
             }
 
             else if (Objects.equals(op, "mult")) {
-                double newvalue = (double) cellsref.elementAt(0).getInfo();
+                Double newvalue = (Double) cellsref.elementAt(0).getInfo();
                 for (int j=1;j<cellsref.size();j++){
-                    newvalue= newvalue* (double) (cellsref.elementAt(j)).getInfo();
+                    newvalue= newvalue* (Double) (cellsref.elementAt(j)).getInfo();
                 }
-                c.changeValue(newvalue);
+                c.setContent(newvalue);
             }
             else if (Objects.equals(op, "div")) {
-                double newvalue = (double) cellsref.elementAt(0).getInfo();
+                Double newvalue = (Double) cellsref.elementAt(0).getInfo();
                 for (int j=1;j<cellsref.size();j++){
-                    newvalue= newvalue/ (double) (cellsref.elementAt(j)).getInfo();
+                    newvalue= newvalue/ (Double) (cellsref.elementAt(j)).getInfo();
                 }
-                c.changeValue(newvalue);
+                c.setContent(newvalue);
             }
             else if(Objects.equals(op, "floor")){
-                double newvalue = (double) cellsref.elementAt(0).getInfo();
-                newvalue= Math.floor(newvalue*10)/100;
-                c.changeValue(newvalue);
+                Double newvalue = (Double) cellsref.elementAt(0).getInfo();
+                newvalue= Math.floor(newvalue);
+                c.setContent(newvalue);
             }
 
             else if(Objects.equals(op, "mTOcm")){
                 UnitOf.Length length = new UnitOf.Length();
-                double newvalue= (double) cellsref.elementAt(0).getInfo();
+                Double newvalue= (Double) cellsref.elementAt(0).getInfo();
                 newvalue= length.fromMeters(newvalue).toCentimeters();
-                c.changeValue(newvalue);
+                c.setContent(newvalue);
             }
             else if(Objects.equals(op, "mTOkm")){
                 UnitOf.Length length = new UnitOf.Length();
-                double newvalue= (double) cellsref.elementAt(0).getInfo();
+                Double newvalue= (Double) cellsref.elementAt(0).getInfo();
                 newvalue= length.fromMeters(newvalue).toKilometers();
-                c.changeValue(newvalue);
+                c.setContent(newvalue);
             }
-            else if(Objects.equals(op, "mTOinchess")){
+            else if(Objects.equals(op, "mTOinches")){
                 UnitOf.Length length = new UnitOf.Length();
-                double newvalue= (double) cellsref.elementAt(0).getInfo();
+                Double newvalue= (Double) cellsref.elementAt(0).getInfo();
                 newvalue= length.fromMeters(newvalue).toInches();
-                c.changeValue(newvalue);
+                c.setContent(newvalue);
             }
             else if(Objects.equals(op, "inchesTOm")){
                 UnitOf.Length length = new UnitOf.Length();
-                double newvalue= (double) cellsref.elementAt(0).getInfo();
+                Double newvalue= (Double) cellsref.elementAt(0).getInfo();
                 newvalue= length.fromInches(newvalue).toMeters();
-                c.changeValue(newvalue);
+                c.setContent(newvalue);
             }
             else if(Objects.equals(op, "cmTOm")){
                 UnitOf.Length length = new UnitOf.Length();
-                double newvalue= (double) cellsref.elementAt(0).getInfo();
+                Double newvalue= (Double) cellsref.elementAt(0).getInfo();
                 newvalue= length.fromCentimeters(newvalue).toMeters();
-                c.changeValue(newvalue);
+                c.setContent(newvalue);
             }
             else if(Objects.equals(op, "cmTOkm")){
                 UnitOf.Length length = new UnitOf.Length();
-                double newvalue= (double) cellsref.elementAt(0).getInfo();
+                Double newvalue= (Double) cellsref.elementAt(0).getInfo();
                 newvalue= length.fromCentimeters(newvalue).toKilometers();
-                c.changeValue(newvalue);
+                c.setContent(newvalue);
             }
 
             else if(Objects.equals(op, "kmTOcm")){
                 UnitOf.Length length = new UnitOf.Length();
-                double newvalue= (double) cellsref.elementAt(0).getInfo();
+                Double newvalue= (Double) cellsref.elementAt(0).getInfo();
                 newvalue= length.fromKilometers(newvalue).toCentimeters();
-                c.changeValue(newvalue);
+                c.setContent(newvalue);
             }
             else if(Objects.equals(op, "kmTOm")){
                 UnitOf.Length length = new UnitOf.Length();
                 double newvalue= (double) cellsref.elementAt(0).getInfo();
                 newvalue= length.fromKilometers(newvalue).toMeters();
-                c.changeValue(newvalue);
+                c.setContent(newvalue);
             }
             else if(Objects.equals(op, "mean")){
-                ////???
+                double auxsum=0;
+                double newvalue= 0;
+                for(int j=0; j<cellsref.size(); j++){
+                    auxsum += (Double) cellsref.elementAt(j).getInfo();
+                }
+                newvalue=auxsum/cellsref.size();
+                c.setContent(newvalue);
             }
             else if(Objects.equals(op, "median")){
-                ////???
+                Double [] arr= new Double [cellsref.size()];
+                int i2=0;
+                for (int j=0; j< cellsref.size();j++){
+                    arr[i2]= (Double) cellsref.elementAt(j).getInfo();
+                    i2 += 1;
+                }
+                Arrays.sort(arr);
+                c.setContent(arr[arr.length/2]);
             }
             else if(Objects.equals(op, "var")){
-
+                Double d= calcstd(cellsref);
+                Double newvalue= Math.pow(d,2);
+                c.setContent(newvalue);
             }
 
+            else if(Objects.equals(op, "covar")){
+                int size=cellsref.size();
+                Vector <Cell> v1= new Vector<>();
+                Vector <Cell> v2= new Vector<>();
+                Double auxsum1=0.0,auxsum2=0.0;
+
+                for (int k=0; k<size/2;k++){
+                    v1.add(cellsref.elementAt(k));
+                }
+
+                for (int j=size/2; j<size;j++){
+                    v2.add(cellsref.elementAt(j));
+                }
+
+                Double cov= calccovar(v1,v2);
+                System.out.print(cov);
+                c.setContent(cov);
+            }
+
+            else if (Objects.equals(op,"std")){
+                c.setContent(calcstd(cellsref));
+            }
+            else if (Objects.equals(op,"cp")){
+                int size=cellsref.size();
+                Vector <Cell> v1= new Vector<>();
+                Vector <Cell> v2= new Vector<>();
+                Double auxsum1=0.0,auxsum2=0.0;
+
+                for (int k=0; k<size/2-1;k++){
+                    v1.add(cellsref.elementAt(k));
+                }
+
+                for (int j=size/2; j<size;j++){
+                    v2.add(cellsref.elementAt(j));
+                }
+
+                Double d1= (Double) calcstd(v1);
+                Double d2= (Double) calcstd(v2);
+
+                Double cp;
+                if (d1==0 || d2==0) cp=1.0;
+                else cp=(Double) calccovar(v1,v2)/(d1*d2);
+
+                if (cp>1.0) cp=1.0;
+                if (cp<-1.0) cp=-1.0;
+                c.setContent(cp);
+            }
             else if(Objects.equals(op, "day")){
                 LocalDate newvaluedate= (LocalDate) cellsref.elementAt((0)).getInfo();
                 int newvalue=0;
                 newvalue= newvaluedate.getDayOfMonth();
-                c.changeValue(newvalue);
+                c.setContent(newvalue);
             }
             else if(Objects.equals(op, "month")){
                 LocalDate newvaluedate= (LocalDate) cellsref.elementAt((0)).getInfo();
                 int newvalue=0;
                 newvalue= newvaluedate.getMonthValue();
-                c.changeValue(newvalue);
+                c.setContent(newvalue);
             }
             else if(Objects.equals(op, "year")){
                 LocalDate newvaluedate= (LocalDate) cellsref.elementAt(0).getInfo();
                 int newvalue=0;
                 newvalue= newvaluedate.getYear();
-                c.changeValue(newvalue);
+                c.setContent(newvalue);
             }
             else if(Objects.equals(op, "dayoftheWeek")){
                 LocalDate newvaluedate= (LocalDate) cellsref.elementAt(0).getInfo();
@@ -258,12 +322,72 @@ public abstract class Cell {
                 else if (day==5) newvalue= "Friday";
                 else if (day==6) newvalue= "Saturday";
                 else if (day==7) newvalue= "Sunday";
-                c.changeValue(newvalue);
+                c.setContent(newvalue);
+            }
+
+            else if (Objects.equals(op,"equal")){
+                c.setContent(cellsref.elementAt(i).getInfo());
             }
         }
     }
 
     public abstract void setRefInfo(Map.Entry<String, Vector<Cell>> refInfo);
+
+    public Double calcstd (Vector<Cell> vcells){
+
+        Double sum=0.0;
+        Double std=0.0;
+        int size= vcells.size();
+        Double [] arr= new Double[size];
+        int i2=0;
+        for (int i=0;i<size;i++){
+            arr[i2] =(Double) vcells.elementAt(i).getInfo();
+            sum += (Double) vcells.elementAt(i).getInfo();
+            i2 += 1;
+        }
+        Double mean = sum/arr.length;
+        for (Double num:arr){
+            std += Math.pow(num-mean,2);
+        }
+        Double stdd= Math.sqrt(std/ arr.length);
+
+        return stdd;
+
+    }
+
+    public Double calccovar(Vector<Cell> v1, Vector<Cell> v2){
+        Double auxsum1=0.0,auxsum2=0.0;
+        for(int q=0; q<v1.size(); q++){
+            auxsum1 += (Double) v1.elementAt(q).getInfo();
+        }
+        Double mean1= auxsum1/v1.size();
+
+        for(int r=0; r<v2.size(); r++){
+            auxsum2 += (Double) v2.elementAt(r).getInfo();
+        }
+        Double mean2= auxsum2/ v2.size();
+
+        int i2=0,j2=0;
+
+        Double[] x= new Double[v1.size()];
+        Double[] y= new Double[v2.size()];
+
+        for (int z=0; z<v1.size();z++){
+            x[i2]= (Double) v1.elementAt(z).getInfo();
+            y[j2]= (Double) v2.elementAt(z).getInfo();
+
+            i2 += 1;
+            j2 += 1;
+        }
+
+        Double sum=0.0;
+        for (int w=0;w<x.length;w++){
+            sum += (x[w]-mean1) *(y[w]-mean2);
+        }
+        Double cov= sum/(x.length-1);
+        return cov;
+    }
+
 
 }
 

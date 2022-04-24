@@ -13,18 +13,41 @@ public class TextCellTest {
     void setUp(){ tcell= new TextCell(2,2,"test of subclass TextCell");}
 
     @Test
-    @DisplayName("replace should work")
-    public void test_replace(){
-        tcell.replace("firstMaj");
+    @DisplayName("replaceCFL should work")
+    public void test_replaceCFL(){
+        tcell.replace("cap_first_letter");
         assertEquals( tcell.getInfo(),"Test of subclass TextCell");
+    }
+    @Test
+    @DisplayName("replaceAC should work")
+    public void test_replaceAL(){
+        tcell.replace("all caps");
+        assertEquals( tcell.getInfo(),"TEST OF SUBCLASS TEXTCELL");
+    }
+    @Test
+    @DisplayName("replaceANC should work")
+    public void test_replaceANC(){
+        tcell.replace("all not caps");
+        assertEquals( tcell.getInfo(),"test of subclass textcell");
     }
 
     @Test
-    @DisplayName("length should work")
-    public void test_length(){
+    @DisplayName("length1 should work")
+    public void test_length1(){
         assertEquals( tcell.length("words"),4);
     }
 
+    @Test
+    @DisplayName("length2 should work")
+    public void test_length2(){
+        assertEquals( tcell.length("letters"),22);
+    }
+
+    @Test
+    @DisplayName("length3 should work")
+    public void test_length3(){
+        assertEquals( tcell.length("characters"),25);
+    }
 
     @Test
     @DisplayName("getType should work")

@@ -21,7 +21,7 @@ public class NumCell extends Cell {
     }
 
     public double truncar(){
-        this.info= Math.floor(info*10)/10;
+        this.info= Math.floor(info);
         return info;
     }
 

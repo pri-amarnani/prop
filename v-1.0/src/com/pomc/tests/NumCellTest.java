@@ -19,13 +19,13 @@ public class NumCellTest {
     @Test
     @DisplayName("truncar should work")
     public void test_truncar(){
-        assertEquals( ncell.truncar(),2.5);
+        assertEquals( ncell.truncar(),2.0);
     }
 
     @Test
     @DisplayName("conversion should work")
     public void test_conversion(){
-        assertEquals(ncell.conversion("m","cm"),254.32); //uno para cada tipo??
+        assertEquals(ncell.conversion("cm","m"),0.025432);
     }
 
     @Test
@@ -43,7 +43,7 @@ public class NumCellTest {
     @Test
     @DisplayName("changeValue should work")
     public void test_changeValue(){
-        ncell.changeValue(1.25);
+        Object a=ncell.changeValue(1.25);
         assertEquals(ncell.getInfo(),1.25); //se hace así???
     }
 

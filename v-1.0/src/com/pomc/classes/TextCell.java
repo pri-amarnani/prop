@@ -17,13 +17,13 @@ public class TextCell extends Cell {
     }
 
     public void replace(String criteria){ //return String??
-        if (Objects.equals(criteria, "majTomin")) {
+        if (Objects.equals(criteria, "all caps")) {
             info= info.toUpperCase();
         }
-        else if (Objects.equals(criteria, "minTomaj")){
+        else if (Objects.equals(criteria, "all not caps")){
             info=info.toLowerCase();
         }
-        else if (Objects.equals(criteria, "firstMaj")){
+        else if (Objects.equals(criteria, "cap_first_letter")){
             String aux;
             aux=info.substring(0,1).toUpperCase()+info.substring(1);
             info=aux;
