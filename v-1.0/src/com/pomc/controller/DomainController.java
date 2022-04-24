@@ -246,10 +246,41 @@ public class DomainController {
         return docSheet.var(cell,ref,val);
     }
 
+    public static Double funcCovariance(Integer[] block,Integer i, Integer j,boolean val, boolean ref ){
+        Block b1 = createBlock(block);
+        Cell cell = docSheet.getCells().get(i-1).get(j-1);
+        return docSheet.covar(b1,cell,ref,val);
+    }
 
     public static Double funcStandardDeviation(Integer i, Integer j,boolean val, boolean ref ){
         Cell cell = docSheet.getCells().get(i-1).get(j-1);
         return docSheet.std(cell,ref,val);
+    }
+
+    public static Double funcCPearson(Integer[] block,Integer i, Integer j,boolean val, boolean ref ){
+        Block b1 = createBlock(block);
+        Cell cell = docSheet.getCells().get(i-1).get(j-1);
+        return docSheet.CPearson(b1,cell,ref,val);
+    }
+
+
+    public static void funcExtract(Integer[] block,boolean ref, String ex){
+        Block b1 = createBlock(block);
+        docSheet.extract(b1,ref,ex);
+    }
+
+    public static void funcDayoftheWeek(Integer[] block,boolean ref){
+        Block b1 = createBlock(block);
+        docSheet.dayOfTheWeek(b1,ref);
+    }
+
+    public static void funcReplaceCriteria(String criteria){
+        docSheet.replaceWithCriteriaText(criteria);
+    }
+
+    public static Integer funcLength(Integer i, Integer j, String Criterio) {
+        Cell cell = docSheet.getCells().get(i-1).get(j-1);
+        return docSheet.length((TextCell) cell,Criterio);
     }
 
 

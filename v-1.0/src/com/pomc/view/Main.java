@@ -26,13 +26,56 @@ public class Main {
                         menu = false;
                         break;
                     case 1:
-                        System.out.println("(4) Delete a Sheet");
+                        System.out.println("Select a criteria for the Replace");
+                        System.out.println(" (1) ALL CAPS \n (2) all not caps \n (3) Caps First Letter");
+                        Integer criteria = numberInsertion(3,1);
+                        if (criteria != null) {
+                            switch (criteria) {
+                                case 1:
+                                    DomainController.funcReplaceCriteria("all caps");
+                                break;
+                                case 2:
+                                    DomainController.funcReplaceCriteria("all not caps");
+                                break;
+                                case 3:
+                                    DomainController.funcReplaceCriteria("cap first letter");
+                                break;
+                                default:
+                                    System.out.println("Could find criteria");
+                                break;
+                            }
+                        }
+                        else System.out.println("Could find criteria");
                         break;
                     case 2:
-                        System.out.println("(4)2t");
-                        break;
-                    case 3:
-                        System.out.println("e a Sheet");
+                        System.out.println("Input the row of the Cell to measure:");
+                        Integer cellI = numberInsertion(DomainController.currentSheetRows(), 1);
+                        System.out.println("Input the column of the Cell to measure:");
+                        Integer cellJ = numberInsertion(DomainController.currentSheetCols(), 1);
+                        if (cellI > 0 && cellJ > 0) {
+                            System.out.println("Select a criteria for the Length");
+                            System.out.println(" (1) Words \n (2) Letters \n (3) Characters");
+                            Integer criterio = numberInsertion(3,1);
+                            if (criterio != null) {
+                                switch (criterio) {
+                                    case 1:
+                                        DomainController.funcLength(cellI,cellJ,"words");
+                                        break;
+                                    case 2:
+                                        DomainController.funcLength(cellI,cellJ,"letters");
+                                        break;
+                                    case 3:
+                                        DomainController.funcLength(cellI,cellJ,"characters");
+                                        break;
+                                    default:
+                                        System.out.println("Could find criteria");
+                                        break;
+                                }
+                            }
+                            else System.out.println("Could find criteria");
+                        }
+                        else System.out.println("Cell not found.");
+
                         break;
                     default:
                         System.out.println("\n");
@@ -61,13 +104,30 @@ public class Main {
                         menu = false;
                         break;
                     case 1:
-                        System.out.println("(4) Delete a Sheet");
+                        System.out.println("Insert block to print the extraction:");
+                        Integer[] blockCellsE = requireBlock();
+                        if (blockCellsE.length == 0) break;
+                        else {
+                            System.out.println("What do you want to extract (day/year/month):");
+                            while(true) {
+                                String ex = userInput.nextLine();
+                                if (!ex.equals("day") && !ex.equals("year") && !ex.equals("month") ) {
+                                    System.out.println("Invalid input. Try again:");
+                                }
+                                else {
+                                    DomainController.funcExtract(blockCellsE, isReferencing(), ex);
+                                    System.out.println("The " + ex + " was extracted!.");
+                                    break;
+                                }
+                            }
+                        }
                         break;
                     case 2:
-                        System.out.println("(4)2t");
-                        break;
-                    case 3:
-                        System.out.println("e a Sheet");
+                        System.out.println("Insert block to print the day of the week:");
+                        Integer[] blockCellsD = requireBlock();
+                        if (blockCellsD.length == 0) break;
+                        else DomainController.funcDayoftheWeek(blockCellsD,isReferencing());
+                        System.out.println("Day of the week printed !");
                         break;
                     default:
                         System.out.println("\n");
@@ -217,7 +277,28 @@ public class Main {
                         else System.out.println("Invalid answer");
                         break;
                     case 8:
-                        System.out.println("e a Sheet");
+                        System.out.println("Insert block to do the covariance with:");
+                        Integer[] blockCellsCV = requireBlock();
+                        if (blockCellsCV.length == 0) break;
+                        else {
+                            System.out.println("Want to print the result in a cell? (y/n)");
+                            String userInCV = userInput.nextLine();
+                            if (userInCV.equals("y") || userInCV.equals("yes") )  {
+                                System.out.println("Input the row of the Cell to print the result:");
+                                Integer cellICV = numberInsertion(DomainController.currentSheetRows(), 1);
+                                System.out.println("Input the column of the Cell to print the result:");
+                                Integer cellJCV = numberInsertion(DomainController.currentSheetCols(), 1);
+                                if (cellICV > 0 && cellJCV > 0) {
+                                    Double result = DomainController.funcCovariance(blockCellsCV,cellICV,cellJCV,true,isReferencing());
+                                    System.out.println("The covariance of the block is " + result + " and it was printed!");
+                                }
+                                else System.out.println("Cell not found");
+                            }
+                            else if (userInCV.equals("n") || userInCV.equals("no")){
+                                System.out.println("The covariance of the block is " + DomainController.funcCovariance(blockCellsCV,0,0,false,false));
+                            }
+                            else System.out.println("Invalid answer");
+                        }
                         break;
                     case 9:
                         System.out.println("Want to print the result in a cell? (y/n)");
@@ -239,7 +320,28 @@ public class Main {
                         else System.out.println("Invalid answer");
                         break;
                     case 10:
-                        System.out.println("e a Sheet");
+                        System.out.println("Insert block to do the Pearson Coefficient with:");
+                        Integer[] blockCellsCP = requireBlock();
+                        if (blockCellsCP.length == 0) break;
+                        else {
+                            System.out.println("Want to print the result in a cell? (y/n)");
+                            String userInCP = userInput.nextLine();
+                            if (userInCP.equals("y") || userInCP.equals("yes") )  {
+                                System.out.println("Input the row of the Cell to print the result:");
+                                Integer cellICV = numberInsertion(DomainController.currentSheetRows(), 1);
+                                System.out.println("Input the column of the Cell to print the result:");
+                                Integer cellJCV = numberInsertion(DomainController.currentSheetCols(), 1);
+                                if (cellICV > 0 && cellJCV > 0) {
+                                    Double result = DomainController.funcCPearson(blockCellsCP,cellICV,cellJCV,true,isReferencing());
+                                    System.out.println("The Pearson Coefficient of the block is " + result + " and it was printed!");
+                                }
+                                else System.out.println("Cell not found");
+                            }
+                            else if (userInCP.equals("n") || userInCP.equals("no")){
+                                System.out.println("The Pearson Coefficient of the block is " + DomainController.funcCPearson(blockCellsCP,0,0,false,false));
+                            }
+                            else System.out.println("Invalid answer");
+                        }
                         break;
                     default:
                         System.out.println("\n");
