@@ -16,11 +16,11 @@ public class DateCell extends Cell {
         this.info= info;
     }
 
-    public int extract(String criteria){ //tendría que devolver localdate???????
-        if (Objects.equals(criteria, "day")) return (info.getDayOfMonth());
-        else if (Objects.equals(criteria, "month")) return info.getMonthValue();
-        else if (Objects.equals(criteria, "year")) return info.getYear();
-        return -1;
+    public Double extract(String criteria){ //tendría que devolver localdate???????
+        if (Objects.equals(criteria, "day")) return Double.valueOf((info.getDayOfMonth()));
+        else if (Objects.equals(criteria, "month")) return Double.valueOf(info.getMonthValue());
+        else if (Objects.equals(criteria, "year")) return Double.valueOf(info.getYear());
+        return Double.valueOf(-1);
     }
 
     public String getDayofTheWeek(){

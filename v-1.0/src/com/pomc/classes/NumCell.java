@@ -82,7 +82,7 @@ public class NumCell extends Cell {
             return d;
         }
 
-        if (hasRefs()) updateRefs();
+        if (hasRefs()) { System.out.println("HOLA");updateRefs();}
         return this;
     }
 

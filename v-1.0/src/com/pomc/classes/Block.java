@@ -324,7 +324,7 @@ public class Block {
                 Cell n = (Cell) b.getCell(i, j).changeValue(N.extract(ex));
 
                 if (ref) {
-                    ReferencedCell rc = new ReferencedCell(n.getRow(),n.getColumn(),"=extrat");
+                    ReferencedCell rc = new ReferencedCell(n.getRow(),n.getColumn(),ex);
                     rc.setContent(n.getInfo());
                     b.setCell(i,j,rc);
                     Vector<Cell> s = new Vector<>(1);
@@ -400,6 +400,7 @@ public class Block {
         c = (Cell) c.changeValue(sum/s.size());
 
         if (ref) {
+            System.out.println("entra1");
             ReferencedCell rc = new ReferencedCell(c.getRow(),c.getColumn(),"=mean");
             rc.setContent(c.getInfo());
             c = rc;
@@ -434,14 +435,13 @@ public class Block {
         if (ref) {
             ReferencedCell rc = new ReferencedCell(c.getRow(),c.getColumn(),"=median");
             rc.setContent(c.getInfo());
-            this.setCell(c.getRow(),c.getColumn(),rc);
+            c = rc;
             Map.Entry<String, Vector<Cell>> r = new AbstractMap.SimpleEntry<>("median", s);
             c.setRefInfo(r);
             for (int x=0;x<s.size();x++){
                 Cell a= s.elementAt(x);
                 a.AddRef(rc);
             }
-            c=null;
         }
 
         return c;
@@ -455,7 +455,7 @@ public class Block {
         if (ref) {
             ReferencedCell rc = new ReferencedCell(c.getRow(),c.getColumn(),"=var");
             rc.setContent(c.getInfo());
-            this.setCell(c.getRow(),c.getColumn(),rc);
+            c = rc;
             Vector<Cell> s = new Vector<>();
 
             for (Cell[] cells : this.block) {
@@ -468,7 +468,6 @@ public class Block {
                 Cell a= s.elementAt(x);
                 a.AddRef(rc);
             }
-            c=null;
         }
         return c;
     }
@@ -510,14 +509,13 @@ public class Block {
         if (ref) {
             ReferencedCell rc = new ReferencedCell(c.getRow(),c.getColumn(),"=covar");
             rc.setContent(c.getInfo());
-            this.setCell(c.getRow(),c.getColumn(),rc);
+            c = rc;
             Map.Entry<String, Vector<Cell>> r = new AbstractMap.SimpleEntry<>("covar", s);
             c.setRefInfo(r);
             for (int t=0;t<s.size();t++){
                 Cell a= s.elementAt(t);
                 a.AddRef(rc);
             }
-            c=null;
         }
 
         return c;
@@ -550,14 +548,13 @@ public class Block {
         if (ref) {
             ReferencedCell rc = new ReferencedCell(c.getRow(),c.getColumn(),"=std");
             rc.setContent(c.getInfo());
-            this.setCell(c.getRow(),c.getColumn(),rc);
+            c = rc;
             Map.Entry<String, Vector<Cell>> r = new AbstractMap.SimpleEntry<>("std", s);
             c.setRefInfo(r);
             for (int t=0;t<s.size();t++){
                 Cell a= s.elementAt(t);
                 a.AddRef(rc);
             }
-            c=null;
         }
 
         return c;
@@ -590,14 +587,13 @@ public class Block {
             }
             ReferencedCell rc = new ReferencedCell(c.getRow(),c.getColumn(),"=cp");
             rc.setContent(c.getInfo());
-            this.setCell(c.getRow(),c.getColumn(),rc);
+            c = rc;
             Map.Entry<String, Vector<Cell>> r = new AbstractMap.SimpleEntry<>("cp", s);
             c.setRefInfo(r);
             for (int t=0;t<s.size();t++){
                 Cell a= s.elementAt(t);
                 a.AddRef(rc);
             }
-            c=null;
         }
 
         return c;

@@ -324,7 +324,10 @@ public class Sheet {
     }
 
     public void extract(Block b1,Boolean ref, String ex){
+
         b_selected.extract(b1, ref, ex);
+        update(b1);
+        System.out.println(cells.get(1).get(1).getType());
     }
 
     public void dayOfTheWeek (Block b, Boolean ref){
@@ -351,7 +354,8 @@ public class Sheet {
             else{
                 Cell m = b_selected.mean(c, ref);
                 if(val) cells.elementAt(m.getRow()).setElementAt(m, m.getColumn());
-                return (Double) m.getInfo();
+                if (ref) return (Double) m.getContent();
+                else return (Double) m.getInfo();
             }
         }
         else System.out.println("Error. Not all cells are of type Number.");
@@ -365,7 +369,8 @@ public class Sheet {
             else{
                 Cell m = b_selected.median(c, ref);
                 if(val) cells.elementAt(m.getRow()).setElementAt(m, m.getColumn());
-                return (Double) m.getInfo();
+                if (ref) return (Double) m.getContent();
+                else return (Double) m.getInfo();
             }
         }
         else System.out.println("Error. Not all cells are of type Number.");
@@ -378,7 +383,9 @@ public class Sheet {
             else{
                 Cell m = b_selected.var(c, ref);
                 if(val) cells.elementAt(m.getRow()).setElementAt(m, m.getColumn());
-                return (Double) m.getInfo();
+                if(val) cells.elementAt(m.getRow()).setElementAt(m, m.getColumn());
+                if (ref) return (Double) m.getContent();
+                else return (Double) m.getInfo();
             }
         }
         else System.out.println("Error. Not all cells are of type Number.");
@@ -391,7 +398,9 @@ public class Sheet {
             else{
                 Cell m = b_selected.covar(b, c, ref);
                 if(val) cells.elementAt(m.getRow()).setElementAt(m, m.getColumn());
-                return (Double) m.getInfo();
+                if(val) cells.elementAt(m.getRow()).setElementAt(m, m.getColumn());
+                if (ref) return (Double) m.getContent();
+                else return (Double) m.getInfo();
             }
         }
         else System.out.println("Error. Not all cells are of type Number.");
@@ -404,7 +413,9 @@ public class Sheet {
             else{
                 Cell m = b_selected.std(c, ref);
                 if(val) cells.elementAt(m.getRow()).setElementAt(m, m.getColumn());
-                return (Double) m.getInfo();
+                if(val) cells.elementAt(m.getRow()).setElementAt(m, m.getColumn());
+                if (ref) return (Double) m.getContent();
+                else return (Double) m.getInfo();
             }
         }
         else System.out.println("Error. Not all cells are of type Number.");
@@ -417,7 +428,8 @@ public class Sheet {
             else{
                 Cell m = b_selected.CPearson(b, c, ref);
                 if(val) cells.elementAt(m.getRow()).setElementAt(m, m.getColumn());
-                return (Double) m.getInfo();
+                if (ref) return (Double) m.getContent();
+                else return (Double) m.getInfo();
             }
         }
         else System.out.println("Error. Not all cells are of type Number.");

@@ -293,21 +293,25 @@ public abstract class Cell {
                 c.setContent(cp);
             }
             else if(Objects.equals(op, "day")){
+                System.out.println("ENTRA DAY!");
                 LocalDate newvaluedate= (LocalDate) cellsref.elementAt((0)).getInfo();
-                int newvalue=0;
-                newvalue= newvaluedate.getDayOfMonth();
+                System.out.println(newvaluedate);
+                Double newvalue=0.0;
+                newvalue= Double.valueOf(newvaluedate.getDayOfMonth());
                 c.setContent(newvalue);
+                System.out.println(newvalue);
+                System.out.println(this.getType());
             }
             else if(Objects.equals(op, "month")){
                 LocalDate newvaluedate= (LocalDate) cellsref.elementAt((0)).getInfo();
-                int newvalue=0;
-                newvalue= newvaluedate.getMonthValue();
+                Double newvalue=0.0;
+                newvalue= Double.valueOf(newvaluedate.getMonthValue());
                 c.setContent(newvalue);
             }
             else if(Objects.equals(op, "year")){
                 LocalDate newvaluedate= (LocalDate) cellsref.elementAt(0).getInfo();
-                int newvalue=0;
-                newvalue= newvaluedate.getYear();
+                Double newvalue=0.0;
+                newvalue= Double.valueOf(newvaluedate.getYear());
                 c.setContent(newvalue);
             }
             else if(Objects.equals(op, "dayoftheWeek")){
