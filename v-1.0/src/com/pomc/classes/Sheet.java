@@ -15,8 +15,10 @@ public class Sheet {
     public void update(Block b){
 
         Cell ul = b.ul;
+
         for(int i = 0; i < b.number_rows(); ++ i){
             for(int j = 0; j < b.number_cols(); ++j){
+                System.out.print(" t: "+ul.getType());
                 cells.elementAt(ul.getRow() + i).setElementAt(b.getCell(i,j),ul.getColumn() + j);
             }
         }
@@ -327,13 +329,15 @@ public class Sheet {
 
         b_selected.extract(b1, ref, ex);
         update(b1);
-        System.out.println(cells.get(1).get(1).getType());
     }
 
     public void dayOfTheWeek (Block b, Boolean ref){
-        if(b_selected.allDate()) b_selected.dayOfTheWeek(b, ref);
+        if(b_selected.allDate()){
+            b_selected.dayOfTheWeek(b, ref);
+            update(b);
+        }
         else System.out.println("Error. Not all cells are of type Date.");
-        update(b);
+
     }
 
     public void replaceWithCriteriaText(String criteria){

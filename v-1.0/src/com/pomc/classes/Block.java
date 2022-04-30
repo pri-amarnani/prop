@@ -91,7 +91,7 @@ public class Block {
     }
 
     //copy values from one block to another
-    public void ref(Block b, Boolean ref) {
+    public void ref(Block b, Boolean ref) { //FALTA!!!!!
         for (int i = 0; i < this.block.length; ++i) {
             for (int j = 0; j < this.block[0].length; ++j) {
 
@@ -178,6 +178,7 @@ public class Block {
 
                 if (this.block[i][j].isNum()) {
                     Cell n = (Cell) b.getCell(i, j).changeValue(Math.floor((double) this.block[i][j].getInfo()));
+                    b.setCell(i,j,n);
                     if (ref) {
                         ReferencedCell rc = new ReferencedCell(n.getRow(),n.getColumn(),"=floor1");
                         rc.setContent(n.getInfo());
@@ -194,6 +195,8 @@ public class Block {
                 }
             }
         }
+        b.ul=b.getCell(0,0);
+        b.dr=b.getCell(b.size_r-1,b.size_c-1);
     }
 
     public void convert (Block b, Boolean ref, String from, String to) {
@@ -202,7 +205,7 @@ public class Block {
                 NumCell N = (NumCell) this.block[i][j];
 
                 Cell n = (Cell) b.getCell(i, j).changeValue(N.conversion(from,to));
-
+                b.setCell(i,j,n);
                 if (ref) {
                     ReferencedCell rc = new ReferencedCell(n.getRow(),n.getColumn(),"=convert");
                     rc.setContent(n.getInfo());
@@ -217,6 +220,8 @@ public class Block {
                 }
             }
         }
+        b.ul=b.getCell(0,0);
+        b.dr=b.getCell(b.size_r-1,b.size_c-1);
     }
 
     public void sum (Block b1, Block b2, Boolean ref) {
@@ -224,7 +229,7 @@ public class Block {
             for (int j = 0; j < this.block[0].length; ++j) {
                 //System.out.println("suma");
                 Cell n = (Cell) b2.getCell(i, j).changeValue((double) this.block[i][j].getInfo() + (double) b1.getCell(i, j).getInfo());
-
+                b2.setCell(i,j,n);
                 if (ref) {
                     ReferencedCell rc = new ReferencedCell(n.getRow(),n.getColumn(),"=sum");
                     rc.setContent(n.getInfo());
@@ -242,6 +247,8 @@ public class Block {
                 }
             }
         }
+        b2.ul=b2.getCell(0,0);
+        b2.dr=b2.getCell(b2.size_r-1,b2.size_c-1);
     }
 
     public void mult (Block b1, Block b2, Boolean ref) {
@@ -249,7 +256,7 @@ public class Block {
             for (int j = 0; j < this.block[0].length; ++j) {
 
                 Cell n = (Cell) b2.getCell(i, j).changeValue((double) this.block[i][j].getInfo() * (double) b1.getCell(i, j).getInfo());
-
+                b2.setCell(i,j,n);
                 if (ref) {
                     ReferencedCell rc = new ReferencedCell(n.getRow(),n.getColumn(),"=mult");
                     rc.setContent(n.getInfo());
@@ -267,6 +274,8 @@ public class Block {
                 }
             }
         }
+        b2.ul=b2.getCell(0,0);
+        b2.dr=b2.getCell(b2.size_r-1,b2.size_c-1);
     }
 
     public void div (Block b1, Block b2, Boolean ref) {
@@ -274,7 +283,7 @@ public class Block {
             for (int j = 0; j < this.block[0].length; ++j) {
 
                 Cell n = (Cell) b2.getCell(i, j).changeValue((double) this.block[i][j].getInfo() / (double) b1.getCell(i, j).getInfo());
-
+                b2.setCell(i,j,n);
                 if (ref) {
                     ReferencedCell rc = new ReferencedCell(n.getRow(),n.getColumn(),"=div");
                     rc.setContent(n.getInfo());
@@ -292,13 +301,15 @@ public class Block {
                 }
             }
         }
+        b2.ul=b2.getCell(0,0);
+        b2.dr=b2.getCell(b2.size_r-1,b2.size_c-1);
     }
 
     public void substract (Block b1, Block b2, Boolean ref) {
         for (int i = 0; i < this.block.length; ++i) {
             for (int j = 0; j < this.block[0].length; ++j) {
                 Cell n = (Cell) b2.getCell(i, j).changeValue((double) this.block[i][j].getInfo() - (double) b1.getCell(i, j).getInfo());
-
+                b2.setCell(i,j,n);
                 if (ref) {
                     ReferencedCell rc = new ReferencedCell(n.getRow(),n.getColumn(),"=sub");
                     rc.setContent(n.getInfo());
@@ -314,6 +325,8 @@ public class Block {
                 }
             }
         }
+        b2.ul=b2.getCell(0,0);
+        b2.dr=b2.getCell(b2.size_r-1,b2.size_c-1);
     }
 
     public void extract (Block b, Boolean ref, String ex) {
@@ -322,7 +335,7 @@ public class Block {
                 DateCell N = (DateCell) this.block[i][j];
 
                 Cell n = (Cell) b.getCell(i, j).changeValue(N.extract(ex));
-
+                b.setCell(i,j,n);
                 if (ref) {
                     ReferencedCell rc = new ReferencedCell(n.getRow(),n.getColumn(),ex);
                     rc.setContent(n.getInfo());
@@ -336,6 +349,8 @@ public class Block {
                 }
             }
         }
+        b.ul=b.getCell(0,0);
+        b.dr=b.getCell(b.size_r-1,b.size_c-1);
     }
 
     //FINISH
@@ -345,7 +360,7 @@ public class Block {
                 DateCell N = (DateCell) this.block[i][j];
 
                 Cell n = (Cell) b.getCell(i, j).changeValue(N.getDayofTheWeek());
-
+                b.setCell(i,j,n);
                 if (ref) {
                     ReferencedCell rc = new ReferencedCell(n.getRow(),n.getColumn(),"=dayoftheWeek");
                     rc.setContent(n.getInfo());
@@ -359,6 +374,9 @@ public class Block {
                 }
             }
         }
+        b.ul=b.getCell(0,0);
+        b.dr=b.getCell(b.size_r-1,b.size_c-1);
+      //  System.out.println(b.getCell(0,0).getType());
     }
 
     // criteria == mayus or criteria == minus
@@ -383,6 +401,7 @@ public class Block {
                 }
             }
         }
+
     }
 
     // val = true means we want to put value in cell, else just show value.

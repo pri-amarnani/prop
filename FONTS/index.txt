@@ -1,4 +1,4 @@
-Esta carpeta contiene el código principal del proyecto. (src>com>pomc)
+Esta carpeta contiene el código principal del proyecto.
 Dentro de esta carpeta hay 5 subcarpetas:
     - Classes: contiene la implementación de todas las clases y subclases de nuestro proyecto.
     - Controller: contiene el Domain Controller.
