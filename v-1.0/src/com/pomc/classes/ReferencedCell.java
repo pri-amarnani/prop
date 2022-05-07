@@ -48,5 +48,17 @@ public class ReferencedCell extends Cell {
 
     public void setContent(Object o) {this.content=o;}
 
+    public void setRCell(Cell c){
+        Vector<Cell> rcell= refInfo.getValue();
+        for (int i=0;i<rcell.size();i++){
+            Cell c2=rcell.elementAt(i);
+            if (c.getRow()==c2.getRow() && c.getColumn()==c2.getColumn()){
+                rcell.setElementAt(c,i);
+                refInfo.setValue(rcell);
+            }
+        }
+
+    }
+
 
 }

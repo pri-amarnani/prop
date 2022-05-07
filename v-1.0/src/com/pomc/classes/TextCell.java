@@ -1,5 +1,6 @@
 package com.pomc.classes;
 
+import java.sql.Ref;
 import java.time.LocalDate;
 import java.util.Map;
 import java.util.Objects;
@@ -68,6 +69,16 @@ public class TextCell extends Cell {
         }
         else if (o.getClass()==Double.class){
             NumCell n=new NumCell(getRow(),getColumn(), (Double) o);
+            if (hasRefs()){
+                Vector<ReferencedCell> myrefs=this.getRefs();
+                for (int i=0;i<myrefs.size();i++){
+                    ReferencedCell r=myrefs.elementAt(i);
+                    r.setRCell(n);
+                    n.AddRef(r);
+                    r.setContent(o);
+                }
+
+            }
             this.info= null;
             this.setRow(null);
             this.setColumn(null);
@@ -76,6 +87,16 @@ public class TextCell extends Cell {
         }
         else if(o.getClass()== LocalDate.class){
             DateCell d=new DateCell(getRow(),getColumn(),(LocalDate)o);
+            if (hasRefs()){
+                Vector<ReferencedCell> myrefs=this.getRefs();
+                for (int i=0;i<myrefs.size();i++){
+                    ReferencedCell r=myrefs.elementAt(i);
+                    r.setRCell(d);
+                    d.AddRef(r);
+                    r.setContent(o);
+                }
+
+            }
             this.info= null;
             this.setRow(null);
             this.setColumn(null);

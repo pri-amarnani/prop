@@ -53,6 +53,16 @@ public class DateCell extends Cell {
         }
         else if (o.getClass()==String.class){
             TextCell t=new TextCell(getRow(),getColumn(), (String) o);
+            if (hasRefs()){
+                Vector<ReferencedCell> myrefs=this.getRefs();
+                for (int i=0;i<myrefs.size();i++){
+                    ReferencedCell r=myrefs.elementAt(i);
+                    r.setRCell(t);
+                    t.AddRef(r);
+                    r.setContent(o);
+                }
+
+            }
             if (hasRefs())
             this.info= null;
             this.setRow(null);
@@ -62,6 +72,16 @@ public class DateCell extends Cell {
         }
         else if(o.getClass()== Double.class){
             NumCell n=new NumCell(getRow(),getColumn(),(Double) o);
+            if (hasRefs()){
+                Vector<ReferencedCell> myrefs=this.getRefs();
+                for (int i=0;i<myrefs.size();i++){
+                    ReferencedCell r=myrefs.elementAt(i);
+                    r.setRCell(n);
+                    n.AddRef(r);
+                    r.setContent(o);
+                }
+
+            }
             this.info= null;
             this.setRow(null);
             this.setColumn(null);
