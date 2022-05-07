@@ -96,7 +96,7 @@ public class DomainController {
                 else if (cell.getType().equals("R")) content = AntiParse(cell.getContent());
                 else content = AntiParse(cell.getInfo());
                 Contents.get(i).add(j,content);
-                //System.out.println(cell);
+                System.out.println(cell.getType());
             }
         }
         Vector<String[]> cellsContents = new Vector<String[]>();
@@ -276,6 +276,11 @@ public class DomainController {
         docSheet.dayOfTheWeek(b1,ref);
     }
 
+    public static void moveBlock(Integer[] block,boolean ref){
+        Block b1 = createBlock(block);
+        docSheet.MoveBlock(b1,ref);
+    }
+
     public static void funcReplaceCriteria(String criteria){
         docSheet.replaceWithCriteriaText(criteria);
     }
@@ -306,6 +311,7 @@ public class DomainController {
 
     }
     public static String AntiParse(Object o) {
+        System.out.println(o);
         if (o.getClass() == Double.class) return String.valueOf(o);
         else if (o.getClass()== LocalDate.class) return o.toString();
         else return (String) o;

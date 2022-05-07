@@ -367,9 +367,10 @@ public class Main {
             System.out.println("(7) Mathematic Operations");
             System.out.println("(8) Date Operations");
             System.out.println("(9) Text Operations");
+            System.out.println("(10) Move Block");
             System.out.println("(0) Go back");
             System.out.println("\n \n Enter number:");
-            Integer num = numberInsertion(9,0);
+            Integer num = numberInsertion(10,0);
             if (num != null) {
                 System.out.println("\n");
                 switch (num) {
@@ -544,6 +545,13 @@ public class Main {
                     case 9:
                         menuTextFunctions(docSheet);
                         break;
+                    case 10:
+                        Integer[] blockCells3 = requireBlock();
+                        if (blockCells3.length == 0) break;
+                        else {
+                            DomainController.moveBlock(blockCells3,isReferencing());
+                            break;
+                        }
                     default:
                         System.out.println("\n");
                         break;

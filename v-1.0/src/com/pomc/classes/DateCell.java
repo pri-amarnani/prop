@@ -53,6 +53,7 @@ public class DateCell extends Cell {
         }
         else if (o.getClass()==String.class){
             TextCell t=new TextCell(getRow(),getColumn(), (String) o);
+            if (hasRefs())
             this.info= null;
             this.setRow(null);
             this.setColumn(null);

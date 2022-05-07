@@ -94,23 +94,30 @@ public class Block {
     public void ref(Block b, Boolean ref) {
         for (int i = 0; i < this.block.length; ++i) {
             for (int j = 0; j < this.block[0].length; ++j) {
+                Cell n =  b.getCell(i,j);
+                if (this.block[i][j].getInfo() != null) {
 
-                if (this.block[i][j].isNum()) b.getCell(i,j).changeValue(this.block[i][j].getInfo());
-                else {
-                    Cell n = (Cell) b.getCell(i, j).changeValue(this.block[i][j].getInfo());
-                    this.block[i][j] = n;
+                    n = (Cell) b.getCell(i,j).changeValue(this.block[i][j].getInfo());
+                    b.setCell(i,j,n);
+
                 }
-
                 if (ref) {
+                    ReferencedCell rc = new ReferencedCell(n.getRow(),n.getColumn(),"=equal");
+                    rc.setContent(n.getInfo());
+                    b.setCell(i, j, rc);
                     Vector<Cell> s = new Vector<>(1);
                     s.add(this.block[i][j]);
-
-                    Map.Entry<String, Vector<Cell>> r = new AbstractMap.SimpleEntry<>("=", s);
+                    this.block[i][j].AddRef((ReferencedCell) b.getCell(i, j));
+                    Map.Entry<String, Vector<Cell>> r = new AbstractMap.SimpleEntry<>("equal", s);
                     b.getCell(i, j).setRefInfo(r);
+                    n = null;
                 }
             }
-        }
+            }
+            b.ul = b.getCell(0,0);
+            b.dr = b.getCell(b.size_r -1,b.size_c -1);
     }
+
 
     public void ModifyBlock(Object n) {
         for (Cell[] cells : block) {
