@@ -1,4 +1,4 @@
-En esta carpeta (out>production>v-1.0>com>pomc) se encuentran los ejecutables del proyecto:
+En esta carpeta se encuentran los ejecutables del proyecto:
 En esta carpeta hay diferentes subcarpetas:
     - Classes, con los ejecutables de todas las clases.
     - Controller, con el ejecutable del Domain Controller.

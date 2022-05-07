@@ -41,14 +41,14 @@ public class ReferencedCellTest {
     }
 
     @Test
-    @DisplayName("getType should work")
+    @DisplayName("getRefInfo should work")
     public void test_getRefInfo(){
         Map.Entry<String,Vector<Cell>> refinfotest= rcell.getRefInfo();
         assertEquals(refinfotest.getKey(),"SUM");
         assertEquals(refinfotest.getValue().elementAt(0).getInfo(),6.0);
     }
     @Test
-    @DisplayName("getValue should work")
+    @DisplayName("getSetRefInfo should work")
     public void test_setRefInfo(){
         NumCell n= new NumCell(1,2,4.0);
         Vector<Cell> v= new Vector<>();
@@ -68,7 +68,7 @@ public class ReferencedCellTest {
     }
 
     @Test
-    @DisplayName("getType should work")
+    @DisplayName("setvalue should work")
     public void test_setValue(){
        rcell.setContent(2);
         assertEquals(rcell.getContent(),2);
