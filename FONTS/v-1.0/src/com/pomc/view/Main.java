@@ -796,12 +796,12 @@ public class Main {
     }
 
 
+
     public static void main(String[] args) {
         System.out.println("\n POMC WORKSHEETS");
         System.out.println("------------------------------");
         System.out.println("Enter title for document:");                //TODO nombre default y unico
         String title = userInput.nextLine();
-        System.out.println("\n");
         DomainController.initializeDoc(title);
         menuDocument();
     }

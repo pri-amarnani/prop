@@ -1,63 +1,79 @@
 package com.pomc.view;
 
+import javax.sql.RowSetReader;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.JTableHeader;
+import javax.swing.table.TableCellRenderer;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Vector;
 
-import static javax.swing.JOptionPane.getRootFrame;
 import static javax.swing.JOptionPane.showMessageDialog;
 
 public class SheetView {
 
-    public static JPanel cambio() {
+    public static JPanel cambio(int numfil,int numcol) {
         // el panel con barras de scroll automáticas
         JPanel frame = new JPanel(new BorderLayout());
-        JScrollPane scrollPane = new JScrollPane();
-
-
-        // se añade el panel de scroll a la ventana
 
 
         //TABLE
-        JTable table;
+        JTable table=new JTable(numfil,numcol);
         DefaultTableModel model;
-        //add the table to the frame
-        String[] columnNames = { "ID", "Un dato", "Otro dato" };
-        // creo un modelo de datos, sin datos por eso 'null' y establezco los
-        // nombres de columna
-        model = new DefaultTableModel(null, columnNames);
-        // creo la tabla con el modelo de datos creado
-        table = new JTable(model);
 
-        // código del botón
-        JButton btnAadirLnea = new JButton("Meter contenido");
-        btnAadirLnea.addActionListener(new ActionListener() {
-           public void actionPerformed(ActionEvent arg0) {
+        ArrayList<String> headers= new ArrayList<>(numfil);
+        for (int i=1; i<=numfil;i++){
+            headers.add(""+i);
+        }
+        ListModel l= new AbstractListModel() {
+            @Override
+            public int getSize() {
+                return headers.size();
+            }
 
-               // aquí se añaden datos a la tabla
-               for (int i = 0; i < 100; i++) {
+            @Override
+            public Object getElementAt(int index) {
+                return headers.get(index);
+            }
+        };
+        JList rowHeader= new JList(l);
 
-                   // creo un vector con una fila
-                   Object[] aux = {i, i * 34, Math.random()};
+        rowHeader.setFixedCellWidth(50);
+        rowHeader.setFixedCellHeight(table.getRowHeight());
+        Color c= new Color(70,130,180);
+        rowHeader.setBackground(c);
+        rowHeader.setBorder(BorderFactory.createLineBorder(Color.WHITE));
+        rowHeader.setForeground(Color.WHITE);
 
-                   // añado la fila al modelo
-                   model.addRow(aux);
+        table.getTableHeader().setBorder(BorderFactory.createLineBorder(Color.WHITE));
+        table.getTableHeader().setBackground(c);
+        table.getTableHeader().setForeground(Color.WHITE);
+        rowHeader.setCellRenderer(getRenderer());
 
-               }
-           }
-       });
-        scrollPane.setViewportView(table);
-btnAadirLnea.setBounds(10, 249, 267, 23);
+        model = (DefaultTableModel) (table.getModel());
+
+
+
+       table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+        JScrollPane scrollPane = new JScrollPane(
+                table,
+                ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS,
+                ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS
+        );
             // pongo el botón en la ventana
+
+        scrollPane.setRowHeaderView(rowHeader);
         frame.add(BorderLayout.CENTER,scrollPane);
-        frame.add(BorderLayout.SOUTH,btnAadirLnea);
         return frame;
     }
 
     public static void updateMenu(JMenuBar mb) {
+
         JMenu m = mb.getMenu(0);
         JMenuItem saveB = new JMenuItem("Save");
         JMenuItem saveAsB = new JMenuItem("Save As...");
@@ -82,6 +98,33 @@ btnAadirLnea.setBounds(10, 249, 267, 23);
             }
         });
 
+    }
+
+    public static String convertToNumberingScheme(int number) {
+        var letters  = "";
+        do {
+            number -= 1;
+            char letra = (char) (65 + (number % 26));
+            letters = letra + letters;
+            number = (number / 26); // quick `floor`
+        } while(number > 0);
+
+        return letters;
+    }
+
+    private static ListCellRenderer<? super String> getRenderer() {
+        return new DefaultListCellRenderer() {
+            @Override
+            public Component getListCellRendererComponent(JList<?> list,
+                                                          Object value, int index, boolean isSelected, boolean cellHasFocus) {
+                JLabel listCellRendererComponent = (JLabel) super
+                        .getListCellRendererComponent(list, value, index, isSelected,
+                                cellHasFocus);
+                listCellRendererComponent.setBorder(BorderFactory.createMatteBorder(0,
+                        0, 1, 0, Color.white));
+                return listCellRendererComponent;
+            }
+        };
     }
 
 }
