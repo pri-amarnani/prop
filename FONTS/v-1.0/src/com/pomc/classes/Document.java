@@ -50,4 +50,8 @@ public class Document {
         System.out.println("Unexistent Sheet");
         return;
     }
+
+    public int getNumSheet(){
+        return docSheets.size();
+    }
 }

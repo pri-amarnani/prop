@@ -78,17 +78,18 @@ public class MainMenu {
         newDocB.addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent e) {
-            JTextField title= new JTextField("untitled_doc");
-            JTextField newsheet_title= new JTextField("sheet1");
+           // JTextField title= new JTextField("untitled_doc");
+
+            JTextField newsheet_title = new JTextField("sheet 1");
             JTextField nrows= new JTextField("25");
             JTextField ncolumns= new JTextField("25");
             Object[] fields= {
-                    "Insert a title for the new document",title,
+                    //"Insert a title for the new document",title,
                     "Insert a title for the new sheet", newsheet_title,
                     "Insert the number of rows in the new sheet", nrows,
                     "Insert the number of columns in the new sheet",ncolumns,
             };
-                int result=  JOptionPane.showConfirmDialog(
+              /*  int result=  JOptionPane.showConfirmDialog(
                         null,
                         fields,
                         "New document",
@@ -96,8 +97,8 @@ public class MainMenu {
                         JOptionPane.PLAIN_MESSAGE,
                         null
 
-                );
-              /*  String result2= (String) JOptionPane.showInputDialog(
+                );*/
+                String result2= (String) JOptionPane.showInputDialog(
                         frame,
                         "New Document",
                         "Insert a title for the new document",
@@ -115,19 +116,22 @@ public class MainMenu {
                         JOptionPane.PLAIN_MESSAGE,
                         null
 
-                );*/
-                if(result==JOptionPane.OK_OPTION) {
-                    PresentationController.newDoc(title.getText());
-                    frame.getContentPane().remove(centro);
+                );
+                if(result3==JOptionPane.OK_OPTION) {
+                    PresentationController.newDoc(result2);
+                    BorderLayout blayout= (BorderLayout) frame.getContentPane().getLayout();
+                    frame.getContentPane().remove(blayout.getLayoutComponent(BorderLayout.CENTER));
                     frame.repaint();
                     int numfil=Integer.parseInt(nrows.getText());
-                    int numcol=Integer.parseInt(ncolumns.getText());;
-                    frame.getContentPane().add(SheetView.cambio(numfil,numcol));
+                    int numcol=Integer.parseInt(ncolumns.getText());
+                    PresentationController.newSheet(newsheet_title.getText(),numfil,numcol);
+                    frame.getContentPane().add(BorderLayout.CENTER,SheetView.cambio(true));
+
                     if(!menuUpdated){
                         menuUpdated=true;
                         SheetView.updateMenu(mb);
                     }
-                    frame.setTitle(title.getText() + " - POMC WORKSHEETS");
+                    frame.setTitle(result2 + " - POMC WORKSHEETS");
                     frame.setVisible(true);
 
                }
