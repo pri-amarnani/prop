@@ -1,19 +1,34 @@
-package com.pomc.persistence;
+package com.pomc.controller;
 
-import com.pomc.classes.Document;
+import com.pomc.classes.*;
+
 
 import java.io.*;
 import java.util.Scanner;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
-public class PersistenceController {
+public class PersistenceC {
     File docFile;
     FileWriter docWriter;
     static Scanner userInput = new Scanner(System.in);
 
+    private final gestorCSV Csv;
+    private final gestorTXT Txt;
+    private final ExportPdf Pdf;
 
-    public void dooc(){
+    private final Path dataDirectory = Paths.get("..", "..", "..", "..", "EXE", "dades");
+
+    public PersistenceC(gestorCSV csv, gestorTXT txt, ExportPdf pdf) {
+        Csv = csv;
+        Txt = txt;
+        Pdf = pdf;
+    }
+
+
+    public void doc(){
         File tempDirectory; //defines where the file is created
         tempDirectory = new File(path);
         this.docFile = new File(tempDirectory.getAbsolutePath() +"/" + Title +".pomc");
@@ -27,7 +42,11 @@ public class PersistenceController {
     }
 
     //Save Files
-    public void save() {
+    public void save(Document doc) {
+        String name = "doc_name";
+        if(){
+            saveAs(doc, name);
+        }
         try {
             docWriter = new FileWriter(docFile.getAbsoluteFile());
             docWriter.write(String.valueOf(docSheets));  //CAMBIAR CUANDO TODO ESTE HECHO
@@ -37,7 +56,7 @@ public class PersistenceController {
         }
     }
 
-    public void saveAs() {
+    public void saveAs(Document doc, String name) {
         try {
             String path = validPath();
             System.out.println("Enter New Title:");
@@ -74,6 +93,11 @@ public class PersistenceController {
 
     }
 
+
+    public void importAs(String path){
+
+    }
+
     //Export Files
     public String escapeSpecialCharacters(String data) {
         String escapedData = data.replaceAll("\\R", " ");
@@ -90,7 +114,7 @@ public class PersistenceController {
                 .collect(Collectors.joining(","));
     }
 
-    public void export(){
+    public void export(String type){
         while (true) {
             System.out.println("Enter extension to export :");
             String ext = userInput.nextLine();
@@ -110,6 +134,7 @@ public class PersistenceController {
             }
         }
     }
+
 
     //Auxiliar methods
     public static String validPath() {
