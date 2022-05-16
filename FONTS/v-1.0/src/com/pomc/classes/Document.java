@@ -54,4 +54,18 @@ public class Document {
     public int getNumSheet(){
         return docSheets.size();
     }
+
+    public Sheet getSheet(String name){
+        int i=0;
+        boolean found=false;
+        while (i<docSheets.size() && !found) {
+            if (docSheets.elementAt(i).getTitle()==name) {
+                found = true;
+                return docSheets.elementAt(i);
+            }
+            else i++;
+        }
+        return null;
+        }
+
 }

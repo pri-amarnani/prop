@@ -49,9 +49,9 @@ public class Main {
                         break;
                     case 2:
                         System.out.println("Input the row of the Cell to measure:");
-                        Integer cellI = numberInsertion(DomainController.currentSheetRows(), 1);
+                        Integer cellI = numberInsertion(DomainController.sheetRows("A"), 1);
                         System.out.println("Input the column of the Cell to measure:");
-                        Integer cellJ = numberInsertion(DomainController.currentSheetCols(), 1);
+                        Integer cellJ = numberInsertion(DomainController.sheetCols("A"), 1);
                         if (cellI > 0 && cellJ > 0) {
                             System.out.println("Select a criteria for the Length");
                             System.out.println(" (1) Words \n (2) Letters \n (3) Characters");
@@ -224,9 +224,9 @@ public class Main {
                         String userInM = userInput.nextLine();
                         if (userInM.equals("y") || userInM.equals("yes") )  {
                             System.out.println("Input the row of the Cell to print the result:");
-                            Integer cellIM = numberInsertion(DomainController.currentSheetRows(), 1);
+                            Integer cellIM = numberInsertion(DomainController.sheetRows("A"), 1);
                             System.out.println("Input the column of the Cell to print the result:");
-                            Integer cellJM = numberInsertion(DomainController.currentSheetCols(), 1);
+                            Integer cellJM = numberInsertion(DomainController.sheetCols("A"), 1);
                             if (cellIM > 0 && cellJM > 0) {
                                 Double result = DomainController.funcMean(cellIM,cellJM,true,isReferencing());
                                 System.out.println("The mean of the block is " + result + " and it was printed!");
@@ -243,9 +243,9 @@ public class Main {
                         String userInm = userInput.nextLine();
                         if (userInm.equals("y") || userInm.equals("yes") )  {
                             System.out.println("Input the row of the Cell to print the result:");
-                            Integer cellIm = numberInsertion(DomainController.currentSheetRows(), 1);
+                            Integer cellIm = numberInsertion(DomainController.sheetRows("A"), 1);
                             System.out.println("Input the column of the Cell to print the result:");
-                            Integer cellJm = numberInsertion(DomainController.currentSheetCols(), 1);
+                            Integer cellJm = numberInsertion(DomainController.sheetCols("A"), 1);
                             if (cellIm > 0 && cellJm > 0) {
                                 Double result = DomainController.funcMedian(cellIm,cellJm,true,isReferencing());
                                 System.out.println("The median of the block is " + result + " and it was printed!");
@@ -262,9 +262,9 @@ public class Main {
                         String userInV = userInput.nextLine();
                         if (userInV.equals("y") || userInV.equals("yes") )  {
                             System.out.println("Input the row of the Cell to print the result:");
-                            Integer cellIV = numberInsertion(DomainController.currentSheetRows(), 1);
+                            Integer cellIV = numberInsertion(DomainController.sheetRows("A"), 1);
                             System.out.println("Input the column of the Cell to print the result:");
-                            Integer cellJV = numberInsertion(DomainController.currentSheetCols(), 1);
+                            Integer cellJV = numberInsertion(DomainController.sheetCols("A"), 1);
                             if (cellIV > 0 && cellJV > 0) {
                                 Double result = DomainController.funcVariance(cellIV,cellJV,true,isReferencing());
                                 System.out.println("The variance of the block is " + result + " and it was printed!");
@@ -285,9 +285,9 @@ public class Main {
                             String userInCV = userInput.nextLine();
                             if (userInCV.equals("y") || userInCV.equals("yes") )  {
                                 System.out.println("Input the row of the Cell to print the result:");
-                                Integer cellICV = numberInsertion(DomainController.currentSheetRows(), 1);
+                                Integer cellICV = numberInsertion(DomainController.sheetRows("A"), 1);
                                 System.out.println("Input the column of the Cell to print the result:");
-                                Integer cellJCV = numberInsertion(DomainController.currentSheetCols(), 1);
+                                Integer cellJCV = numberInsertion(DomainController.sheetCols("A"), 1);
                                 if (cellICV > 0 && cellJCV > 0) {
                                     Double result = DomainController.funcCovariance(blockCellsCV,cellICV,cellJCV,true,isReferencing());
                                     System.out.println("The covariance of the block is " + result + " and it was printed!");
@@ -305,9 +305,9 @@ public class Main {
                         String userInS = userInput.nextLine();
                         if (userInS.equals("y") || userInS.equals("yes") )  {
                             System.out.println("Input the row of the Cell to print the result:");
-                            Integer cellIS = numberInsertion(DomainController.currentSheetRows(), 1);
+                            Integer cellIS = numberInsertion(DomainController.sheetRows("A"), 1);
                             System.out.println("Input the column of the Cell to print the result:");
-                            Integer cellJS = numberInsertion(DomainController.currentSheetCols(), 1);
+                            Integer cellJS = numberInsertion(DomainController.sheetCols("A"), 1);
                             if (cellIS > 0 && cellJS > 0) {
                                 Double result = DomainController.funcStandardDeviation(cellIS,cellJS,true,isReferencing());
                                 System.out.println("The Standard Deviation of the block is " + result + " and it was printed!");
@@ -328,9 +328,9 @@ public class Main {
                             String userInCP = userInput.nextLine();
                             if (userInCP.equals("y") || userInCP.equals("yes") )  {
                                 System.out.println("Input the row of the Cell to print the result:");
-                                Integer cellICV = numberInsertion(DomainController.currentSheetRows(), 1);
+                                Integer cellICV = numberInsertion(DomainController.sheetRows("A"), 1);
                                 System.out.println("Input the column of the Cell to print the result:");
-                                Integer cellJCV = numberInsertion(DomainController.currentSheetCols(), 1);
+                                Integer cellJCV = numberInsertion(DomainController.sheetCols("A"), 1);
                                 if (cellICV > 0 && cellJCV > 0) {
                                     Double result = DomainController.funcCPearson(blockCellsCP,cellICV,cellJCV,true,isReferencing());
                                     System.out.println("The Pearson Coefficient of the block is " + result + " and it was printed!");
@@ -593,9 +593,9 @@ public class Main {
                         break;
                     case 2:
                         System.out.println("Input the row of the Cell to edit:");
-                        Integer cellI = numberInsertion(DomainController.currentSheetRows(), 1);
+                        Integer cellI = numberInsertion(DomainController.sheetRows("A"), 1);
                         System.out.println("Input the column of the Cell to edit:");
-                        Integer cellJ = numberInsertion(DomainController.currentSheetCols(), 1);
+                        Integer cellJ = numberInsertion(DomainController.sheetCols("A"), 1);
                         if (cellI > 0 && cellJ > 0) {
                             System.out.println("Input the value:");
                             String value = userInput.nextLine();
@@ -606,32 +606,32 @@ public class Main {
                         break;
                     case 3:
                         System.out.println("Input where to add the row:");
-                        Integer newRowPos = numberInsertion(DomainController.currentSheetRows(), 1);
-                        if (newRowPos == 0) newRowPos = DomainController.currentSheetRows();
-                        DomainController.currentSheetAddRow(newRowPos);
+                        Integer newRowPos = numberInsertion(DomainController.sheetRows("A"), 1);
+                        if (newRowPos == 0) newRowPos = DomainController.sheetRows("A");
+                        DomainController.sheetAddRow(newRowPos,"a");
                         System.out.println("Row in position " + newRowPos + " was added to the Sheet");
                         break;
                     case 4:
                         System.out.println("Input where to add the column:");
-                        Integer newColPos = numberInsertion(DomainController.currentSheetCols(), 1);
-                        if (newColPos == 0) newColPos = DomainController.currentSheetCols();
-                        DomainController.currentSheetAddCol(newColPos);
+                        Integer newColPos = numberInsertion(DomainController.sheetCols("A"), 1);
+                        if (newColPos == 0) newColPos = DomainController.sheetCols("A");
+                        DomainController.sheetAddCol(newColPos,"");
                         System.out.println("Column in position " + newColPos + " was added to the Sheet");
                         break;
                     case 5:
                         System.out.println("Input the number of row to delete:");
-                        Integer rowPos = numberInsertion(DomainController.currentSheetRows(), 1);
+                        Integer rowPos = numberInsertion(DomainController.sheetRows("A"), 1);
                         if (rowPos >0 && isUserSure()) {
-                            DomainController.currentSheetDeleteRow(rowPos);
+                            DomainController.sheetDeleteRow(rowPos,"");
                             System.out.println("Row in position " + rowPos + " was deleted");
                         }
                         else System.out.println("No row was deleted.");
                         break;
                     case 6:
                         System.out.println("Input the number of column to delete:");
-                        Integer colPos = numberInsertion(DomainController.currentSheetCols(), 1);
+                        Integer colPos = numberInsertion(DomainController.sheetCols("A"), 1);
                         if (colPos >0 && isUserSure()) {
-                            DomainController.currentSheetDeleteCol(colPos);
+                            DomainController.sheetDeleteCol(colPos,"");
                             System.out.println("Column in position " + colPos + " was deleted");
                         }
                         else System.out.println("No column was deleted.");
@@ -770,13 +770,13 @@ public class Main {
 
     public static Integer[] requireBlock(){
         System.out.println("Input the row of the upper left cell of the block:");
-        Integer ulCelli = numberInsertion(DomainController.currentSheetRows(), 1);
+        Integer ulCelli = numberInsertion(DomainController.sheetRows("A"), 1);
         System.out.println("Input the column of the upper left cell of the block:");
-        Integer ulCellj = numberInsertion(DomainController.currentSheetCols(), 1);
+        Integer ulCellj = numberInsertion(DomainController.sheetCols("A"), 1);
         System.out.println("Input the row of the lower right cell of the block:");
-        Integer lrCelli = numberInsertion(DomainController.currentSheetRows(), 1);
+        Integer lrCelli = numberInsertion(DomainController.sheetRows("A"), 1);
         System.out.println("Input the column of the lower right cell of the block:");
-        Integer lrCellj = numberInsertion(DomainController.currentSheetCols(), 1);
+        Integer lrCellj = numberInsertion(DomainController.sheetCols("A"), 1);
         if (ulCelli > 0 && ulCellj > 0 && lrCelli > 0 && lrCellj > 0 ) return new Integer[]{ulCelli, ulCellj, lrCelli, lrCellj};
         else {
             System.out.println("No Block created");

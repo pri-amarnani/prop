@@ -25,6 +25,8 @@ public class DomainController {
         return doc.getTitle();
     }
 
+    public static int getNumSheet(){return doc.getNumSheet();}
+
     //returns an array of the sheets names and No sheets if there are no sheets
     public static String[] showSheets() {
         Vector<String> sheetsNames = new Vector<String>();
@@ -74,14 +76,20 @@ public class DomainController {
         }
     }
 
+    public static void setSheetTitle(String title,String newtitle){
+        doc.getSheet(title).setTitle(newtitle);
+    }
+
     //gets current sheet number of rows
-    public static Integer currentSheetRows(){
-        return docSheet.getNumRows();
+    public static Integer sheetRows(String name){
+        if (doc.getSheet(name)!=null) return doc.getSheet(name).getNumRows();
+        else return -1;
     }
 
     //gets current sheet number of columns
-    public static Integer currentSheetCols(){
-        return docSheet.getNumCols();
+    public static Integer sheetCols(String name){
+        if (doc.getSheet(name)!=null) return doc.getSheet(name).getNumCols();
+        else return -1;
     }
 
     //gets an array with all the contents of the cells of the current sheet
@@ -107,24 +115,46 @@ public class DomainController {
     }
 
     //adds an empty row to the specified position
-    public static void currentSheetAddRow(Integer num){
-        docSheet.NewRow(num -1);
+    public static void sheetAddRow(Integer num, String name){
+        if (doc.getSheet(name)!=null) {
+            doc.getSheet(name).NewRow(num - 1);
+        }
     }
 
+    public static void sheetAddRows(int num,int pos,String name){
+        for(int i=0;i<num;i++){
+            sheetAddRow(pos,name);
+        }
+    }
     //adds an empty col to the specified position
-    public static void currentSheetAddCol(Integer num){
-        docSheet.NewColumn(num -1);
+    public static void sheetAddCol(Integer num, String name){
+        if (doc.getSheet(name)!=null) doc.getSheet(name).NewColumn(num -1);
     }
 
+    public static void sheetAddCols(int num,int pos,String name){
+        for(int i=0;i<num;i++){
+            sheetAddCol(pos,name);
+        }
+    }
     //deletes a row in the specified position
-    public static void currentSheetDeleteRow(Integer num){
-        docSheet.DeleteRow(num -1);
+    public static void sheetDeleteRow(Integer num, String name){
+        if (doc.getSheet(name)!=null) doc.getSheet(name).DeleteRow(num -1);
     }
 
+    public static void sheetDelRows(int num,int pos,String name){
+        for(int i=0;i<num;i++){
+            sheetDeleteRow(pos,name);
+        }
+    }
     //deletes a column in the specified position
-    public static void currentSheetDeleteCol(Integer num){
-        docSheet.DeleteColumn(num -1);
+    public static void sheetDeleteCol(Integer num, String name){
+        if (doc.getSheet(name)!=null) doc.getSheet(name).DeleteColumn(num -1);
 
+    }
+    public static void sheetDeleteCols(int num,int pos,String name){
+        for(int i=0;i<num;i++){
+            sheetDeleteCol(pos,name);
+        }
     }
 
     public static void editCell(int i, int j, String value) {

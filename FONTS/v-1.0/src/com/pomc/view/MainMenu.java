@@ -4,9 +4,13 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 
 import static javax.swing.JOptionPane.showMessageDialog;
 public class MainMenu {
@@ -61,6 +65,25 @@ public class MainMenu {
         });
 
 
+        userGuideB.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                try{
+                    Desktop.getDesktop().browse(new URI("https://www.google.com/"));
+                }
+                catch (URISyntaxException | IOException e2){
+                    e2.printStackTrace();
+                }
+
+                };
+
+        });
+
+
+
+
+
         // Área de texto en el centro
         JPanel centro = new JPanel(new BorderLayout());
         JPanel top = new JPanel(new BorderLayout());
@@ -71,72 +94,88 @@ public class MainMenu {
         centro.add(top,BorderLayout.CENTER);
         // Agregar componentes al marco.
         frame.getContentPane().add(BorderLayout.NORTH, mb);
+        //Color cfons= new Color(0x4D4D97);
         frame.getContentPane().add(BorderLayout.CENTER, centro);
         frame.setLocationRelativeTo(null);
+
         frame.setVisible(true);
 
         newDocB.addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent e) {
-           // JTextField title= new JTextField("untitled_doc");
+                boolean ok = false;
+                while (!ok) {
+                    // JTextField title= new JTextField("untitled_doc");
 
-            JTextField newsheet_title = new JTextField("sheet 1");
-            JTextField nrows= new JTextField("25");
-            JTextField ncolumns= new JTextField("25");
-            Object[] fields= {
-                    //"Insert a title for the new document",title,
-                    "Insert a title for the new sheet", newsheet_title,
-                    "Insert the number of rows in the new sheet", nrows,
-                    "Insert the number of columns in the new sheet",ncolumns,
-            };
-              /*  int result=  JOptionPane.showConfirmDialog(
-                        null,
-                        fields,
-                        "New document",
-                        JOptionPane.OK_CANCEL_OPTION,
-                        JOptionPane.PLAIN_MESSAGE,
-                        null
+                    JTextField newsheet_title = new JTextField("sheet 1");
+                    JTextField nrows = new JTextField("25");
+                    JTextField ncolumns = new JTextField("25");
+                    Object[] fields = {
+                            //"Insert a title for the new document",title,
+                            "Insert a title for the new sheet", newsheet_title,
+                            "Insert the number of rows in the new sheet", nrows,
+                            "Insert the number of columns in the new sheet", ncolumns,
+                    };
+                      /*  int result=  JOptionPane.showConfirmDialog(
+                                null,
+                                fields,
+                                "New document",
+                                JOptionPane.OK_CANCEL_OPTION,
+                                JOptionPane.PLAIN_MESSAGE,
+                                null
 
-                );*/
-                String result2= (String) JOptionPane.showInputDialog(
-                        frame,
-                        "New Document",
-                        "Insert a title for the new document",
-                        JOptionPane.PLAIN_MESSAGE,
-                        null,
-                        null,
-                        "untitled_doc"
+                        );*/
+                    String result2 = (String) JOptionPane.showInputDialog(
+                            frame,
+                            "New Document",
+                            "Insert a title for the new document",
+                            JOptionPane.PLAIN_MESSAGE,
+                            null,
+                            null,
+                            "untitled_doc"
 
-                );
-                 int result3=  JOptionPane.showConfirmDialog(
-                        null,
-                        fields,
-                        "New sheet",
-                        JOptionPane.OK_CANCEL_OPTION,
-                        JOptionPane.PLAIN_MESSAGE,
-                        null
+                    );
+                    if (result2==null) ok=true;
+                    else {
+                        int result3 = JOptionPane.showConfirmDialog(
+                                null,
+                                fields,
+                                "New sheet",
+                                JOptionPane.OK_CANCEL_OPTION,
+                                JOptionPane.PLAIN_MESSAGE,
+                                null
 
-                );
-                if(result3==JOptionPane.OK_OPTION) {
-                    PresentationController.newDoc(result2);
-                    BorderLayout blayout= (BorderLayout) frame.getContentPane().getLayout();
-                    frame.getContentPane().remove(blayout.getLayoutComponent(BorderLayout.CENTER));
-                    frame.repaint();
-                    int numfil=Integer.parseInt(nrows.getText());
-                    int numcol=Integer.parseInt(ncolumns.getText());
-                    PresentationController.newSheet(newsheet_title.getText(),numfil,numcol);
-                    frame.getContentPane().add(BorderLayout.CENTER,SheetView.cambio(true));
 
-                    if(!menuUpdated){
-                        menuUpdated=true;
-                        SheetView.updateMenu(mb);
+                        );
+                        if (nrows.getText()!= null&&ncolumns.getText()!=null) {
+                            if (result3 == JOptionPane.OK_OPTION) {
+                                Integer numfil = Integer.parseInt(nrows.getText());
+                                Integer numcol = Integer.parseInt(ncolumns.getText());
+                                if (numfil > 0 && numcol > 0) {
+                                    PresentationController.newDoc(result2);
+                                    BorderLayout blayout = (BorderLayout) frame.getContentPane().getLayout();
+                                    frame.getContentPane().remove(blayout.getLayoutComponent(BorderLayout.CENTER));
+                                    frame.repaint();
+                                        ok = true;
+                                        PresentationController.newSheet(newsheet_title.getText(), numfil, numcol);
+                                        frame.getContentPane().add(BorderLayout.CENTER, SheetView.cambio(true));
+
+                                        if (!menuUpdated) {
+                                            menuUpdated = true;
+                                            SheetView.updateMenu(mb);
+                                        }
+                                        frame.setTitle(result2 + " - POMC WORKSHEETS");
+                                        frame.setVisible(true);
+                                }
+
+
+                            }
+                        }
+                        if (result3 == JOptionPane.CANCEL_OPTION) ok = true;
                     }
-                    frame.setTitle(result2 + " - POMC WORKSHEETS");
-                    frame.setVisible(true);
+                    if (!ok) showMessageDialog(null,"Invalid values. Couldn't create document.\nTry again","Error!",JOptionPane.ERROR_MESSAGE);
 
-               }
-
-
+                }
             }
         });
 
