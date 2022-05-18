@@ -29,9 +29,13 @@ public class PersistenceC {
 
 
     public void doc(){
+        String Title = "titulo por defecto";
         File tempDirectory; //defines where the file is created
-        tempDirectory = new File(path);
+        tempDirectory = new File("./Data");
         this.docFile = new File(tempDirectory.getAbsolutePath() +"/" + Title +".pomc");
+        if (!tempDirectory.exists()) {
+            tempDirectory.mkdirs();
+        }
         try {
             if (docFile.createNewFile()) {
                 System.out.println("File created: "+ docFile.getName());
