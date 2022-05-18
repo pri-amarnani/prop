@@ -21,7 +21,7 @@ public class MainMenu {
         // MARCO DE TO DO
         frame.repaint();
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(600, 600);
+        frame.setSize(900, 900);
 
         //MENU DE ARRIBA
         JMenuBar mb = new JMenuBar();
@@ -41,6 +41,8 @@ public class MainMenu {
         m2.add(validFormatB);
         m2.add(userGuideB);
         m2.add(aboutB);
+
+
 
         //LISTENERS
 
@@ -87,13 +89,18 @@ public class MainMenu {
         // Área de texto en el centro
         JPanel centro = new JPanel(new BorderLayout());
         JPanel top = new JPanel(new BorderLayout());
-        JLabel intro = new JLabel("<html>BIENVENIDO A POMC WORKSHEETS<br/><br/><br/>Para empezar crea un nuevo archivo</html>");
-        intro.setFont(new Font("Serif",Font.BOLD,25));
-        intro.setAlignmentX(Component.CENTER_ALIGNMENT);
-        top.add(intro,BorderLayout.CENTER);
+        //JLabel intro = new JLabel("<html>BIENVENIDO A POMC WORKSHEETS<br/><br/><br/>Para empezar crea un nuevo archivo</html>");
+        //intro.setFont(new Font("Serif",Font.BOLD,25));
+        //intro.setAlignmentX(Component.CENTER_ALIGNMENT);
+        BufferedImage logo= ImageIO.read(new File("LOGO.png"));
+        JLabel logoLabel= new JLabel(new ImageIcon(logo));
+        top.setBackground(Color.white);
+        top.add(logoLabel,BorderLayout.CENTER);
         centro.add(top,BorderLayout.CENTER);
         // Agregar componentes al marco.
-        frame.getContentPane().add(BorderLayout.NORTH, mb);
+        JPanel menuPanel= new JPanel(new BorderLayout());
+        menuPanel.add(BorderLayout.NORTH,mb);
+        frame.getContentPane().add(BorderLayout.NORTH, menuPanel);
         //Color cfons= new Color(0x4D4D97);
         frame.getContentPane().add(BorderLayout.CENTER, centro);
         frame.setLocationRelativeTo(null);
@@ -105,26 +112,16 @@ public class MainMenu {
             public void actionPerformed(ActionEvent e) {
                 boolean ok = false;
                 while (!ok) {
-                    // JTextField title= new JTextField("untitled_doc");
 
                     JTextField newsheet_title = new JTextField("sheet 1");
                     JTextField nrows = new JTextField("25");
                     JTextField ncolumns = new JTextField("25");
                     Object[] fields = {
-                            //"Insert a title for the new document",title,
                             "Insert a title for the new sheet", newsheet_title,
                             "Insert the number of rows in the new sheet", nrows,
                             "Insert the number of columns in the new sheet", ncolumns,
                     };
-                      /*  int result=  JOptionPane.showConfirmDialog(
-                                null,
-                                fields,
-                                "New document",
-                                JOptionPane.OK_CANCEL_OPTION,
-                                JOptionPane.PLAIN_MESSAGE,
-                                null
 
-                        );*/
                     String result2 = (String) JOptionPane.showInputDialog(
                             frame,
                             "New Document",
@@ -147,7 +144,7 @@ public class MainMenu {
 
 
                         );
-                        if (nrows.getText()!= null&&ncolumns.getText()!=null) {
+                        if (nrows.getText()!= null&&ncolumns.getText()!=null && isNumeric(nrows.getText()) && isNumeric(ncolumns.getText())) {
                             if (result3 == JOptionPane.OK_OPTION) {
                                 Integer numfil = Integer.parseInt(nrows.getText());
                                 Integer numcol = Integer.parseInt(ncolumns.getText());
@@ -171,7 +168,7 @@ public class MainMenu {
 
                             }
                         }
-                        if (result3 == JOptionPane.CANCEL_OPTION) ok = true;
+                        if (result3 == JOptionPane.CANCEL_OPTION|| result3==JOptionPane.CLOSED_OPTION) ok = true;
                     }
                     if (!ok) showMessageDialog(null,"Invalid values. Couldn't create document.\nTry again","Error!",JOptionPane.ERROR_MESSAGE);
 
@@ -181,4 +178,21 @@ public class MainMenu {
 
 
     }
+
+    public static boolean isNumeric(String str) {
+        try {
+            Double.parseDouble(str);
+            return true;
+        } catch(NumberFormatException e){
+            return false;
+        }
+    }
+
+    public static JFrame getCurrentFrame(){
+        return frame;
+    }
+
+
+
 }
+

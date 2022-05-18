@@ -93,18 +93,17 @@ public class DomainController {
     }
 
     //gets an array with all the contents of the cells of the current sheet
-    public static String[][] currentSheetCells(){
+    public static String[][] currentSheetCells(String name){
         Vector<Vector<String>> Contents = new Vector<Vector<String>>();
-        for(int i = 0; i < docSheet.getNumRows(); ++i) {
+        for(int i = 0; i < doc.getSheet(name).getNumRows(); ++i) {
                 Contents.add(i,new Vector<String>());
-            for (int j = 0; j < docSheet.getNumCols(); ++j) {
+            for (int j = 0; j < doc.getSheet(name).getNumCols(); ++j) {
                 String content;
-                Cell cell = docSheet.getCells().get(i).get(j);
+                Cell cell = doc.getSheet(name).getCells().get(i).get(j);
                 if (cell.getInfo() == null) { content = " - "; }
                 else if (cell.getType().equals("R")) content = AntiParse(cell.getContent());
                 else content = AntiParse(cell.getInfo());
                 Contents.get(i).add(j,content);
-                System.out.println(cell.getType());
             }
         }
         Vector<String[]> cellsContents = new Vector<String[]>();
@@ -128,7 +127,7 @@ public class DomainController {
     }
     //adds an empty col to the specified position
     public static void sheetAddCol(Integer num, String name){
-        if (doc.getSheet(name)!=null) doc.getSheet(name).NewColumn(num -1);
+        if (doc.getSheet(name)!=null) doc.getSheet(name).NewColumn(num );
     }
 
     public static void sheetAddCols(int num,int pos,String name){
@@ -138,7 +137,7 @@ public class DomainController {
     }
     //deletes a row in the specified position
     public static void sheetDeleteRow(Integer num, String name){
-        if (doc.getSheet(name)!=null) doc.getSheet(name).DeleteRow(num -1);
+        if (doc.getSheet(name)!=null) doc.getSheet(name).DeleteRow(num );
     }
 
     public static void sheetDelRows(int num,int pos,String name){
@@ -148,7 +147,7 @@ public class DomainController {
     }
     //deletes a column in the specified position
     public static void sheetDeleteCol(Integer num, String name){
-        if (doc.getSheet(name)!=null) doc.getSheet(name).DeleteColumn(num -1);
+        if (doc.getSheet(name)!=null) doc.getSheet(name).DeleteColumn(num );
 
     }
     public static void sheetDeleteCols(int num,int pos,String name){
@@ -157,50 +156,67 @@ public class DomainController {
         }
     }
 
-    public static void editCell(int i, int j, String value) {
-        Object parsedValue = Parse(value);
-        Cell cellToEdit = docSheet.getCell(i-1,j-1);
-        docSheet.change_value(cellToEdit,parsedValue);
+    public static void editCell(int i, int j, String value, String name) {
+        Sheet s;
+        if (name != null) {
+            s = doc.getSheet(name);
+            Object parsedValue = Parse(value);
+            Cell cellToEdit = s.getCell(i - 1, j - 1);
+            s.change_value(cellToEdit, parsedValue);
+        }
     }
+    //-----------------------------------BLOCK FUNCTIONS------------------------------
     //-----------------------------------BLOCK FUNCTIONS------------------------------
 
     //Current block initialized, as it's minimum is 1
-    public static Boolean initializeBlock(Integer[] blockCells) {
+    public static Boolean initializeBlock(Integer[] blockCells,String sheetname) {
         if (blockCells[0] <= blockCells[2]  && blockCells[1]  <= blockCells[3] ) {
-            Cell c1 = docSheet.getCell(blockCells[0] -1, blockCells[1] -1);
-            Cell c2 = docSheet.getCell(blockCells[2] -1, blockCells[3] -1);
-            block = docSheet.SelectBlock(c1,c2);
+            Cell c1 = doc.getSheet(sheetname).getCell(blockCells[0] , blockCells[1] );
+            Cell c2 = doc.getSheet(sheetname).getCell(blockCells[2] , blockCells[3] );
+            block = doc.getSheet(sheetname).SelectBlock(c1,c2);
             return true;
         }
             return false;
     }
-    public static Block createBlock(Integer[] blockCells) {
-        if (blockCells[0] <= blockCells[2]  && blockCells[1]  <= blockCells[3] ) {
-            Cell c1 = docSheet.getCell(blockCells[0] -1, blockCells[1] -1);
-            Cell c2 = docSheet.getCell(blockCells[2] -1, blockCells[3] -1);
-            return docSheet.create_block(c1,c2);
+
+
+
+
+    public static Block createBlock(Integer[] blockCells, String name) {
+        if (name != null) {
+            Sheet s=doc.getSheet(name);
+            if (blockCells[0] <= blockCells[2] && blockCells[1] <= blockCells[3]) {
+                Cell c1 = s.getCell(blockCells[0] - 1, blockCells[1] - 1);
+                Cell c2 = s.getCell(blockCells[2] - 1, blockCells[3] - 1);
+                return s.create_block(c1, c2);
+            }
         }
             return null;
     }
 
-    public static String[][] currentBlockCells(){
-        Vector<Vector<String>> Contents = new Vector<Vector<String>>();
-        for(int i = 0; i < docSheet.getSelectedBlock().number_rows(); ++i) {
-            Contents.add(i,new Vector<String>());
-            for (int j = 0; j < docSheet.getSelectedBlock().number_cols(); ++j) {
-                String content;
-                Cell cell = docSheet.getSelectedBlock().getCell(i,j);
-                if (cell.getInfo() == null) { content = " - "; }
-                else if (cell.getType().equals("R")) content = AntiParse(cell.getContent());
-                else content = AntiParse(cell.getInfo());
-                Contents.get(i).add(j,content);
+    public static String[][] currentBlockCells(String name){
+        if (name != null) {
+            Vector<Vector<String>> Contents = new Vector<Vector<String>>();
+            for (int i = 0; i < doc.getSheet(name).getSelectedBlock().number_rows(); ++i) {
+                Contents.add(i, new Vector<String>());
+                for (int j = 0; j < doc.getSheet(name).getSelectedBlock().number_cols(); ++j) {
+                    String content;
+                    Cell cell = doc.getSheet(name).getSelectedBlock().getCell(i, j);
+                    if (cell.getInfo() == null) {
+                        content = " - ";
+                    } else if (cell.getType().equals("R")) content = AntiParse(cell.getContent());
+                    else content = AntiParse(cell.getInfo());
+                    Contents.get(i).add(j, content);
+                }
             }
+            Vector<String[]> cellsContents = new Vector<String[]>();
+            for (int k = 0; k < Contents.size(); ++k) {
+                cellsContents.add(Contents.get(k).toArray(new String[Contents.get(k).size()]));
+            }
+
+            return cellsContents.toArray(new String[Contents.size()][]);
         }
-        Vector<String[]> cellsContents = new Vector<String[]>();
-        for (int k = 0; k < Contents.size(); ++k) {
-            cellsContents.add(Contents.get(k).toArray(new String[Contents.get(k).size()]));
-        }
-        return cellsContents.toArray(new String[Contents.size()][]);
+        return null;
     }
 
     public static String[] currentBlockFind(String value) {
@@ -219,16 +235,16 @@ public class DomainController {
     }
 
     public static boolean currentBlockSort(int nCol, String Criteria){
-        return (docSheet.SortBlock(nCol-1,Criteria));
+        return (docSheet.SortBlock(nCol,Criteria));
     }
 
-    public static void currentBlockFloor(Integer[] blockCells, boolean ref){
-        Block block = createBlock(blockCells);
+    public static void currentBlockFloor(Integer[] blockCells, boolean ref,String name){
+        Block block = createBlock(blockCells,name);
         docSheet.floor(block,ref);
     }
 
-    public static void currentBlockConvert(Integer[] blockCells, boolean ref, String from, String to){
-        Block block = createBlock(blockCells);
+    public static void currentBlockConvert(Integer[] blockCells, boolean ref, String from, String to, String sheetname){
+        Block block = createBlock(blockCells,sheetname);
         docSheet.convert(block, ref, from, to);
     }
 
@@ -238,76 +254,80 @@ public class DomainController {
     public static int currentBlockRows() {
         return docSheet.getSelectedBlock().number_rows();
     }
+
+//    public static String[][] getCurrentBlock(String name){
+//        return doc.getSheet(name).getSelectedBlock().curre;
+//    }
     //-----------------------------FUNCTIONS--------------------------------
 
-    public static void funcAddition(Integer[] Block1, Integer[] Block2, boolean ref) {
-        Block b1 = createBlock(Block1);
-        Block b2 = createBlock(Block2);
+    public static void funcAddition(Integer[] Block1, Integer[] Block2, boolean ref, String sheetname) {
+        Block b1 = createBlock(Block1, sheetname);
+        Block b2 = createBlock(Block2,sheetname);
         docSheet.sum(b1,b2,ref);
     }
 
-    public static void funcSubstraction(Integer[] Block1, Integer[] Block2, boolean ref) {
-        Block b1 = createBlock(Block1);
-        Block b2 = createBlock(Block2);
+    public static void funcSubstraction(Integer[] Block1, Integer[] Block2, boolean ref, String sheetname) {
+        Block b1 = createBlock(Block1,sheetname);
+        Block b2 = createBlock(Block2,sheetname);
         docSheet.substract(b1,b2,ref);
     }
 
-    public static void funcMultiply(Integer[] Block1, Integer[] Block2, boolean ref) {
-        Block b1 = createBlock(Block1);
-        Block b2 = createBlock(Block2);
+    public static void funcMultiply(Integer[] Block1, Integer[] Block2, boolean ref, String sheetname) {
+        Block b1 = createBlock(Block1,sheetname);
+        Block b2 = createBlock(Block2,sheetname);
         docSheet.mult(b1,b2,ref);
     }
 
-    public static void funcDivide(Integer[] Block1, Integer[] Block2, boolean ref) {
-        Block b1 = createBlock(Block1);
-        Block b2 = createBlock(Block2);
+    public static void funcDivide(Integer[] Block1, Integer[] Block2, boolean ref,String sheetname) {
+        Block b1 = createBlock(Block1,sheetname);
+        Block b2 = createBlock(Block2,sheetname);
         docSheet.div(b1,b2,ref);
     }
 
     public static Double funcMean(Integer i, Integer j, boolean val, boolean ref ){
         Cell cell = null;
-        if (val) cell = docSheet.getCells().get(i-1).get(j-1);
+        if (val) cell = docSheet.getCells().get(i).get(j);
         return docSheet.mean(cell,ref,val);
     }
     public static Double funcMedian(Integer i, Integer j,boolean val, boolean ref ){
-        Cell cell = docSheet.getCells().get(i-1).get(j-1);
+        Cell cell = docSheet.getCells().get(i).get(j);
         return docSheet.median(cell,ref,val);
     }
     public static Double funcVariance(Integer i, Integer j,boolean val, boolean ref ){
-        Cell cell = docSheet.getCells().get(i-1).get(j-1);
+        Cell cell = docSheet.getCells().get(i).get(j);
         return docSheet.var(cell,ref,val);
     }
 
-    public static Double funcCovariance(Integer[] block,Integer i, Integer j,boolean val, boolean ref ){
-        Block b1 = createBlock(block);
-        Cell cell = docSheet.getCells().get(i-1).get(j-1);
+    public static Double funcCovariance(Integer[] block,Integer i, Integer j,boolean val, boolean ref,String sheetname ){
+        Block b1 = createBlock(block,sheetname);
+        Cell cell = docSheet.getCells().get(i).get(j);
         return docSheet.covar(b1,cell,ref,val);
     }
 
     public static Double funcStandardDeviation(Integer i, Integer j,boolean val, boolean ref ){
-        Cell cell = docSheet.getCells().get(i-1).get(j-1);
+        Cell cell = docSheet.getCells().get(i).get(j);
         return docSheet.std(cell,ref,val);
     }
 
-    public static Double funcCPearson(Integer[] block,Integer i, Integer j,boolean val, boolean ref ){
-        Block b1 = createBlock(block);
-        Cell cell = docSheet.getCells().get(i-1).get(j-1);
+    public static Double funcCPearson(Integer[] block,Integer i, Integer j,boolean val, boolean ref,String sheetname ){
+        Block b1 = createBlock(block,sheetname);
+        Cell cell = docSheet.getCells().get(i).get(j);
         return docSheet.CPearson(b1,cell,ref,val);
     }
 
 
-    public static void funcExtract(Integer[] block,boolean ref, String ex){
-        Block b1 = createBlock(block);
+    public static void funcExtract(Integer[] block,boolean ref, String ex,String sheetname){
+        Block b1 = createBlock(block,sheetname);
         docSheet.extract(b1,ref,ex);
     }
 
-    public static void funcDayoftheWeek(Integer[] block,boolean ref){
-        Block b1 = createBlock(block);
+    public static void funcDayoftheWeek(Integer[] block,boolean ref,String sheetname){
+        Block b1 = createBlock(block,sheetname);
         docSheet.dayOfTheWeek(b1,ref);
     }
 
-    public static void moveBlock(Integer[] block,boolean ref){
-        Block b1 = createBlock(block);
+    public static void moveBlock(Integer[] block,boolean ref,String sheetname){
+        Block b1 = createBlock(block,sheetname);
         docSheet.MoveBlock(b1,ref);
     }
 
@@ -316,9 +336,27 @@ public class DomainController {
     }
 
     public static Integer funcLength(Integer i, Integer j, String Criterio) {
-        Cell cell = docSheet.getCells().get(i-1).get(j-1);
+        Cell cell = docSheet.getCells().get(i).get(j);
         return docSheet.length((TextCell) cell,Criterio);
     }
+
+    public static String getCellInfo(int r, int c, String sheetname){
+        if(sheetname!=null) {
+            Sheet s = doc.getSheet(sheetname);
+            if(s.getCell(r, c).getInfo()!=null) return AntiParse(s.getCell(r, c).getInfo());
+            else return "";
+        }
+        return null;
+    }
+
+    public static String getCellType(int r,int c, String sheetname){
+        if(sheetname!=null){
+            Sheet s=doc.getSheet(sheetname);
+            return s.getCell(r,c).getType();
+        }
+        return null;
+    }
+
 
 
 
@@ -341,7 +379,6 @@ public class DomainController {
 
     }
     public static String AntiParse(Object o) {
-        System.out.println(o);
         if (o.getClass() == Double.class) return String.valueOf(o);
         else if (o.getClass()== LocalDate.class) return o.toString();
         else return (String) o;

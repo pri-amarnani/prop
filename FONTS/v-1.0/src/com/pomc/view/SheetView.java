@@ -2,15 +2,19 @@ package com.pomc.view;
 
 import javax.sql.RowSetReader;
 import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.table.JTableHeader;
-import javax.swing.table.TableCellRenderer;
-import javax.swing.table.TableColumn;
+import javax.swing.event.CellEditorListener;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
+import javax.swing.table.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.EventObject;
 import java.util.List;
 import java.util.Vector;
 
@@ -20,7 +24,7 @@ import static javax.swing.JOptionPane.showOptionDialog;
 public class SheetView {
     static JTabbedPane sheets = new JTabbedPane();
     public static JPanel cambio(boolean isNew) {
-
+        sheets.removeAll();
         // el panel con barras de scroll automáticas
         JPanel frame = new JPanel(new BorderLayout());
         String[] sheets_names = PresentationController.getSheets();
@@ -30,24 +34,32 @@ public class SheetView {
             int numcol= PresentationController.getSheetCols(i,sheets_names[i]);
             //TABLE
             JTable table = new JTable();
+            table.putClientProperty("terminateEditOnFocusLost", true);
             DefaultTableModel model=new DefaultTableModel(numfil,numcol);
+
             table.setModel(model);
-            ArrayList<String> headers = new ArrayList<>(numfil);
+            ArrayList<String> rowheaders = new ArrayList<>(numfil);
             for (int j = 1; j <= numfil; j++) {
-                headers.add("" + j);
+                rowheaders.add("" + j);
 
             }
             ListModel l = new AbstractListModel() {
                 @Override
                 public int getSize() {
-                    return headers.size();
+                    return rowheaders.size();
                 }
 
                 @Override
                 public Object getElementAt(int index) {
-                    return headers.get(index);
+                    return rowheaders.get(index);
                 }
             };
+
+
+            for (int j=0;j<numcol;j++){
+               table.getColumnModel().getColumn(j).setHeaderValue(numToAlphabet(j));
+            }
+
             JList rowHeader = new JList(l);
 
             rowHeader.setFixedCellWidth(50);
@@ -56,6 +68,8 @@ public class SheetView {
             rowHeader.setBackground(c);
             rowHeader.setBorder(BorderFactory.createLineBorder(Color.WHITE));
             rowHeader.setForeground(Color.WHITE);
+
+
 
             table.getTableHeader().setBorder(BorderFactory.createLineBorder(Color.WHITE));
             table.getTableHeader().setBackground(c);
@@ -75,12 +89,76 @@ public class SheetView {
             // pongo el botón en la ventana
 
             scrollPane.setRowHeaderView(rowHeader);
-
-
-            //new sheet button
-
+            JLabel bar=new JLabel();
+            bar.setBackground(Color.LIGHT_GRAY);
+            bar.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY));
+            bar.setSize(table.getWidth(),30);
+            bar.setText("    ");
+            frame.add(BorderLayout.NORTH,bar);
 
             sheets.addTab(sheets_names[i], null, scrollPane);
+
+
+
+            //Cell listeners
+
+            model.addTableModelListener(new TableModelListener() {
+                @Override
+                public void tableChanged(TableModelEvent e) {
+                    int rowChanged=e.getFirstRow();
+                    int colChanged=e.getColumn();
+                    if (rowChanged>0 && rowChanged<numfil&& colChanged>0 && colChanged<numcol) {
+                        String newValue = (String) table.getValueAt(rowChanged, colChanged);
+                        PresentationController.editedCell(rowChanged, colChanged, newValue, currentSheetName());
+                        //System.out.println(newValue);
+                        PresentationController.showTcells(currentSheetName());
+                    }
+                }
+            });
+
+            table.addMouseListener(new MouseAdapter() {
+                int row1,col1,row2,col2;
+                @Override
+                public void mousePressed(MouseEvent e) {
+                    table.clearSelection();
+                    int row=table.rowAtPoint(e.getPoint());
+                    int col=table.columnAtPoint(e.getPoint());
+                    if(row<numfil && row>=0 && col>=0 && col<numcol){
+                        row1=row;
+                        col1=col;
+                        bar.setText(PresentationController.cellInfo(row,col,currentSheetName()));
+                    }
+
+                }
+
+                @Override
+                public void mouseReleased(MouseEvent e) {
+
+                    int row=table.rowAtPoint(e.getPoint());
+                    int col=table.columnAtPoint(e.getPoint());
+                    if(row<numfil && row>=0 && col>=0 && col<numcol &&row1 != row && col1 != col){
+                        bar.setText(PresentationController.cellInfo(row,col,currentSheetName()));
+                        col2=col;
+                        row2=row;
+                        PresentationController.createBlock(row1,col1,row2,col2,currentSheetName());
+                        PresentationController.showTcells(currentSheetName());
+                    }
+                    else if(row1 == row2 && col1 == col2) {
+
+                    }
+
+                }
+
+            });
+
+            table.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+            table.setColumnSelectionAllowed(false);
+            table.setRowSelectionAllowed(false);
+            table.setCellSelectionEnabled(true);
+
+
+
+
         }
 
     JButton newsheet = new JButton("+");
@@ -91,7 +169,7 @@ public class SheetView {
             Font f= new Font("Comic Sans",Font.BOLD,10);
             newsheet.setFont(f);
             sheets.setSize(5,5);
-           frame.add(BorderLayout.PAGE_END, newsheet);
+            frame.add(BorderLayout.PAGE_END, newsheet);
             JPanel panelboton= new JPanel();
             panelboton.add(newsheet);
             sheets.add("extra",null);
@@ -108,7 +186,9 @@ public class SheetView {
                         boolean ok = false;
                         while (!ok) {
                             int aux = PresentationController.getNumberofSheets() + 1;
-                            JTextField newsheet_title = new JTextField("sheet " + aux);
+                            JTextField newsheet_title;
+                            if (existsSheetName("sheet " + aux)) ++aux;
+                            newsheet_title = new JTextField("sheet " + aux);
                             JTextField nrows = new JTextField("25");
                             JTextField ncolumns = new JTextField("25");
                             Object[] fields = {
@@ -127,18 +207,20 @@ public class SheetView {
                                     null
 
                             );
-                            if (newsheetpop == JOptionPane.OK_OPTION && nrows.getText()!=null &&ncolumns.getText() !=null) {
+                            if (newsheetpop == JOptionPane.OK_OPTION && nrows.getText()!=null &&ncolumns.getText() !=null && isNumeric(nrows.getText()) && isNumeric(ncolumns.getText())) {
                                 Integer numfil = Integer.parseInt(nrows.getText());
                                 Integer numcol = Integer.parseInt(ncolumns.getText());
                                 if (numfil > 0 && numcol > 0) {
-                                    sheets.insertTab(newsheet_title.getText(), null, addSheet(newsheet_title.getText(), numfil, numcol), null, sheets.getTabCount() - 1);
+                                    String title=newsheet_title.getText();
+                                    if (existsSheetName(title)) title=title+"_v2";
+                                    sheets.insertTab(title, null, addSheet(title, numfil, numcol), null, sheets.getTabCount() - 1);
                                     frame.setVisible(true);
                                     sheets.setSelectedIndex(sheets.getTabCount() - 2);
                                     ok=true;
                                 }
                             }
 
-                            if (newsheetpop == JOptionPane.CANCEL_OPTION) ok = true;
+                            if (newsheetpop == JOptionPane.CANCEL_OPTION || newsheetpop==JOptionPane.CLOSED_OPTION) ok = true;
 
                             if (!ok)
                                 showMessageDialog(null, "Invalid values. Couldn't create sheet.\nTry again", "Error!", JOptionPane.ERROR_MESSAGE);
@@ -147,6 +229,12 @@ public class SheetView {
                     }
 
                 });
+
+
+
+
+
+
 
         return frame;
     }
@@ -187,13 +275,56 @@ public class SheetView {
         sheet.add(rows);
         sheet.add(cols);
         sheet.add(delete);
+        
+        JMenuBar jmbar_sheet= new JMenuBar();
+        jmbar_sheet.add(Box.createHorizontalGlue());
+        // TODO: 18/5/22 persistencia 
+        ImageIcon findIcon= new ImageIcon("find.png");
+        Image fIcon=findIcon.getImage();
+        Image fi=fIcon.getScaledInstance(40,40,Image.SCALE_DEFAULT);
+        findIcon.setImage(fi);
+        JButton find= new JButton(findIcon);
+        Color c = new Color(70, 130, 180);
+        find.setBackground(jmbar_sheet.getBackground());
+        find.setBorder(BorderFactory.createLineBorder(c,1));
+        jmbar_sheet.add(find);
 
+        ImageIcon findRIcon= new ImageIcon("findR.png");
+        Image fRcon=findRIcon.getImage();
+        Image fr=fRcon.getScaledInstance(40,40,Image.SCALE_DEFAULT);
+        findRIcon.setImage(fr);
+        JButton findR= new JButton(findRIcon);
+        findR.setBackground(jmbar_sheet.getBackground());
+        findR.setBorder(BorderFactory.createLineBorder(c,1));
+        jmbar_sheet.add(BorderLayout.CENTER,findR);
+
+
+        ImageIcon sort= new ImageIcon("sort.png");
+        Image sortI=sort.getImage();
+        Image s=sortI.getScaledInstance(40,40,Image.SCALE_DEFAULT);
+        sort.setImage(s);
+        JButton sortB= new JButton(sort);
+        sortB.setBackground(jmbar_sheet.getBackground());
+        sortB.setBorder(BorderFactory.createLineBorder(c,1));
+        jmbar_sheet.add(BorderLayout.CENTER,sortB);
+
+        jmbar_sheet.add(Box.createHorizontalGlue());
+
+        JPanel mp= (JPanel) MainMenu.getCurrentFrame().getContentPane().getComponent(0);
+        mp.add(BorderLayout.CENTER,jmbar_sheet);
         /*JMenu sheets= new JMenu("Change sheet");
         JMenuItem changesheets= new JRadioButtonMenuItem();
         sheets.add(changesheets);
         mb.add(sheets,2);*/
         mb.add(block,1);
         mb.add(sheet,2);
+
+        create.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        });
         closeB.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
 
@@ -206,12 +337,7 @@ public class SheetView {
             }
         });
 
-        create.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                //PresentationController.createBlock(2,1,2,2,0);
-            }
-        });
+
 
         change_name.addActionListener(new ActionListener() {
             @Override
@@ -235,7 +361,7 @@ public class SheetView {
             @Override
             public void actionPerformed(ActionEvent e) {
                 SpinnerNumberModel snm= new SpinnerNumberModel(1,1,100000,1);
-                SpinnerNumberModel snm2= new SpinnerNumberModel(getCurrentTable().getModel().getRowCount(),1,getCurrentTable().getModel().getRowCount(),1);
+                SpinnerNumberModel snm2= new SpinnerNumberModel(getCurrentTable().getModel().getRowCount()+1,1,getCurrentTable().getModel().getRowCount()+1,1);
                 JSpinner jsp=new JSpinner(snm);
                 JSpinner jsp2=new JSpinner(snm2);
                 //FALTA PREGUNTAR ON
@@ -253,6 +379,7 @@ public class SheetView {
 
                 );
                 if (addR==JOptionPane.OK_OPTION) {
+
                     PresentationController.addRow(currentSheetName(), (Integer) jsp.getValue(), (Integer) jsp2.getValue());
                     DefaultTableModel tmodel = (DefaultTableModel) getCurrentTable().getModel();
                     //  tmodel.setRowCount(0);
@@ -264,7 +391,7 @@ public class SheetView {
                     for (int k = 0; k < (Integer) jsp.getValue(); k++) {
                         tmodel.insertRow((Integer) jsp2.getValue()-1, newRow.toArray());
                     }
-                    updateHeaders();
+                    updateRowHeaders();
                 }
             }
         });
@@ -291,17 +418,17 @@ public class SheetView {
 
                 );
                 if (addC==JOptionPane.OK_OPTION) {
-                    PresentationController.addCols(currentSheetName(), (Integer) jsp.getValue(), (Integer) jsp2.getValue());
+                    PresentationController.addCols(currentSheetName(), (Integer) jsp.getValue(), (Integer) jsp2.getValue()-1);
                     DefaultTableModel tmodel = (DefaultTableModel) getCurrentTable().getModel();
 
                     for (int k = 0; k < (Integer) jsp.getValue(); k++) {
                         TableColumn col= new TableColumn(tmodel.getColumnCount());
                         getCurrentTable().addColumn(col);
-                        int a=(Integer)jsp2.getValue();
+                        int a=(Integer)jsp2.getValue()-1;
                         tmodel.addColumn( getCurrentTable().getColumnModel().getColumn(a).getHeaderValue());//NO SE ACTUALIZA BIEN SI NO SE AÑADE AL FINAL
-                        getCurrentTable().moveColumn(getCurrentTable().getColumnCount()-1,a);
+                        getCurrentTable().moveColumn(getCurrentTable().getColumnCount(),a);
                     }
-
+                        updateColHeaders();
                 }
             }
         });
@@ -328,7 +455,7 @@ public class SheetView {
 
                 );
                 if (DelR==JOptionPane.OK_OPTION) {
-                    PresentationController.delRow(currentSheetName(), (Integer) jsp.getValue(), (Integer) jsp2.getValue());
+                    PresentationController.delRow(currentSheetName(), (Integer) jsp.getValue(), (Integer) jsp2.getValue()-1);
                     DefaultTableModel tmodel = (DefaultTableModel) getCurrentTable().getModel();
                     //  tmodel.setRowCount(0);
 
@@ -336,7 +463,7 @@ public class SheetView {
                         int a=(Integer) jsp2.getValue()-1;
                         tmodel.removeRow(a);
                     }
-                    updateHeaders();
+                    updateRowHeaders();
                 }
             }
         });
@@ -353,7 +480,7 @@ public class SheetView {
                         "Insert the number of columns to delete",jsp,
                         "Insert the position from where you want to delete the columns",jsp2
                 };
-                int DelR = JOptionPane.showConfirmDialog(
+                int DelC = JOptionPane.showConfirmDialog(
                         null,
                         spinners,
                         "Delete columns",
@@ -362,8 +489,8 @@ public class SheetView {
                         null
 
                 );
-                if (DelR==JOptionPane.OK_OPTION) {
-                    PresentationController.delCols(currentSheetName(), (Integer) jsp.getValue(), (Integer) jsp2.getValue());
+                if (DelC==JOptionPane.OK_OPTION) {
+                    PresentationController.delCols(currentSheetName(), (Integer) jsp.getValue(), (Integer) jsp2.getValue()-1);
                     DefaultTableModel tmodel = (DefaultTableModel) getCurrentTable().getModel();
 
 
@@ -374,9 +501,11 @@ public class SheetView {
                         getCurrentTable().revalidate();
                         //FALTA UPDATE HEADER
                     }
-
+                    updateColHeaders();
                 }
+
             }
+
         });
 
         delete.addActionListener(new ActionListener() {
@@ -386,6 +515,7 @@ public class SheetView {
                 sheets.remove(sheets.getSelectedIndex());
             }
         });
+
 
     }
 
@@ -442,20 +572,32 @@ public class SheetView {
 
             //new sheet button
 
+        model.addTableModelListener(new TableModelListener() {
+            @Override
+            public void tableChanged(TableModelEvent e) {
+                int rowChanged=e.getFirstRow();
+                int colChanged=e.getColumn();
+                String newValue= (String) table.getValueAt(rowChanged,colChanged);
+                PresentationController.editedCell(rowChanged,colChanged,newValue,currentSheetName());
+                //System.out.println(newValue);
+                PresentationController.showTcells(currentSheetName());
+
+            }
+        });
             return scrollPane;
 
     }
-    public static String convertToNumberingScheme(int number) {
-        var letters  = "";
-        do {
-            number -= 1;
-            char letra = (char) (65 + (number % 26));
-            letters = letra + letters;
-            number = (number / 26); // quick `floor`
-        } while(number > 0);
-
-        return letters;
-    }
+//    public static String convertToNumberingScheme(int number) {
+//        var letters  = "";
+//        do {
+//            number -= 1;
+//            char letra = (char) (65 + (number % 26));
+//            letters = letra + letters;
+//            number = (number / 26); // quick `floor`
+//        } while(number > 0);
+//
+//        return letters;
+//    }
 
     private static ListCellRenderer<? super String> getRenderer() {
         return new DefaultListCellRenderer() {
@@ -485,6 +627,8 @@ public class SheetView {
         return (JTable) sp.getViewport().getComponent(0);
     }
 
+
+
     public static JScrollPane getCurrentScroll(){
         int a= sheets.getSelectedIndex();
         JScrollPane sp;
@@ -492,7 +636,7 @@ public class SheetView {
         else {sp= (JScrollPane) sheets.getComponent(a+1);}
         return sp;
     }
-    public static void updateHeaders(){
+    public static void updateRowHeaders(){
         JTable current= getCurrentTable();
         DefaultTableModel tmodel= (DefaultTableModel) current.getModel();
         int numfil=tmodel.getRowCount();
@@ -525,8 +669,50 @@ public class SheetView {
         current.getTableHeader().setForeground(Color.WHITE);
         rowHeader.setCellRenderer(getRenderer());
         getCurrentScroll().setRowHeaderView(rowHeader);
-
+        
 
     }
+
+    public static void updateColHeaders(){
+        for (int j=0;j<getCurrentTable().getColumnCount();j++){
+            getCurrentTable().getColumnModel().getColumn(j).setHeaderValue(numToAlphabet(j));
+        }
+    }
+
+    public static boolean isNumeric(String str) {
+        try {
+            Double.parseDouble(str);
+            return true;
+        } catch(NumberFormatException e){
+            return false;
+        }
+    }
+
+    public static boolean existsSheetName(String name){
+        for (int i=0;i<sheets.getTabCount();i++){
+            if (sheets.getTitleAt(i).equals(name)) return true;
+        }
+        return false;
+    }
+
+    public static String numToAlphabet(int i) {
+        if( i<0 ) {
+            return "-"+numToAlphabet(-i-1);
+        }
+
+        int quot = i/26;
+        int rem = i%26;
+        char letter = (char)((int)'A' + rem);
+        if( quot == 0 ) {
+            return ""+letter;
+        } else {
+            return numToAlphabet(quot-1) + letter;
+        }
+    }
+
+
+
+
+
 
 }
