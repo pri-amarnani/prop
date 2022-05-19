@@ -92,7 +92,7 @@ public class MainMenu {
         //JLabel intro = new JLabel("<html>BIENVENIDO A POMC WORKSHEETS<br/><br/><br/>Para empezar crea un nuevo archivo</html>");
         //intro.setFont(new Font("Serif",Font.BOLD,25));
         //intro.setAlignmentX(Component.CENTER_ALIGNMENT);
-        BufferedImage logo= ImageIO.read(new File("LOGO.png"));
+        BufferedImage logo= ImageIO.read(new File("res/LOGO.png")); //TODO Persistencia
         JLabel logoLabel= new JLabel(new ImageIcon(logo));
         top.setBackground(Color.white);
         top.add(logoLabel,BorderLayout.CENTER);

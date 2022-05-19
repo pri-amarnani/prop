@@ -107,7 +107,7 @@ public class SheetView {
                 public void tableChanged(TableModelEvent e) {
                     int rowChanged=e.getFirstRow();
                     int colChanged=e.getColumn();
-                    if (rowChanged>0 && rowChanged<numfil&& colChanged>0 && colChanged<numcol) {
+                    if (rowChanged>=0 && rowChanged<table.getRowCount()&& colChanged>=0 && colChanged<table.getColumnCount()) {
                         String newValue = (String) table.getValueAt(rowChanged, colChanged);
                         PresentationController.editedCell(rowChanged, colChanged, newValue, currentSheetName());
                         //System.out.println(newValue);
@@ -123,7 +123,7 @@ public class SheetView {
                     table.clearSelection();
                     int row=table.rowAtPoint(e.getPoint());
                     int col=table.columnAtPoint(e.getPoint());
-                    if(row<numfil && row>=0 && col>=0 && col<numcol){
+                    if(row<table.getRowCount() && row>=0 && col>=0 && col<table.getColumnCount()){
                         row1=row;
                         col1=col;
                         bar.setText(PresentationController.cellInfo(row,col,currentSheetName()));
@@ -136,17 +136,15 @@ public class SheetView {
 
                     int row=table.rowAtPoint(e.getPoint());
                     int col=table.columnAtPoint(e.getPoint());
-                    if(row<numfil && row>=0 && col>=0 && col<numcol &&row1 != row && col1 != col){
-                        bar.setText(PresentationController.cellInfo(row,col,currentSheetName()));
-                        col2=col;
-                        row2=row;
-                        PresentationController.createBlock(row1,col1,row2,col2,currentSheetName());
-                        PresentationController.showTcells(currentSheetName());
+                    if(row<table.getRowCount() && row>=0 && col>=0 && col<table.getColumnCount() ){
+                        if (row1 != row || col1 != col ) {
+                            bar.setText(PresentationController.cellInfo(row,col,currentSheetName()));
+                            col2=col;
+                            row2=row;
+                            PresentationController.createBlock(row1,col1,row2,col2,currentSheetName());
+                            PresentationController.showTcells(currentSheetName());
+                        }
                     }
-                    else if(row1 == row2 && col1 == col2) {
-
-                    }
-
                 }
 
             });
@@ -279,7 +277,7 @@ public class SheetView {
         JMenuBar jmbar_sheet= new JMenuBar();
         jmbar_sheet.add(Box.createHorizontalGlue());
         // TODO: 18/5/22 persistencia 
-        ImageIcon findIcon= new ImageIcon("find.png");
+        ImageIcon findIcon= new ImageIcon("res/find.png");
         Image fIcon=findIcon.getImage();
         Image fi=fIcon.getScaledInstance(40,40,Image.SCALE_DEFAULT);
         findIcon.setImage(fi);
@@ -289,7 +287,7 @@ public class SheetView {
         find.setBorder(BorderFactory.createLineBorder(c,1));
         jmbar_sheet.add(find);
 
-        ImageIcon findRIcon= new ImageIcon("findR.png");
+        ImageIcon findRIcon= new ImageIcon("res/findR.png");
         Image fRcon=findRIcon.getImage();
         Image fr=fRcon.getScaledInstance(40,40,Image.SCALE_DEFAULT);
         findRIcon.setImage(fr);
@@ -299,7 +297,7 @@ public class SheetView {
         jmbar_sheet.add(BorderLayout.CENTER,findR);
 
 
-        ImageIcon sort= new ImageIcon("sort.png");
+        ImageIcon sort= new ImageIcon("res/sort.png");
         Image sortI=sort.getImage();
         Image s=sortI.getScaledInstance(40,40,Image.SCALE_DEFAULT);
         sort.setImage(s);
@@ -418,15 +416,18 @@ public class SheetView {
 
                 );
                 if (addC==JOptionPane.OK_OPTION) {
-                    PresentationController.addCols(currentSheetName(), (Integer) jsp.getValue(), (Integer) jsp2.getValue()-1);
+                    PresentationController.addCols(currentSheetName(), (Integer) jsp.getValue(), (Integer) jsp2.getValue());
                     DefaultTableModel tmodel = (DefaultTableModel) getCurrentTable().getModel();
 
                     for (int k = 0; k < (Integer) jsp.getValue(); k++) {
                         TableColumn col= new TableColumn(tmodel.getColumnCount());
                         getCurrentTable().addColumn(col);
-                        int a=(Integer)jsp2.getValue()-1;
+                        int a=(Integer)jsp2.getValue();
+                        System.out.println(a);
+                        System.out.println(getCurrentTable().getColumnCount());
                         tmodel.addColumn( getCurrentTable().getColumnModel().getColumn(a).getHeaderValue());//NO SE ACTUALIZA BIEN SI NO SE AÑADE AL FINAL
-                        getCurrentTable().moveColumn(getCurrentTable().getColumnCount(),a);
+                        int b = getCurrentTable().getColumnCount()-1;
+                        getCurrentTable().moveColumn(b,a);
                     }
                         updateColHeaders();
                 }
@@ -577,6 +578,7 @@ public class SheetView {
             public void tableChanged(TableModelEvent e) {
                 int rowChanged=e.getFirstRow();
                 int colChanged=e.getColumn();
+                System.out.println(rowChanged+ " + "+ colChanged);
                 String newValue= (String) table.getValueAt(rowChanged,colChanged);
                 PresentationController.editedCell(rowChanged,colChanged,newValue,currentSheetName());
                 //System.out.println(newValue);

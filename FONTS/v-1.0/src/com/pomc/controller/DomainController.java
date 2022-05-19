@@ -161,7 +161,7 @@ public class DomainController {
         if (name != null) {
             s = doc.getSheet(name);
             Object parsedValue = Parse(value);
-            Cell cellToEdit = s.getCell(i - 1, j - 1);
+            Cell cellToEdit = s.getCell(i , j );
             s.change_value(cellToEdit, parsedValue);
         }
     }
