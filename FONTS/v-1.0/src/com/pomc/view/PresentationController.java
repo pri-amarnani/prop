@@ -61,7 +61,10 @@ public class PresentationController {
 
     public static void delSheet(String name){DomainController.deleteSheet(name);}
 
-    public static void editedCell(int r,int c, String newValue, String SheetName){DomainController.editCell(r,c,newValue,SheetName);}
+    public static void editedCell(int r,int c, String newValue, String SheetName){
+        DomainController.editCell(r,c,newValue,SheetName);
+     //   System.out.println("cell row is "+r+" , cell col is "+c+" and the value is "+newValue);
+    }
 
     public static void showTcells(String name){
         String[][] cellsContents = DomainController.currentBlockCells(name);

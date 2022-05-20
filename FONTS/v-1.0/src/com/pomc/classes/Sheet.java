@@ -17,7 +17,6 @@ public class Sheet {
 
         for(int i = 0; i < b.number_rows(); ++ i){
             for(int j = 0; j < b.number_cols(); ++j){
-                System.out.print(" t: "+ul.getType());
                 cells.elementAt(ul.getRow() + i).setElementAt(b.getCell(i,j),ul.getColumn() + j);
             }
         }
@@ -126,7 +125,7 @@ public class Sheet {
         Object o1 = c.changeValue(o);
         if(id != -1) cells.elementAt(id2).setElementAt((Cell) o1, id);
         else System.out.println("Cell not found");
-        System.out.println(cells.elementAt(id2).elementAt(id).getType());
+
     }
 
     public void NewRow(int pos){
@@ -212,8 +211,8 @@ public class Sheet {
     }
 
     public Block SelectBlock(Cell c1, Cell c2){
-        System.out.println(c1.getRow() + " " + c2.getRow());
-        System.out.println(c1.getInfo() + " " + c2.getInfo());
+//        System.out.println(c1.getRow() + " " + c2.getRow());
+//        System.out.println(c1.getInfo() + " " + c2.getInfo());
         b_selected = null;
         Block b = create_block(c1,c2);
         b_selected = b;

@@ -107,11 +107,12 @@ public class SheetView {
                 public void tableChanged(TableModelEvent e) {
                     int rowChanged=e.getFirstRow();
                     int colChanged=e.getColumn();
-                    if (rowChanged>=0 && rowChanged<table.getRowCount()&& colChanged>=0 && colChanged<table.getColumnCount()) {
-                        String newValue = (String) table.getValueAt(rowChanged, colChanged);
-                        PresentationController.editedCell(rowChanged, colChanged, newValue, currentSheetName());
-                        //System.out.println(newValue);
-                        PresentationController.showTcells(currentSheetName());
+                    if (rowChanged>=0 && rowChanged<getCurrentTable().getRowCount()&& colChanged>=0 && colChanged<getCurrentTable().getColumnCount()) {
+                        String newValue = (String) getCurrentTable().getModel().getValueAt(rowChanged, colChanged);
+                        int ids[]=getIds(newValue);
+                        PresentationController.editedCell(ids[0], ids[1], newValue, currentSheetName());
+                        //PresentationController.showTcells(currentSheetName());
+
                     }
                 }
             });
@@ -420,15 +421,16 @@ public class SheetView {
                     DefaultTableModel tmodel = (DefaultTableModel) getCurrentTable().getModel();
 
                     for (int k = 0; k < (Integer) jsp.getValue(); k++) {
+                        getCurrentTable().setAutoCreateColumnsFromModel(false);
                         TableColumn col= new TableColumn(tmodel.getColumnCount());
                         getCurrentTable().addColumn(col);
                         int a=(Integer)jsp2.getValue();
-                        System.out.println(a);
-                        System.out.println(getCurrentTable().getColumnCount());
+
                         tmodel.addColumn( getCurrentTable().getColumnModel().getColumn(a).getHeaderValue());//NO SE ACTUALIZA BIEN SI NO SE AÑADE AL FINAL
                         int b = getCurrentTable().getColumnCount()-1;
-                        getCurrentTable().moveColumn(b,a);
+                        getCurrentTable().moveColumn(b,a+k);
                     }
+                        ((DefaultTableModel) getCurrentTable().getModel()).fireTableDataChanged();
                         updateColHeaders();
                 }
             }
@@ -456,7 +458,7 @@ public class SheetView {
 
                 );
                 if (DelR==JOptionPane.OK_OPTION) {
-                    PresentationController.delRow(currentSheetName(), (Integer) jsp.getValue(), (Integer) jsp2.getValue()-1);
+                    PresentationController.delRow(currentSheetName(), (Integer) jsp.getValue(), (Integer) jsp2.getValue());
                     DefaultTableModel tmodel = (DefaultTableModel) getCurrentTable().getModel();
                     //  tmodel.setRowCount(0);
 
@@ -491,13 +493,14 @@ public class SheetView {
 
                 );
                 if (DelC==JOptionPane.OK_OPTION) {
-                    PresentationController.delCols(currentSheetName(), (Integer) jsp.getValue(), (Integer) jsp2.getValue()-1);
+                    PresentationController.delCols(currentSheetName(), (Integer) jsp.getValue(), (Integer) jsp2.getValue());
                     DefaultTableModel tmodel = (DefaultTableModel) getCurrentTable().getModel();
 
 
                     for (int k = 0; k < (Integer) jsp.getValue(); k++) {
                         int a=(Integer) jsp2.getValue()-1;
-                        TableColumn t=getCurrentTable().getColumnModel().getColumn(a);
+                        //System.out.println(a);
+                        TableColumn t=getCurrentTable().getColumn(a);
                         getCurrentTable().removeColumn(t);
                         getCurrentTable().revalidate();
                         //FALTA UPDATE HEADER
@@ -580,9 +583,11 @@ public class SheetView {
                 int colChanged=e.getColumn();
                 System.out.println(rowChanged+ " + "+ colChanged);
                 String newValue= (String) table.getValueAt(rowChanged,colChanged);
+                System.out.println("cell row is "+rowChanged+" , cell col is "+colChanged+" and the value is "+newValue);
                 PresentationController.editedCell(rowChanged,colChanged,newValue,currentSheetName());
+
                 //System.out.println(newValue);
-                PresentationController.showTcells(currentSheetName());
+               // PresentationController.showTcells(currentSheetName());
 
             }
         });
@@ -710,6 +715,21 @@ public class SheetView {
         } else {
             return numToAlphabet(quot-1) + letter;
         }
+    }
+
+    public static int[] getIds(String s){
+        int found[] = new int[2];
+        if(s!=null) {
+            for (int i = 0; i < getCurrentTable().getRowCount(); i++) {
+                for (int j = 0; j < getCurrentTable().getColumnCount(); j++) {
+                    if (getCurrentTable().getValueAt(i, j)!= null && getCurrentTable().getValueAt(i, j).equals(s)) {
+                        found[0] = i;
+                        found[1] = j;
+                    }
+                }
+            }
+        }
+        return found;
     }
 
 
