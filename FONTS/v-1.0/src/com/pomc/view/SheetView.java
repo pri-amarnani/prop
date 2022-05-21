@@ -57,7 +57,7 @@ public class SheetView {
 
 
             for (int j=0;j<numcol;j++){
-               table.getColumnModel().getColumn(j).setHeaderValue(numToAlphabet(j));
+                table.getColumnModel().getColumn(j).setHeaderValue(numToAlphabet(j));
             }
 
             JList rowHeader = new JList(l);
@@ -75,7 +75,6 @@ public class SheetView {
             table.getTableHeader().setBackground(c);
             table.getTableHeader().setForeground(Color.WHITE);
             rowHeader.setCellRenderer(getRenderer());
-            table.setAutoCreateColumnsFromModel(false);
 
             model = (DefaultTableModel) (table.getModel());
 
@@ -108,18 +107,12 @@ public class SheetView {
                 public void tableChanged(TableModelEvent e) {
                     int rowChanged=e.getFirstRow();
                     int colChanged=e.getColumn();
-                    System.out.println(rowChanged+ " + "+ colChanged );
-                    String colName = getCurrentTable().getModel().getColumnName(colChanged);
-                    if(!colName.equals(numToAlphabet(colChanged))){
-                        colChanged = alphabetToNum(colName);
-                    }
+                    if (rowChanged>=0 && rowChanged<getCurrentTable().getRowCount()&& colChanged>=0 && colChanged<getCurrentTable().getColumnCount()) {
+                        String newValue = (String) getCurrentTable().getModel().getValueAt(rowChanged, colChanged);
+                        int ids[]=getIds(newValue);
+                        PresentationController.editedCell(ids[0], ids[1], newValue, currentSheetName());
+                        //PresentationController.showTcells(currentSheetName());
 
-                    if (rowChanged>=0 && rowChanged<table.getRowCount()&& colChanged>=0 && colChanged<table.getColumnCount()) {
-
-                        String newValue = (String) table.getValueAt(rowChanged, colChanged);
-                        PresentationController.editedCell(rowChanged, colChanged, newValue, currentSheetName());
-                        //System.out.println(newValue);
-                        PresentationController.showTcells(currentSheetName());
                     }
                 }
             });
@@ -167,74 +160,74 @@ public class SheetView {
 
         }
 
-    JButton newsheet = new JButton("+");
-            newsheet.setBorderPainted(false);
-            newsheet.setFocusPainted(false);
-            newsheet.setContentAreaFilled(false);
-            newsheet.setBackground(frame.getBackground());
-            Font f= new Font("Comic Sans",Font.BOLD,10);
-            newsheet.setFont(f);
-            sheets.setSize(5,5);
-            frame.add(BorderLayout.PAGE_END, newsheet);
-            JPanel panelboton= new JPanel();
-            panelboton.add(newsheet);
-            sheets.add("extra",null);
-            sheets.setTabComponentAt(sheets.getTabCount()-1,panelboton);
-            sheets.setEnabledAt(sheets.getTabCount()-1,false);
+        JButton newsheet = new JButton("+");
+        newsheet.setBorderPainted(false);
+        newsheet.setFocusPainted(false);
+        newsheet.setContentAreaFilled(false);
+        newsheet.setBackground(frame.getBackground());
+        Font f= new Font("Comic Sans",Font.BOLD,10);
+        newsheet.setFont(f);
+        sheets.setSize(5,5);
+        frame.add(BorderLayout.PAGE_END, newsheet);
+        JPanel panelboton= new JPanel();
+        panelboton.add(newsheet);
+        sheets.add("extra",null);
+        sheets.setTabComponentAt(sheets.getTabCount()-1,panelboton);
+        sheets.setEnabledAt(sheets.getTabCount()-1,false);
 
         frame.add(BorderLayout.CENTER, sheets);
 
 
-                newsheet.addActionListener(new ActionListener() {
+        newsheet.addActionListener(new ActionListener() {
 
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        boolean ok = false;
-                        while (!ok) {
-                            int aux = PresentationController.getNumberofSheets() + 1;
-                            JTextField newsheet_title;
-                            if (existsSheetName("sheet " + aux)) ++aux;
-                            newsheet_title = new JTextField("sheet " + aux);
-                            JTextField nrows = new JTextField("25");
-                            JTextField ncolumns = new JTextField("25");
-                            Object[] fields = {
-                                    //"Insert a title for the new document",title,
-                                    "Insert a title for the new sheet", newsheet_title,
-                                    "Insert the number of rows in the new sheet", nrows,
-                                    "Insert the number of columns in the new sheet", ncolumns,
-                            };
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                boolean ok = false;
+                while (!ok) {
+                    int aux = PresentationController.getNumberofSheets() + 1;
+                    JTextField newsheet_title;
+                    if (existsSheetName("sheet " + aux)) ++aux;
+                    newsheet_title = new JTextField("sheet " + aux);
+                    JTextField nrows = new JTextField("25");
+                    JTextField ncolumns = new JTextField("25");
+                    Object[] fields = {
+                            //"Insert a title for the new document",title,
+                            "Insert a title for the new sheet", newsheet_title,
+                            "Insert the number of rows in the new sheet", nrows,
+                            "Insert the number of columns in the new sheet", ncolumns,
+                    };
 
-                            int newsheetpop = JOptionPane.showConfirmDialog(
-                                    null,
-                                    fields,
-                                    "New sheet",
-                                    JOptionPane.OK_CANCEL_OPTION,
-                                    JOptionPane.PLAIN_MESSAGE,
-                                    null
+                    int newsheetpop = JOptionPane.showConfirmDialog(
+                            null,
+                            fields,
+                            "New sheet",
+                            JOptionPane.OK_CANCEL_OPTION,
+                            JOptionPane.PLAIN_MESSAGE,
+                            null
 
-                            );
-                            if (newsheetpop == JOptionPane.OK_OPTION && nrows.getText()!=null &&ncolumns.getText() !=null && isNumeric(nrows.getText()) && isNumeric(ncolumns.getText())) {
-                                Integer numfil = Integer.parseInt(nrows.getText());
-                                Integer numcol = Integer.parseInt(ncolumns.getText());
-                                if (numfil > 0 && numcol > 0) {
-                                    String title=newsheet_title.getText();
-                                    if (existsSheetName(title)) title=title+"_v2";
-                                    sheets.insertTab(title, null, addSheet(title, numfil, numcol), null, sheets.getTabCount() - 1);
-                                    frame.setVisible(true);
-                                    sheets.setSelectedIndex(sheets.getTabCount() - 2);
-                                    ok=true;
-                                }
-                            }
-
-                            if (newsheetpop == JOptionPane.CANCEL_OPTION || newsheetpop==JOptionPane.CLOSED_OPTION) ok = true;
-
-                            if (!ok)
-                                showMessageDialog(null, "Invalid values. Couldn't create sheet.\nTry again", "Error!", JOptionPane.ERROR_MESSAGE);
-
+                    );
+                    if (newsheetpop == JOptionPane.OK_OPTION && nrows.getText()!=null &&ncolumns.getText() !=null && isNumeric(nrows.getText()) && isNumeric(ncolumns.getText())) {
+                        Integer numfil = Integer.parseInt(nrows.getText());
+                        Integer numcol = Integer.parseInt(ncolumns.getText());
+                        if (numfil > 0 && numcol > 0) {
+                            String title=newsheet_title.getText();
+                            if (existsSheetName(title)) title=title+"_v2";
+                            sheets.insertTab(title, null, addSheet(title, numfil, numcol), null, sheets.getTabCount() - 1);
+                            frame.setVisible(true);
+                            sheets.setSelectedIndex(sheets.getTabCount() - 2);
+                            ok=true;
                         }
                     }
 
-                });
+                    if (newsheetpop == JOptionPane.CANCEL_OPTION || newsheetpop==JOptionPane.CLOSED_OPTION) ok = true;
+
+                    if (!ok)
+                        showMessageDialog(null, "Invalid values. Couldn't create sheet.\nTry again", "Error!", JOptionPane.ERROR_MESSAGE);
+
+                }
+            }
+
+        });
 
 
 
@@ -281,10 +274,10 @@ public class SheetView {
         sheet.add(rows);
         sheet.add(cols);
         sheet.add(delete);
-        
+
         JMenuBar jmbar_sheet= new JMenuBar();
         jmbar_sheet.add(Box.createHorizontalGlue());
-        // TODO: 18/5/22 persistencia 
+        // TODO: 18/5/22 persistencia
         ImageIcon findIcon= new ImageIcon("res/find.png");
         Image fIcon=findIcon.getImage();
         Image fi=fIcon.getScaledInstance(40,40,Image.SCALE_DEFAULT);
@@ -428,18 +421,17 @@ public class SheetView {
                     DefaultTableModel tmodel = (DefaultTableModel) getCurrentTable().getModel();
 
                     for (int k = 0; k < (Integer) jsp.getValue(); k++) {
+                        getCurrentTable().setAutoCreateColumnsFromModel(false);
                         TableColumn col= new TableColumn(tmodel.getColumnCount());
                         getCurrentTable().addColumn(col);
-                        int a= (int) jsp2.getValue();
-                        //System.out.println(a);
-                        //System.out.println(getCurrentTable().getColumnCount());
+                        int a=(Integer)jsp2.getValue();
+
                         tmodel.addColumn( getCurrentTable().getColumnModel().getColumn(a).getHeaderValue());//NO SE ACTUALIZA BIEN SI NO SE AÑADE AL FINAL
                         int b = getCurrentTable().getColumnCount()-1;
-                        getCurrentTable().moveColumn(b,a);
-
-                        //System.out.println(getCurrentTable().convertColumnIndexToView(b));
+                        getCurrentTable().moveColumn(b,a+k);
                     }
-                        updateColHeaders();
+                    ((DefaultTableModel) getCurrentTable().getModel()).fireTableDataChanged();
+                    updateColHeaders();
                 }
             }
         });
@@ -466,7 +458,7 @@ public class SheetView {
 
                 );
                 if (DelR==JOptionPane.OK_OPTION) {
-                    PresentationController.delRow(currentSheetName(), (Integer) jsp.getValue(), (Integer) jsp2.getValue()-1);
+                    PresentationController.delRow(currentSheetName(), (Integer) jsp.getValue(), (Integer) jsp2.getValue());
                     DefaultTableModel tmodel = (DefaultTableModel) getCurrentTable().getModel();
                     //  tmodel.setRowCount(0);
 
@@ -501,13 +493,14 @@ public class SheetView {
 
                 );
                 if (DelC==JOptionPane.OK_OPTION) {
-                    PresentationController.delCols(currentSheetName(), (Integer) jsp.getValue(), (Integer) jsp2.getValue()-1);
+                    PresentationController.delCols(currentSheetName(), (Integer) jsp.getValue(), (Integer) jsp2.getValue());
                     DefaultTableModel tmodel = (DefaultTableModel) getCurrentTable().getModel();
 
 
                     for (int k = 0; k < (Integer) jsp.getValue(); k++) {
                         int a=(Integer) jsp2.getValue()-1;
-                        TableColumn t=getCurrentTable().getColumnModel().getColumn(a);
+                        //System.out.println(a);
+                        TableColumn t=getCurrentTable().getColumn(a);
                         getCurrentTable().removeColumn(t);
                         getCurrentTable().revalidate();
                         //FALTA UPDATE HEADER
@@ -534,54 +527,54 @@ public class SheetView {
         PresentationController.newSheet(title,numfil,numcol);
         String[] sheets_names = PresentationController.getSheets();
 
-            //TABLE
-            JTable table = new JTable(numfil,numcol );
-            DefaultTableModel model;
+        //TABLE
+        JTable table = new JTable(numfil,numcol );
+        DefaultTableModel model;
 
-            ArrayList<String> headers = new ArrayList<>(numfil);
-            for (int j = 1; j <= numfil; j++) {
-                headers.add("" + j);
+        ArrayList<String> headers = new ArrayList<>(numfil);
+        for (int j = 1; j <= numfil; j++) {
+            headers.add("" + j);
+        }
+        ListModel l = new AbstractListModel() {
+            @Override
+            public int getSize() {
+                return headers.size();
             }
-            ListModel l = new AbstractListModel() {
-                @Override
-                public int getSize() {
-                    return headers.size();
-                }
 
-                @Override
-                public Object getElementAt(int index) {
-                    return headers.get(index);
-                }
-            };
-            JList rowHeader = new JList(l);
+            @Override
+            public Object getElementAt(int index) {
+                return headers.get(index);
+            }
+        };
+        JList rowHeader = new JList(l);
 
-            rowHeader.setFixedCellWidth(50);
-            rowHeader.setFixedCellHeight(table.getRowHeight());
-            Color c = new Color(70, 130, 180);
-            rowHeader.setBackground(c);
-            rowHeader.setBorder(BorderFactory.createLineBorder(Color.WHITE));
-            rowHeader.setForeground(Color.WHITE);
+        rowHeader.setFixedCellWidth(50);
+        rowHeader.setFixedCellHeight(table.getRowHeight());
+        Color c = new Color(70, 130, 180);
+        rowHeader.setBackground(c);
+        rowHeader.setBorder(BorderFactory.createLineBorder(Color.WHITE));
+        rowHeader.setForeground(Color.WHITE);
 
-            table.getTableHeader().setBorder(BorderFactory.createLineBorder(Color.WHITE));
-            table.getTableHeader().setBackground(c);
-            table.getTableHeader().setForeground(Color.WHITE);
-            rowHeader.setCellRenderer(getRenderer());
+        table.getTableHeader().setBorder(BorderFactory.createLineBorder(Color.WHITE));
+        table.getTableHeader().setBackground(c);
+        table.getTableHeader().setForeground(Color.WHITE);
+        rowHeader.setCellRenderer(getRenderer());
 
-            model = (DefaultTableModel) (table.getModel());
+        model = (DefaultTableModel) (table.getModel());
 
 
-            table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-            JScrollPane scrollPane = new JScrollPane(
-                    table,
-                    ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS,
-                    ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS
-            );
-            // pongo el botón en la ventana
+        table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+        JScrollPane scrollPane = new JScrollPane(
+                table,
+                ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS,
+                ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS
+        );
+        // pongo el botón en la ventana
 
-            scrollPane.setRowHeaderView(rowHeader);
+        scrollPane.setRowHeaderView(rowHeader);
 
 
-            //new sheet button
+        //new sheet button
 
         model.addTableModelListener(new TableModelListener() {
             @Override
@@ -590,12 +583,15 @@ public class SheetView {
                 int colChanged=e.getColumn();
                 System.out.println(rowChanged+ " + "+ colChanged);
                 String newValue= (String) table.getValueAt(rowChanged,colChanged);
+                System.out.println("cell row is "+rowChanged+" , cell col is "+colChanged+" and the value is "+newValue);
                 PresentationController.editedCell(rowChanged,colChanged,newValue,currentSheetName());
+
                 //System.out.println(newValue);
-                PresentationController.showTcells(currentSheetName());
+                // PresentationController.showTcells(currentSheetName());
+
             }
         });
-            return scrollPane;
+        return scrollPane;
 
     }
 //    public static String convertToNumberingScheme(int number) {
@@ -680,7 +676,7 @@ public class SheetView {
         current.getTableHeader().setForeground(Color.WHITE);
         rowHeader.setCellRenderer(getRenderer());
         getCurrentScroll().setRowHeaderView(rowHeader);
-        
+
 
     }
 
@@ -721,13 +717,19 @@ public class SheetView {
         }
     }
 
-    public static int alphabetToNum(String i) {
-        int result = -1;
-        for (int j = 0; j < i.length(); j++) {
-            result += Math.pow(26,j)* (i.charAt(j) - 'A' + 1);
-
+    public static int[] getIds(String s){
+        int found[] = new int[2];
+        if(s!=null) {
+            for (int i = 0; i < getCurrentTable().getRowCount(); i++) {
+                for (int j = 0; j < getCurrentTable().getColumnCount(); j++) {
+                    if (getCurrentTable().getValueAt(i, j)!= null && getCurrentTable().getValueAt(i, j).equals(s)) {
+                        found[0] = i;
+                        found[1] = j;
+                    }
+                }
+            }
         }
-        return result;
+        return found;
     }
 
 

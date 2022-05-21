@@ -83,7 +83,12 @@ public class MainMenu {
         });
 
 
-
+        openB.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //
+            }
+        });
 
 
         // Área de texto en el centro
