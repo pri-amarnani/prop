@@ -1,5 +1,6 @@
 package com.pomc.controller;
 import com.pomc.classes.*;
+import com.pomc.view.PresentationController;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
@@ -138,11 +139,14 @@ public class DomainController {
     //deletes a row in the specified position
     public static void sheetDeleteRow(Integer num, String name){
         if (doc.getSheet(name)!=null) doc.getSheet(name).DeleteRow(num );
+
     }
 
     public static void sheetDelRows(int num,int pos,String name){
         for(int i=0;i<num;i++){
+
             sheetDeleteRow(pos,name);
+
         }
     }
     //deletes a column in the specified position

@@ -67,7 +67,7 @@ public class PresentationController {
     }
 
     public static void showTcells(String name){
-        String[][] cellsContents = DomainController.currentBlockCells(name);
+        String[][] cellsContents = DomainController.currentSheetCells(name);
         for(int i = 0; i < cellsContents.length ; ++i) {
             for (int j = 0; j < cellsContents[0].length ; ++j) {
                 System.out.print(" | " + cellsContents[i][j]);

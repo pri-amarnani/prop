@@ -23,7 +23,7 @@ import static javax.swing.JOptionPane.showOptionDialog;
 
 public class SheetView {
     static JTabbedPane sheets = new JTabbedPane();
-    public static JPanel cambio(boolean isNew) {
+    public static JPanel cambio() {
         sheets.removeAll();
         // el panel con barras de scroll automáticas
         JPanel frame = new JPanel(new BorderLayout());
@@ -92,8 +92,10 @@ public class SheetView {
             JLabel bar=new JLabel();
             bar.setBackground(Color.LIGHT_GRAY);
             bar.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY));
-            bar.setSize(table.getWidth(),30);
             bar.setText("    ");
+            bar.setMinimumSize(new Dimension(table.getWidth(),25));
+            bar.setPreferredSize(new Dimension(table.getWidth(),25));
+            bar.setMaximumSize(new Dimension(table.getWidth(),25));
             frame.add(BorderLayout.NORTH,bar);
 
             sheets.addTab(sheets_names[i], null, scrollPane);
@@ -105,13 +107,42 @@ public class SheetView {
             model.addTableModelListener(new TableModelListener() {
                 @Override
                 public void tableChanged(TableModelEvent e) {
-                    int rowChanged=e.getFirstRow();
-                    int colChanged=e.getColumn();
-                    if (rowChanged>=0 && rowChanged<getCurrentTable().getRowCount()&& colChanged>=0 && colChanged<getCurrentTable().getColumnCount()) {
-                        String newValue = (String) getCurrentTable().getModel().getValueAt(rowChanged, colChanged);
-                        int ids[]=getIds(newValue);
-                        PresentationController.editedCell(ids[0], ids[1], newValue, currentSheetName());
-                        //PresentationController.showTcells(currentSheetName());
+                    if (e.getType() == 0) {
+                        int rowChanged = e.getFirstRow();
+                        int colChanged = e.getColumn();
+
+
+                        if (rowChanged >= 0 && rowChanged < getCurrentTable().getRowCount() && colChanged >= 0 && colChanged < getCurrentTable().getColumnCount()) {
+//                       String colName = getCurrentTable().getModel().getColumnName(colChanged);
+//
+//                        int colValue= alphabetToNum(colName);
+                            int colIndex = getCurrentTable().convertColumnIndexToView(colChanged);
+
+
+                            TableModel tm = getCurrentTable().getModel();
+
+                            int mrows = tm.getRowCount();
+                            int mcols = tm.getColumnCount();
+                            for (int x = 0; x < mcols; x++) {
+                                System.out.print(tm.getColumnName(x) + " ");
+                            }
+                            System.out.println();
+                            for (int y = 0; y < mrows; y++) {
+                                for (int x = 0; x < mcols; x++) {
+                                    System.out.print(tm.getValueAt(y, x) + "   ");
+                                }
+                                System.out.print(" | \n");
+                            }
+
+                            String newValue = (String) table.getValueAt(rowChanged, colIndex);
+                            PresentationController.editedCell(rowChanged, colIndex, newValue, currentSheetName());
+                            //System.out.println(newValue);
+                            //PresentationController.showTcells(currentSheetName());
+
+                            //PresentationController.showTcells(currentSheetName());
+
+
+                        }
 
                     }
                 }
@@ -143,7 +174,8 @@ public class SheetView {
                             col2=col;
                             row2=row;
                             PresentationController.createBlock(row1,col1,row2,col2,currentSheetName());
-                            PresentationController.showTcells(currentSheetName());
+                          //  PresentationController.showTcells(currentSheetName());
+                            System.out.println();
                         }
                     }
                 }
@@ -425,13 +457,13 @@ public class SheetView {
                         TableColumn col= new TableColumn(tmodel.getColumnCount());
                         getCurrentTable().addColumn(col);
                         int a=(Integer)jsp2.getValue();
-
                         tmodel.addColumn( getCurrentTable().getColumnModel().getColumn(a).getHeaderValue());//NO SE ACTUALIZA BIEN SI NO SE AÑADE AL FINAL
                         int b = getCurrentTable().getColumnCount()-1;
                         getCurrentTable().moveColumn(b,a+k);
                     }
-                    ((DefaultTableModel) getCurrentTable().getModel()).fireTableDataChanged();
                     updateColHeaders();
+                    ((DefaultTableModel) getCurrentTable().getModel()).fireTableDataChanged();
+
                 }
             }
         });
@@ -458,13 +490,17 @@ public class SheetView {
 
                 );
                 if (DelR==JOptionPane.OK_OPTION) {
-                    PresentationController.delRow(currentSheetName(), (Integer) jsp.getValue(), (Integer) jsp2.getValue());
+                    int a2=(int) jsp.getValue();
+                    int b=(int) jsp2.getValue()-1;
+
+                    PresentationController.delRow(currentSheetName(), a2, b);
+                    System.out.println();
+                    PresentationController.showTcells(currentSheetName());
                     DefaultTableModel tmodel = (DefaultTableModel) getCurrentTable().getModel();
                     //  tmodel.setRowCount(0);
 
-                    for (int k = 0; k < (Integer) jsp.getValue(); k++) {
-                        int a=(Integer) jsp2.getValue()-1;
-                        tmodel.removeRow(a);
+                    for (int k = 0; k < (int) jsp.getValue(); ++k) {
+                        tmodel.removeRow(b);
                     }
                     updateRowHeaders();
                 }
@@ -681,10 +717,16 @@ public class SheetView {
     }
 
     public static void updateColHeaders(){
-        for (int j=0;j<getCurrentTable().getColumnCount();j++){
+        int colcount=getCurrentTable().getColumnCount();
+        String[] newh= new String[colcount];
+        for (int j=0;j<colcount;j++){
             getCurrentTable().getColumnModel().getColumn(j).setHeaderValue(numToAlphabet(j));
+            newh[j]=numToAlphabet(j);
         }
+        DefaultTableModel tm= (DefaultTableModel) getCurrentTable().getModel();
+        tm.setColumnIdentifiers(newh);
     }
+
 
     public static boolean isNumeric(String str) {
         try {
@@ -717,19 +759,30 @@ public class SheetView {
         }
     }
 
-    public static int[] getIds(String s){
-        int found[] = new int[2];
-        if(s!=null) {
-            for (int i = 0; i < getCurrentTable().getRowCount(); i++) {
-                for (int j = 0; j < getCurrentTable().getColumnCount(); j++) {
-                    if (getCurrentTable().getValueAt(i, j)!= null && getCurrentTable().getValueAt(i, j).equals(s)) {
-                        found[0] = i;
-                        found[1] = j;
-                    }
-                }
-            }
+//    public static int[] getIds(String s){
+//        int found[] = new int[2];
+//        int modelids[]=getIdsModel(s);
+//        if(s!=null) {
+//            for (int i = 0; i < getCurrentTable().getRowCount(); i++) {
+//                for (int j = 0; j < getCurrentTable().getColumnCount(); j++) {
+//                    if (getCurrentTable().getValueAt(i, j)!= null && getCurrentTable().getValueAt(i, j).equals(s)) {
+//                            found[0] = i;
+//                            found[1] = j;
+//                    }
+//                }
+//            }
+//        }
+//        return found;
+//    }
+//
+
+    public static int alphabetToNum(String i) {
+        int result = -1;
+        for (int j = 0; j < i.length(); j++) {
+            result += Math.pow(26,j)* (i.charAt(j) - 'A' + 1);
+
         }
-        return found;
+        return result;
     }
 
 

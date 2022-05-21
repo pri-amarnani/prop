@@ -160,7 +160,7 @@ public class MainMenu {
                                     frame.repaint();
                                         ok = true;
                                         PresentationController.newSheet(newsheet_title.getText(), numfil, numcol);
-                                        frame.getContentPane().add(BorderLayout.CENTER, SheetView.cambio(true));
+                                        frame.getContentPane().add(BorderLayout.CENTER, SheetView.cambio());
 
                                         if (!menuUpdated) {
                                             menuUpdated = true;

@@ -167,7 +167,8 @@ public class Sheet {
         if(num_rows <= 1) System.out.println("Error. Not enough rows.");
         else{
             --num_rows;
-            cells.removeElement(pos);
+
+            cells.removeElementAt(pos);
             for(int i = pos; i < num_rows; ++i){
                 Vector<Cell> row = cells.elementAt(i);
                 for(int j = 0; j < num_cols; ++j){
