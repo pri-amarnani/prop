@@ -32,7 +32,6 @@ public class Block {
     }
 
     public void setCell(int i, int j, Cell c) {
-        //System.out.println(c.getClass());
         this.block[i][j] = c;
     }
 
@@ -90,7 +89,7 @@ public class Block {
     }
 
     //copy values from one block to another
-    public void ref(Block b, Boolean ref) { //FALTA!!!!!
+    public void ref(Block b, Boolean ref) {
         for (int i = 0; i < this.block.length; ++i) {
             for (int j = 0; j < this.block[0].length; ++j) {
                 Cell n =  b.getCell(i,j);
@@ -186,7 +185,7 @@ public class Block {
                     Cell n = (Cell) b.getCell(i, j).changeValue(Math.floor((double) this.block[i][j].getInfo()));
                     b.setCell(i,j,n);
                     if (ref) {
-                        ReferencedCell rc = new ReferencedCell(n.getRow(),n.getColumn(),"=floor1");
+                        ReferencedCell rc = new ReferencedCell(n.getRow(),n.getColumn(),"=floor");
                         rc.setContent(n.getInfo());
                         b.setCell(i, j, rc);
                         Vector<Cell> s = new Vector<>(1);
@@ -425,7 +424,7 @@ public class Block {
         c = (Cell) c.changeValue(sum/s.size());
 
         if (ref) {
-            System.out.println("entra1");
+            //System.out.println("entra1");
             ReferencedCell rc = new ReferencedCell(c.getRow(),c.getColumn(),"=mean");
             rc.setContent(c.getInfo());
             c = rc;

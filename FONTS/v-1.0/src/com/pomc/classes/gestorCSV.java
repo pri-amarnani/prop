@@ -31,7 +31,8 @@ public class gestorCSV {
                 }
 
                 else {
-                    file.write(sh.getCell(i,j).getInfo().toString());
+                    if (sh.getCell(i,j).getInfo() == null) file.write("null");
+                    else file.write(sh.getCell(i,j).getInfo().toString());
                 }
 
                 if (first) first = false;
@@ -47,7 +48,6 @@ public class gestorCSV {
 
         BufferedReader file = new BufferedReader(new FileReader(location));
         String row;
-
         int rows = 0;
         int cols = 0;
         String title = null;
@@ -165,6 +165,5 @@ public class gestorCSV {
         else if (o.getClass()== LocalDate.class) return o.toString();
         else return (String) o;
     }
-
 }
 

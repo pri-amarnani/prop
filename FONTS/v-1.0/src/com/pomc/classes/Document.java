@@ -6,8 +6,6 @@ import java.util.Vector;
 public class Document {
     String Title;
     Vector<Sheet> docSheets = new Vector<Sheet>();
-    private File docFile;
-    private static Scanner userInput = new Scanner(System.in);
 
     //constructor
     public Document(String Title) {

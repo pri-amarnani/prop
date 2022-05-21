@@ -31,7 +31,8 @@ public class gestorTXT {
                 }
 
                 else {
-                    file.write(sh.getCell(i,j).getInfo().toString());
+                    if (sh.getCell(i,j).getInfo() == null) file.write("null");
+                    else file.write(sh.getCell(i,j).getInfo().toString());
                 }
 
                 if (first) first = false;
