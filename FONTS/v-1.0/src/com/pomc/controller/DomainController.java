@@ -307,8 +307,6 @@ public class DomainController {
               return input;
           }
        }
-
-
     }
     public static String AntiParse(Object o) {
         System.out.println(o);

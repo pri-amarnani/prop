@@ -35,6 +35,11 @@ public class Document {
         docSheets.add(newSheet);
     }
 
+    public void createDocWithSheet(Sheet a) {
+        Title = a.getTitle();
+        docSheets.add(a);
+    }
+
     public void createSheet(int rows, int columns, String title) {
         Sheet newSheet = new Sheet(rows,columns,title);
         docSheets.add(newSheet);

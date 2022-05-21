@@ -1,115 +1,170 @@
 package com.pomc.classes;
 
 import java.io.*;
+import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import java.util.Arrays;
+import java.util.Objects;
 import java.util.Vector;
 
 public class gestorCSV {
 
-    public void writeCSV(String location, Vector<Vector<String>> sheet, String tempName) throws IOException {
+    public void writeCSV(String location, Sheet sh, String tempName) throws IOException {
         File check = new File(location);
         if (check.isDirectory()) {
             location = location + "/" + tempName + ".csv";
         }
         BufferedWriter file = new BufferedWriter(new FileWriter(location));
-        for (Vector<String> row : sheet) {
+        file.write('"' + sh.getTitle() + '"' + ';' + sh.getNumRows() + ";" + sh.getNumCols() + "\n");
+
+        for (int i = 0; i < sh.getNumRows(); ++i) {
             boolean first = true;
-            for (String data : row) {
-                if (!first) file.write(',');
-                file.write(data);
-                first = false;
+            for (int j = 0; j < sh.getNumCols(); ++j) {
+                if (!first) file.write(";");
+
+                if (sh.getCell(i,j).getClass() == ReferencedCell.class) {
+                    file.write(sh.getCell(i,j).getContent().toString());
+                }
+
+                else if (sh.getCell(i,j).getClass() == TextCell.class) {
+                    file.write('"' + (String) sh.getCell(i,j).getInfo() + '"');
+                }
+
+                else {
+                    file.write(sh.getCell(i,j).getInfo().toString());
+                }
+
+                if (first) first = false;
             }
-            file.write('\n');
+            file.write("\n");
         }
+
         file.close();
     }
 
-    public Vector<Vector<String>> readCSV(String location) throws IOException {   //not sure
+    public Sheet readCSV(String location) throws IOException {
         Vector<Vector<String>> sheet = new Vector<>();
 
         BufferedReader file = new BufferedReader(new FileReader(location));
         String row;
 
+        int rows = 0;
+        int cols = 0;
+        String title = null;
+
         Vector<String> atributs = new Vector<>();
+
         if ((row = file.readLine()) != null) {
-            atributs.addAll(Arrays.asList(row.split(",")));
-            sheet.add(new Vector<>(atributs));
+
+            atributs.addAll(Arrays.asList(row.split(";")));
+
+            rows = Integer.parseInt(atributs.elementAt(1));
+            cols = Integer.parseInt(atributs.elementAt(2));
+            title = atributs.elementAt(0);
         }
 
-        Vector<String> valors = new Vector<>();
+        Vector<String> row_doc = new Vector<>();
+        Cell [][] sh = new Cell[rows][cols];
+        int i_aux = 0;
+
         while ((row = file.readLine()) != null) {
-            row = row + ' ';
-            char[] characters = row.toCharArray();
-            boolean quotMark = true;
-            boolean betweenQuotMarks = false;
 
-            Vector<Integer> posQuotMarks = new Vector<>();   //cambiar variables
-            Vector<Integer> posComa = new Vector<>();
+            boolean quote_mark_o = false;
+            boolean quote_mark_c = false;
 
-            for (int i = 1; i < characters.length; ++i) {
-                if (betweenQuotMarks && quotMark && characters[i - 1] == '\"' && characters[i] == ',') {
-                    characters[i - 1] = ' ';
-                    posQuotMarks.add(i - 1);
-                    betweenQuotMarks = false;
-                }
+            String new_row = "";
 
-                else if (!betweenQuotMarks && characters[i - 1] == ',' && characters[i] == '\"') {
-                    quotMark = true;
-                    characters[i] = ' ';
-                    posQuotMarks.add(i);
-                    betweenQuotMarks = true;
-                }
+            for (int i = 0; i < row.length(); ++i) {
+                if (row.charAt(i) == '"' && quote_mark_c == quote_mark_o) {quote_mark_o = true; quote_mark_c = false; new_row += (row.charAt(i));}
+                else if (quote_mark_o && !quote_mark_c && row.charAt(i) == ';') new_row += ('~');
+                else if (row.charAt(i) == '"' && quote_mark_o && !quote_mark_c) {quote_mark_c = true; new_row += (row.charAt(i));}
+                else new_row += (row.charAt(i));
 
-                if (betweenQuotMarks && characters[i - 1] == '\"') {
-                    quotMark = !quotMark;
-                    posQuotMarks.add(i - 1);
-                    characters[i - 1] = '\'';
-                }
+            }
 
-                if (betweenQuotMarks && characters[i] == ',') {
-                    posComa.add(i);
-                    characters[i] = ';';
+            row = new_row;
+            row_doc.addAll(Arrays.asList(row.split(";")));
+
+            for (int i = 0; i < row_doc.size(); ++i) {
+                if (!Objects.equals(row_doc.elementAt(i), "") && row_doc.elementAt(i).charAt(0) == '"') {
+                    String aux = "";
+                    for (int j = 0; j < row_doc.elementAt(i).length(); ++j) {
+                        if (row_doc.elementAt(i).charAt(j) == '~') aux += ';';
+                        else if (row_doc.elementAt(i).charAt(j) != '"') aux += row_doc.elementAt(i).charAt(j);
+                    }
+
+                    row_doc.setElementAt(aux, i);
                 }
             }
 
-            String actual = String.valueOf(characters);
-            String[] temp = actual.split(",");
-
-            valors.addAll(Arrays.asList(temp));
-
-            Vector<String> temporal = new Vector<>();
-            Integer index = 0;
-            for (String valor : valors) {
-                char[] lletres = valor.toCharArray();
-                for (int i = 0; i < lletres.length; ++i) {
-                    if (posComa.contains(index)) lletres[i] = ',';
-                    if (posQuotMarks.contains(index)) lletres[i] = '\"';
-                    ++index;
+            for (int i = 0; i < cols; ++i) {
+                if (i == row_doc.size() && row_doc.size() < cols) {
+                    sh[i_aux][i] = new NumCell(i_aux,i,null);
                 }
-                temporal.add(String.valueOf(lletres).trim());
-                ++index;
-            }
 
-            sheet.add(temporal);
-            valors.clear();
+                else if (!Objects.equals(row_doc.elementAt(i), "")) {
+                    Object aux = Parse(row_doc.elementAt(i));
+                    if (aux.getClass() == Double.class) {
+                        sh[i_aux][i] = new NumCell(i_aux,i,(Double) aux);
+                    }
+
+                    else if (aux.getClass() == LocalDate.class) {
+                        sh[i_aux][i] = new DateCell(i_aux,i,(LocalDate) aux);
+                    }
+
+                    else {
+                        sh[i_aux][i] = new TextCell(i_aux,i,(String) aux);
+                    }
+                }
+
+                else {
+                    sh[i_aux][i] = new NumCell(i_aux,i,null);
+                }
+            }
+            row_doc = new Vector<>();
+            ++i_aux;
         }
+
+        Sheet s = new Sheet(sh,title);
 
         atributs.clear();
         file.close();
-        return sheet;
+
+        return s;
     }
 
-    public boolean exists(String fileName) {
-        return new File("./Data/" + fileName + ".txt").canRead();
+    public boolean exists(String path) {
+        return new File(path).canRead();
     }
 
-    public boolean deleteCSV(String fileName) {
-        if (exists(fileName)) {
-            return new File("./Data/" + fileName + ".txt").delete();
+    public boolean deleteCSV(String path) {
+        if (exists(path)) {
+            return new File(path).delete();
         } else {
             return false;
         }
     }
-}
+
+    public static Object Parse(String input) {
+        try{
+            Double isDouble = Double.parseDouble(input);
+            return isDouble;
+        } catch (NumberFormatException e) {
+            try {
+                LocalDate isDate = LocalDate.parse(input);
+                return isDate;
+            }
+            catch (DateTimeParseException d) {
+                return input;
+            }
+        }
+    }
+    public static String AntiParse(Object o) {
+        System.out.println(o);
+        if (o.getClass() == Double.class) return String.valueOf(o);
+        else if (o.getClass()== LocalDate.class) return o.toString();
+        else return (String) o;
+    }
 
 }
+

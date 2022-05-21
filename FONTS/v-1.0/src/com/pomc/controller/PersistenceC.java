@@ -44,7 +44,7 @@ public class PersistenceC {
             e.printStackTrace();
         }
     }
-
+    /*
     //Save Files
     public void save(Document doc) {
         String name = "doc_name";
@@ -153,6 +153,6 @@ public class PersistenceC {
                 System.out.println("Path not valid, try again.");
             }
         }
-    }
+    }*/
 
 }

@@ -12,7 +12,7 @@ public class PersistenceController {
     FileWriter docWriter;
     static Scanner userInput = new Scanner(System.in);
 
-
+    /*
     public void dooc(){
         File tempDirectory; //defines where the file is created
         tempDirectory = new File(path);
@@ -124,6 +124,6 @@ public class PersistenceController {
                 System.out.println("Path not valid, try again.");
             }
         }
-    }
+    }*/
 
 }
