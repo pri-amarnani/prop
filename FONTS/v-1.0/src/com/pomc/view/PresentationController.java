@@ -75,10 +75,16 @@ public class PresentationController {
 
     public static String[] blockFind(String value, String sheetName){ return DomainController.blockFind(value,sheetName);}
 
-    public static Integer[] blockFindAndReplace(String find, String replace, String sheetName){ return DomainController.blockFindAndReplace(find,replace,sheetName);}
+    public static Object[] blockFindAndReplace(String find, String replace, String sheetName){ return DomainController.blockFindAndReplace(find,replace,sheetName);}
 
     public static boolean blockSort(int nCol, String criteria, String sheetName) {return DomainController.blockSort(nCol,criteria,sheetName); }
 
+    public static String blockType(String sheetName) {return DomainController.blockType(sheetName);}
+
+    public static void blockFloor(int ulr, int ulc, int drr, int drc, boolean ref,String Sheetname){
+        Integer[] b_ids= {ulr,ulc,drr,drc};
+        DomainController.currentBlockFloor(b_ids,ref,Sheetname);
+    }
 
 
     //-----------------------CELL FUNCTIONS--------------------------------

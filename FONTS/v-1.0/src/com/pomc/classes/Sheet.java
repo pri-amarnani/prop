@@ -267,8 +267,8 @@ public class Sheet {
         return b_selected.find(o);
     }
 
-    public Integer[] findAndReplace(Object n, Object r){
-        Integer[] result = b_selected.findAndReplace(n, r);
+    public Object[] findAndReplace(Object n, Object r){
+        Object[] result = b_selected.findAndReplace(n, r);
         update(b_selected);
         return result;
     }

@@ -329,36 +329,7 @@ public class SheetView {
 
         find.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent e) {
-                String value = (String) JOptionPane.showInputDialog(
-                        null,
-                        "Find in Sheet",
-                        "Insert value to Find:",
-                        JOptionPane.PLAIN_MESSAGE,
-                        null,
-                        null,
-                        ""
-                );
-                if (value != null) {
-                    if (emptyBlock()) {
-                        System.out.println("NO BLOCK :///");
-                        PresentationController.createBlock(0,0,getCurrentTable().getRowCount()-1,getCurrentTable().getColumnCount()-1,currentSheetName());
-                    }
-                    String[] cellFound = PresentationController.blockFind(value,currentSheetName());
-                    if (cellFound.length>1) {
-                        System.out.println("FOUNDD");
-                        int row = Integer.parseInt(cellFound[0]);
-                        int col = Integer.parseInt(cellFound[1]);
-                        getCurrentTable().changeSelection(row-1,col-1,false,false);
-                        System.out.println("SLECTEDDD");
-                    }
-                    else{
-                        System.out.println("WTFFFF");
-                        showMessageDialog(null, "Value not found! :(\nTry again", "Error!", JOptionPane.ERROR_MESSAGE);
-                    }
-                }
-
-            }
+            public void actionPerformed(ActionEvent e) {FuncView.addFind();}
         });
 
         ImageIcon findRIcon= new ImageIcon("res/findR.png");
@@ -372,39 +343,40 @@ public class SheetView {
         findR.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JTextField value = new JTextField();
-                JTextField replace = new JTextField();
-                Object[] fields = new Object[]{
-                    "Value to find :", value,
-                    "Value to replace : ", replace
-                };
-                int result = JOptionPane.showConfirmDialog(
-                        null,
-                        fields,
-                        "Find and Replace",
-                        JOptionPane.OK_CANCEL_OPTION,
-                        JOptionPane.PLAIN_MESSAGE,
-                        null
-
-                );
-                if (result == JOptionPane.OK_OPTION){
-                    if (emptyBlock()) {
-                        PresentationController.createBlock(0,0,getCurrentTable().getRowCount()-1,getCurrentTable().getColumnCount()-1,currentSheetName());
-                    }
-                    String[] cellFound = PresentationController.blockFind(value.getText(),currentSheetName());
-                    if (cellFound.length>1 && !value.getText().equals("")) {
-                        Integer[] replaces = PresentationController.blockFindAndReplace(value.getText(),replace.getText(),currentSheetName());
-                        if(replaces != null) {
-                            for (int i = 0; i < replaces.length; i+=2) {
-                                getCurrentTable().getModel().setValueAt(replace.getText(),replaces[i],replaces[i+1]);
-                            }
-                        }
-                    }
-                    else{
-
-                        showMessageDialog(null, "Value not found! :(\nTry again", "Error!", JOptionPane.ERROR_MESSAGE);
-                    }
-                }
+//                JTextField value = new JTextField();
+//                JTextField replace = new JTextField();
+//                Object[] fields = new Object[]{
+//                    "Value to find :", value,
+//                    "Value to replace : ", replace
+//                };
+//                int result = JOptionPane.showConfirmDialog(
+//                        null,
+//                        fields,
+//                        "Find and Replace",
+//                        JOptionPane.OK_CANCEL_OPTION,
+//                        JOptionPane.PLAIN_MESSAGE,
+//                        null
+//
+//                );
+//                if (result == JOptionPane.OK_OPTION){
+//                    if (emptyBlock()) {
+//                        PresentationController.createBlock(0,0,getCurrentTable().getRowCount()-1,getCurrentTable().getColumnCount()-1,currentSheetName());
+//                    }
+//                    String[] cellFound = PresentationController.blockFind(value.getText(),currentSheetName());
+//                    if (cellFound.length>1 && !value.getText().equals("")) {
+//                        Integer[] replaces = PresentationController.blockFindAndReplace(value.getText(),replace.getText(),currentSheetName());
+//                        if(replaces != null) {
+//                            for (int i = 0; i < replaces.length; i+=2) {
+//                                getCurrentTable().getModel().setValueAt(replace.getText(),replaces[i],replaces[i+1]);
+//                            }
+//                        }
+//                    }
+//                    else{
+//
+//                        showMessageDialog(null, "Value not found! :(\nTry again", "Error!", JOptionPane.ERROR_MESSAGE);
+//                    }
+//                }
+                FuncView.addFindR();
 
             }
         });
@@ -424,45 +396,7 @@ public class SheetView {
         sortB.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (emptyBlock()) {
-                    System.out.println("NO BLOCK :///");
-                    PresentationController.createBlock(0,0,getCurrentTable().getRowCount()-1,getCurrentTable().getColumnCount()-1,currentSheetName());
-                }
-                SpinnerNumberModel snm= new SpinnerNumberModel(1,1,PresentationController.blockCols(currentSheetName()),1);
-                JSpinner jsp=new JSpinner(snm);
-                Object[] options = {
-                        "Descending",
-                        "Ascending",
-                };
-                JComboBox optionList = new JComboBox(options);
-                optionList.setSelectedIndex(0);
-                Object[] components = {
-                        "Insert main column :", jsp,
-                        "Select sort criteria :", optionList
-                };
-                int result = JOptionPane.showConfirmDialog(
-                        null,
-                        components,
-                        "Sort",
-                        JOptionPane.OK_CANCEL_OPTION,
-                        JOptionPane.PLAIN_MESSAGE,
-                        null
-                );
-                if (result == JOptionPane.OK_OPTION) {
-                    String criteria = "<";
-                    if(optionList.getSelectedItem().equals("Ascending")) criteria = ">";
-                    int col = (int) jsp.getValue()-1;
-                    //int ncol = PresentationController.blockFirstCol(currentSheetName()) + col - 1;
-                    Boolean sort =PresentationController.blockSort(col,criteria ,currentSheetName());
-                    if (!sort) {
-                        showMessageDialog(null, "Couldn't sort \nTry again", "Error!", JOptionPane.ERROR_MESSAGE);
-                    }
-                    else {
-                        rewriteBlock();
-                    }
-                }
-
-
+                FuncView.addSort();
             }
         });
 
@@ -699,36 +633,107 @@ public class SheetView {
 
        // JPanel blockmenu= new JPanel();
         if(!emptyBlock()){
+            String blockType=PresentationController.blockType(currentSheetName());
+            ImageIcon moveBlockIcon= new ImageIcon("res/iconomove.png");
+            Image mvbi=moveBlockIcon.getImage();
+            Image mv=mvbi.getScaledInstance(40,40,Image.SCALE_DEFAULT);
+            moveBlockIcon.setImage(mv);
+            JButton moveBlock= new JButton(moveBlockIcon);
+            moveBlock.setToolTipText("Move block");
+            moveBlock.setBackground(blockBar.getBackground());
+            moveBlock.setBorder(BorderFactory.createLineBorder(c,1));
+            blockBar.add(moveBlock,blockBar.getMenuCount()-1);
+            switch (blockType){
+                case "N":
+                    ImageIcon floorIcon= new ImageIcon("res/iconofloor.png");
+                    Image flIcon=floorIcon.getImage();
+                    Image fl=flIcon.getScaledInstance(40,40,Image.SCALE_DEFAULT);
+                    floorIcon.setImage(fl);
+                    JButton floor= new JButton(floorIcon);
+                    floor.setToolTipText("Floor");
+                    floor.setBackground(blockBar.getBackground());
+                    floor.setBorder(BorderFactory.createLineBorder(c,1));
+                    blockBar.add(floor,blockBar.getMenuCount()-1);
 
-            ImageIcon floorIcon= new ImageIcon("res/iconofloor.png");
-            Image flIcon=floorIcon.getImage();
-            Image fl=flIcon.getScaledInstance(40,40,Image.SCALE_DEFAULT);
-            floorIcon.setImage(fl);
-            JButton floor= new JButton(floorIcon);
-            floor.setBackground(blockBar.getBackground());
-            floor.setBorder(BorderFactory.createLineBorder(c,1));
-            blockBar.add(floor,blockBar.getMenuCount()-1);
+
+                    ImageIcon convertIcon= new ImageIcon("res/iconoconvert.png");
+                    Image cIcon=convertIcon.getImage();
+                    Image conv=cIcon.getScaledInstance(40,40,Image.SCALE_DEFAULT);
+                    convertIcon.setImage(conv);
+                    JButton convert= new JButton(convertIcon);
+                    convert.setToolTipText("Convert");
+                    convert.setBackground(blockBar.getBackground());
+                    convert.setBorder(BorderFactory.createLineBorder(c,1));
+                    blockBar.add(convert,blockBar.getMenuCount()-1);
+
+                    ImageIcon AOpIcon= new ImageIcon("res/iconoaritmetic.png");
+                    Image aopIcon=AOpIcon.getImage();
+                    Image ao=aopIcon.getScaledInstance(40,40,Image.SCALE_DEFAULT);
+                    AOpIcon.setImage(ao);
+                    JButton AritOp= new JButton(AOpIcon);
+                    AritOp.setToolTipText("Arithmetic operations");
+                    AritOp.setBackground(blockBar.getBackground());
+                    AritOp.setBorder(BorderFactory.createLineBorder(c,1));
+                    blockBar.add(AritOp,blockBar.getMenuCount()-1);
+
+                    ImageIcon statIcon= new ImageIcon("res/iconoest.png");
+                    Image stIcon=statIcon.getImage();
+                    Image st=stIcon.getScaledInstance(40,40,Image.SCALE_DEFAULT);
+                    statIcon.setImage(st);
+                    JButton stat= new JButton(statIcon);
+                    stat.setToolTipText("Statistic operations");
+                    stat.setBackground(blockBar.getBackground());
+                    stat.setBorder(BorderFactory.createLineBorder(c,1));
+                    blockBar.add(stat,blockBar.getMenuCount()-1);
+
+                    break;
+                case "T":
+                    ImageIcon lengthIcon= new ImageIcon("res/iconolength.png");
+                    Image lIcon=lengthIcon.getImage();
+                    Image len=lIcon.getScaledInstance(40,40,Image.SCALE_DEFAULT);
+                    lengthIcon.setImage(len);
+                    JButton length= new JButton(lengthIcon);
+                    length.setToolTipText("Length");
+                    length.setBackground(blockBar.getBackground());
+                    length.setBorder(BorderFactory.createLineBorder(c,1));
+                    blockBar.add(length,blockBar.getMenuCount()-1);
+
+                    ImageIcon replaceIcon= new ImageIcon("res/iconoreplace.png");
+                    Image repIcon=replaceIcon.getImage();
+                    Image re=repIcon.getScaledInstance(40,40,Image.SCALE_DEFAULT);
+                    replaceIcon.setImage(re);
+                    JButton replace= new JButton(replaceIcon);
+                    replace.setToolTipText("Replace text");
+                    replace.setBackground(blockBar.getBackground());
+                    replace.setBorder(BorderFactory.createLineBorder(c,1));
+                    blockBar.add(replace,blockBar.getMenuCount()-1);
+                    break;
+                case "D":
+                    ImageIcon extractIcon= new ImageIcon("res/iconoextract.png");
+                    Image extracIcon=extractIcon.getImage();
+                    Image exic=extracIcon.getScaledInstance(40,40,Image.SCALE_DEFAULT);
+                    extractIcon.setImage(exic);
+                    JButton extract= new JButton(extractIcon);
+                    extract.setToolTipText("Extract");
+                    extract.setBackground(blockBar.getBackground());
+                    extract.setBorder(BorderFactory.createLineBorder(c,1));
+                    blockBar.add(extract,blockBar.getMenuCount()-1);
+
+                    ImageIcon dotwIcon= new ImageIcon("res/iconodotw.png");
+                    Image dotIcon=dotwIcon.getImage();
+                    Image dotwi=dotIcon.getScaledInstance(40,40,Image.SCALE_DEFAULT);
+                    dotwIcon.setImage(dotwi);
+                    JButton dotw= new JButton(dotwIcon);
+                    dotw.setToolTipText("Day of the Week");
+                    dotw.setBackground(blockBar.getBackground());
+                    dotw.setBorder(BorderFactory.createLineBorder(c,1));
+                    blockBar.add(dotw,blockBar.getMenuCount()-1);
+                    break;
+                default:
+                    break;
+            }
 
 
-            ImageIcon convertIcon= new ImageIcon("res/iconoconvert.png");
-            Image cIcon=convertIcon.getImage();
-            Image conv=cIcon.getScaledInstance(40,40,Image.SCALE_DEFAULT);
-            convertIcon.setImage(conv);
-            JButton convert= new JButton(convertIcon);
-            convert.setBackground(blockBar.getBackground());
-            convert.setBorder(BorderFactory.createLineBorder(c,1));
-            blockBar.add(convert,blockBar.getMenuCount()-1);
-
-//            ImageIcon convertIcon= new ImageIcon("res/iconoconvert.png");
-//            Image cIcon=convertIcon.getImage();
-//            Image conv=cIcon.getScaledInstance(40,40,Image.SCALE_DEFAULT);
-//            convertIcon.setImage(conv);
-//            JButton convert= new JButton(convertIcon);
-//            convert.setBackground(blockBar.getBackground());
-//            convert.setBorder(BorderFactory.createLineBorder(c,1));
-//            blockBar.add(convert,blockBar.getMenuCount()-1);
-
-            System.out.println("IN FUNC---> "+blockBar.getMenuCount());
             blockBar.repaint();
             blockBar.revalidate();
 //            JPanel mp= (JPanel) MainMenu.getCurrentFrame().getContentPane().getComponent(0);

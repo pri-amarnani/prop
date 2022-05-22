@@ -223,6 +223,17 @@ public class DomainController {
         return null;
     }
 
+    public static String blockType(String sheetname){
+        if(sheetname!=null){
+            if(doc.getSheet(sheetname).getSelectedBlock().allDouble()) return "N";
+            else if (doc.getSheet(sheetname).getSelectedBlock().allDate()) return "D";
+            else if (doc.getSheet(sheetname).getSelectedBlock().allText()) return "T";
+            else return "M";
+        }
+        return null;
+    }
+
+
     public static String[] blockFind(String value,String sheetName) {
         Object parsedValue = Parse(value);
         if (sheetName != null) {
@@ -236,7 +247,7 @@ public class DomainController {
         return new String[]{"Not Found"};
     }
 
-    public static Integer[] blockFindAndReplace(String find,String replace, String sheetName) {
+    public static Object[] blockFindAndReplace(String find,String replace, String sheetName) {
         if (sheetName != null) {
             Object parsedFind = Parse(find);
             Object parsedReplace = Parse(replace);
