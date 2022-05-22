@@ -221,6 +221,13 @@ public class Sheet {
         return b;
     }
 
+
+    public int blockFirstRow(){
+        return b_selected.ul.getRow();
+    }
+    public int blockFirstCol(){
+       return b_selected.ul.getColumn();
+    }
     public void CopyB(){
         b_selected.CopyB();
     }
@@ -255,12 +262,14 @@ public class Sheet {
     }
 
     public Cell find(Object o){
+        System.out.println(o);
         return b_selected.find(o);
     }
 
-    public void findAndReplace(Object n, Object r){
-        b_selected.findAndReplace(n, r);
+    public Integer[] findAndReplace(Object n, Object r){
+        Integer[] result = b_selected.findAndReplace(n, r);
         update(b_selected);
+        return result;
     }
 
     public Boolean overlapping(Block b1, Block b2){

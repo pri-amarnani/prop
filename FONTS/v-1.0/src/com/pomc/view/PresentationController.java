@@ -10,8 +10,11 @@ import com.pomc.controller.DomainController;
 import java.util.Vector;
 
 public class PresentationController {
-//    static Document doc;
-//    static Block block;
+    private static int blockFCol;
+    private static int blockFRow;
+
+    //------------------------------DOC FUNCTIONS -------------------------------------
+
     public static void newDoc(String d){
         DomainController.initializeDoc(d);
     }
@@ -26,6 +29,11 @@ public class PresentationController {
         return DomainController.showSheets();
     }
 
+
+
+
+    //_-------------------------SHEET FUNCTIONS -------------------------------
+
     public static int getSheetRows(int i,String name){
         return DomainController.sheetRows(name);
     }
@@ -33,18 +41,6 @@ public class PresentationController {
     public static int getSheetCols(int i,String name){
         return DomainController.sheetCols(name);
     }
-
-    public static boolean createBlock(int ulr,int ulc,int drr,int drc, String name){
-        //FALTA id de la hoja en la que estamos
-        Integer[] cells= new Integer[]{ulr,ulc,drr,drc};
-        return DomainController.initializeBlock(cells,name);
-    }
-
-//    public static String[] showBlock(String sheetname){
-//        return DomainController.currentBlockCells(sheetname);
-//    }
-
-
     public static void changeSheetName(String name,String newname){
         DomainController.setSheetTitle(name,newname);
     }
@@ -61,25 +57,34 @@ public class PresentationController {
 
     public static void delSheet(String name){DomainController.deleteSheet(name);}
 
-    public static void editedCell(int r,int c, String newValue, String SheetName){
-        DomainController.editCell(r,c,newValue,SheetName);
-     //   System.out.println("cell row is "+r+" , cell col is "+c+" and the value is "+newValue);
+
+
+    //------------------------BLOCK FUNCTIONS-----------------------------------
+
+    public static boolean createBlock(int ulr,int ulc,int drr,int drc, String name){
+        //FALTA id de la hoja en la que estamos
+        blockFCol = ulc;
+        blockFRow = ulr;
+        Integer[] cells= new Integer[]{ulr,ulc,drr,drc};
+        return DomainController.initializeBlock(cells,name);
     }
 
-    public static void showTcells(String name){
-        String[][] cellsContents = DomainController.currentSheetCells(name);
-        for(int i = 0; i < cellsContents.length ; ++i) {
-            for (int j = 0; j < cellsContents[0].length ; ++j) {
-                System.out.print(" | " + cellsContents[i][j]);
-            }
-            System.out.print(" | \n");
-        }
-    }
+    public static int blockRows(String sheetName) {return DomainController.blockRows(sheetName);};
+    public static int blockCols(String sheetName) {return DomainController.blockColumns(sheetName);};
 
-//    public static String[][] currentBlock(String sheetname){
-//      //  DomainController.getCurrentBlock(sheetname);
-//
-//    }
+    public static int blockFirstRow(String sheetName) {return blockFRow;};
+    public static int blockFirstCol(String sheetName) {return blockFCol;};
+
+    public static String[] blockFind(String value, String sheetName){ return DomainController.blockFind(value,sheetName);}
+
+    public static Integer[] blockFindAndReplace(String find, String replace, String sheetName){ return DomainController.blockFindAndReplace(find,replace,sheetName);}
+
+    public static boolean blockSort(int nCol, String criteria, String sheetName) {return DomainController.blockSort(nCol,criteria,sheetName); }
+
+
+
+    //-----------------------CELL FUNCTIONS--------------------------------
+    public static void editedCell(int r,int c, String newValue, String SheetName){DomainController.editCell(r,c,newValue,SheetName);}
 
     public static String cellInfo(int r, int c, String name){
         String t= DomainController.getCellType(r,c,name);
@@ -100,8 +105,17 @@ public class PresentationController {
             i= DomainController.getCellInfo(r,c,name);
         }
         return i;
-
-
     }
+
+    public static void showTcells(String name){
+        String[][] cellsContents = DomainController.currentBlockCells(name);
+        for(int i = 0; i < cellsContents.length ; ++i) {
+            for (int j = 0; j < cellsContents[0].length ; ++j) {
+                System.out.print(" | " + cellsContents[i][j]);
+            }
+            System.out.print(" | \n");
+        }
+    }
+
 
 }

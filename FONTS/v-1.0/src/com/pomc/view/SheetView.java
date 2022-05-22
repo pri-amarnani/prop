@@ -18,12 +18,14 @@ import java.util.EventObject;
 import java.util.List;
 import java.util.Vector;
 
+import static java.lang.Math.max;
+import static java.lang.Math.min;
 import static javax.swing.JOptionPane.showMessageDialog;
 import static javax.swing.JOptionPane.showOptionDialog;
 
 public class SheetView {
     static JTabbedPane sheets = new JTabbedPane();
-
+    static JLabel bar=new JLabel();
 
     public static JPanel cambio() {
         sheets.removeAll();
@@ -91,7 +93,7 @@ public class SheetView {
             // pongo el botón en la ventana
 
             scrollPane.setRowHeaderView(rowHeader);
-            JLabel bar=new JLabel();
+
             bar.setBackground(Color.LIGHT_GRAY);
             bar.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY));
             bar.setText("    ");
@@ -123,23 +125,10 @@ public class SheetView {
 
                             TableModel tm = getCurrentTable().getModel();
 
-                            int mrows = tm.getRowCount();
-                            int mcols = tm.getColumnCount();
-                            for (int x = 0; x < mcols; x++) {
-                                System.out.print(tm.getColumnName(x) + " ");
-                            }
-                            System.out.println();
-                            for (int y = 0; y < mrows; y++) {
-                                for (int x = 0; x < mcols; x++) {
-                                    System.out.print(tm.getValueAt(y, x) + "   ");
-                                }
-                                System.out.print(" | \n");
-                            }
-
                             String newValue = (String) table.getValueAt(rowChanged, colIndex);
                             PresentationController.editedCell(rowChanged, colIndex, newValue, currentSheetName());
                             //System.out.println(newValue);
-                            PresentationController.showTcells(currentSheetName());
+                            //PresentationController.showTcells(currentSheetName());
 
 
                         }
@@ -173,8 +162,8 @@ public class SheetView {
                             bar.setText(PresentationController.cellInfo(row,col,currentSheetName()));
                             col2=col;
                             row2=row;
-                            PresentationController.createBlock(row1,col1,row2,col2,currentSheetName());
-                          //  PresentationController.showTcells(currentSheetName());
+                            PresentationController.createBlock(min(row1,row2),min(col1,col2),max(row1,row2),max(col1,col2),currentSheetName());
+                            PresentationController.showTcells(currentSheetName());
                             System.out.println();
                         }
                     }
@@ -186,7 +175,7 @@ public class SheetView {
             table.setColumnSelectionAllowed(false);
             table.setRowSelectionAllowed(false);
             table.setCellSelectionEnabled(true);
-
+            PresentationController.createBlock(0,0,numfil-1,numcol-1,sheets_names[i]);
 
 
 
@@ -319,6 +308,39 @@ public class SheetView {
         find.setBackground(jmbar_sheet.getBackground());
         find.setBorder(BorderFactory.createLineBorder(c,1));
         jmbar_sheet.add(find);
+        find.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String value = (String) JOptionPane.showInputDialog(
+                        null,
+                        "Find in Sheet",
+                        "Insert value to Find:",
+                        JOptionPane.PLAIN_MESSAGE,
+                        null,
+                        null,
+                        ""
+                );
+                if (value != null) {
+                    if (emptyBlock()) {
+                        System.out.println("NO BLOCK :///");
+                        PresentationController.createBlock(0,0,getCurrentTable().getRowCount()-1,getCurrentTable().getColumnCount()-1,currentSheetName());
+                    }
+                    String[] cellFound = PresentationController.blockFind(value,currentSheetName());
+                    if (cellFound.length>1) {
+                        System.out.println("FOUNDD");
+                        int row = Integer.parseInt(cellFound[0]);
+                        int col = Integer.parseInt(cellFound[1]);
+                        getCurrentTable().changeSelection(row-1,col-1,false,false);
+                        System.out.println("SLECTEDDD");
+                    }
+                    else{
+                        System.out.println("WTFFFF");
+                        showMessageDialog(null, "Value not found! :(\nTry again", "Error!", JOptionPane.ERROR_MESSAGE);
+                    }
+                }
+
+            }
+        });
 
         ImageIcon findRIcon= new ImageIcon("res/findR.png");
         Image fRcon=findRIcon.getImage();
@@ -328,6 +350,45 @@ public class SheetView {
         findR.setBackground(jmbar_sheet.getBackground());
         findR.setBorder(BorderFactory.createLineBorder(c,1));
         jmbar_sheet.add(BorderLayout.CENTER,findR);
+        findR.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JTextField value = new JTextField();
+                JTextField replace = new JTextField();
+                Object[] fields = new Object[]{
+                    "Value to find :", value,
+                    "Value to replace : ", replace
+                };
+                int result = JOptionPane.showConfirmDialog(
+                        null,
+                        fields,
+                        "Find and Replace",
+                        JOptionPane.OK_CANCEL_OPTION,
+                        JOptionPane.PLAIN_MESSAGE,
+                        null
+
+                );
+                if (result == JOptionPane.OK_OPTION){
+                    if (emptyBlock()) {
+                        PresentationController.createBlock(0,0,getCurrentTable().getRowCount()-1,getCurrentTable().getColumnCount()-1,currentSheetName());
+                    }
+                    String[] cellFound = PresentationController.blockFind(value.getText(),currentSheetName());
+                    if (cellFound.length>1 && !value.getText().equals("")) {
+                        Integer[] replaces = PresentationController.blockFindAndReplace(value.getText(),replace.getText(),currentSheetName());
+                        if(replaces != null) {
+                            for (int i = 0; i < replaces.length; i+=2) {
+                                getCurrentTable().getModel().setValueAt(replace.getText(),replaces[i],replaces[i+1]);
+                            }
+                        }
+                    }
+                    else{
+
+                        showMessageDialog(null, "Value not found! :(\nTry again", "Error!", JOptionPane.ERROR_MESSAGE);
+                    }
+                }
+
+            }
+        });
 
 
         ImageIcon sort= new ImageIcon("res/sort.png");
@@ -338,6 +399,56 @@ public class SheetView {
         sortB.setBackground(jmbar_sheet.getBackground());
         sortB.setBorder(BorderFactory.createLineBorder(c,1));
         jmbar_sheet.add(BorderLayout.CENTER,sortB);
+
+
+
+        sortB.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (emptyBlock()) {
+                    System.out.println("NO BLOCK :///");
+                    PresentationController.createBlock(0,0,getCurrentTable().getRowCount()-1,getCurrentTable().getColumnCount()-1,currentSheetName());
+                }
+                SpinnerNumberModel snm= new SpinnerNumberModel(1,1,PresentationController.blockCols(currentSheetName()),1);
+                JSpinner jsp=new JSpinner(snm);
+                Object[] options = {
+                        "Descending",
+                        "Ascending",
+                };
+                JComboBox optionList = new JComboBox(options);
+                optionList.setSelectedIndex(0);
+                Object[] components = {
+                        "Insert main column :", jsp,
+                        "Select sort criteria :", optionList
+                };
+                int result = JOptionPane.showConfirmDialog(
+                        null,
+                        components,
+                        "Sort",
+                        JOptionPane.OK_CANCEL_OPTION,
+                        JOptionPane.PLAIN_MESSAGE,
+                        null
+                );
+                if (result == JOptionPane.OK_OPTION) {
+                    String criteria = "<";
+                    if(optionList.getSelectedItem().equals("Ascending")) criteria = ">";
+                    int col = (int) jsp.getValue()-1;
+                    //int ncol = PresentationController.blockFirstCol(currentSheetName()) + col - 1;
+                    Boolean sort =PresentationController.blockSort(col,criteria ,currentSheetName());
+                    if (!sort) {
+                        showMessageDialog(null, "Couldn't sort \nTry again", "Error!", JOptionPane.ERROR_MESSAGE);
+                    }
+                    else {
+                        rewriteBlock();
+                    }
+                }
+
+
+            }
+        });
+
+
+
 
         jmbar_sheet.add(Box.createHorizontalGlue());
 
@@ -496,7 +607,7 @@ public class SheetView {
 
                     PresentationController.delRow(currentSheetName(), a2, b);
                     System.out.println();
-                    PresentationController.showTcells(currentSheetName());
+                    //PresentationController.showTcells(currentSheetName());
                     DefaultTableModel tmodel = (DefaultTableModel) getCurrentTable().getModel();
                     //  tmodel.setRowCount(0);
 
@@ -615,22 +726,70 @@ public class SheetView {
 
 
         //new sheet button
-
         model.addTableModelListener(new TableModelListener() {
             @Override
             public void tableChanged(TableModelEvent e) {
-                int rowChanged=e.getFirstRow();
-                int colChanged=e.getColumn();
-                System.out.println(rowChanged+ " + "+ colChanged);
-                String newValue= (String) table.getValueAt(rowChanged,colChanged);
-                System.out.println("cell row is "+rowChanged+" , cell col is "+colChanged+" and the value is "+newValue);
-                PresentationController.editedCell(rowChanged,colChanged,newValue,currentSheetName());
+                if (e.getType() == TableModelEvent.UPDATE) {
+                    int rowChanged = e.getFirstRow();
+                    int colChanged = e.getColumn();
 
-                //System.out.println(newValue);
-                //PresentationController.showTcells(currentSheetName());
 
+                    if (rowChanged >= 0 && rowChanged < getCurrentTable().getRowCount() && colChanged >= 0 && colChanged < getCurrentTable().getColumnCount()) {
+//                       String colName = getCurrentTable().getModel().getColumnName(colChanged);
+//
+//                        int colValue= alphabetToNum(colName);
+                        int colIndex = getCurrentTable().convertColumnIndexToView(colChanged);
+
+                        TableModel tm = getCurrentTable().getModel();
+                        String newValue = (String) table.getValueAt(rowChanged, colIndex);
+                        PresentationController.editedCell(rowChanged, colIndex, newValue, currentSheetName());
+                        //System.out.println(newValue);
+                        //PresentationController.showTcells(currentSheetName());
+                    }
+
+                }
             }
         });
+
+        table.addMouseListener(new MouseAdapter() {
+            int row1,col1,row2,col2;
+            @Override
+            public void mousePressed(MouseEvent e) {
+                table.clearSelection();
+                int row=table.rowAtPoint(e.getPoint());
+                int col=table.columnAtPoint(e.getPoint());
+                if(row<table.getRowCount() && row>=0 && col>=0 && col<table.getColumnCount()){
+                    row1=row;
+                    col1=col;
+                    bar.setText(PresentationController.cellInfo(row,col,currentSheetName()));
+                }
+
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+
+                int row=table.rowAtPoint(e.getPoint());
+                int col=table.columnAtPoint(e.getPoint());
+                if(row<table.getRowCount() && row>=0 && col>=0 && col<table.getColumnCount() ){
+                    if (row1 != row || col1 != col ) {
+                        bar.setText(PresentationController.cellInfo(row,col,currentSheetName()));
+                        col2=col;
+                        row2=row;
+                        PresentationController.createBlock(min(row1,row2),min(col1,col2),max(row1,row2),max(col1,col2),currentSheetName());
+
+                        System.out.println();
+                    }
+                }
+            }
+
+        });
+
+        table.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+        table.setColumnSelectionAllowed(false);
+        table.setRowSelectionAllowed(false);
+        table.setCellSelectionEnabled(true);
+
         return scrollPane;
 
     }
@@ -800,7 +959,22 @@ public class SheetView {
         return result;
     }
 
+    public static boolean emptyBlock() {
+       return (getCurrentTable().getSelectedColumnCount() <= 0) && (getCurrentTable().getSelectedRowCount() <=0);
+    }
 
+    public static void rewriteBlock(){
+        TableModel tm = getCurrentTable().getModel();
+        String cs = currentSheetName();
+        int firstrow = PresentationController.blockFirstRow(cs);
+        int firstcol = PresentationController.blockFirstCol(cs);
+        System.out.println("firstcol ====" + firstcol);
+        for (int i = 0; i < PresentationController.blockRows(cs); i++) {
+            for (int j = 0; j < PresentationController.blockCols(cs); j++) {
+                  tm.setValueAt(PresentationController.getCellInfo(firstrow+i,firstcol+j,cs),firstrow+i,firstcol+j);
+            }
+        }
+    }
 
 
 

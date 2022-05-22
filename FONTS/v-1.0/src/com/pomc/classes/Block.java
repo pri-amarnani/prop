@@ -167,15 +167,20 @@ public class Block {
         return null;
     }
 
-    public void findAndReplace (Object n, Object change) {
+    public Integer[] findAndReplace (Object n, Object change) {
+        Vector<Integer> results = new Vector<>();
         for (Cell[] cells : block) {
             for (int j = 0; j < block[0].length; ++j) {
                 if (Objects.equals(cells[j].getInfo(), n)) {
+                    results.add(cells[j].getRow());
+                    results.add(j);
                     Cell nw = (Cell) cells[j].changeValue(change);
                     cells[j] = nw;
                 }
             }
         }
+        Integer[] result = results.toArray(new Integer[0]);
+        return result;
     }
 
     public void floor (Block b, Boolean ref) {

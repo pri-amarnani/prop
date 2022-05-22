@@ -223,23 +223,30 @@ public class DomainController {
         return null;
     }
 
-    public static String[] currentBlockFind(String value) {
+    public static String[] blockFind(String value,String sheetName) {
         Object parsedValue = Parse(value);
-        if (docSheet.find(parsedValue) != null) {
-            Cell searchedCell = docSheet.find(parsedValue);
-            return new String[]{String.valueOf(searchedCell.getRow() +1), String.valueOf(searchedCell.getColumn() +1)};
+        if (sheetName != null) {
+            doc.getSheet(sheetName);
+            if (doc.getSheet(sheetName).find(parsedValue) != null) {
+                Cell searchedCell = doc.getSheet(sheetName).find(parsedValue);
+                return new String[]{String.valueOf(searchedCell.getRow() +1), String.valueOf(searchedCell.getColumn() +1)};
+            }
+            else return new String[]{"Not Found"};
         }
-        else return new String[]{"Not Found"};
+        return new String[]{"Not Found"};
     }
 
-    public static void currentBlockFindAndReplace(String find,String replace) {
-        Object parsedFind = Parse(find);
-        Object parsedReplace = Parse(replace);
-        docSheet.findAndReplace(parsedFind,parsedReplace);
+    public static Integer[] blockFindAndReplace(String find,String replace, String sheetName) {
+        if (sheetName != null) {
+            Object parsedFind = Parse(find);
+            Object parsedReplace = Parse(replace);
+            return doc.getSheet(sheetName).findAndReplace(parsedFind,parsedReplace);
+        }
+        return null;
     }
 
-    public static boolean currentBlockSort(int nCol, String Criteria){
-        return (docSheet.SortBlock(nCol,Criteria));
+    public static boolean blockSort(int nCol, String Criteria, String sheetName){
+        return (doc.getSheet(sheetName).SortBlock(nCol,Criteria));
     }
 
     public static void currentBlockFloor(Integer[] blockCells, boolean ref,String name){
@@ -252,16 +259,19 @@ public class DomainController {
         docSheet.convert(block, ref, from, to);
     }
 
-    public static int currentBlockColumns() {
-        return docSheet.getSelectedBlock().number_cols();
+    public static int blockColumns(String sheetName) {
+        return doc.getSheet(sheetName).getSelectedBlock().number_cols();
     }
-    public static int currentBlockRows() {
-        return docSheet.getSelectedBlock().number_rows();
+    public static int blockRows(String sheetName) {
+        return doc.getSheet(sheetName).getSelectedBlock().number_rows();
     }
 
-//    public static String[][] getCurrentBlock(String name){
-//        return doc.getSheet(name).getSelectedBlock().curre;
-//    }
+    public static int blockFirstRow(String sheetName) {
+        return doc.getSheet(sheetName).blockFirstRow();
+    }
+    public static int blockFirstCol(String sheetName) {
+        return doc.getSheet(sheetName).blockFirstCol();
+    }
     //-----------------------------FUNCTIONS--------------------------------
 
     public static void funcAddition(Integer[] Block1, Integer[] Block2, boolean ref, String sheetname) {
@@ -396,7 +406,6 @@ public class DomainController {
         else if (o.getClass()== LocalDate.class) return o.toString();
         else return (String) o;
     }
-
 
 
 
