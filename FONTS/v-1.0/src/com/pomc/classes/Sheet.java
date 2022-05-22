@@ -184,6 +184,7 @@ public class Sheet {
     public void DeleteColumn(int pos){
         if(num_cols <= 1) System.out.println("Error. Not enough columns.");
         else{
+            System.out.println("OAAAAAAAAAAAAAAAA" + pos);
             --num_cols;
             for(int i = 0; i < num_rows; ++i){
                 Vector<Cell> row = cells.elementAt(i);

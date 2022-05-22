@@ -90,6 +90,17 @@ public class PresentationController {
         String i= DomainController.getCellInfo(r,c,name);
         if (i.equals("")) return "";
         return " Type: "+t+" | Content: "+i;
+    }
+
+    public static String getCellInfo(int r, int c, String name){
+        String t= DomainController.getCellType(r,c,name);
+        String i;
+        if (t.equals("R")) i =DomainController.getCellContent(r,c,name);
+        else {
+            i= DomainController.getCellInfo(r,c,name);
+        }
+        return i;
+
 
     }
 

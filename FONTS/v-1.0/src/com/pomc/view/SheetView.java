@@ -23,6 +23,8 @@ import static javax.swing.JOptionPane.showOptionDialog;
 
 public class SheetView {
     static JTabbedPane sheets = new JTabbedPane();
+
+
     public static JPanel cambio() {
         sheets.removeAll();
         // el panel con barras de scroll automáticas
@@ -36,8 +38,8 @@ public class SheetView {
             JTable table = new JTable();
             table.putClientProperty("terminateEditOnFocusLost", true);
             DefaultTableModel model=new DefaultTableModel(numfil,numcol);
-
             table.setModel(model);
+            //table.setColumnModel(columnsModel);
             ArrayList<String> rowheaders = new ArrayList<>(numfil);
             for (int j = 1; j <= numfil; j++) {
                 rowheaders.add("" + j);
@@ -137,9 +139,7 @@ public class SheetView {
                             String newValue = (String) table.getValueAt(rowChanged, colIndex);
                             PresentationController.editedCell(rowChanged, colIndex, newValue, currentSheetName());
                             //System.out.println(newValue);
-                            //PresentationController.showTcells(currentSheetName());
-
-                            //PresentationController.showTcells(currentSheetName());
+                            PresentationController.showTcells(currentSheetName());
 
 
                         }
@@ -453,8 +453,8 @@ public class SheetView {
                     DefaultTableModel tmodel = (DefaultTableModel) getCurrentTable().getModel();
 
                     for (int k = 0; k < (Integer) jsp.getValue(); k++) {
-                        getCurrentTable().setAutoCreateColumnsFromModel(false);
                         TableColumn col= new TableColumn(tmodel.getColumnCount());
+                        getCurrentTable().setAutoCreateColumnsFromModel(false);
                         getCurrentTable().addColumn(col);
                         int a=(Integer)jsp2.getValue();
                         tmodel.addColumn( getCurrentTable().getColumnModel().getColumn(a).getHeaderValue());//NO SE ACTUALIZA BIEN SI NO SE AÑADE AL FINAL
@@ -463,6 +463,7 @@ public class SheetView {
                     }
                     updateColHeaders();
                     ((DefaultTableModel) getCurrentTable().getModel()).fireTableDataChanged();
+
 
                 }
             }
@@ -529,19 +530,22 @@ public class SheetView {
 
                 );
                 if (DelC==JOptionPane.OK_OPTION) {
-                    PresentationController.delCols(currentSheetName(), (Integer) jsp.getValue(), (Integer) jsp2.getValue());
+                    int a=(int) jsp2.getValue()-1;
+
+                    PresentationController.delCols(currentSheetName(), (Integer) jsp.getValue(), a);
                     DefaultTableModel tmodel = (DefaultTableModel) getCurrentTable().getModel();
-
-
-                    for (int k = 0; k < (Integer) jsp.getValue(); k++) {
-                        int a=(Integer) jsp2.getValue()-1;
-                        //System.out.println(a);
-                        TableColumn t=getCurrentTable().getColumn(a);
+                    for (int k = 0; k < (int) jsp.getValue(); k++) {
+                        getCurrentTable().setAutoCreateColumnsFromModel(true);
+                        //getCurrentTable().setAutoCreateColumnsFromModel(false);
+                        TableColumn t= getCurrentTable().getColumnModel().getColumn(a);
+                        System.out.println("HEADERRR:..............."+t.getHeaderValue());
                         getCurrentTable().removeColumn(t);
                         getCurrentTable().revalidate();
                         //FALTA UPDATE HEADER
                     }
                     updateColHeaders();
+                    rewriteModel(a);
+                    //((DefaultTableModel) getCurrentTable().getModel()).fireTableDataChanged();
                 }
 
             }
@@ -623,7 +627,7 @@ public class SheetView {
                 PresentationController.editedCell(rowChanged,colChanged,newValue,currentSheetName());
 
                 //System.out.println(newValue);
-                // PresentationController.showTcells(currentSheetName());
+                //PresentationController.showTcells(currentSheetName());
 
             }
         });
@@ -757,6 +761,17 @@ public class SheetView {
         } else {
             return numToAlphabet(quot-1) + letter;
         }
+    }
+
+    public static void rewriteModel(int col){
+        TableModel tm = getCurrentTable().getModel();
+        for (int i = 0; i < tm.getRowCount(); i++) {
+            for (int j = col; j <tm.getColumnCount() ; j++) {
+                tm.setValueAt(PresentationController.getCellInfo(i,j,currentSheetName()),i,j);
+            }
+
+        }
+
     }
 
 //    public static int[] getIds(String s){

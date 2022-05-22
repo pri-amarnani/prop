@@ -151,7 +151,7 @@ public class DomainController {
     }
     //deletes a column in the specified position
     public static void sheetDeleteCol(Integer num, String name){
-        if (doc.getSheet(name)!=null) doc.getSheet(name).DeleteColumn(num );
+        if (doc.getSheet(name)!=null) doc.getSheet(name).DeleteColumn(num);
 
     }
     public static void sheetDeleteCols(int num,int pos,String name){
@@ -348,6 +348,15 @@ public class DomainController {
         if(sheetname!=null) {
             Sheet s = doc.getSheet(sheetname);
             if(s.getCell(r, c).getInfo()!=null) return AntiParse(s.getCell(r, c).getInfo());
+            else return "";
+        }
+        return null;
+    }
+
+    public static String getCellContent(int r, int c, String sheetname){
+        if(sheetname!=null) {
+            Sheet s = doc.getSheet(sheetname);
+            if(s.getCell(r, c).getContent()!=null) return AntiParse(s.getCell(r, c).getInfo());
             else return "";
         }
         return null;
