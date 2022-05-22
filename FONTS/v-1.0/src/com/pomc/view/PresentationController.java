@@ -10,8 +10,7 @@ import com.pomc.controller.DomainController;
 import java.util.Vector;
 
 public class PresentationController {
-    private static int blockFCol;
-    private static int blockFRow;
+
 
     //------------------------------DOC FUNCTIONS -------------------------------------
 
@@ -63,8 +62,7 @@ public class PresentationController {
 
     public static boolean createBlock(int ulr,int ulc,int drr,int drc, String name){
         //FALTA id de la hoja en la que estamos
-        blockFCol = ulc;
-        blockFRow = ulr;
+
         Integer[] cells= new Integer[]{ulr,ulc,drr,drc};
         return DomainController.initializeBlock(cells,name);
     }
@@ -72,8 +70,8 @@ public class PresentationController {
     public static int blockRows(String sheetName) {return DomainController.blockRows(sheetName);};
     public static int blockCols(String sheetName) {return DomainController.blockColumns(sheetName);};
 
-    public static int blockFirstRow(String sheetName) {return blockFRow;};
-    public static int blockFirstCol(String sheetName) {return blockFCol;};
+    public static int blockFirstRow(String sheetName) {return DomainController.blockFirstRow(sheetName);};
+    public static int blockFirstCol(String sheetName) {return DomainController.blockFirstCol(sheetName);};
 
     public static String[] blockFind(String value, String sheetName){ return DomainController.blockFind(value,sheetName);}
 

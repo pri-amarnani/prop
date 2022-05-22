@@ -128,6 +128,8 @@ public class Block {
     }
 
     public void SortBlock (int n_col, String criteria, String type) {
+        int firstCol=ul.getColumn();
+        int firstRow=ul.getRow();
 
         if (Objects.equals(criteria, "<")) {
             if (Objects.equals(type, "N")) {
@@ -148,10 +150,11 @@ public class Block {
             }
         }
 
+
         for (int i = 0; i < size_r; ++i) {
             for (int j = 0; j < size_c; ++j) {
-                this.block[i][j].setRow(i);
-                this.block[i][j].setColumn(j);
+                this.block[i][j].setRow(firstRow+i);
+                this.block[i][j].setColumn(firstCol+j);
             }
         }
         ul = this.block[0][0];

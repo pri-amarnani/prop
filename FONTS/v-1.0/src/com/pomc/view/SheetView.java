@@ -1,5 +1,7 @@
 package com.pomc.view;
 
+import com.sun.tools.javac.Main;
+
 import javax.sql.RowSetReader;
 import javax.swing.*;
 import javax.swing.event.CellEditorListener;
@@ -26,12 +28,14 @@ import static javax.swing.JOptionPane.showOptionDialog;
 public class SheetView {
     static JTabbedPane sheets = new JTabbedPane();
     static JLabel bar=new JLabel();
-
+    static JMenuBar jmbar_sheet= new JMenuBar();
+    static boolean changedMenu=false;
     public static JPanel cambio() {
         sheets.removeAll();
         // el panel con barras de scroll automáticas
         JPanel frame = new JPanel(new BorderLayout());
         String[] sheets_names = PresentationController.getSheets();
+
 
         for (int i = 0; i < sheets_names.length; i++) {
             int numfil=PresentationController.getSheetRows(i,sheets_names[i]);
@@ -142,6 +146,17 @@ public class SheetView {
                 @Override
                 public void mousePressed(MouseEvent e) {
                     table.clearSelection();
+                    if(changedMenu) {
+                        int count=jmbar_sheet.getMenuCount();
+                        for (int j = count-2; j >= 4; j--) {
+                            System.out.println(" IN ME--> "+jmbar_sheet.getMenuCount());
+                            jmbar_sheet.remove(j);
+                            System.out.println(" IN ME2--> "+jmbar_sheet.getMenuCount());
+                        }
+                        jmbar_sheet.repaint();
+                        jmbar_sheet.revalidate();
+                        changedMenu=false;
+                    }
                     int row=table.rowAtPoint(e.getPoint());
                     int col=table.columnAtPoint(e.getPoint());
                     if(row<table.getRowCount() && row>=0 && col>=0 && col<table.getColumnCount()){
@@ -164,6 +179,7 @@ public class SheetView {
                             row2=row;
                             PresentationController.createBlock(min(row1,row2),min(col1,col2),max(row1,row2),max(col1,col2),currentSheetName());
                             PresentationController.showTcells(currentSheetName());
+                            updateBlockMenu(jmbar_sheet);
                             System.out.println();
                         }
                     }
@@ -296,7 +312,7 @@ public class SheetView {
         sheet.add(cols);
         sheet.add(delete);
 
-        JMenuBar jmbar_sheet= new JMenuBar();
+
         jmbar_sheet.add(Box.createHorizontalGlue());
         // TODO: 18/5/22 persistencia
         ImageIcon findIcon= new ImageIcon("res/find.png");
@@ -308,6 +324,9 @@ public class SheetView {
         find.setBackground(jmbar_sheet.getBackground());
         find.setBorder(BorderFactory.createLineBorder(c,1));
         jmbar_sheet.add(find);
+
+
+
         find.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -391,7 +410,7 @@ public class SheetView {
         });
 
 
-        ImageIcon sort= new ImageIcon("res/sort.png");
+        ImageIcon sort= new ImageIcon("res/iconosort.png");
         Image sortI=sort.getImage();
         Image s=sortI.getScaledInstance(40,40,Image.SCALE_DEFAULT);
         sort.setImage(s);
@@ -674,6 +693,52 @@ public class SheetView {
 
     }
 
+    public static void updateBlockMenu(JMenuBar blockBar){
+        changedMenu=true;
+        Color c = new Color(70, 130, 180);
+
+       // JPanel blockmenu= new JPanel();
+        if(!emptyBlock()){
+
+            ImageIcon floorIcon= new ImageIcon("res/iconofloor.png");
+            Image flIcon=floorIcon.getImage();
+            Image fl=flIcon.getScaledInstance(40,40,Image.SCALE_DEFAULT);
+            floorIcon.setImage(fl);
+            JButton floor= new JButton(floorIcon);
+            floor.setBackground(blockBar.getBackground());
+            floor.setBorder(BorderFactory.createLineBorder(c,1));
+            blockBar.add(floor,blockBar.getMenuCount()-1);
+
+
+            ImageIcon convertIcon= new ImageIcon("res/iconoconvert.png");
+            Image cIcon=convertIcon.getImage();
+            Image conv=cIcon.getScaledInstance(40,40,Image.SCALE_DEFAULT);
+            convertIcon.setImage(conv);
+            JButton convert= new JButton(convertIcon);
+            convert.setBackground(blockBar.getBackground());
+            convert.setBorder(BorderFactory.createLineBorder(c,1));
+            blockBar.add(convert,blockBar.getMenuCount()-1);
+
+//            ImageIcon convertIcon= new ImageIcon("res/iconoconvert.png");
+//            Image cIcon=convertIcon.getImage();
+//            Image conv=cIcon.getScaledInstance(40,40,Image.SCALE_DEFAULT);
+//            convertIcon.setImage(conv);
+//            JButton convert= new JButton(convertIcon);
+//            convert.setBackground(blockBar.getBackground());
+//            convert.setBorder(BorderFactory.createLineBorder(c,1));
+//            blockBar.add(convert,blockBar.getMenuCount()-1);
+
+            System.out.println("IN FUNC---> "+blockBar.getMenuCount());
+            blockBar.repaint();
+            blockBar.revalidate();
+//            JPanel mp= (JPanel) MainMenu.getCurrentFrame().getContentPane().getComponent(0);
+//            mp.add(BorderLayout.CENTER,blockBar);
+//
+//           // MainMenu.getCurrentFrame().repaint();
+//            mp.repaint();
+        }
+    }
+
     public static JScrollPane addSheet(String title, int numfil,int numcol){
         PresentationController.newSheet(title,numfil,numcol);
         String[] sheets_names = PresentationController.getSheets();
@@ -777,8 +842,8 @@ public class SheetView {
                         col2=col;
                         row2=row;
                         PresentationController.createBlock(min(row1,row2),min(col1,col2),max(row1,row2),max(col1,col2),currentSheetName());
-
-                        System.out.println();
+                        System.out.println("Aqui??????");
+                        updateBlockMenu(jmbar_sheet);
                     }
                 }
             }
@@ -968,7 +1033,7 @@ public class SheetView {
         String cs = currentSheetName();
         int firstrow = PresentationController.blockFirstRow(cs);
         int firstcol = PresentationController.blockFirstCol(cs);
-        System.out.println("firstcol ====" + firstcol);
+        //System.out.println("firstcol ====" + firstcol);
         for (int i = 0; i < PresentationController.blockRows(cs); i++) {
             for (int j = 0; j < PresentationController.blockCols(cs); j++) {
                   tm.setValueAt(PresentationController.getCellInfo(firstrow+i,firstcol+j,cs),firstrow+i,firstcol+j);
