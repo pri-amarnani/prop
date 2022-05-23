@@ -29,6 +29,8 @@ public class SheetView {
     static JLabel bar=new JLabel();
     static JMenuBar jmbar_sheet= new JMenuBar();
     static boolean changedMenu=false;
+
+    static boolean writeChange=false;
     public static JPanel cambio() {
         sheets.removeAll();
         // el panel con barras de scroll automáticas
@@ -115,27 +117,32 @@ public class SheetView {
             model.addTableModelListener(new TableModelListener() {
                 @Override
                 public void tableChanged(TableModelEvent e) {
-                    if (e.getType() == 0) {
+                    if (e.getType() == 0 && !writeChange) {
                         int rowChanged = e.getFirstRow();
                         int colChanged = e.getColumn();
 
-
                         if (rowChanged >= 0 && rowChanged < getCurrentTable().getRowCount() && colChanged >= 0 && colChanged < getCurrentTable().getColumnCount()) {
-//                       String colName = getCurrentTable().getModel().getColumnName(colChanged);
-//
-//                        int colValue= alphabetToNum(colName);
+                           //si no son ref:
                             int colIndex = getCurrentTable().convertColumnIndexToView(colChanged);
-
 
                             TableModel tm = getCurrentTable().getModel();
 
                             String newValue = (String) table.getValueAt(rowChanged, colIndex);
                             PresentationController.editedCell(rowChanged, colIndex, newValue, currentSheetName());
-                            //System.out.println(newValue);
-                            //PresentationController.showTcells(currentSheetName());
 
+                            boolean b=PresentationController.hasRefs(rowChanged,colIndex,currentSheetName());
+                            if(b){
+                                Object[] Rmodify=PresentationController.getRefsIds(rowChanged,colIndex,currentSheetName());
+                                for (int i = 0; i < Rmodify.length; i+=2) {
+                                    int rRow= (int) Rmodify[i];
+                                    int rCol=(int) Rmodify[i+1];
+                                    writeBlock(rRow,rCol,rRow,rCol);
+                                }
+                            }
 
                         }
+
+
 
                     }
                 }
@@ -149,9 +156,8 @@ public class SheetView {
                     if(changedMenu) {
                         int count=jmbar_sheet.getMenuCount();
                         for (int j = count-2; j >= 4; j--) {
-                            System.out.println(" IN ME--> "+jmbar_sheet.getMenuCount());
                             jmbar_sheet.remove(j);
-                            System.out.println(" IN ME2--> "+jmbar_sheet.getMenuCount());
+
                         }
                         jmbar_sheet.repaint();
                         jmbar_sheet.revalidate();
@@ -177,6 +183,7 @@ public class SheetView {
                             bar.setText(PresentationController.cellInfo(row,col,currentSheetName()));
                             col2=col;
                             row2=row;
+
                             PresentationController.createBlock(min(row1,row2),min(col1,col2),max(row1,row2),max(col1,col2),currentSheetName());
                             PresentationController.showTcells(currentSheetName());
                             updateBlockMenu(jmbar_sheet);
@@ -451,8 +458,9 @@ public class SheetView {
                         @Override
                         public void actionPerformed(ActionEvent e) {
                             Integer[] floored=FuncView.addFloor();
-                            rewriteBlock();
                             if(floored[4]==-1) writeBlock(floored[0],floored[1],floored[2],floored[3]);
+                            else rewriteBlock();
+                            PresentationController.showTcells(currentSheetName());
                         }
                     });
 
@@ -614,8 +622,16 @@ public class SheetView {
                         TableModel tm = getCurrentTable().getModel();
                         String newValue = (String) table.getValueAt(rowChanged, colIndex);
                         PresentationController.editedCell(rowChanged, colIndex, newValue, currentSheetName());
-                        //System.out.println(newValue);
-                        //PresentationController.showTcells(currentSheetName());
+                        boolean b=PresentationController.hasRefs(rowChanged,colIndex,currentSheetName());
+                        if(b){
+                            System.out.println("  LLEGA HASTA AQUÍ ;)  ");
+                            Object[] Rmodify=PresentationController.getRefsIds(rowChanged,colIndex,currentSheetName());
+                            for (int i = 0; i < Rmodify.length; i+=2) {
+                                int rRow= (int) Rmodify[i];
+                                int rCol=(int) Rmodify[i+1];
+                                writeBlock(rRow,rCol,rRow,rCol);
+                            }
+                        }
                     }
 
                 }
@@ -648,7 +664,6 @@ public class SheetView {
                         col2=col;
                         row2=row;
                         PresentationController.createBlock(min(row1,row2),min(col1,col2),max(row1,row2),max(col1,col2),currentSheetName());
-                        System.out.println("Aqui??????");
                         updateBlockMenu(jmbar_sheet);
                     }
                 }
@@ -664,17 +679,6 @@ public class SheetView {
         return scrollPane;
 
     }
-//    public static String convertToNumberingScheme(int number) {
-//        var letters  = "";
-//        do {
-//            number -= 1;
-//            char letra = (char) (65 + (number % 26));
-//            letters = letra + letters;
-//            number = (number / 26); // quick `floor`
-//        } while(number > 0);
-//
-//        return letters;
-//    }
 
     private static ListCellRenderer<? super String> getRenderer() {
         return new DefaultListCellRenderer() {
@@ -804,23 +808,6 @@ public class SheetView {
 
     }
 
-//    public static int[] getIds(String s){
-//        int found[] = new int[2];
-//        int modelids[]=getIdsModel(s);
-//        if(s!=null) {
-//            for (int i = 0; i < getCurrentTable().getRowCount(); i++) {
-//                for (int j = 0; j < getCurrentTable().getColumnCount(); j++) {
-//                    if (getCurrentTable().getValueAt(i, j)!= null && getCurrentTable().getValueAt(i, j).equals(s)) {
-//                            found[0] = i;
-//                            found[1] = j;
-//                    }
-//                }
-//            }
-//        }
-//        return found;
-//    }
-//
-
     public static int alphabetToNum(String i) {
         int result = -1;
         for (int j = 0; j < i.length(); j++) {
@@ -835,6 +822,7 @@ public class SheetView {
     }
 
     public static void rewriteBlock(){
+        writeChange=true;
         TableModel tm = getCurrentTable().getModel();
         String cs = currentSheetName();
         int firstrow = PresentationController.blockFirstRow(cs);
@@ -845,16 +833,20 @@ public class SheetView {
                   tm.setValueAt(PresentationController.getCellInfo(firstrow+i,firstcol+j,cs),firstrow+i,firstcol+j);
             }
         }
+        writeChange=false;
     }
 
     public static void writeBlock(int ulr,int ulc,int drr,int drc){
+        writeChange=true;
         TableModel tm = getCurrentTable().getModel();
         String cs = currentSheetName();
         for (int i = ulr; i <=drr; i++) {
             for (int j = ulc; j <=drc; j++) {
-                tm.setValueAt(PresentationController.getCellInfo(i,j,cs),i,j);
+                String s=PresentationController.getCellInfo(i,j,cs);
+                tm.setValueAt(s,i,j);
             }
         }
+        writeChange=false;
     }
 
 

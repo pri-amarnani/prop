@@ -32,7 +32,6 @@ public class Block {
     }
 
     public void setCell(int i, int j, Cell c) {
-        //System.out.println(c.getClass());
         this.block[i][j] = c;
     }
 
@@ -194,7 +193,7 @@ public class Block {
                     Cell n = (Cell) b.getCell(i, j).changeValue(Math.floor((double) this.block[i][j].getInfo()));
                     b.setCell(i,j,n);
                     if (ref) {
-                        ReferencedCell rc = new ReferencedCell(n.getRow(),n.getColumn(),"=floor1");
+                        ReferencedCell rc = new ReferencedCell(n.getRow(),n.getColumn(),"=floor(");
                         rc.setContent(n.getInfo());
                         b.setCell(i, j, rc);
                         Vector<Cell> s = new Vector<>(1);
@@ -206,9 +205,11 @@ public class Block {
 
                         n = null;
                     }
+
                 }
             }
         }
+
         b.ul=b.getCell(0,0);
         b.dr=b.getCell(b.size_r-1,b.size_c-1);
     }

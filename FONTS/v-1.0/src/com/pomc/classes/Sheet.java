@@ -1,5 +1,8 @@
 package com.pomc.classes;
 
+import com.pomc.view.PresentationController;
+
+import java.util.Map;
 import java.util.Vector;
 
 public class Sheet {
@@ -12,13 +15,11 @@ public class Sheet {
 
 
     public void update(Block b){
-
         Cell ul = b.ul;
-        System.out.println(" ul col--> "+ul.getColumn());
-        System.out.println(" ul row---> "+ul.getRow());
         for(int i = 0; i < b.number_rows(); ++ i){
             for(int j = 0; j < b.number_cols(); ++j){
                 cells.elementAt(ul.getRow() + i).setElementAt(b.getCell(i,j),ul.getColumn() + j);
+              //  System.out.println("SHEET PRINT: "+getCell(ul.getRow()+i,ul.getColumn()+j).getInfo());
             }
         }
     }
@@ -121,6 +122,16 @@ public class Sheet {
             if (id != -1) {
                 id2 = i;
                 break;
+            }
+        }
+        if(c.getType()=="R"){
+           ReferencedCell rcell= (ReferencedCell) c;
+            Map.Entry<String,Vector<Cell>> rcellRefs=rcell.getRefInfo();
+            Vector<Cell> rcellCells= rcellRefs.getValue();
+            for (int i = 0; i < rcellCells.size(); i++) {
+                Cell delRef=rcellCells.elementAt(i);
+                System.out.println("DEPENDIA DE: "+delRef.getRow()+", "+delRef.getColumn());
+                delRef.deleteRefCell(rcell);
             }
         }
         Object o1 = c.changeValue(o);
@@ -288,6 +299,7 @@ public class Sheet {
         }
         else System.out.println("Error. Not all cells are of type Number.");
         update(b);
+
     }
 
     public void convert(Block b, Boolean ref, String from, String to){

@@ -93,6 +93,13 @@ public class PresentationController {
     //-----------------------CELL FUNCTIONS--------------------------------
     public static void editedCell(int r,int c, String newValue, String SheetName){DomainController.editCell(r,c,newValue,SheetName);}
 
+    public static boolean isReferenced(int r,int c,String Sheetname){
+        String t= DomainController.getCellType(r,c,Sheetname);
+        return t.equals("R");
+    }
+    public static boolean hasRefs (int r,int c, String sheetName){return DomainController.hasRefs(r,c,sheetName);}
+
+    public static Object[] getRefsIds(int r, int c, String sheetName){return DomainController.getRefsIds(r,c,sheetName);}
     public static String cellInfo(int r, int c, String name){
         String t= DomainController.getCellType(r,c,name);
         if(t.equals("N")) t="Number";
@@ -104,10 +111,13 @@ public class PresentationController {
         return " Type: "+t+" | Content: "+i;
     }
 
+
     public static String getCellInfo(int r, int c, String name){
         String t= DomainController.getCellType(r,c,name);
         String i;
-        if (t.equals("R")) i =DomainController.getCellContent(r,c,name);
+        if (t.equals("R")){
+            i =DomainController.getCellContent(r,c,name);
+        }
         else {
             i= DomainController.getCellInfo(r,c,name);
         }
@@ -115,7 +125,7 @@ public class PresentationController {
     }
 
     public static void showTcells(String name){
-        String[][] cellsContents = DomainController.currentBlockCells(name);
+        String[][] cellsContents = DomainController.currentSheetCells(name);
         for(int i = 0; i < cellsContents.length ; ++i) {
             for (int j = 0; j < cellsContents[0].length ; ++j) {
                 System.out.print(" | " + cellsContents[i][j]);

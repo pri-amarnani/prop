@@ -100,7 +100,7 @@ public class DomainController {
                 Contents.add(i,new Vector<String>());
             for (int j = 0; j < doc.getSheet(name).getNumCols(); ++j) {
                 String content;
-                Cell cell = doc.getSheet(name).getCells().get(i).get(j);
+                Cell cell = doc.getSheet(name).getCell(i,j);
                 if (cell.getInfo() == null) { content = " - "; }
                 else if (cell.getType().equals("R")) content = AntiParse(cell.getContent());
                 else content = AntiParse(cell.getInfo());
@@ -377,7 +377,9 @@ public class DomainController {
     public static String getCellContent(int r, int c, String sheetname){
         if(sheetname!=null) {
             Sheet s = doc.getSheet(sheetname);
-            if(s.getCell(r, c).getContent()!=null) return AntiParse(s.getCell(r, c).getInfo());
+            if(s.getCell(r, c).getContent()!=null){
+                return AntiParse(s.getCell(r, c).getContent());
+            }
             else return "";
         }
         return null;
@@ -389,6 +391,30 @@ public class DomainController {
             return s.getCell(r,c).getType();
         }
         return null;
+    }
+
+    public static boolean hasRefs(int r,int c,String sheetName){
+        if(sheetName!=null){
+            Sheet s=doc.getSheet(sheetName);
+            return s.getCell(r,c).hasRefs();
+        }
+        return false;
+    }
+
+    public static Object[] getRefsIds (int r, int c, String sheetName){
+        Vector<Integer> rids= new Vector<>();
+        if(sheetName!=null){
+            Sheet s=doc.getSheet(sheetName);
+             int rsize=s.getCell(r,c).getRefs().size();
+            for (int i = 0; i <rsize; i++) {
+                int row=s.getCell(r,c).getRefs().elementAt(i).getRow();
+                int col=s.getCell(r,c).getRefs().elementAt(i).getColumn();
+                rids.add(i,row);
+                rids.add(i+1,col);
+            }
+
+        }
+        return rids.toArray();
     }
 
 
