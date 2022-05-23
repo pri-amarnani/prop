@@ -87,10 +87,11 @@ public class MainMenu {
 
         openB.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent e) {
-                //
-            }
-        });
+            public void actionPerformed(ActionEvent e) {MenuViews.open();}});
+
+        importB.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {MenuViews.importFiles();}});
 
 
         // Área de texto en el centro

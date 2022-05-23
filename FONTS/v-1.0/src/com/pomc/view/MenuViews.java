@@ -183,7 +183,9 @@ public class MenuViews {
 
     public static void saveAs() {
         JFileChooser selectFile = new JFileChooser();
-        selectFile.addChoosableFileFilter(new FileNameExtensionFilter("POMC Worksheet Files", "pomc"));
+        FileFilter pomc = new FileNameExtensionFilter("POMC Worksheet Files (*.pomc)", "pomc");
+        selectFile.addChoosableFileFilter(pomc);
+        selectFile.setFileFilter(pomc);
         selectFile.setDialogTitle("Select location to save the file");
         int result = selectFile.showSaveDialog(null);
         if(result == JFileChooser.APPROVE_OPTION) {
@@ -194,11 +196,39 @@ public class MenuViews {
 
     public static void export() {
         JFileChooser selectFile = new JFileChooser();
-        selectFile.addChoosableFileFilter(new FileNameExtensionFilter("PDF Documents", "pdf"));
-        selectFile.addChoosableFileFilter(new FileNameExtensionFilter("Text Files", "txt"));
-        selectFile.addChoosableFileFilter(new FileNameExtensionFilter("CSV Files", "csv"));
+        FileFilter pdf =new FileNameExtensionFilter("PDF Documents (*.pdf)", "pdf");
+        selectFile.addChoosableFileFilter(pdf);
+        selectFile.addChoosableFileFilter(new FileNameExtensionFilter("Text Files (*.txt)", "txt"));
+        selectFile.addChoosableFileFilter(new FileNameExtensionFilter("CSV Files (*.csv)", "csv"));
+        selectFile.setFileFilter(pdf);
         selectFile.setDialogTitle("Select location to export the file");
         int result = selectFile.showSaveDialog(null);
+        if(result == JFileChooser.APPROVE_OPTION) {
+            System.out.println(selectFile.getCurrentDirectory());
+            PresentationController.export(selectFile.getSelectedFile());
+        }
+    }
+
+    public static void importFiles() {
+        JFileChooser selectFile = new JFileChooser();
+        FileFilter csv = new FileNameExtensionFilter("CSV Files (*.csv)", "csv");
+        selectFile.addChoosableFileFilter(csv);
+        selectFile.addChoosableFileFilter(new FileNameExtensionFilter("Text Files (*.txt)", "txt"));
+        selectFile.setDialogTitle("Select file to import");
+        selectFile.setFileFilter(csv);
+        int result = selectFile.showOpenDialog(null);
+        if(result == JFileChooser.APPROVE_OPTION) {
+            System.out.println(selectFile.getCurrentDirectory());
+            PresentationController.export(selectFile.getSelectedFile());
+        }
+    }
+    public static void open() {
+        JFileChooser selectFile = new JFileChooser();
+        FileFilter pomc = new FileNameExtensionFilter("POMC Worksheet Files (*.pomc)", "pomc");
+        selectFile.addChoosableFileFilter(pomc);
+        selectFile.setDialogTitle("Select file to open");
+        selectFile.setFileFilter(pomc);
+        int result = selectFile.showOpenDialog(null);
         if(result == JFileChooser.APPROVE_OPTION) {
             System.out.println(selectFile.getCurrentDirectory());
             PresentationController.export(selectFile.getSelectedFile());
