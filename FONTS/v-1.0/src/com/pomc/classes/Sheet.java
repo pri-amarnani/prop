@@ -16,8 +16,6 @@ public class Sheet {
 
     public void update(Block b){
         Cell ul = b.ul;
-        System.out.println(" ul col--> "+ul.getColumn());
-        System.out.println(" ul row---> "+ul.getRow());
         for(int i = 0; i < b.number_rows(); ++ i){
             for(int j = 0; j < b.number_cols(); ++j){
                 cells.elementAt(ul.getRow() + i).setElementAt(b.getCell(i,j),ul.getColumn() + j);

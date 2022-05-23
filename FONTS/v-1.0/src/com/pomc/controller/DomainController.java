@@ -388,10 +388,33 @@ public class DomainController {
     public static String getCellType(int r,int c, String sheetname){
         if(sheetname!=null){
             Sheet s=doc.getSheet(sheetname);
-            System.out.println("----------- "+s.getCell(r,c).getRow());
             return s.getCell(r,c).getType();
         }
         return null;
+    }
+
+    public static boolean hasRefs(int r,int c,String sheetName){
+        if(sheetName!=null){
+            Sheet s=doc.getSheet(sheetName);
+            return s.getCell(r,c).hasRefs();
+        }
+        return false;
+    }
+
+    public static Object[] getRefsIds (int r, int c, String sheetName){
+        Vector<Integer> rids= new Vector<>();
+        if(sheetName!=null){
+            Sheet s=doc.getSheet(sheetName);
+             int rsize=s.getCell(r,c).getRefs().size();
+            for (int i = 0; i <rsize; i++) {
+                int row=s.getCell(r,c).getRefs().elementAt(i).getRow();
+                int col=s.getCell(r,c).getRefs().elementAt(i).getColumn();
+                rids.add(i,row);
+                rids.add(i+1,col);
+            }
+
+        }
+        return rids.toArray();
     }
 
 

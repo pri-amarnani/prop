@@ -97,7 +97,9 @@ public class PresentationController {
         String t= DomainController.getCellType(r,c,Sheetname);
         return t.equals("R");
     }
+    public static boolean hasRefs (int r,int c, String sheetName){return DomainController.hasRefs(r,c,sheetName);}
 
+    public static Object[] getRefsIds(int r, int c, String sheetName){return DomainController.getRefsIds(r,c,sheetName);}
     public static String cellInfo(int r, int c, String name){
         String t= DomainController.getCellType(r,c,name);
         if(t.equals("N")) t="Number";
@@ -115,7 +117,6 @@ public class PresentationController {
         String i;
         if (t.equals("R")){
             i =DomainController.getCellContent(r,c,name);
-            System.out.println("Entra???????? ->>>> "+i);
         }
         else {
             i= DomainController.getCellInfo(r,c,name);
