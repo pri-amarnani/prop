@@ -3,6 +3,7 @@ package com.pomc.classes;
 import com.digidemic.unitof.D;
 import com.digidemic.unitof.UnitOf;
 
+import java.sql.Ref;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.*;
@@ -59,6 +60,14 @@ public abstract class Cell {
         return this.refs;
     }
 
+    /**
+     * Busca el índice donde se encuentra una celda referenciada en su vector de referencias
+     * @param  r
+     *
+     */
+    public void deleteRefCell(ReferencedCell r){
+        this.refs.removeElement(r);
+    }
 
     /**
      * Modificadora de columna, la columna de la celda pasa a ser c.

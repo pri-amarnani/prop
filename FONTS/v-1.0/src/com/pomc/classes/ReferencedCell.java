@@ -1,5 +1,6 @@
 package com.pomc.classes;
 
+import java.time.LocalDate;
 import java.util.*;
 
 public class ReferencedCell extends Cell {
@@ -26,7 +27,27 @@ public class ReferencedCell extends Cell {
 
     @Override
     public Object changeValue(Object o) {
-        return null;
+        int myrow=getRow();
+        int mycol=getColumn();
+        this.info= null;
+        this.setRow(null);
+        this.setColumn(null);
+        System.gc();
+
+        if (o.getClass()==String.class){
+            TextCell t=new TextCell(myrow,mycol, (String) o);
+            return t;
+        }
+        else if(o.getClass()== LocalDate.class){
+            DateCell d=new DateCell(myrow,mycol,(LocalDate)o);
+            return d;
+        }
+        else if (o.getClass()==Double.class){
+            NumCell n=new NumCell(myrow,mycol, (Double) o);
+            return n;
+        }
+
+        return this;
     }
 
 

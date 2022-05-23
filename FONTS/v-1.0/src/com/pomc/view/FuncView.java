@@ -13,7 +13,6 @@ public class FuncView {
 
       public static void addSort() {
           if (SheetView.emptyBlock()) {
-              System.out.println("NO BLOCK :///");
               PresentationController.createBlock(0, 0, SheetView.getCurrentTable().getRowCount() - 1, SheetView.getCurrentTable().getColumnCount() - 1, SheetView.currentSheetName());
           }
           SpinnerNumberModel snm = new SpinnerNumberModel(1, 1, PresentationController.blockCols(SheetView.currentSheetName()), 1);
@@ -63,19 +62,17 @@ public class FuncView {
           );
           if (value != null) {
               if (SheetView.emptyBlock()) {
-                  System.out.println("NO BLOCK :///");
+
                   PresentationController.createBlock(0,0,SheetView.getCurrentTable().getRowCount()-1,SheetView.getCurrentTable().getColumnCount()-1,SheetView.currentSheetName());
               }
               String[] cellFound = PresentationController.blockFind(value,SheetView.currentSheetName());
               if (cellFound.length>1) {
-                  System.out.println("FOUNDD");
                   int row = Integer.parseInt(cellFound[0]);
                   int col = Integer.parseInt(cellFound[1]);
                   SheetView.getCurrentTable().changeSelection(row-1,col-1,false,false);
-                  System.out.println("SLECTEDDD");
+
               }
               else{
-                  System.out.println("WTFFFF");
                   showMessageDialog(null, "Value not found! :(\nTry again", "Error!", JOptionPane.ERROR_MESSAGE);
               }
           }
