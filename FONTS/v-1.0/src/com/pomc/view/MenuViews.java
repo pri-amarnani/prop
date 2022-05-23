@@ -1,8 +1,11 @@
 package com.pomc.view;
 
 import javax.swing.*;
+import javax.swing.filechooser.FileFilter;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -174,11 +177,31 @@ public class MenuViews {
     public static void deleteSheet() {PresentationController.delSheet(currentSheetName());}
 
     public static void save() {
+        if (PresentationController.isFileSaved()) PresentationController.save();
+        else saveAs();
     }
 
     public static void saveAs() {
+        JFileChooser selectFile = new JFileChooser();
+        selectFile.addChoosableFileFilter(new FileNameExtensionFilter("POMC Worksheet Files", "pomc"));
+        selectFile.setDialogTitle("Select location to save the file");
+        int result = selectFile.showSaveDialog(null);
+        if(result == JFileChooser.APPROVE_OPTION) {
+            System.out.println(selectFile.getCurrentDirectory());
+            PresentationController.saveAs(selectFile.getSelectedFile());
+        }
     }
 
     public static void export() {
+        JFileChooser selectFile = new JFileChooser();
+        selectFile.addChoosableFileFilter(new FileNameExtensionFilter("PDF Documents", "pdf"));
+        selectFile.addChoosableFileFilter(new FileNameExtensionFilter("Text Files", "txt"));
+        selectFile.addChoosableFileFilter(new FileNameExtensionFilter("CSV Files", "csv"));
+        selectFile.setDialogTitle("Select location to export the file");
+        int result = selectFile.showSaveDialog(null);
+        if(result == JFileChooser.APPROVE_OPTION) {
+            System.out.println(selectFile.getCurrentDirectory());
+            PresentationController.export(selectFile.getSelectedFile());
+        }
     }
 }

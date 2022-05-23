@@ -7,9 +7,12 @@ import com.pomc.classes.Document;
 import com.pomc.classes.Sheet;
 import com.pomc.controller.DomainController;
 
+import java.io.File;
 import java.util.Vector;
 
 public class PresentationController {
+
+    private static String path = null;
 
 
     //------------------------------DOC FUNCTIONS -------------------------------------
@@ -122,4 +125,30 @@ public class PresentationController {
     }
 
 
+    //-------------------------FILE MANAGEMENT-----------------------------
+
+    public static boolean isFileSaved() {
+        return (path != null);
+    }
+
+    public static void save() {
+        //TODO enviar path a persistencia
+    }
+
+    public static void saveAs(File selectedFile) {
+        //TODO enviar path a persistencia y guardar current path
+        String[] extension = selectedFile.getName().split("\\.(?=[^\\.]+$)");
+        if (extension.length> 1){
+            if(extension[1].equals("pomc")) path= selectedFile.getName();
+            else {
+                path = selectedFile.getName()+".pomc";
+            }
+        }
+        else path = selectedFile.getName()+".pomc";
+        System.out.println(path);
+    }
+
+    public static void export(File selectedFile) {
+        //TODO enviar path a persistencia y formato
+    }
 }
