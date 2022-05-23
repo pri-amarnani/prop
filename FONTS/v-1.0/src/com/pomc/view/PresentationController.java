@@ -150,11 +150,11 @@ public class PresentationController {
     }
 
     public static void save() {
-        //TODO enviar path a persistencia
+        //TODO enviar path y doc a persistencia
     }
 
     public static void saveAs(File selectedFile) {
-        //TODO enviar path a persistencia y guardar current path
+        //TODO enviar titulo, path y doc a persistencia y guardar current path y cambiar titulo si es distinto
         String[] extension = selectedFile.getName().split("\\.(?=[^\\.]+$)");
         if (extension.length> 1){
             if(extension[1].equals("pomc")) path= selectedFile.getName();
@@ -167,7 +167,18 @@ public class PresentationController {
     }
 
     public static void export(File selectedFile) {
-        //TODO enviar path a persistencia y formato
+        //TODO enviar titulo, path, format y doc a persistencia y formato
     }
 
+    public static void blockMean(Integer[] b1, boolean ref, String sheetName) {DomainController.funcMean(b1[0],b1[1],true,ref,sheetName);}
+
+    public static void blockMedian(Integer[] b1, boolean ref, String sheetName) {DomainController.funcMedian(b1[0],b1[1],true,ref,sheetName);}
+
+    public static void blockVariance(Integer[] b1, boolean ref, String sheetName) {DomainController.funcVariance(b1[0],b1[1],true,ref,sheetName); }
+
+    public static void blockSTD(Integer[] b1, boolean ref, String sheetName) {DomainController.funcStandardDeviation(b1[0],b1[1],true,ref,sheetName);}
+
+    public static void blockCovar(Integer[] a, Integer[] b1, boolean ref, String sheetName) {DomainController.funcCPearson(b1,a[0],a[1],true,ref,sheetName);}
+
+    public static void blockCPearson(Integer[] a, Integer[] b1, boolean ref, String sheetName) {DomainController.funcCPearson(b1,a[0],a[1],true,ref,sheetName);}
 }

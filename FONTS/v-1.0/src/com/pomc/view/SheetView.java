@@ -489,7 +489,7 @@ public class SheetView {
                         @Override
                         public void actionPerformed(ActionEvent e) {
                             Integer[] Aop=FuncView.addAOp();
-                            writeBlock(Aop[0]-1,Aop[1]-1,Aop[2]-1,Aop[3]-1);
+                            if (Aop != null)writeBlock(Aop[0]-1,Aop[1]-1,Aop[2]-1,Aop[3]-1);
                         }
                     });
 
@@ -504,6 +504,14 @@ public class SheetView {
                     stat.setBackground(blockBar.getBackground());
                     stat.setBorder(BorderFactory.createLineBorder(c,1));
                     blockBar.add(stat,blockBar.getMenuCount()-1);
+
+                    stat.addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            Integer[] Sop=FuncView.addSOp();
+                            if(Sop != null) writeBlock(Sop[0],Sop[1],Sop[0],Sop[1]);
+                        }
+                    });
 
                     break;
                 case "T":
