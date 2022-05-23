@@ -83,7 +83,7 @@ public class PresentationController {
 
     public static void blockFloor(int ulr, int ulc, int drr, int drc, boolean ref,String Sheetname){
         Integer[] b_ids= {ulr,ulc,drr,drc};
-        DomainController.currentBlockFloor(b_ids,ref,Sheetname);
+        DomainController.blockFloor(b_ids,ref,Sheetname);
     }
 
 

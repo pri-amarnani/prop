@@ -43,6 +43,7 @@ public class SheetView {
             //TABLE
             JTable table = new JTable();
             table.putClientProperty("terminateEditOnFocusLost", true);
+            table.getTableHeader().setReorderingAllowed(false);
             DefaultTableModel model=new DefaultTableModel(numfil,numcol);
             table.setModel(model);
             //table.setColumnModel(columnsModel);
@@ -654,6 +655,15 @@ public class SheetView {
                     floor.setBackground(blockBar.getBackground());
                     floor.setBorder(BorderFactory.createLineBorder(c,1));
                     blockBar.add(floor,blockBar.getMenuCount()-1);
+
+
+                    floor.addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            FuncView.addFloor();
+                            rewriteBlock();
+                        }
+                    });
 
 
                     ImageIcon convertIcon= new ImageIcon("res/iconoconvert.png");

@@ -260,9 +260,9 @@ public class DomainController {
         return (doc.getSheet(sheetName).SortBlock(nCol,Criteria));
     }
 
-    public static void currentBlockFloor(Integer[] blockCells, boolean ref,String name){
+    public static void blockFloor(Integer[] blockCells, boolean ref,String name){
         Block block = createBlock(blockCells,name);
-        docSheet.floor(block,ref);
+        doc.getSheet(name).floor(block,ref);
     }
 
     public static void currentBlockConvert(Integer[] blockCells, boolean ref, String from, String to, String sheetname){

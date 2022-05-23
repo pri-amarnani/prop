@@ -117,7 +117,77 @@ public class FuncView {
       }
 
       public static void addFloor(){
+//          JRadioButton yesPrint= new JRadioButton("yes",false);
+//          JRadioButton noPrint= new JRadioButton("no",true);
+//          JRadioButton yesRef= new JRadioButton("yes",false);
+//          JRadioButton noRef= new JRadioButton("no",true);
+            JCheckBox printb= new JCheckBox("Print the result in another block");
+            JCheckBox ref= new JCheckBox("Reference the result");
+          Object[] fields = new Object[]{
+                  printb,
+                  ref,
+          };
+          int result = JOptionPane.showConfirmDialog(
+                  null,
+                  fields,
+                  "Floor",
+                  JOptionPane.OK_CANCEL_OPTION,
+                  JOptionPane.PLAIN_MESSAGE,
+                  null
 
+          );
+          if (result == JOptionPane.OK_OPTION){
+
+              int ulrowaux=PresentationController.blockFirstRow(SheetView.currentSheetName());
+              int ulcolaux=PresentationController.blockFirstCol(SheetView.currentSheetName());
+              int drrow=ulrowaux+SheetView.getCurrentTable().getSelectedRowCount();
+              int drcol=ulcolaux+SheetView.getCurrentTable().getSelectedColumnCount();
+              int ulrow=ulrowaux+1;
+              int ulcol=ulcolaux+1;
+
+//              System.out.println("ul: "+ulrow+" , "+ulcol);
+//              System.out.println("dr: "+drrow+" , "+drcol);
+
+                if(printb.isSelected()) {
+                    int trows=SheetView.getCurrentTable().getModel().getRowCount();
+                    int tcols= SheetView.getCurrentTable().getModel().getColumnCount();
+                    SpinnerNumberModel ulrm= new SpinnerNumberModel(1,1,trows,1);
+                    SpinnerNumberModel ulcm= new SpinnerNumberModel(1,1,tcols,1);
+                    JSpinner ulr=new JSpinner(ulrm);
+                    JSpinner ulc=new JSpinner(ulcm);
+
+                    SpinnerNumberModel drrm= new SpinnerNumberModel(trows,1,trows,1);
+                    SpinnerNumberModel drcm= new SpinnerNumberModel(tcols,1,tcols,1);
+                    JSpinner drr=new JSpinner(ulrm);
+                    JSpinner drc=new JSpinner(ulcm);
+
+                    Object[] fields2 = new Object[]{
+                           "Select the upper left cell's row",ulr,
+                            "Select the upper left cell's column",ulc,
+                            "Select the down right cell's row",drr,
+                            "Select the down right cell's column", drc,
+                    };
+                    int result2 = JOptionPane.showConfirmDialog(
+                            null,
+                            fields2,
+                            "Floor",
+                            JOptionPane.OK_CANCEL_OPTION,
+                            JOptionPane.PLAIN_MESSAGE,
+                            null
+
+                    );
+                    if(result2==JOptionPane.OK_OPTION){
+                        ulrow=(Integer)ulr.getValue()-1;
+                        ulcol=(Integer)ulc.getValue()-1;
+                        drrow=(Integer)drr.getValue()-1;
+                        drcol=(Integer)drc.getValue()-1;
+                    }
+                }
+                boolean b=false;
+                if(ref.isSelected()) b=true;
+                PresentationController.blockFloor(ulrow,ulcol,drrow,drcol,b,SheetView.currentSheetName());
+
+          }
       }
 
 
