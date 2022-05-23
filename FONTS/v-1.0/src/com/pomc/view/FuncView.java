@@ -5,6 +5,7 @@ import com.pomc.classes.Sheet;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 
+import static javax.swing.JOptionPane.showConfirmDialog;
 import static javax.swing.JOptionPane.showMessageDialog;
 
 public class FuncView {
@@ -116,7 +117,9 @@ public class FuncView {
           }
       }
 
-      public static void addFloor(){
+      public static Integer[] addFloor(){
+          Integer[] ids=new Integer[5];
+          ids[4]=0;
 //          JRadioButton yesPrint= new JRadioButton("yes",false);
 //          JRadioButton noPrint= new JRadioButton("no",true);
 //          JRadioButton yesRef= new JRadioButton("yes",false);
@@ -149,45 +152,53 @@ public class FuncView {
 //              System.out.println("dr: "+drrow+" , "+drcol);
 
                 if(printb.isSelected()) {
-                    int trows=SheetView.getCurrentTable().getModel().getRowCount();
-                    int tcols= SheetView.getCurrentTable().getModel().getColumnCount();
-                    SpinnerNumberModel ulrm= new SpinnerNumberModel(1,1,trows,1);
-                    SpinnerNumberModel ulcm= new SpinnerNumberModel(1,1,tcols,1);
-                    JSpinner ulr=new JSpinner(ulrm);
-                    JSpinner ulc=new JSpinner(ulcm);
+                    int confirm = showConfirmDialog(null, "The information from the cells will be lost.\n Are you sure", "Alert!", JOptionPane.YES_NO_OPTION);
+                    if (confirm == JOptionPane.YES_OPTION) {
+                        int trows = SheetView.getCurrentTable().getModel().getRowCount();
+                        int tcols = SheetView.getCurrentTable().getModel().getColumnCount();
+                        SpinnerNumberModel ulrm = new SpinnerNumberModel(1, 1, trows, 1);
+                        SpinnerNumberModel ulcm = new SpinnerNumberModel(1, 1, tcols, 1);
+                        JSpinner ulr = new JSpinner(ulrm);
+                        JSpinner ulc = new JSpinner(ulcm);
 
-                    SpinnerNumberModel drrm= new SpinnerNumberModel(trows,1,trows,1);
-                    SpinnerNumberModel drcm= new SpinnerNumberModel(tcols,1,tcols,1);
-                    JSpinner drr=new JSpinner(ulrm);
-                    JSpinner drc=new JSpinner(ulcm);
+                        SpinnerNumberModel drrm = new SpinnerNumberModel(trows, 1, trows, 1);
+                        SpinnerNumberModel drcm = new SpinnerNumberModel(tcols, 1, tcols, 1);
+                        JSpinner drr = new JSpinner(drrm);
+                        JSpinner drc = new JSpinner(drcm);
 
-                    Object[] fields2 = new Object[]{
-                           "Select the upper left cell's row",ulr,
-                            "Select the upper left cell's column",ulc,
-                            "Select the down right cell's row",drr,
-                            "Select the down right cell's column", drc,
-                    };
-                    int result2 = JOptionPane.showConfirmDialog(
-                            null,
-                            fields2,
-                            "Floor",
-                            JOptionPane.OK_CANCEL_OPTION,
-                            JOptionPane.PLAIN_MESSAGE,
-                            null
+                        Object[] fields2 = new Object[]{
+                                "Select the upper left cell's row", ulr,
+                                "Select the upper left cell's column", ulc,
+                                "Select the down right cell's row", drr,
+                                "Select the down right cell's column", drc,
+                        };
+                        int result2 = JOptionPane.showConfirmDialog(
+                                null,
+                                fields2,
+                                "Floor",
+                                JOptionPane.OK_CANCEL_OPTION,
+                                JOptionPane.PLAIN_MESSAGE,
+                                null
 
-                    );
-                    if(result2==JOptionPane.OK_OPTION){
-                        ulrow=(Integer)ulr.getValue()-1;
-                        ulcol=(Integer)ulc.getValue()-1;
-                        drrow=(Integer)drr.getValue()-1;
-                        drcol=(Integer)drc.getValue()-1;
+                        );
+                        if (result2 == JOptionPane.OK_OPTION) {
+                            ulrow = (Integer) ulr.getValue() ;
+                            ulcol = (Integer) ulc.getValue() ;
+                            drrow = (Integer) drr.getValue();
+                            drcol = (Integer) drc.getValue();
+                        }
                     }
+                    ids[4]=-1;
                 }
                 boolean b=false;
                 if(ref.isSelected()) b=true;
                 PresentationController.blockFloor(ulrow,ulcol,drrow,drcol,b,SheetView.currentSheetName());
-
+                ids[0]=ulrow-1;
+                ids[1]=ulcol-1;
+                ids[2]=drrow-1;
+                ids[3]=drcol-1;
           }
+          return ids;
       }
 
 

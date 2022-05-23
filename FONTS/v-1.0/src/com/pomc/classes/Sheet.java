@@ -282,7 +282,7 @@ public class Sheet {
     }
 
     public void floor(Block b, Boolean ref){
-        if (b_selected.allDouble() && b.allDouble()){
+        if (b_selected.allDouble()){
             if(ref && overlapping(b_selected, b)) System.out.println("Error. The blocks selected are overlapped.");
             else b_selected.floor(b, ref);
         }

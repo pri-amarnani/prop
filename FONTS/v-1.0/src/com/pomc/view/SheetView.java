@@ -342,43 +342,7 @@ public class SheetView {
         jmbar_sheet.add(BorderLayout.CENTER,findR);
         findR.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent e) {
-//                JTextField value = new JTextField();
-//                JTextField replace = new JTextField();
-//                Object[] fields = new Object[]{
-//                    "Value to find :", value,
-//                    "Value to replace : ", replace
-//                };
-//                int result = JOptionPane.showConfirmDialog(
-//                        null,
-//                        fields,
-//                        "Find and Replace",
-//                        JOptionPane.OK_CANCEL_OPTION,
-//                        JOptionPane.PLAIN_MESSAGE,
-//                        null
-//
-//                );
-//                if (result == JOptionPane.OK_OPTION){
-//                    if (emptyBlock()) {
-//                        PresentationController.createBlock(0,0,getCurrentTable().getRowCount()-1,getCurrentTable().getColumnCount()-1,currentSheetName());
-//                    }
-//                    String[] cellFound = PresentationController.blockFind(value.getText(),currentSheetName());
-//                    if (cellFound.length>1 && !value.getText().equals("")) {
-//                        Integer[] replaces = PresentationController.blockFindAndReplace(value.getText(),replace.getText(),currentSheetName());
-//                        if(replaces != null) {
-//                            for (int i = 0; i < replaces.length; i+=2) {
-//                                getCurrentTable().getModel().setValueAt(replace.getText(),replaces[i],replaces[i+1]);
-//                            }
-//                        }
-//                    }
-//                    else{
-//
-//                        showMessageDialog(null, "Value not found! :(\nTry again", "Error!", JOptionPane.ERROR_MESSAGE);
-//                    }
-//                }
-                FuncView.addFindR();
-
-            }
+            public void actionPerformed(ActionEvent e) {FuncView.addFindR();}
         });
 
 
@@ -486,8 +450,9 @@ public class SheetView {
                     floor.addActionListener(new ActionListener() {
                         @Override
                         public void actionPerformed(ActionEvent e) {
-                            FuncView.addFloor();
+                            Integer[] floored=FuncView.addFloor();
                             rewriteBlock();
+                            if(floored[4]==-1) writeBlock(floored[0],floored[1],floored[2],floored[3]);
                         }
                     });
 
@@ -878,6 +843,16 @@ public class SheetView {
         for (int i = 0; i < PresentationController.blockRows(cs); i++) {
             for (int j = 0; j < PresentationController.blockCols(cs); j++) {
                   tm.setValueAt(PresentationController.getCellInfo(firstrow+i,firstcol+j,cs),firstrow+i,firstcol+j);
+            }
+        }
+    }
+
+    public static void writeBlock(int ulr,int ulc,int drr,int drc){
+        TableModel tm = getCurrentTable().getModel();
+        String cs = currentSheetName();
+        for (int i = ulr; i <=drr; i++) {
+            for (int j = ulc; j <=drc; j++) {
+                tm.setValueAt(PresentationController.getCellInfo(i,j,cs),i,j);
             }
         }
     }
