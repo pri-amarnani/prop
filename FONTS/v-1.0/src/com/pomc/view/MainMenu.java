@@ -31,12 +31,14 @@ public class MainMenu {
         mb.add(m2);
         JMenuItem newDocB = new JMenuItem("New");
         JMenuItem openB = new JMenuItem("Open...");
+        JMenuItem importB = new JMenuItem("Import...");
         JMenuItem exitB = new JMenuItem("Exit POMC WORKSHEETS");
         JMenuItem validFormatB = new JMenuItem("Valid formats");
         JMenuItem userGuideB = new JMenuItem("Users Guide");
         JMenuItem aboutB = new JMenuItem("About");
         m1.add(newDocB);
         m1.add(openB);
+        m1.add(importB);
         m1.add(exitB);
         m2.add(validFormatB);
         m2.add(userGuideB);

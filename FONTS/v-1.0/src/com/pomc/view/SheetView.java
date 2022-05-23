@@ -20,8 +20,7 @@ import java.util.EventObject;
 import java.util.List;
 import java.util.Vector;
 
-import static java.lang.Math.max;
-import static java.lang.Math.min;
+import static java.lang.Math.*;
 import static javax.swing.JOptionPane.showMessageDialog;
 import static javax.swing.JOptionPane.showOptionDialog;
 
@@ -283,11 +282,11 @@ public class SheetView {
         JMenuItem exportB = new JMenuItem("Export...");
         JMenuItem propertiesB = new JMenuItem("Properties");
         JMenuItem closeB = new JMenuItem("Close");
-        m.add(saveB,2);
-        m.add(saveAsB,3);
-        m.add(exportB,4);
-        m.add(propertiesB,5);
-        m.add(closeB,6);
+        m.add(saveB,3);
+        m.add(saveAsB,4);
+        m.add(exportB,5);
+        m.add(propertiesB,6);
+        m.add(closeB,7);
         JMenu block= new JMenu("Block");
         JMenuItem create= new JMenuItem("Create");
         JMenuItem create_and_func= new JMenuItem("Create & Apply function");
@@ -408,223 +407,50 @@ public class SheetView {
 
         JPanel mp= (JPanel) MainMenu.getCurrentFrame().getContentPane().getComponent(0);
         mp.add(BorderLayout.CENTER,jmbar_sheet);
-        /*JMenu sheets= new JMenu("Change sheet");
-        JMenuItem changesheets= new JRadioButtonMenuItem();
-        sheets.add(changesheets);
-        mb.add(sheets,2);*/
-        mb.add(block,1);
-        mb.add(sheet,2);
+        mb.add(sheet,1);
 
-        create.addActionListener(new ActionListener() {
+
+        saveB.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent e) {
+            public void actionPerformed(ActionEvent e) {MenuViews.save();}});
 
-            }
-        });
+        saveAsB.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {MenuViews.saveAs();}});
+        exportB.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {MenuViews.export();}});
+
         closeB.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-
-                MainMenu.frame.removeAll();
-                try {
-                    MainMenu.main(new String[] {""});
-                } catch (IOException ex) {
-                    throw new RuntimeException(ex);
-                }
-            }
-        });
-
-
+            public void actionPerformed(ActionEvent e) {MenuViews.close();}});
 
         change_name.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent e) {
-                String newname = (String) JOptionPane.showInputDialog(
-                        null,
-                        "New Name",
-                        "Insert a new title for this sheet",
-                        JOptionPane.PLAIN_MESSAGE,
-                        null,
-                        null,
-                        currentSheetName()
-
-                );
-                PresentationController.changeSheetName(currentSheetName(),newname);
-                sheets.setTitleAt(sheets.getSelectedIndex(),newname);
-            }
-        });
+            public void actionPerformed(ActionEvent e) {  sheets.setTitleAt(sheets.getSelectedIndex(),MenuViews.changeName());}});
 
         rowsInsert.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent e) {
-                SpinnerNumberModel snm= new SpinnerNumberModel(1,1,100000,1);
-                SpinnerNumberModel snm2= new SpinnerNumberModel(getCurrentTable().getModel().getRowCount()+1,1,getCurrentTable().getModel().getRowCount()+1,1);
-                JSpinner jsp=new JSpinner(snm);
-                JSpinner jsp2=new JSpinner(snm2);
-                //FALTA PREGUNTAR ON
-                Object [] spinners= {
-                        "Insert the number of rows to add",jsp,
-                        "Insert the position where you want to add the rows",jsp2
-                };
-                int addR = JOptionPane.showConfirmDialog(
-                        null,
-                        spinners,
-                        "Add rows",
-                        JOptionPane.OK_CANCEL_OPTION,
-                        JOptionPane.PLAIN_MESSAGE,
-                        null
-
-                );
-                if (addR==JOptionPane.OK_OPTION) {
-
-                    PresentationController.addRow(currentSheetName(), (Integer) jsp.getValue(), (Integer) jsp2.getValue());
-                    DefaultTableModel tmodel = (DefaultTableModel) getCurrentTable().getModel();
-                    //  tmodel.setRowCount(0);
-                    ArrayList<Object> newRow = new ArrayList<Object>();
-                    //fill with empty data this row
-                    for (int j = 0; j < tmodel.getColumnCount(); j++) {
-                        newRow.add("");
-                    }
-                    for (int k = 0; k < (Integer) jsp.getValue(); k++) {
-                        tmodel.insertRow((Integer) jsp2.getValue()-1, newRow.toArray());
-                    }
-                    updateRowHeaders();
-                }
-            }
-        });
+            public void actionPerformed(ActionEvent e) {MenuViews.rowsInsert();}});
 
         colsInsert.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent e) {
-                SpinnerNumberModel snm= new SpinnerNumberModel(1,1,100000,1);
-                SpinnerNumberModel snm2= new SpinnerNumberModel(getCurrentTable().getModel().getColumnCount(),1,getCurrentTable().getModel().getColumnCount(),1);
-                JSpinner jsp=new JSpinner(snm);
-                JSpinner jsp2=new JSpinner(snm2);
-                //FALTA PREGUNTAR ON
-                Object [] spinners= {
-                        "Insert the number of columns to add",jsp,
-                        "Insert the position where you want to add the columns",jsp2
-                };
-                int addC = JOptionPane.showConfirmDialog(
-                        null,
-                        spinners,
-                        "Add columns",
-                        JOptionPane.OK_CANCEL_OPTION,
-                        JOptionPane.PLAIN_MESSAGE,
-                        null
-
-                );
-                if (addC==JOptionPane.OK_OPTION) {
-                    PresentationController.addCols(currentSheetName(), (Integer) jsp.getValue(), (Integer) jsp2.getValue());
-                    DefaultTableModel tmodel = (DefaultTableModel) getCurrentTable().getModel();
-
-                    for (int k = 0; k < (Integer) jsp.getValue(); k++) {
-                        TableColumn col= new TableColumn(tmodel.getColumnCount());
-                        getCurrentTable().setAutoCreateColumnsFromModel(false);
-                        getCurrentTable().addColumn(col);
-                        int a=(Integer)jsp2.getValue();
-                        tmodel.addColumn( getCurrentTable().getColumnModel().getColumn(a).getHeaderValue());//NO SE ACTUALIZA BIEN SI NO SE AÑADE AL FINAL
-                        int b = getCurrentTable().getColumnCount()-1;
-                        getCurrentTable().moveColumn(b,a+k);
-                    }
-                    updateColHeaders();
-                    ((DefaultTableModel) getCurrentTable().getModel()).fireTableDataChanged();
-
-
-                }
-            }
-        });
+            public void actionPerformed(ActionEvent e) {MenuViews.colsInsert();}});
 
         rowsDelete.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent e) {
-                SpinnerNumberModel snm= new SpinnerNumberModel(1,1,getCurrentTable().getModel().getRowCount(),1);
-                SpinnerNumberModel snm2= new SpinnerNumberModel(1,1,getCurrentTable().getModel().getRowCount(),1);
-                JSpinner jsp=new JSpinner(snm);
-                JSpinner jsp2=new JSpinner(snm2);
-                //FALTA PREGUNTAR ON
-                Object [] spinners= {
-                        "Insert the number of rows to delete",jsp,
-                        "Insert the position from where you want to delete the rows",jsp2
-                };
-                int DelR = JOptionPane.showConfirmDialog(
-                        null,
-                        spinners,
-                        "Delete rows",
-                        JOptionPane.OK_CANCEL_OPTION,
-                        JOptionPane.PLAIN_MESSAGE,
-                        null
-
-                );
-                if (DelR==JOptionPane.OK_OPTION) {
-                    int a2=(int) jsp.getValue();
-                    int b=(int) jsp2.getValue()-1;
-
-                    PresentationController.delRow(currentSheetName(), a2, b);
-                    System.out.println();
-                    //PresentationController.showTcells(currentSheetName());
-                    DefaultTableModel tmodel = (DefaultTableModel) getCurrentTable().getModel();
-                    //  tmodel.setRowCount(0);
-
-                    for (int k = 0; k < (int) jsp.getValue(); ++k) {
-                        tmodel.removeRow(b);
-                    }
-                    updateRowHeaders();
-                }
-            }
-        });
+            public void actionPerformed(ActionEvent e) { MenuViews.rowsDelete();}});
 
         colsDelete.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent e) {
-                SpinnerNumberModel snm= new SpinnerNumberModel(1,1,getCurrentTable().getModel().getColumnCount(),1);
-                SpinnerNumberModel snm2= new SpinnerNumberModel(1,1,getCurrentTable().getModel().getColumnCount(),1);
-                JSpinner jsp=new JSpinner(snm);
-                JSpinner jsp2=new JSpinner(snm2);
-                //FALTA PREGUNTAR ON
-                Object [] spinners= {
-                        "Insert the number of columns to delete",jsp,
-                        "Insert the position from where you want to delete the columns",jsp2
-                };
-                int DelC = JOptionPane.showConfirmDialog(
-                        null,
-                        spinners,
-                        "Delete columns",
-                        JOptionPane.OK_CANCEL_OPTION,
-                        JOptionPane.PLAIN_MESSAGE,
-                        null
-
-                );
-                if (DelC==JOptionPane.OK_OPTION) {
-                    int a=(int) jsp2.getValue()-1;
-
-                    PresentationController.delCols(currentSheetName(), (Integer) jsp.getValue(), a);
-                    DefaultTableModel tmodel = (DefaultTableModel) getCurrentTable().getModel();
-                    for (int k = 0; k < (int) jsp.getValue(); k++) {
-                        getCurrentTable().setAutoCreateColumnsFromModel(true);
-                        //getCurrentTable().setAutoCreateColumnsFromModel(false);
-                        TableColumn t= getCurrentTable().getColumnModel().getColumn(a);
-                        System.out.println("HEADERRR:..............."+t.getHeaderValue());
-                        getCurrentTable().removeColumn(t);
-                        getCurrentTable().revalidate();
-                        //FALTA UPDATE HEADER
-                    }
-                    updateColHeaders();
-                    rewriteModel(a);
-                    //((DefaultTableModel) getCurrentTable().getModel()).fireTableDataChanged();
-                }
-
-            }
-
-        });
+            public void actionPerformed(ActionEvent e) { MenuViews.colsDelete();}});
 
         delete.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                PresentationController.delSheet(currentSheetName());
+                MenuViews.deleteSheet();
                 sheets.remove(sheets.getSelectedIndex());
             }
         });
-
 
     }
 
