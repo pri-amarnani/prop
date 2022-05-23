@@ -485,6 +485,17 @@ public class SheetView {
                     AritOp.setBorder(BorderFactory.createLineBorder(c,1));
                     blockBar.add(AritOp,blockBar.getMenuCount()-1);
 
+                    AritOp.addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            Integer[] Aop=FuncView.addAOp();
+                            if(Aop[4]==-1) writeBlock(Aop[0],Aop[1],Aop[2],Aop[3]);
+                            else rewriteBlock();
+                        }
+                    });
+
+
+
                     ImageIcon statIcon= new ImageIcon("res/iconoest.png");
                     Image stIcon=statIcon.getImage();
                     Image st=stIcon.getScaledInstance(40,40,Image.SCALE_DEFAULT);

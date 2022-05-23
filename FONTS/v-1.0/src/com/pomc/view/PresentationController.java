@@ -89,6 +89,8 @@ public class PresentationController {
         DomainController.blockFloor(b_ids,ref,Sheetname);
     }
 
+    public static void blockAdd(Integer[] block1, Integer[] block2, boolean ref, String sheetName){DomainController.funcAddition(block1,block2,ref,sheetName);}
+
 
     //-----------------------CELL FUNCTIONS--------------------------------
     public static void editedCell(int r,int c, String newValue, String SheetName){DomainController.editCell(r,c,newValue,SheetName);}
