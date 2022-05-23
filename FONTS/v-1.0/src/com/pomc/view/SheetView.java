@@ -489,8 +489,7 @@ public class SheetView {
                         @Override
                         public void actionPerformed(ActionEvent e) {
                             Integer[] Aop=FuncView.addAOp();
-                            if(Aop[4]==-1) writeBlock(Aop[0],Aop[1],Aop[2],Aop[3]);
-                            else rewriteBlock();
+                            writeBlock(Aop[0]-1,Aop[1]-1,Aop[2]-1,Aop[3]-1);
                         }
                     });
 

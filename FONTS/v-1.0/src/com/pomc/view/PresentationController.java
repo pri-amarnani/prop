@@ -91,6 +91,12 @@ public class PresentationController {
 
     public static void blockAdd(Integer[] block1, Integer[] block2, boolean ref, String sheetName){DomainController.funcAddition(block1,block2,ref,sheetName);}
 
+    public static void blockSubs(Integer[] block1, Integer[] block2, boolean ref, String sheetName){DomainController.funcSubstraction(block1,block2,ref,sheetName);}
+
+    public static void blockMult(Integer[] block1, Integer[] block2, boolean ref, String sheetName){DomainController.funcMultiply(block1,block2,ref,sheetName);}
+
+    public static void blockDiv(Integer[] block1, Integer[] block2, boolean ref, String sheetName){DomainController.funcDivide(block1,block2,ref,sheetName);}
+
 
     //-----------------------CELL FUNCTIONS--------------------------------
     public static void editedCell(int r,int c, String newValue, String SheetName){DomainController.editCell(r,c,newValue,SheetName);}
@@ -163,4 +169,5 @@ public class PresentationController {
     public static void export(File selectedFile) {
         //TODO enviar path a persistencia y formato
     }
+
 }

@@ -10,7 +10,6 @@ import static java.lang.String.valueOf;
 
 public class DomainController {
     static Document doc ;
-    static Sheet docSheet;
 
     static Block block;
 
@@ -67,15 +66,6 @@ public class DomainController {
 
         //----------------------------------SHEETS FUNCTS--------------------------------------------
 
-    //Initializes the current Sheet
-    public static void setDocSheet(String title){
-        for (Sheet sheet : doc.getDocSheets()) {
-            if (title.equals(sheet.getTitle())) {
-                docSheet = sheet;
-                return;
-            }
-        }
-    }
 
     public static void setSheetTitle(String title,String newtitle){
         doc.getSheet(title).setTitle(newtitle);
@@ -169,7 +159,8 @@ public class DomainController {
             s.change_value(cellToEdit, parsedValue);
         }
     }
-    //-----------------------------------BLOCK FUNCTIONS------------------------------
+
+
     //-----------------------------------BLOCK FUNCTIONS------------------------------
 
     //Current block initialized, as it's minimum is 1
@@ -267,7 +258,7 @@ public class DomainController {
 
     public static void currentBlockConvert(Integer[] blockCells, boolean ref, String from, String to, String sheetname){
         Block block = createBlock(blockCells,sheetname);
-        docSheet.convert(block, ref, from, to);
+        doc.getSheet(sheetname).convert(block, ref, from, to);
     }
 
     public static int blockColumns(String sheetName) {
@@ -288,81 +279,81 @@ public class DomainController {
     public static void funcAddition(Integer[] Block1, Integer[] Block2, boolean ref, String sheetname) {
         Block b1 = createBlock(Block1, sheetname);
         Block b2 = createBlock(Block2,sheetname);
-        docSheet.sum(b1,b2,ref);
+        doc.getSheet(sheetname).sum(b1,b2,ref);
     }
 
     public static void funcSubstraction(Integer[] Block1, Integer[] Block2, boolean ref, String sheetname) {
         Block b1 = createBlock(Block1,sheetname);
         Block b2 = createBlock(Block2,sheetname);
-        docSheet.substract(b1,b2,ref);
+        doc.getSheet(sheetname).substract(b1,b2,ref);
     }
 
     public static void funcMultiply(Integer[] Block1, Integer[] Block2, boolean ref, String sheetname) {
         Block b1 = createBlock(Block1,sheetname);
         Block b2 = createBlock(Block2,sheetname);
-        docSheet.mult(b1,b2,ref);
+        doc.getSheet(sheetname).mult(b1,b2,ref);
     }
 
     public static void funcDivide(Integer[] Block1, Integer[] Block2, boolean ref,String sheetname) {
         Block b1 = createBlock(Block1,sheetname);
         Block b2 = createBlock(Block2,sheetname);
-        docSheet.div(b1,b2,ref);
+        doc.getSheet(sheetname).div(b1,b2,ref);
     }
 
-    public static Double funcMean(Integer i, Integer j, boolean val, boolean ref ){
+    public static Double funcMean(Integer i, Integer j, boolean val, boolean ref, String sheetname){
         Cell cell = null;
-        if (val) cell = docSheet.getCells().get(i).get(j);
-        return docSheet.mean(cell,ref,val);
+        if (val) cell =   doc.getSheet(sheetname).getCells().get(i).get(j);
+        return   doc.getSheet(sheetname).mean(cell,ref,val);
     }
-    public static Double funcMedian(Integer i, Integer j,boolean val, boolean ref ){
-        Cell cell = docSheet.getCells().get(i).get(j);
-        return docSheet.median(cell,ref,val);
+    public static Double funcMedian(Integer i, Integer j,boolean val, boolean ref,String sheetname ){
+        Cell cell = doc.getSheet(sheetname).getCells().get(i).get(j);
+        return doc.getSheet(sheetname).median(cell,ref,val);
     }
-    public static Double funcVariance(Integer i, Integer j,boolean val, boolean ref ){
-        Cell cell = docSheet.getCells().get(i).get(j);
-        return docSheet.var(cell,ref,val);
+    public static Double funcVariance(Integer i, Integer j,boolean val, boolean ref ,String sheetname){
+        Cell cell = doc.getSheet(sheetname).getCells().get(i).get(j);
+        return doc.getSheet(sheetname).var(cell,ref,val);
     }
 
     public static Double funcCovariance(Integer[] block,Integer i, Integer j,boolean val, boolean ref,String sheetname ){
         Block b1 = createBlock(block,sheetname);
-        Cell cell = docSheet.getCells().get(i).get(j);
-        return docSheet.covar(b1,cell,ref,val);
+        Cell cell = doc.getSheet(sheetname).getCells().get(i).get(j);
+        return doc.getSheet(sheetname).covar(b1,cell,ref,val);
     }
 
-    public static Double funcStandardDeviation(Integer i, Integer j,boolean val, boolean ref ){
-        Cell cell = docSheet.getCells().get(i).get(j);
-        return docSheet.std(cell,ref,val);
+    public static Double funcStandardDeviation(Integer i, Integer j,boolean val, boolean ref,String sheetname ){
+        Cell cell = doc.getSheet(sheetname).getCells().get(i).get(j);
+        return doc.getSheet(sheetname).std(cell,ref,val);
     }
 
     public static Double funcCPearson(Integer[] block,Integer i, Integer j,boolean val, boolean ref,String sheetname ){
         Block b1 = createBlock(block,sheetname);
-        Cell cell = docSheet.getCells().get(i).get(j);
-        return docSheet.CPearson(b1,cell,ref,val);
+        Cell cell = doc.getSheet(sheetname).getCells().get(i).get(j);
+        return doc.getSheet(sheetname).CPearson(b1,cell,ref,val);
     }
 
 
     public static void funcExtract(Integer[] block,boolean ref, String ex,String sheetname){
         Block b1 = createBlock(block,sheetname);
-        docSheet.extract(b1,ref,ex);
+        doc.getSheet(sheetname).extract(b1,ref,ex);
     }
 
     public static void funcDayoftheWeek(Integer[] block,boolean ref,String sheetname){
         Block b1 = createBlock(block,sheetname);
-        docSheet.dayOfTheWeek(b1,ref);
+        doc.getSheet(sheetname).dayOfTheWeek(b1,ref);
     }
 
     public static void moveBlock(Integer[] block,boolean ref,String sheetname){
         Block b1 = createBlock(block,sheetname);
-        docSheet.MoveBlock(b1,ref);
+        doc.getSheet(sheetname).MoveBlock(b1,ref);
     }
 
-    public static void funcReplaceCriteria(String criteria){
-        docSheet.replaceWithCriteriaText(criteria);
+    public static void funcReplaceCriteria(String criteria,String sheetname){
+        doc.getSheet(sheetname).replaceWithCriteriaText(criteria);
     }
 
-    public static Integer funcLength(Integer i, Integer j, String Criterio) {
-        Cell cell = docSheet.getCells().get(i).get(j);
-        return docSheet.length((TextCell) cell,Criterio);
+    public static Integer funcLength(Integer i, Integer j, String Criterio,String sheetname) {
+        Cell cell = doc.getSheet(sheetname).getCells().get(i).get(j);
+        return doc.getSheet(sheetname).length((TextCell) cell,Criterio);
     }
 
     public static String getCellInfo(int r, int c, String sheetname){

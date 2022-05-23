@@ -180,7 +180,7 @@ public class FuncView {
                     }
                 }
                 ids[4] = -1;
-            }
+            } else ref.setSelected(false);
             boolean b = false;
             if (ref.isSelected()) b = true;
             PresentationController.blockFloor(ulrow, ulcol, drrow, drcol, b, SheetView.currentSheetName());
@@ -194,126 +194,135 @@ public class FuncView {
 
 
     public static Integer[] addAOp() {
-        Integer[] b1= new Integer[4]; //segundo operando
-        Integer [] b2= new Integer[5];//donde se imprime
-        b2[4]=0;
+        Integer[] b1 = new Integer[4]; //segundo operando
+        Integer[] b2 = new Integer[5];//donde se imprime
+        b2[4] = 0;
 
-        Object[] selectionValues = {"Addition", "Substraction"," Multiplication", "Division"};
+        Object[] selectionValues = {"Addition", "Substraction", "Multiplication", "Division"};
         String initialSelection = "Addition";
         Object selection = JOptionPane.showInputDialog(null, "Choose the type of arithmetic operation",
                 "Arithmetic operations", JOptionPane.QUESTION_MESSAGE, null, selectionValues, initialSelection);
 
-        if (selection == "Addition") {
-            JCheckBox printb = new JCheckBox("Print the result in another block");
-            JCheckBox ref = new JCheckBox("Reference the result");
-            Object[] fields = new Object[]{
-                    printb,
-                    ref,
+        b2 = Operation(b1,b2,selection.toString());
+
+        return b2;
+    }
+
+    public static Integer[] Operation(Integer[] b1, Integer[] b2, String op) {
+        JCheckBox printb = new JCheckBox("Print the result in another block");
+        JCheckBox ref = new JCheckBox("Reference the result");
+        Object[] fields = new Object[]{
+                printb,
+                ref,
+        };
+        int result = JOptionPane.showConfirmDialog(
+                null,
+                fields,
+                "Arithmetic operations : " + op,
+                JOptionPane.OK_CANCEL_OPTION,
+                JOptionPane.PLAIN_MESSAGE,
+                null
+
+        );
+        if (result == JOptionPane.OK_OPTION) {
+            int trows = SheetView.getCurrentTable().getModel().getRowCount();
+            int tcols = SheetView.getCurrentTable().getModel().getColumnCount();
+            SpinnerNumberModel ulrm = new SpinnerNumberModel(1, 1, trows, 1);
+            SpinnerNumberModel ulcm = new SpinnerNumberModel(1, 1, tcols, 1);
+            JSpinner ulr = new JSpinner(ulrm);
+            JSpinner ulc = new JSpinner(ulcm);
+
+            SpinnerNumberModel drrm = new SpinnerNumberModel(trows, 1, trows, 1);
+            SpinnerNumberModel drcm = new SpinnerNumberModel(tcols, 1, tcols, 1);
+            JSpinner drr = new JSpinner(drrm);
+            JSpinner drc = new JSpinner(drcm);
+
+            Object[] fields2 = new Object[]{
+                    "Select the upper left cell's row", ulr,
+                    "Select the upper left cell's column", ulc,
+                    "Select the down right cell's row", drr,
+                    "Select the down right cell's column", drc,
             };
-            int result = JOptionPane.showConfirmDialog(
+            int result2 = JOptionPane.showConfirmDialog(
                     null,
-                    fields,
-                    "Arithmetic operations",
+                    fields2,
+                    "Select the second block for the addition",
                     JOptionPane.OK_CANCEL_OPTION,
                     JOptionPane.PLAIN_MESSAGE,
                     null
 
             );
-            if (result == JOptionPane.OK_OPTION) {
+            if (result2 == JOptionPane.OK_OPTION) {
+                b1[0] = (Integer) ulr.getValue();
+                b1[1] = (Integer) ulc.getValue();
+                b1[2] = (Integer) drr.getValue();
+                b1[3] = (Integer) drc.getValue();
+            }
 
-               // int confirm = showConfirmDialog(null, "The information from the cells will be lost.\n Are you sure", "Alert!", JOptionPane.YES_NO_OPTION);
 
-                    int trows = SheetView.getCurrentTable().getModel().getRowCount();
-                    int tcols = SheetView.getCurrentTable().getModel().getColumnCount();
-                    SpinnerNumberModel ulrm = new SpinnerNumberModel(1, 1, trows, 1);
-                    SpinnerNumberModel ulcm = new SpinnerNumberModel(1, 1, tcols, 1);
-                    JSpinner ulr = new JSpinner(ulrm);
-                    JSpinner ulc = new JSpinner(ulcm);
+            if (printb.isSelected()) {
+                int confirm = showConfirmDialog(null, "The information from the cells will be lost.\n Are you sure", "Alert!", JOptionPane.YES_NO_OPTION);
+                if (confirm == JOptionPane.YES_OPTION) {
 
-                    SpinnerNumberModel drrm = new SpinnerNumberModel(trows, 1, trows, 1);
-                    SpinnerNumberModel drcm = new SpinnerNumberModel(tcols, 1, tcols, 1);
-                    JSpinner drr = new JSpinner(drrm);
-                    JSpinner drc = new JSpinner(drcm);
+                    SpinnerNumberModel ulrm2 = new SpinnerNumberModel(1, 1, trows, 1);
+                    SpinnerNumberModel ulcm2 = new SpinnerNumberModel(1, 1, tcols, 1);
+                    JSpinner ulr2 = new JSpinner(ulrm);
+                    JSpinner ulc2 = new JSpinner(ulcm);
 
-                    Object[] fields2 = new Object[]{
+                    SpinnerNumberModel drrm2 = new SpinnerNumberModel(trows, 1, trows, 1);
+                    SpinnerNumberModel drcm2 = new SpinnerNumberModel(tcols, 1, tcols, 1);
+                    JSpinner drr2 = new JSpinner(drrm);
+                    JSpinner drc2 = new JSpinner(drcm);
+
+                    Object[] fields22 = new Object[]{
                             "Select the upper left cell's row", ulr,
                             "Select the upper left cell's column", ulc,
                             "Select the down right cell's row", drr,
                             "Select the down right cell's column", drc,
                     };
-                    int result2 = JOptionPane.showConfirmDialog(
+                    int result22 = JOptionPane.showConfirmDialog(
                             null,
-                            fields2,
-                            "Select the second block for the addition",
+                            fields22,
+                            "Select the block where you want to print the result",
                             JOptionPane.OK_CANCEL_OPTION,
                             JOptionPane.PLAIN_MESSAGE,
                             null
 
                     );
-                    if (result2 == JOptionPane.OK_OPTION) {
-                        b1[0] = (Integer) ulr.getValue();
-                        b1[1] = (Integer) ulc.getValue();
-                        b1[2] = (Integer) drr.getValue();
-                        b1[3] = (Integer) drc.getValue();
+                    if (result22 == JOptionPane.OK_OPTION) {
+                        b2[0] = (Integer) ulr.getValue();
+                        b2[1] = (Integer) ulc.getValue();
+                        b2[2] = (Integer) drr.getValue();
+                        b2[3] = (Integer) drc.getValue();
                     }
-
-/////////////////////////////7
-
-                b2[0]=b1[0];
-                    b2[1]=b1[1];
-                b2[2]=b1[2];
-                b2[3]=b1[3];
-
-                if (printb.isSelected()) {
-                    int confirm = showConfirmDialog(null, "The information from the cells will be lost.\n Are you sure", "Alert!", JOptionPane.YES_NO_OPTION);
-                    if (confirm == JOptionPane.YES_OPTION) {
-
-                        SpinnerNumberModel ulrm2 = new SpinnerNumberModel(1, 1, trows, 1);
-                        SpinnerNumberModel ulcm2 = new SpinnerNumberModel(1, 1, tcols, 1);
-                        JSpinner ulr2 = new JSpinner(ulrm);
-                        JSpinner ulc2 = new JSpinner(ulcm);
-
-                        SpinnerNumberModel drrm2 = new SpinnerNumberModel(trows, 1, trows, 1);
-                        SpinnerNumberModel drcm2 = new SpinnerNumberModel(tcols, 1, tcols, 1);
-                        JSpinner drr2 = new JSpinner(drrm);
-                        JSpinner drc2 = new JSpinner(drcm);
-
-                        Object[] fields22 = new Object[]{
-                                "Select the upper left cell's row", ulr,
-                                "Select the upper left cell's column", ulc,
-                                "Select the down right cell's row", drr,
-                                "Select the down right cell's column", drc,
-                        };
-                        int result22 = JOptionPane.showConfirmDialog(
-                                null,
-                                fields22,
-                                "Select the block where you want to print the result",
-                                JOptionPane.OK_CANCEL_OPTION,
-                                JOptionPane.PLAIN_MESSAGE,
-                                null
-
-                        );
-                        if (result22 == JOptionPane.OK_OPTION) {
-                            b2[0] = (Integer) ulr.getValue();
-                            b2[1] = (Integer) ulc.getValue();
-                            b2[2] = (Integer) drr.getValue();
-                            b2[3] = (Integer) drc.getValue();
-                        }
-                    }
-                    b2[4] = -1;
                 }
-                boolean b = false;
-                if (ref.isSelected()) b = true;
-                PresentationController.blockAdd(b1,b2,b,SheetView.currentSheetName());
+                b2[4] = -1;
+            } else {
+                ref.setSelected(false);
+                b2[0] = b1[0];
+                b2[1] = b1[1];
+                b2[2] = b1[2];
+                b2[3] = b1[3];
             }
-
+            boolean b = false;
+            if (ref.isSelected()) b = true;
+            switch(op) {
+                case "Addition":
+                    PresentationController.blockAdd(b1, b2, b, SheetView.currentSheetName());
+                    break;
+                case "Substraction":
+                    PresentationController.blockSubs(b1, b2, b, SheetView.currentSheetName());
+                    break;
+                case "Multiplication":
+                    PresentationController.blockMult(b1, b2, b, SheetView.currentSheetName());
+                    break;
+                default:
+                    PresentationController.blockDiv(b1, b2, b, SheetView.currentSheetName());
+                    break;
+            }
         }
         return b2;
-
-//              System.out.println("ul: "+ulrow+" , "+ulcol);
-//              System.out.println("dr: "+drrow+" , "+drcol);
-
     }
-
-
 }
+
+
