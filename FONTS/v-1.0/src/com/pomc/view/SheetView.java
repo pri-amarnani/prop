@@ -328,6 +328,7 @@ public class SheetView {
         Image fi=fIcon.getScaledInstance(40,40,Image.SCALE_DEFAULT);
         findIcon.setImage(fi);
         JButton find= new JButton(findIcon);
+        find.setToolTipText("Find");
         Color c = new Color(70, 130, 180);
         find.setBackground(jmbar_sheet.getBackground());
         find.setBorder(BorderFactory.createLineBorder(c,1));
@@ -346,6 +347,7 @@ public class SheetView {
         findRIcon.setImage(fr);
         JButton findR= new JButton(findRIcon);
         findR.setBackground(jmbar_sheet.getBackground());
+        findR.setToolTipText("Find & Replace");
         findR.setBorder(BorderFactory.createLineBorder(c,1));
         jmbar_sheet.add(BorderLayout.CENTER,findR);
         findR.addActionListener(new ActionListener() {
@@ -359,6 +361,7 @@ public class SheetView {
         Image s=sortI.getScaledInstance(40,40,Image.SCALE_DEFAULT);
         sort.setImage(s);
         JButton sortB= new JButton(sort);
+        sortB.setToolTipText("Sort");
         sortB.setBackground(jmbar_sheet.getBackground());
         sortB.setBorder(BorderFactory.createLineBorder(c,1));
         jmbar_sheet.add(BorderLayout.CENTER,sortB);
