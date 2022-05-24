@@ -132,10 +132,10 @@ public class SheetView {
 
                             boolean b=PresentationController.hasRefs(rowChanged,colIndex,currentSheetName());
                             if(b){
-                                Object[] Rmodify=PresentationController.getRefsIds(rowChanged,colIndex,currentSheetName());
+                                Object[] Rmodify= PresentationController.getRefsIds(rowChanged,colIndex,currentSheetName());
                                 for (int i = 0; i < Rmodify.length; i+=2) {
                                     int rRow= (int) Rmodify[i];
-                                    int rCol=(int) Rmodify[i+1];
+                                    int rCol= (int) Rmodify[i+1];
                                     System.out.println("refs ids: "+rRow+" , "+rCol);
                                     writeBlock(rRow,rCol,rRow,rCol);
                                 }
@@ -516,7 +516,6 @@ public class SheetView {
                             if(Sop != null) writeBlock(Sop[0],Sop[1],Sop[0],Sop[1]);
                         }
                     });
-
                     break;
                 case "T":
                     ImageIcon lengthIcon= new ImageIcon("res/iconolength.png");

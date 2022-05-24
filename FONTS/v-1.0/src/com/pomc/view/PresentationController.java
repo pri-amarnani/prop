@@ -122,7 +122,6 @@ public class PresentationController {
         DomainController.funcExtract(ints,ref,criteria,sheetName);
     }
 
-
     //-----------------------CELL FUNCTIONS--------------------------------
     public static void editedCell(int r,int c, String newValue, String SheetName){DomainController.editCell(r,c,newValue,SheetName);}
 
