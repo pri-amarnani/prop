@@ -33,9 +33,10 @@ public class Document {
         docSheets.add(newSheet);
     }
 
-    public void createDocWithSheet(Sheet a) {
-        Title = a.getTitle();
-        docSheets.add(a);
+    public void createDocWithSheet(Vector<Sheet> a) {
+        for(int i = 0; i < a.size(); ++i) {
+            docSheets.add(a.elementAt(i));
+        }
     }
 
     public void createSheet(int rows, int columns, String title) {

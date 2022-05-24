@@ -9,12 +9,14 @@ import java.util.Vector;
 
 public class gestorCSV {
 
-    public void writeCSV(String location, Sheet sh, String tempName) throws IOException {
-        File check = new File(location);
-        if (check.isDirectory()) {
+    public void writeCSV(String path, Sheet sh) throws IOException {
+        /*File check = new File(location);
+        if (check.isDirectory()) { //no haría fatla, nos pasan el path completo
             location = location + "/" + tempName + ".csv";
         }
-        BufferedWriter file = new BufferedWriter(new FileWriter(location));
+
+         */
+        BufferedWriter file = new BufferedWriter(new FileWriter(path));
         file.write('"' + sh.getTitle() + '"' + ';' + sh.getNumRows() + ";" + sh.getNumCols() + "\n");
 
         for (int i = 0; i < sh.getNumRows(); ++i) {

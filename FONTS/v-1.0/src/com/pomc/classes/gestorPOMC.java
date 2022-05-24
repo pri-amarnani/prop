@@ -7,12 +7,17 @@ import java.util.*;
 
 public class gestorPOMC {
 
-    public void writePOMC(String location, Vector<Sheet> sh_t, String tempName) throws IOException {
+    public void writePOMC(String path, Vector<Sheet> sh_t) throws IOException {
+        /*
         File check = new File(location);
         if (check.isDirectory()) {
             location = location + "/" + tempName + ".pomc";
         }
-        BufferedWriter file = new BufferedWriter(new FileWriter(location));
+
+         */
+        BufferedWriter file = new BufferedWriter(new FileWriter(path));
+
+
         file.write(sh_t.size() + "\n");
         int u = 0;
 
@@ -53,10 +58,10 @@ public class gestorPOMC {
         file.close();
     }
 
-    public Vector<Sheet> readPOMC(String location) throws IOException {
+    public Vector<Sheet> readPOMC(String path) throws IOException {
         Vector<Sheet> res = new Vector<>();
 
-        BufferedReader file = new BufferedReader(new FileReader(location));
+        BufferedReader file = new BufferedReader(new FileReader(path));
         String row;
         int n_sh = 0;
 
@@ -278,7 +283,7 @@ public class gestorPOMC {
         Sheet sheet = new Sheet( b ,"hoja");
         aux.add(sheet);
         aux.add(sheet);
-        g.writePOMC("/home/mark/Desktop", aux, "test_write");
+        g.writePOMC("/home/mark/Desktop/test_write.pomc", aux);
 
         Vector<Sheet> s_t = g.readPOMC("/home/mark/Desktop/test_write.pomc");
 

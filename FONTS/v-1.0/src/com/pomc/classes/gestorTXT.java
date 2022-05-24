@@ -9,12 +9,15 @@ import java.util.Vector;
 
 public class gestorTXT {
 
-    public void writeTXT(String location, Sheet sh, String tempName) throws IOException {
+    public void writeTXT(String path, Sheet sh) throws IOException {
+        /*
         File check = new File(location);
         if (check.isDirectory()) {
             location = location + "/" + tempName + ".txt";
         }
-        BufferedWriter file = new BufferedWriter(new FileWriter(location));
+
+         */
+        BufferedWriter file = new BufferedWriter(new FileWriter(path));
         file.write('"' + sh.getTitle() + '"' + ';' + sh.getNumRows() + ";" + sh.getNumCols() + "\n");
 
         for (int i = 0; i < sh.getNumRows(); ++i) {
