@@ -97,17 +97,44 @@ public class PresentationController {
 
     public static void blockDiv(Integer[] block1, Integer[] block2, boolean ref, String sheetName){DomainController.funcDivide(block1,block2,ref,sheetName);}
 
+    public static void blockMean(Integer[] b1, boolean ref, String sheetName) {DomainController.funcMean(b1[0],b1[1],true,ref,sheetName);}
+
+    public static void blockMedian(Integer[] b1, boolean ref, String sheetName) {DomainController.funcMedian(b1[0],b1[1],true,ref,sheetName);}
+
+    public static void blockVariance(Integer[] b1, boolean ref, String sheetName) {DomainController.funcVariance(b1[0],b1[1],true,ref,sheetName); }
+
+    public static void blockSTD(Integer[] b1, boolean ref, String sheetName) {DomainController.funcStandardDeviation(b1[0],b1[1],true,ref,sheetName);}
+
+    public static void blockCovar(Integer[] a, Integer[] b1, boolean ref, String sheetName) {DomainController.funcCPearson(b1,a[0],a[1],true,ref,sheetName);}
+
+    public static void blockCPearson(Integer[] a, Integer[] b1, boolean ref, String sheetName) {DomainController.funcCPearson(b1,a[0],a[1],true,ref,sheetName);}
+
+//    public static void blockLength(int ulr, int ulc, boolean ref,String Sheetname){
+//        DomainController.blockFloor(b_ids,ref,Sheetname);
+//    }
+    public static void blockDOTW(int ulr,int ulc, int drr, int drc, boolean ref, String sheetName){
+        Integer[] ints={ulr,ulc,drr,drc};
+        DomainController.funcDayoftheWeek(ints,ref,sheetName);
+    }
+
+    public static void blockExtract(int ulr, int ulc, int drr, int drc, boolean ref,String criteria, String sheetName){
+        Integer[] ints= {ulr,ulc,drr,drc};
+        DomainController.funcExtract(ints,ref,criteria,sheetName);
+    }
+
 
     //-----------------------CELL FUNCTIONS--------------------------------
     public static void editedCell(int r,int c, String newValue, String SheetName){DomainController.editCell(r,c,newValue,SheetName);}
 
-    public static boolean isReferenced(int r,int c,String Sheetname){
-        String t= DomainController.getCellType(r,c,Sheetname);
-        return t.equals("R");
-    }
+//    public static boolean isReferenced(int r,int c,String Sheetname){
+//        String t= DomainController.getCellType(r,c,Sheetname);
+//        return t.equals("R");
+//    }
     public static boolean hasRefs (int r,int c, String sheetName){return DomainController.hasRefs(r,c,sheetName);}
 
-    public static Object[] getRefsIds(int r, int c, String sheetName){return DomainController.getRefsIds(r,c,sheetName);}
+    public static Object[] getRefsIds(int r, int c, String sheetName){
+        return DomainController.getRefsIds(r,c,sheetName);
+    }
     public static String cellInfo(int r, int c, String name){
         String t= DomainController.getCellType(r,c,name);
         if(t.equals("N")) t="Number";
@@ -143,6 +170,8 @@ public class PresentationController {
     }
 
 
+
+
     //-------------------------FILE MANAGEMENT-----------------------------
 
     public static boolean isFileSaved() {
@@ -170,15 +199,6 @@ public class PresentationController {
         //TODO enviar titulo, path, format y doc a persistencia y formato
     }
 
-    public static void blockMean(Integer[] b1, boolean ref, String sheetName) {DomainController.funcMean(b1[0],b1[1],true,ref,sheetName);}
 
-    public static void blockMedian(Integer[] b1, boolean ref, String sheetName) {DomainController.funcMedian(b1[0],b1[1],true,ref,sheetName);}
 
-    public static void blockVariance(Integer[] b1, boolean ref, String sheetName) {DomainController.funcVariance(b1[0],b1[1],true,ref,sheetName); }
-
-    public static void blockSTD(Integer[] b1, boolean ref, String sheetName) {DomainController.funcStandardDeviation(b1[0],b1[1],true,ref,sheetName);}
-
-    public static void blockCovar(Integer[] a, Integer[] b1, boolean ref, String sheetName) {DomainController.funcCPearson(b1,a[0],a[1],true,ref,sheetName);}
-
-    public static void blockCPearson(Integer[] a, Integer[] b1, boolean ref, String sheetName) {DomainController.funcCPearson(b1,a[0],a[1],true,ref,sheetName);}
 }

@@ -400,8 +400,8 @@ public class DomainController {
             for (int i = 0; i <rsize; i++) {
                 int row=s.getCell(r,c).getRefs().elementAt(i).getRow();
                 int col=s.getCell(r,c).getRefs().elementAt(i).getColumn();
-                rids.add(i,row);
-                rids.add(i+1,col);
+                rids.add(row);
+                rids.add(col);
             }
 
         }

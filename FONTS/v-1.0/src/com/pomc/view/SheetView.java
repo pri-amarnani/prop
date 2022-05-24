@@ -136,6 +136,7 @@ public class SheetView {
                                 for (int i = 0; i < Rmodify.length; i+=2) {
                                     int rRow= (int) Rmodify[i];
                                     int rCol=(int) Rmodify[i+1];
+                                    System.out.println("refs ids: "+rRow+" , "+rCol);
                                     writeBlock(rRow,rCol,rRow,rCol);
                                 }
                             }
@@ -457,7 +458,7 @@ public class SheetView {
                     floor.addActionListener(new ActionListener() {
                         @Override
                         public void actionPerformed(ActionEvent e) {
-                            Integer[] floored=FuncView.addFloor();
+                            Integer[] floored=FuncView.addSingleOp("floor");
                             if(floored[4]==-1) writeBlock(floored[0],floored[1],floored[2],floored[3]);
                             else rewriteBlock();
                             PresentationController.showTcells(currentSheetName());
@@ -525,6 +526,15 @@ public class SheetView {
                     length.setBorder(BorderFactory.createLineBorder(c,1));
                     blockBar.add(length,blockBar.getMenuCount()-1);
 
+                    length.addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            Integer[] L=FuncView.addSingleOp("length");
+                            if(L != null) writeBlock(L[0],L[1],L[0],L[1]);
+                        }
+                    });
+
+
                     ImageIcon replaceIcon= new ImageIcon("res/iconoreplace.png");
                     Image repIcon=replaceIcon.getImage();
                     Image re=repIcon.getScaledInstance(40,40,Image.SCALE_DEFAULT);
@@ -546,6 +556,14 @@ public class SheetView {
                     extract.setBorder(BorderFactory.createLineBorder(c,1));
                     blockBar.add(extract,blockBar.getMenuCount()-1);
 
+                    extract.addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            Integer [] ex= FuncView.addSingleOpCrit("Extract");
+                            if(ex!=null) writeBlock(ex[0],ex[1],ex[2],ex[3]);
+                        }
+                    });
+
                     ImageIcon dotwIcon= new ImageIcon("res/iconodotw.png");
                     Image dotIcon=dotwIcon.getImage();
                     Image dotwi=dotIcon.getScaledInstance(40,40,Image.SCALE_DEFAULT);
@@ -555,6 +573,13 @@ public class SheetView {
                     dotw.setBackground(blockBar.getBackground());
                     dotw.setBorder(BorderFactory.createLineBorder(c,1));
                     blockBar.add(dotw,blockBar.getMenuCount()-1);
+                    dotw.addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            Integer [] dtw=FuncView.addSingleOp("Day of the week");
+                            if(dtw != null) writeBlock(dtw[0],dtw[1],dtw[2],dtw[3]);
+                        }
+                    });
                     break;
                 default:
                     break;

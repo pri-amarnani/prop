@@ -17,9 +17,9 @@ public class DateCell extends Cell {
     }
 
     public Double extract(String criteria){ //tendría que devolver localdate???????
-        if (Objects.equals(criteria, "day")) return Double.valueOf((info.getDayOfMonth()));
-        else if (Objects.equals(criteria, "month")) return Double.valueOf(info.getMonthValue());
-        else if (Objects.equals(criteria, "year")) return Double.valueOf(info.getYear());
+        if (Objects.equals(criteria, "Day")) return Double.valueOf((info.getDayOfMonth()));
+        else if (Objects.equals(criteria, "Month")) return Double.valueOf(info.getMonthValue());
+        else if (Objects.equals(criteria, "Year")) return Double.valueOf(info.getYear());
         return Double.valueOf(-1);
     }
 
