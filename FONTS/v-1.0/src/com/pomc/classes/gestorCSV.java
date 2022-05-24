@@ -3,9 +3,7 @@ package com.pomc.classes;
 import java.io.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
-import java.util.Arrays;
-import java.util.Objects;
-import java.util.Vector;
+import java.util.*;
 
 public class gestorCSV {
 
@@ -167,5 +165,30 @@ public class gestorCSV {
         else if (o.getClass()== LocalDate.class) return o.toString();
         else return (String) o;
     }
+
+
+
+    public static void main(String[] args) throws IOException {
+        gestorCSV g = new gestorCSV();
+
+        Cell [][] b = new Cell[10][10];
+        for(int i = 0; i < 10; ++i){
+            for(int j = 0; j < 10; ++j){
+
+
+
+
+                    b[i][j] = new NumCell(i, j, 3.0);
+
+            }
+        }
+
+        Sheet sheet = new Sheet( b ,"hoja");
+
+        g.writeCSV("/home/crisbret/Desktop/test_write.csv", sheet);
+
+
+    }
+
 }
 
