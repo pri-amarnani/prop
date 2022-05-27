@@ -89,6 +89,32 @@ public class Block {
         // copy to clipboard
     }
 
+    public void length(Block b, Boolean ref, String criteria){
+        for (int i = 0; i < this.block.length; ++i) {
+            for (int j = 0; j < this.block[0].length; ++j) {
+                TextCell n = (TextCell)  b.getCell(i,j);
+                if (this.block[i][j].getInfo() != null) {
+                    TextCell c = (TextCell)  this.block[i][j];
+                    n = (TextCell) b.getCell(i,j).changeValue(c.length(criteria));
+                    b.setCell(i,j,n);
+                }
+                if (ref) {
+                    ReferencedCell rc = new ReferencedCell(n.getRow(),n.getColumn(),"=length" + criteria);
+                    rc.setContent(n.getInfo());
+                    b.setCell(i, j, rc);
+                    Vector<Cell> s = new Vector<>(1);
+                    s.add(this.block[i][j]);
+                    this.block[i][j].AddRef((ReferencedCell) b.getCell(i, j));
+                    Map.Entry<String, Vector<Cell>> r = new AbstractMap.SimpleEntry<>("length" + criteria, s);
+                    b.getCell(i, j).setRefInfo(r);
+                    n = null;
+                }
+            }
+        }
+        b.ul = b.getCell(0,0);
+        b.dr = b.getCell(b.size_r -1,b.size_c -1);
+    }
+
     //copy values from one block to another
     public void ref(Block b, Boolean ref) {
         for (int i = 0; i < this.block.length; ++i) {
