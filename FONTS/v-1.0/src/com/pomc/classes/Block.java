@@ -1,5 +1,6 @@
 package com.pomc.classes;
 
+import java.time.LocalDate;
 import java.util.*;
 
 public class Block {
@@ -135,6 +136,10 @@ public class Block {
             else if (Objects.equals(type, "T")) {
                 Arrays.sort(block, (a, b) -> ((String) a[n_col].getInfo()).compareTo((String) b[n_col].getInfo()));
             }
+
+            else if (Objects.equals(type, "D")) {
+                Arrays.sort(block, (a, b) -> ((LocalDate) a[n_col].getInfo()).compareTo((LocalDate) b[n_col].getInfo()));
+            }
         }
 
         // >
@@ -144,6 +149,10 @@ public class Block {
             }
             else if (Objects.equals(type, "T")) {
                 Arrays.sort(block, (a, b) -> ((String) b[n_col].getInfo()).compareTo((String) a[n_col].getInfo()));
+            }
+
+            else if (Objects.equals(type, "D")) {
+                Arrays.sort(block, (a, b) -> ((LocalDate) b[n_col].getInfo()).compareTo((LocalDate) a[n_col].getInfo()));
             }
         }
 
@@ -406,7 +415,6 @@ public class Block {
                 }
             }
         }
-
     }
 
     // val = true means we want to put value in cell, else just show value.

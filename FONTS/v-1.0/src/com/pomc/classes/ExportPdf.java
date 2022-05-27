@@ -63,13 +63,7 @@ public class ExportPdf {
                 PdfPCell c1 = new PdfPCell(new Phrase(id));
                 t.addCell(c1);
 
-
-
-
             } else {
-
-
-
                 PdfPCell c1 = new PdfPCell(new Phrase(9));
                 t.addCell(c1);
 

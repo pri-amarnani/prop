@@ -131,10 +131,10 @@ public abstract class Cell {
         for (int i=0; i<this.refs.size();i++){
             ReferencedCell c= this.refs.elementAt(i);
             Map.Entry<String,Vector<Cell>> s= c.getRefInfo();
-            //Volver a hacer esa operación con los nuevos valores
+
             String op= s.getKey();
             Vector<Cell> cellsref= s.getValue();
-//sum(c1,c2.c3)
+
             if (Objects.equals(op, "sum")) {
                 Double newvalue = 0.0;
                 for (int j=0;j<cellsref.size();j++){
@@ -359,7 +359,6 @@ public abstract class Cell {
         Double stdd= Math.sqrt(std/ arr.length);
 
         return stdd;
-
     }
 
     public Double calccovar(Vector<Cell> v1, Vector<Cell> v2){

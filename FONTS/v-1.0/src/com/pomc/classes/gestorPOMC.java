@@ -198,9 +198,9 @@ public class gestorPOMC {
                 }
             }
 
-            for (int i = 0; i < sh.length; ++i) {
+            for (Cell[] cells : sh) {
                 for (int j = 0; j < sh[0].length; ++j) {
-                    sh[i][j].updateRefs();
+                    cells[j].updateRefs();
                 }
             }
 
@@ -242,12 +242,6 @@ public class gestorPOMC {
             }
         }
     }
-    public static String AntiParse(Object o) {
-        System.out.println(o);
-        if (o.getClass() == Double.class) return String.valueOf(o);
-        else if (o.getClass()== LocalDate.class) return o.toString();
-        else return (String) o;
-    }
 
     // testing purpose
     public static void main(String[] args) throws IOException {
@@ -258,23 +252,21 @@ public class gestorPOMC {
             for(int j = 0; j < 10; ++j){
                 if (i+j == 0) b[i][j] = new NumCell(i, j, null);
                 else if (i + j >= 5)  {
-                    ReferencedCell r = new ReferencedCell(1,1,"=sum");
+                    ReferencedCell r = new ReferencedCell(1,1,"=floor");
 
                     NumCell n= new NumCell(2,2,3.0);
-                    NumCell n2= new NumCell(1,2,3.0);
 
                     Vector<Cell> v= new Vector<>();
                     v.add(n);
-                    v.add(n2);
 
-                    Map.Entry<String, Vector<Cell>> re = new AbstractMap.SimpleEntry<>("sum", v);
+                    Map.Entry<String, Vector<Cell>> re = new AbstractMap.SimpleEntry<>("floor", v);
                     r.setRefInfo(re);
 
                     b[i][j] = r;
                 }
 
                 else if (i + j < 5) {
-                    b[i][j] = new NumCell(i, j, 3.0);
+                    b[i][j] = new NumCell(i, j, 6.6);
                 }
             }
         }
@@ -286,6 +278,9 @@ public class gestorPOMC {
         g.writePOMC("/home/mark/Desktop/test_write.pomc", aux);
 
         Vector<Sheet> s_t = g.readPOMC("/home/mark/Desktop/test_write.pomc");
+        Cell c = s_t.elementAt(0).getCell(2,2);
+
+        s_t.elementAt(0).change_value(c, 9.5);
 
         for (int u = 0; u < s_t.size(); ++u) {
             Sheet s = s_t.elementAt(u);
@@ -303,6 +298,5 @@ public class gestorPOMC {
             System.out.println();
         }
     }
-
 }
 
