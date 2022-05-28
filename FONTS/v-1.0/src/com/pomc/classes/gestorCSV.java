@@ -171,14 +171,11 @@ public class gestorCSV {
     public static void main(String[] args) throws IOException {
         gestorCSV g = new gestorCSV();
 
-        Cell [][] b = new Cell[10][10];
-        for(int i = 0; i < 10; ++i){
-            for(int j = 0; j < 10; ++j){
+        Cell [][] b = new Cell[150][25];
+        for(int i = 0; i < 150; ++i){
+            for(int j = 0; j < 25; ++j){
 
-
-
-
-                    b[i][j] = new NumCell(i, j, 3.0);
+                    b[i][j] = new NumCell(i, j, 100.0);
 
             }
         }

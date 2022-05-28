@@ -1,5 +1,6 @@
 package com.pomc.controller;
 
+import com.itextpdf.text.DocumentException;
 import com.pomc.classes.*;
 
 
@@ -43,7 +44,7 @@ public class PersistenceController {
 
 
 
-    public void export(String path_doc, Document doc, String type) throws IOException {
+    public void export(String path_doc, Document doc, String type) throws IOException, DocumentException {
         Vector<Sheet> sh = doc.getDocSheets();
 
         if(type == "csv"){
@@ -53,7 +54,10 @@ public class PersistenceController {
             Txt.writeTXT(path_doc, sh.elementAt(0));
         }
         else if(type == "pdf"){
-
+            Vector<String> v = new Vector<>();
+            v.addAll(Arrays.asList(path_doc.split(".")));
+            Csv.writeCSV(v.elementAt(0)+".csv", sh.elementAt(0));
+            Pdf.exportPDF(path_doc, v.elementAt(0)+".csv");
         }
 
         else System.out.println("Extension not valid, try again.");

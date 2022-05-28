@@ -40,6 +40,12 @@ public class ReferencedCell extends Cell {
 
     public void setRefInfo(Map.Entry<String, Vector<Cell>> refInfo) {
         this.refInfo = refInfo;
+        Vector<Cell> v = refInfo.getValue();
+        info += "( ";
+        for (int k = 0; k < v.size(); ++k) {
+            this.info += ("(" + v.elementAt(k).getRow() + "," + v.elementAt(k).getColumn() + ")");
+        }
+        info += " )";
     }
 
     public void setInfo(String s){
@@ -49,6 +55,8 @@ public class ReferencedCell extends Cell {
     public void setContent(Object o) {this.content=o;}
 
     public void setRCell(Cell c){
+
+
         Vector<Cell> rcell= refInfo.getValue();
         for (int i=0;i<rcell.size();i++){
             Cell c2=rcell.elementAt(i);
