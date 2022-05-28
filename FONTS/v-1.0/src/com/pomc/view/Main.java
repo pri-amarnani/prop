@@ -15,10 +15,11 @@ public class Main {
             System.out.println("In the block of Sheet " + docSheet);
             System.out.println("Select an action:");
             System.out.println("(1) Replace with Criteria");
-            System.out.println("(2) Length");
+            System.out.println("(2) Length Cell");
+            System.out.println("(3) Length Block");
             System.out.println("(0) Go back");
             System.out.println("\n \n Enter number:");
-            Integer num = numberInsertion(2,0);
+            Integer num = numberInsertion(3,0);
             if (num != null) {
                 System.out.println("\n");
                 switch (num) {
@@ -75,6 +76,38 @@ public class Main {
                             else System.out.println("Could find criteria");
                         }
                         else System.out.println("Cell not found.");
+                    // EN PROCESOOOOO
+                    case 3:
+                        System.out.println("First define the destination block.");
+                        Integer[] blockCells = requireBlock();
+
+                        if (blockCells.length == 0) {
+                            System.out.println("Invalid block");
+                            break;
+                        }
+                        else {
+                            System.out.println("Select a criteria for the Length");
+                            System.out.println(" (1) Words \n (2) Letters \n (3) Characters");
+                            Integer criterio = numberInsertion(3,1);
+                            if (criterio != null) {
+
+                                switch (criterio) {
+                                    case 1:
+                                        DomainController.lengthBlock(blockCells, isReferencing(),"words");
+                                        break;
+                                    case 2:
+                                        DomainController.lengthBlock(blockCells, isReferencing(), "letters");
+                                        break;
+                                    case 3:
+                                        DomainController.lengthBlock(blockCells, isReferencing(), "characters");
+                                        break;
+                                    default:
+                                        System.out.println("Could calculate length of the block");
+                                        break;
+                                }
+                            }
+                            else System.out.println("Could calculate length of the block");
+                        }
 
                         break;
                     default:

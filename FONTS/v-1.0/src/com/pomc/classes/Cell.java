@@ -328,9 +328,20 @@ public abstract class Cell {
                 else if (day==7) newvalue= "Sunday";
                 c.setContent(newvalue);
             }
-
             else if (Objects.equals(op,"equal")){
                 c.setContent(cellsref.elementAt(i).getInfo());
+            }
+            else if(Objects.equals(op, "lengthwords")){
+                TextCell tc = (TextCell) cellsref.elementAt(0);
+                c.setContent(tc.length("words"));
+            }
+            else if(Objects.equals(op, "lengthletters")){
+                TextCell tc = (TextCell) cellsref.elementAt(0);
+                c.setContent(tc.length("letters"));
+            }
+            else if(Objects.equals(op, "lengthcharacters")){
+                TextCell tc = (TextCell) cellsref.elementAt(0);
+                c.setContent(tc.length("characters"));
             }
         }
     }

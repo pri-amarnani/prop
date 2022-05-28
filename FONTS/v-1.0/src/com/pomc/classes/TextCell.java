@@ -31,21 +31,21 @@ public class TextCell extends Cell {
         //not cientifica a num??
     }
 
-    public int length(String criteria){
+    public double length(String criteria){
         if  (Objects.equals(criteria, "words")){ //falta comprovar!!!!!!
             String [] aux;
             aux= info.split("\\s+");
-            return aux.length;
+            return ((double) aux.length);
         }
         else if (Objects.equals(criteria, "letters")){
             int count=0;
             for (int i=0;i<info.length();i++){
                 if(info.charAt(i)!=' ') count++;
             }
-            return count;
+            return (double) count;
         }
         else if (Objects.equals(criteria, "characters")){
-            return info.length();
+            return (double) info.length();
         }
         return -1;
 

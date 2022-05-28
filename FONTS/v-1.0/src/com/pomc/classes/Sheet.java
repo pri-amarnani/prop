@@ -233,6 +233,15 @@ public class Sheet {
         update(b);
     }
 
+    public void lengthBlock(Block b, Boolean ref, String criteria){
+        if(b.number_cols() == b_selected.number_cols() && b.number_rows() == b_selected.number_rows()) {
+            if(b_selected.dr.getColumn() > b.ul.getColumn() && b_selected.dr.getRow() > b.ul.getRow()) System.out.println("Error. The blocks selected collide.");
+            else b_selected.length(b, ref, criteria);
+        }
+        else System.out.println("Error. The blocks selected have different sizes.");
+        update(b);
+    }
+
     public void ModifyBlock(Object o){
         b_selected.ModifyBlock(o);
         update(b_selected);
@@ -244,11 +253,7 @@ public class Sheet {
 
         Block b = create_block(c, c2);
 
-        if(!b.allText() && !b.allDouble()){
-            System.out.println("Error. Whole column has to be of type number or type text.");
-            return false;
-        }
-        else b_selected.SortBlock(n_col, Criteria, c.getType());
+        b_selected.SortBlock(n_col, Criteria, c.getType());
         update(b_selected);
         return true;
     }
@@ -345,7 +350,7 @@ public class Sheet {
         update(b_selected);
     }
 
-    public int length(TextCell c, String criteria){
+    public double length(TextCell c, String criteria){
         if(c.getType() == "T") return c.length(criteria);
         else System.out.println("Error. Cell is not of type Text.");
         return -1;

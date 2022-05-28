@@ -285,9 +285,14 @@ public class DomainController {
         docSheet.replaceWithCriteriaText(criteria);
     }
 
-    public static Integer funcLength(Integer i, Integer j, String Criterio) {
+    public static double funcLength(Integer i, Integer j, String Criterio) {
         Cell cell = docSheet.getCells().get(i-1).get(j-1);
         return docSheet.length((TextCell) cell,Criterio);
+    }
+
+    public static void lengthBlock(Integer[] Block1, boolean ref, String criteria) {
+        Block b1 = createBlock(Block1);
+        docSheet.lengthBlock(b1,ref, criteria);
     }
 
 
