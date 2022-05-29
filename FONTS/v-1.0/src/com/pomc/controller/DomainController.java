@@ -233,7 +233,26 @@ public class DomainController {
         Block b2 = createBlock(Block2);
         docSheet.div(b1,b2,ref);
     }
-
+    public static Double funcSumAll(Integer i, Integer j, boolean val, boolean ref ){
+        Cell cell = null;
+        if (val) cell = docSheet.getCells().get(i-1).get(j-1);
+        return docSheet.sumAll(cell,ref,val);
+    }
+    public static Double funcSubAll(Integer i, Integer j, boolean val, boolean ref ){
+        Cell cell = null;
+        if (val) cell = docSheet.getCells().get(i-1).get(j-1);
+        return docSheet.subAll(cell,ref,val);
+    }
+    public static Double funcMultAll(Integer i, Integer j, boolean val, boolean ref ){
+        Cell cell = null;
+        if (val) cell = docSheet.getCells().get(i-1).get(j-1);
+        return docSheet.multAll(cell,ref,val);
+    }
+    public static Double funcDivAll(Integer i, Integer j, boolean val, boolean ref ){
+        Cell cell = null;
+        if (val) cell = docSheet.getCells().get(i-1).get(j-1);
+        return docSheet.divAll(cell,ref,val);
+    }
     public static Double funcMean(Integer i, Integer j, boolean val, boolean ref ){
         Cell cell = null;
         if (val) cell = docSheet.getCells().get(i-1).get(j-1);

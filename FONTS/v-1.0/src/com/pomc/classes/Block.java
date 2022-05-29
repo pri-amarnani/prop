@@ -489,7 +489,7 @@ public class Block {
         Vector<Cell> s = new Vector<>();
         for (Cell[] cells : this.block) {
             for (int j = 0; j < this.block[0].length; ++j) {
-                sum += abs((double) cells[j].getInfo());
+                sum -= (double) cells[j].getInfo();
                 s.add(cells[j]);
             }
         }

@@ -187,9 +187,13 @@ public class Main {
             System.out.println("(8) Covariance");
             System.out.println("(9) Standard Deviation");
             System.out.println("(10) Pearson Coefficient");
+            System.out.println("(11) SumAll");
+            System.out.println("(12) SubAll");
+            System.out.println("(13) MultAll");
+            System.out.println("(14) DivAll");
             System.out.println("(0) Go back");
             System.out.println("\n \n Enter number:");
-            Integer num = numberInsertion(10,0);
+            Integer num = numberInsertion(14,0);
             if (num != null) {
                 System.out.println("\n");
                 switch (num) {
@@ -375,6 +379,83 @@ public class Main {
                             }
                             else System.out.println("Invalid answer");
                         }
+                        break;
+
+                    case 11:
+                        System.out.println("Want to print the result in a cell? (y/n)");
+                        userInM = userInput.nextLine();
+                        if (userInM.equals("y") || userInM.equals("yes") )  {
+                            System.out.println("Input the row of the Cell to print the result:");
+                            Integer cellIM = numberInsertion(DomainController.currentSheetRows(), 1);
+                            System.out.println("Input the column of the Cell to print the result:");
+                            Integer cellJM = numberInsertion(DomainController.currentSheetCols(), 1);
+                            if (cellIM > 0 && cellJM > 0) {
+                                Double result = DomainController.funcSumAll(cellIM,cellJM,true,isReferencing());
+                                System.out.println("The mean of the block is " + result + " and it was printed!");
+                            }
+                            else System.out.println("Cell not found");
+                        }
+                        else if (userInM.equals("n") || userInM.equals("no")){
+                            System.out.println("The mean of the block is " + DomainController.funcSumAll(0,0,false,false));
+                        }
+                        else System.out.println("Invalid answer");
+                        break;
+                    case 12:
+                        System.out.println("Want to print the result in a cell? (y/n)");
+                        userInM = userInput.nextLine();
+                        if (userInM.equals("y") || userInM.equals("yes") )  {
+                            System.out.println("Input the row of the Cell to print the result:");
+                            Integer cellIM = numberInsertion(DomainController.currentSheetRows(), 1);
+                            System.out.println("Input the column of the Cell to print the result:");
+                            Integer cellJM = numberInsertion(DomainController.currentSheetCols(), 1);
+                            if (cellIM > 0 && cellJM > 0) {
+                                Double result = DomainController.funcSubAll(cellIM,cellJM,true,isReferencing());
+                                System.out.println("The mean of the block is " + result + " and it was printed!");
+                            }
+                            else System.out.println("Cell not found");
+                        }
+                        else if (userInM.equals("n") || userInM.equals("no")){
+                            System.out.println("The mean of the block is " + DomainController.funcSubAll(0,0,false,false));
+                        }
+                        else System.out.println("Invalid answer");
+                        break;
+                    case 13:
+                        System.out.println("Want to print the result in a cell? (y/n)");
+                        userInM = userInput.nextLine();
+                        if (userInM.equals("y") || userInM.equals("yes") )  {
+                            System.out.println("Input the row of the Cell to print the result:");
+                            Integer cellIM = numberInsertion(DomainController.currentSheetRows(), 1);
+                            System.out.println("Input the column of the Cell to print the result:");
+                            Integer cellJM = numberInsertion(DomainController.currentSheetCols(), 1);
+                            if (cellIM > 0 && cellJM > 0) {
+                                Double result = DomainController.funcMultAll(cellIM,cellJM,true,isReferencing());
+                                System.out.println("The mean of the block is " + result + " and it was printed!");
+                            }
+                            else System.out.println("Cell not found");
+                        }
+                        else if (userInM.equals("n") || userInM.equals("no")){
+                            System.out.println("The mean of the block is " + DomainController.funcMultAll(0,0,false,false));
+                        }
+                        else System.out.println("Invalid answer");
+                        break;
+                    case 14:
+                        System.out.println("Want to print the result in a cell? (y/n)");
+                        userInM = userInput.nextLine();
+                        if (userInM.equals("y") || userInM.equals("yes") )  {
+                            System.out.println("Input the row of the Cell to print the result:");
+                            Integer cellIM = numberInsertion(DomainController.currentSheetRows(), 1);
+                            System.out.println("Input the column of the Cell to print the result:");
+                            Integer cellJM = numberInsertion(DomainController.currentSheetCols(), 1);
+                            if (cellIM > 0 && cellJM > 0) {
+                                Double result = DomainController.funcDivAll(cellIM,cellJM,true,isReferencing());
+                                System.out.println("The mean of the block is " + result + " and it was printed!");
+                            }
+                            else System.out.println("Cell not found");
+                        }
+                        else if (userInM.equals("n") || userInM.equals("no")){
+                            System.out.println("The mean of the block is " + DomainController.funcDivAll(0,0,false,false));
+                        }
+                        else System.out.println("Invalid answer");
                         break;
                     default:
                         System.out.println("\n");

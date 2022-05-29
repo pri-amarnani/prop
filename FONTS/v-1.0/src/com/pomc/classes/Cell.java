@@ -243,15 +243,13 @@ public abstract class Cell {
                 double newvalue;
                 for(int j=0; j<cellsref.size(); j++){
                     Double val = (Double) cellsref.elementAt(j).getInfo();
-
-                    if (val < 0) auxsum += (-1)*val;
-                    else auxsum += val;
+                    auxsum -= val;
                 }
                 newvalue=auxsum;
                 c.setContent(newvalue);
             }
             else if(Objects.equals(op, "multAll")){
-                double auxsum=0;
+                double auxsum=1;
                 double newvalue;
                 for(int j=0; j<cellsref.size(); j++){
                     auxsum *= (Double) cellsref.elementAt(j).getInfo();
@@ -260,7 +258,7 @@ public abstract class Cell {
                 c.setContent(newvalue);
             }
             else if(Objects.equals(op, "divAll")){
-                double auxsum=0;
+                double auxsum=1;
                 double newvalue;
                 for(int j=0; j<cellsref.size(); j++){
                     auxsum /= (Double) cellsref.elementAt(j).getInfo();

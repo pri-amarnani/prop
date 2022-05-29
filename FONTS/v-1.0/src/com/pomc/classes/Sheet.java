@@ -356,6 +356,66 @@ public class Sheet {
         return -1;
     }
 
+    public Double sumAll(Cell c, Boolean ref, Boolean val){
+        if(b_selected.allDouble()){
+            if (ref && overlapping(b_selected, create_block(c,c))) System.out.println("Error. Cell contained in the block.");
+            else{
+                Cell m = b_selected.sumAll(c, ref);
+                if(val) cells.elementAt(m.getRow()).setElementAt(m, m.getColumn());
+                if (ref) return (Double) m.getContent();
+                else return (Double) m.getInfo();
+            }
+        }
+        else System.out.println("Error. Not all cells are of type Number.");
+
+        return null;
+    }
+
+    public Double subAll(Cell c, Boolean ref, Boolean val){
+        if(b_selected.allDouble()){
+            if (ref && overlapping(b_selected, create_block(c,c))) System.out.println("Error. Cell contained in the block.");
+            else{
+                Cell m = b_selected.subAll(c, ref);
+                if(val) cells.elementAt(m.getRow()).setElementAt(m, m.getColumn());
+                if (ref) return (Double) m.getContent();
+                else return (Double) m.getInfo();
+            }
+        }
+        else System.out.println("Error. Not all cells are of type Number.");
+
+        return null;
+    }
+
+    public Double multAll(Cell c, Boolean ref, Boolean val){
+        if(b_selected.allDouble()){
+            if (ref && overlapping(b_selected, create_block(c,c))) System.out.println("Error. Cell contained in the block.");
+            else{
+                Cell m = b_selected.multAll(c, ref);
+                if(val) cells.elementAt(m.getRow()).setElementAt(m, m.getColumn());
+                if (ref) return (Double) m.getContent();
+                else return (Double) m.getInfo();
+            }
+        }
+        else System.out.println("Error. Not all cells are of type Number.");
+
+        return null;
+    }
+
+    public Double divAll(Cell c, Boolean ref, Boolean val){
+        if(b_selected.allDouble()){
+            if (ref && overlapping(b_selected, create_block(c,c))) System.out.println("Error. Cell contained in the block.");
+            else{
+                Cell m = b_selected.divAll(c, ref);
+                if(val) cells.elementAt(m.getRow()).setElementAt(m, m.getColumn());
+                if (ref) return (Double) m.getContent();
+                else return (Double) m.getInfo();
+            }
+        }
+        else System.out.println("Error. Not all cells are of type Number.");
+
+        return null;
+    }
+
     public Double mean(Cell c, Boolean ref, Boolean val){
         if(b_selected.allDouble()){
             if (ref && overlapping(b_selected, create_block(c,c))) System.out.println("Error. Cell contained in the block.");

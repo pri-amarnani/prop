@@ -31,11 +31,12 @@ public class gestorPOMC {
                     if (!first) file.write(";");
 
                     if (sh.getCell(i, j).getClass() == ReferencedCell.class) {
-                        file.write(sh.getCell(i, j).getInfo().toString());
+                        //file.write(sh.getCell(i, j).getInfo().toString());
 
                         ReferencedCell c = (ReferencedCell) sh.getCell(i, j);
                         Map.Entry<String, Vector<Cell>> ref = c.getRefInfo();
                         Vector<Cell> v = ref.getValue();
+                        file.write(ref.getKey() + "=");
 
                         for (int k = 0; k < v.size(); ++k) {
                             file.write("(" + v.elementAt(k).getRow() + "," + v.elementAt(k).getColumn() + ")");
