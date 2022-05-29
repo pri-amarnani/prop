@@ -14,7 +14,10 @@ public class Sheet {
     int num_cols;
     Block b_selected;
 
-
+    /**
+     * Actualiza en la hoja el valor de las celdas de un bloque modificado
+     * @param b
+     */
     public void update(Block b){
         if (b != null) {
             Cell ul = b.ul;
@@ -25,10 +28,6 @@ public class Sheet {
                 }
             }
         }
-    }
-
-    public boolean isEqual(Block b1, Block b2){
-        return b1.isEqual(b2);
     }
 
     public int getNumRows () {
@@ -60,6 +59,10 @@ public class Sheet {
         this.title = title;
     }
 
+    /**
+     * Crea una hoja 64x64 vacía con el título proporcionado
+     * @param title
+     */
     public Sheet(String title) {
         this.title = title;
         for(int i = 0; i < 64; ++i){
@@ -73,6 +76,11 @@ public class Sheet {
         num_rows = 64;
     }
 
+    /**
+     * Crea una hoja con el título y valor de las celdas proporcionado
+     * @param cells
+     * @param title
+     */
     public Sheet(Cell[][] cells, String title) {
 
         Vector<Vector<Cell>> v_cells = new Vector<>();
@@ -91,6 +99,12 @@ public class Sheet {
         num_cols = v_cells.elementAt(0).size();
     }
 
+    /**
+     * Crea una hoja con el titulo proporcionado y número de filas y columnas indicado
+     * @param rows
+     * @param columns
+     * @param title
+     */
     public Sheet(int rows, int columns, String title){
         this.num_rows = rows;
         this.num_cols = columns;
@@ -104,6 +118,11 @@ public class Sheet {
         }
     }
 
+    /**
+     * Compruba si dos hojas son iguales
+     * @param sh
+     * @return true si la hoja actual es igual a la hoja pasada por parámetro, false si son diferentes
+     */
     public boolean isEqual(Sheet sh) {
 
         if (sh.getNumCols() != this.getNumCols() || sh.getNumRows() != this.getNumRows()) return false;
@@ -118,6 +137,11 @@ public class Sheet {
         return true;
     }
 
+    /**
+     * Cambia el valor de la celda c por el valor o
+     * @param c
+     * @param o
+     */
     public void change_value(Cell c, Object o){
         Integer id = -1, id2 = -1;
         for(int i = 0; i < num_rows; ++i) {
@@ -143,14 +167,30 @@ public class Sheet {
 
     }
 
+    /**
+     * Crea una grafica lineal con los parámetros indicados
+     * @param title
+     * @param x
+     * @param y
+     * @param func
+     * @return Devuelve la grafica creada
+     */
     public XYChart graficXY(String title, String x, String y, String func){
         return b_selected.graficXY(title, x, y, func);
     }
 
+    /**
+     * Crea una grafica Pie
+     * @return devuelve la gráfica creada
+     */
     public PieChart graficPie(){
         return b_selected.graficPie();
     }
 
+    /**
+     * Añade una fila en la posición indicada
+     * @param pos
+     */
     public void NewRow(int pos){
         ++num_rows;
         Vector<Cell> pos_row = new Vector<>();
@@ -171,6 +211,10 @@ public class Sheet {
         }
     }
 
+    /**
+     * Añade una columna en la posición indicada
+     * @param pos
+     */
     public void NewColumn(int pos){
         ++num_cols;
         for(int i = 0; i < num_rows; ++i){
@@ -186,44 +230,52 @@ public class Sheet {
         }
     }
 
+    /**
+     * Elimina la fila indicada
+     * @param pos
+     */
     public void DeleteRow(int pos){
-        if(num_rows <= 1) System.out.println("Error. Not enough rows.");
-        else{
-            --num_rows;
-            cells.removeElementAt(pos);
-            for(int i = pos; i < num_rows; ++i){
-                Vector<Cell> row = cells.elementAt(i);
-                for(int j = 0; j < num_cols; ++j){
-                    Cell c = row.elementAt(j);
-                    c.setRow(i);
-                    row.setElementAt(c,j);
-                }
-                cells.setElementAt(row,i);
+        --num_rows;
+        cells.removeElementAt(pos);
+        for(int i = pos; i < num_rows; ++i){
+            Vector<Cell> row = cells.elementAt(i);
+            for(int j = 0; j < num_cols; ++j){
+                Cell c = row.elementAt(j);
+                c.setRow(i);
+                row.setElementAt(c,j);
             }
+            cells.setElementAt(row,i);
         }
     }
 
+    /**
+     * Elimina la columna indicada
+     * @param pos
+     */
     public void DeleteColumn(int pos){
-        if(num_cols <= 1) System.out.println("Error. Not enough columns.");
-        else{
-            --num_cols;
-            for(int i = 0; i < num_rows; ++i){
-                Vector<Cell> row = cells.elementAt(i);
-                row.removeElementAt(pos);
-                for(int j = pos; j < num_cols; ++j ) {
-                    Cell c = row.elementAt(j);
-                    c.setColumn(j);
-                    row.setElementAt(c,j);
-                }
-                cells.setElementAt(row,i);
+        --num_cols;
+        for(int i = 0; i < num_rows; ++i){
+            Vector<Cell> row = cells.elementAt(i);
+            row.removeElementAt(pos);
+            for(int j = pos; j < num_cols; ++j ) {
+                Cell c = row.elementAt(j);
+                c.setColumn(j);
+                row.setElementAt(c,j);
             }
+            cells.setElementAt(row,i);
         }
+
     }
 
 
+    /**
+     * Crea un bloque a partir de dos celdas
+     * @param c1
+     * @param c2
+     * @return
+     */
     public Block create_block(Cell c1, Cell c2){
         Cell [][] arr_block = new Cell[c2.getRow()-c1.getRow()+1][c2.getColumn()-c1.getColumn()+1];
-        //System.out.println(c2.getRow()-c1.getRow()+1 + " " + (c2.getColumn()-c1.getColumn()+1));
         for(int i =0 ; i <= c2.getRow()-c1.getRow(); ++i){
             for(int j = 0; j <= c2.getColumn()-c1.getColumn(); ++j){
                 arr_block[i][j] = cells.elementAt(c1.getRow()+ i).elementAt(c1.getColumn()+j);
@@ -233,6 +285,12 @@ public class Sheet {
         return block;
     }
 
+    /**
+     * Selecciona un bloque a partir de dos celdas y lo guarda en el parámetro privado
+     * @param c1
+     * @param c2
+     * @return Devuelve el bloque seleccionado
+     */
     public Block SelectBlock(Cell c1, Cell c2){
         b_selected = null;
         Block b = create_block(c1,c2);
@@ -247,34 +305,44 @@ public class Sheet {
     public int blockFirstCol(){
        return b_selected.ul.getColumn();
     }
-    public void CopyB(){
-        b_selected.CopyB();
-    }
 
+    /**
+     * Mueve un bloque a otra posición de la hoja con posibilidad de referencia
+     * @param b
+     * @param ref
+     */
     public void MoveBlock(Block b, Boolean ref){
-        if(b.number_cols() == b_selected.number_cols() && b.number_rows() == b_selected.number_rows()) {
-            if(b_selected.dr.getColumn() > b.ul.getColumn() && b_selected.dr.getRow() > b.ul.getRow()) System.out.println("Error. The blocks selected collide.");
-            else b_selected.ref(b, ref);
-        }
-        else System.out.println("Error. The blocks selected have different sizes.");
+        b_selected.ref(b, ref);
         update(b);
     }
 
+    /**
+     * Calcula la longitud de las celdas de un bloque y las guarda en otro bloque, puede tener referencia
+     * @param b
+     * @param ref
+     * @param criteria
+     */
     public void lengthBlock(Block b, Boolean ref, String criteria){
-        if(b.number_cols() == b_selected.number_cols() && b.number_rows() == b_selected.number_rows()) {
-            if(b_selected.dr.getColumn() > b.ul.getColumn() && b_selected.dr.getRow() > b.ul.getRow()) System.out.println("Error. The blocks selected collide.");
-            else b_selected.length(b, ref, criteria);
-        }
-        else System.out.println("Error. The blocks selected have different sizes.");
+        b_selected.length(b, ref, criteria);
         update(b);
     }
 
+    /**
+     * Cambia el valor de las celdas de un bloque por el valor pasado por parámetro
+     * @param o
+     */
     public void ModifyBlock(Object o){
 
         b_selected.ModifyBlock(o);
         update(b_selected);
     }
 
+    /**
+     * Ordena un bloque en función de la columna indicada y siguiendo el criterio indicado
+     * @param n_col
+     * @param Criteria
+     * @return
+     */
     public boolean SortBlock(int n_col, String Criteria){
         Cell c = b_selected.getCell(0,n_col);
         Cell c2 = b_selected.getCell(b_selected.number_rows()-1,n_col);
@@ -286,16 +354,33 @@ public class Sheet {
         return true;
     }
 
-    public Cell find(Object o){
+    /**
+     * Busca las celdas con valor igual al indicado
+     * @param o
+     * @return Devuelve
+     */
+    public Vector<Cell> find(Object o){
         return b_selected.find(o);
     }
 
+    /**
+     * Busca las celdas con valor n y modifica su valor poniendo r
+     * @param n
+     * @param r
+     * @return devuelve
+     */
     public Object[] findAndReplace(Object n, Object r){
         Object[] result = b_selected.findAndReplace(n, r);
         update(b_selected);
         return result;
     }
 
+    /**
+     * Comprueba si dos bloques coinciden en alguna celda
+     * @param b1
+     * @param b2
+     * @return true si comparten celdas, false si no comparten
+     */
     public Boolean overlapping(Block b1, Block b2){
         if(b1.dr.getColumn() < b2.ul.getColumn()) return false;
         if(b1.dr.getRow() < b2.ul.getRow()) return false;
@@ -304,29 +389,29 @@ public class Sheet {
         return true;
     }
 
+    /**
+     * Llama a la funcion de bloque que hace las operaciones unitarias
+     * @param op
+     * @param x
+     */
     public void opBlock(String op, double x){
-        if (b_selected.allDouble()){
-            b_selected.opBlock(op, x);
-        }
-        else System.out.println("Error. Not all cells are of type Number.");
+        b_selected.opBlock(op, x);
         update(b_selected);
     }
 
+    /**
+     * Llama a la función de bloque que edita la celda dejando solo su parte entera
+     * @param b
+     * @param ref
+     */
     public void floor(Block b, Boolean ref){
-        if (b_selected.allDouble()){
-            if(ref && overlapping(b_selected, b)) System.out.println("Error. The blocks selected are overlapped.");
-            else b_selected.floor(b, ref);
-        }
-        else System.out.println("Error. Not all cells are of type Number.");
+        b_selected.floor(b, ref);
         update(b);
     }
 
+
     public void ceil(Block b, Boolean ref){
-        if (b_selected.allDouble()){
-            if(ref && overlapping(b_selected, b)) System.out.println("Error. The blocks selected are overlapped.");
-            else b_selected.ceiling(b, ref);
-        }
-        else System.out.println("Error. Not all cells are of type Number.");
+        b_selected.ceiling(b, ref);
         update(b);
     }
 
@@ -336,276 +421,143 @@ public class Sheet {
     }
 
     public void sum(Block b1, Block b2, Boolean ref){
-        if (b_selected.allDouble() && b1.allDouble()){
-            if(ref && overlapping(b_selected, b2)) System.out.println("Error. The blocks selected are overlapped.");
-            else if(ref && overlapping(b1, b2)) System.out.println("Error. The blocks selected are overlapped.");
-            else b_selected.sum(b1, b2, ref);
-        }
-        else System.out.println("Error. Not all cells are of type Number.");
+        b_selected.sum(b1, b2, ref);
         update(b2);
     }
 
     public void mult(Block b1, Block b2, Boolean ref){
-        if (b_selected.allDouble() && b1.allDouble()){
-            if(ref && overlapping(b_selected, b2)) System.out.println("Error. The blocks selected are overlapped.");
-            else if(ref && overlapping(b1, b2)) System.out.println("Error. The blocks selected are overlapped.");
-            else b_selected.mult(b1, b2, ref);
-        }
-        else System.out.println("Error. Not all cells are of type Number.");
+        b_selected.mult(b1, b2, ref);
         update(b2);
     }
 
     public void div(Block b1, Block b2, Boolean ref){
-        if (b_selected.allDouble() && b1.allDouble()) {
-            if(ref && overlapping(b_selected, b2)) System.out.println("Error. The blocks selected are overlapped.");
-            else if(ref && overlapping(b1, b2)) System.out.println("Error. The blocks selected are overlapped.");
-            else b_selected.div(b1, b2, ref);
-        }
-        else System.out.println("Error. Not all cells are of type Number.");
+        b_selected.div(b1, b2, ref);
         update(b2);
     }
 
     public void substract(Block b1, Block b2, Boolean ref){
-        if (b_selected.allDouble() && b1.allDouble() ){
-            if(ref && overlapping(b_selected, b2)) System.out.println("Error. The blocks selected are overlapped.");
-            else if(ref && overlapping(b1, b2)) System.out.println("Error. The blocks selected are overlapped.");
-            else b_selected.substract(b1, b2, ref);
-        }
-        else System.out.println("Error. Not all cells are of type Number.");
+        b_selected.substract(b1, b2, ref);
         update(b2);
     }
 
     public void concatenate(Block b1, Block b2, Boolean ref){
-        if (b_selected.allText() && b1.allText()){
-            if(ref && overlapping(b_selected, b2)) System.out.println("Error. The blocks selected are overlapped.");
-            else if(ref && overlapping(b1, b2)) System.out.println("Error. The blocks selected are overlapped.");
-            else b_selected.concatenate(b1, b2, ref);
-        }
-        else System.out.println("Error. Not all cells are of type Text.");
+        b_selected.concatenate(b1, b2, ref);
         update(b2);
     }
 
     public void extract(Block b1,Boolean ref, String ex){
-
         b_selected.extract(b1, ref, ex);
         update(b1);
     }
 
     public void dayOfTheWeek (Block b, Boolean ref){
-        if(b_selected.allDate()){
-            b_selected.dayOfTheWeek(b, ref);
-            update(b);
-        }
-        else System.out.println("Error. Not all cells are of type Date.");
-
+        b_selected.dayOfTheWeek(b, ref);
+        update(b);
     }
 
     public void replaceWithCriteriaText(String criteria){
-        if (b_selected.allText()) b_selected.replaceWithCriteriaText(criteria);
-        else System.out.println("Error. Not all cells are of type Text.");
+        b_selected.replaceWithCriteriaText(criteria);
         update(b_selected);
     }
 
     public void trim(){
-        if (b_selected.allText()) b_selected.trim();
-        else System.out.println("Error. Not all cells are of type Text.");
+        b_selected.trim();
         update(b_selected);
     }
 
     public double length(TextCell c, String criteria){
-        if(c.getType() == "T") return c.length(criteria);
-        else System.out.println("Error. Cell is not of type Text.");
-        return -1;
+        return c.length(criteria);
     }
 
     public Double countIf(Cell c, Boolean ref, double eq, String criteria){
-        if(b_selected.allDouble()){
-            if (ref && overlapping(b_selected, create_block(c,c))) System.out.println("Error. Cell contained in the block.");
-            else{
-                Cell m = b_selected.countIf(c, ref, eq, criteria);
-                cells.elementAt(m.getRow()).setElementAt(m, m.getColumn());
-                if (ref) return (Double) m.getContent();
-                else return (Double) m.getInfo();
-            }
-        }
-        else System.out.println("Error. Not all cells are of type Number.");
-
-        return null;
+        Cell m = b_selected.countIf(c, ref, eq, criteria);
+        cells.elementAt(m.getRow()).setElementAt(m, m.getColumn());
+        if (ref) return (Double) m.getContent();
+        else return (Double) m.getInfo();
     }
 
     public Double max(Cell c, Boolean ref){
-        if(b_selected.allDouble()){
-            if (ref && overlapping(b_selected, create_block(c,c))) System.out.println("Error. Cell contained in the block.");
-            else{
-                Cell m = b_selected.max(c, ref);
-                cells.elementAt(m.getRow()).setElementAt(m, m.getColumn());
-                if (ref) return (Double) m.getContent();
-                else return (Double) m.getInfo();
-            }
-        }
-        else System.out.println("Error. Not all cells are of type Number.");
-
-        return null;
+        Cell m = b_selected.max(c, ref);
+        cells.elementAt(m.getRow()).setElementAt(m, m.getColumn());
+        if (ref) return (Double) m.getContent();
+        else return (Double) m.getInfo();
     }
 
     public Double min(Cell c, Boolean ref){
-        if(b_selected.allDouble()){
-            if (ref && overlapping(b_selected, create_block(c,c))) System.out.println("Error. Cell contained in the block.");
-            else{
-                Cell m = b_selected.min(c, ref);
-                cells.elementAt(m.getRow()).setElementAt(m, m.getColumn());
-                if (ref) return (Double) m.getContent();
-                else return (Double) m.getInfo();
-            }
-        }
-        else System.out.println("Error. Not all cells are of type Number.");
-
-        return null;
+        Cell m = b_selected.min(c, ref);
+        cells.elementAt(m.getRow()).setElementAt(m, m.getColumn());
+        if (ref) return (Double) m.getContent();
+        else return (Double) m.getInfo();
     }
 
-    public Double sumAll(Cell c, Boolean ref, Boolean val){
-        if(b_selected.allDouble()){
-            if (ref && overlapping(b_selected, create_block(c,c))) System.out.println("Error. Cell contained in the block.");
-            else{
-                Cell m = b_selected.sumAll(c, ref);
-                if(val) cells.elementAt(m.getRow()).setElementAt(m, m.getColumn());
-                if (ref) return (Double) m.getContent();
-                else return (Double) m.getInfo();
-            }
-        }
-        else System.out.println("Error. Not all cells are of type Number.");
-
-        return null;
+    public Double sumAll(Cell c, Boolean ref){
+        Cell m = b_selected.sumAll(c, ref);
+        cells.elementAt(m.getRow()).setElementAt(m, m.getColumn());
+        if (ref) return (Double) m.getContent();
+        else return (Double) m.getInfo();
     }
 
-    public Double subAll(Cell c, Boolean ref, Boolean val){
-        if(b_selected.allDouble()){
-            if (ref && overlapping(b_selected, create_block(c,c))) System.out.println("Error. Cell contained in the block.");
-            else{
-                Cell m = b_selected.subAll(c, ref);
-                if(val) cells.elementAt(m.getRow()).setElementAt(m, m.getColumn());
-                if (ref) return (Double) m.getContent();
-                else return (Double) m.getInfo();
-            }
-        }
-        else System.out.println("Error. Not all cells are of type Number.");
-
-        return null;
+    public Double subAll(Cell c, Boolean ref){
+        Cell m = b_selected.subAll(c, ref);
+        cells.elementAt(m.getRow()).setElementAt(m, m.getColumn());
+        if (ref) return (Double) m.getContent();
+        else return (Double) m.getInfo();
     }
 
     public Double multAll(Cell c, Boolean ref, Boolean val){
-        if(b_selected.allDouble()){
-            if (ref && overlapping(b_selected, create_block(c,c))) System.out.println("Error. Cell contained in the block.");
-            else{
-                Cell m = b_selected.multAll(c, ref);
-                if(val) cells.elementAt(m.getRow()).setElementAt(m, m.getColumn());
-                if (ref) return (Double) m.getContent();
-                else return (Double) m.getInfo();
-            }
-        }
-        else System.out.println("Error. Not all cells are of type Number.");
-
-        return null;
+        Cell m = b_selected.multAll(c, ref);
+        cells.elementAt(m.getRow()).setElementAt(m, m.getColumn());
+        if (ref) return (Double) m.getContent();
+        else return (Double) m.getInfo();
     }
 
     public Double divAll(Cell c, Boolean ref, Boolean val){
-        if(b_selected.allDouble()){
-            if (ref && overlapping(b_selected, create_block(c,c))) System.out.println("Error. Cell contained in the block.");
-            else{
-                Cell m = b_selected.divAll(c, ref);
-                if(val) cells.elementAt(m.getRow()).setElementAt(m, m.getColumn());
-                if (ref) return (Double) m.getContent();
-                else return (Double) m.getInfo();
-            }
-        }
-        else System.out.println("Error. Not all cells are of type Number.");
-
-        return null;
+        Cell m = b_selected.divAll(c, ref);
+        cells.elementAt(m.getRow()).setElementAt(m, m.getColumn());
+        if (ref) return (Double) m.getContent();
+        else return (Double) m.getInfo();
     }
 
     public Double mean(Cell c, Boolean ref){
-        if(b_selected.allDouble()){
-            if (ref && overlapping(b_selected, create_block(c,c))) System.out.println("Error. Cell contained in the block.");
-            else{
-                Cell m = b_selected.mean(c, ref);
-                cells.elementAt(m.getRow()).setElementAt(m, m.getColumn());
-                if (ref) return (Double) m.getContent();
-                else return (Double) m.getInfo();
-            }
-        }
-        else System.out.println("Error. Not all cells are of type Number.");
-
-        return null;
+        Cell m = b_selected.mean(c, ref);
+        cells.elementAt(m.getRow()).setElementAt(m, m.getColumn());
+        if (ref) return (Double) m.getContent();
+        else return (Double) m.getInfo();
     }
 
     public Double median(Cell c, Boolean ref){
-        if(b_selected.allDouble()){
-            if(ref && overlapping(b_selected, create_block(c,c))) System.out.println("Error. Cell contained in the block.");
-            else{
-                Cell m = b_selected.median(c, ref);
-                cells.elementAt(m.getRow()).setElementAt(m, m.getColumn());
-                if (ref) return (Double) m.getContent();
-                else return (Double) m.getInfo();
-            }
-        }
-        else System.out.println("Error. Not all cells are of type Number.");
-        return null;
+        Cell m = b_selected.median(c, ref);
+        cells.elementAt(m.getRow()).setElementAt(m, m.getColumn());
+        if (ref) return (Double) m.getContent();
+        else return (Double) m.getInfo();
     }
 
     public Double var(Cell c, Boolean ref){
-        if(b_selected.allDouble()){
-            if(ref && overlapping(b_selected, create_block(c,c))) System.out.println("Error. Cell contained in the block.");
-            else{
-                Cell m = b_selected.var(c, ref);
-                cells.elementAt(m.getRow()).setElementAt(m, m.getColumn());
-                if (ref) return (Double) m.getContent();
-                else return (Double) m.getInfo();
-            }
-        }
-        else System.out.println("Error. Not all cells are of type Number.");
-        return null;
+        Cell m = b_selected.var(c, ref);
+        cells.elementAt(m.getRow()).setElementAt(m, m.getColumn());
+        if (ref) return (Double) m.getContent();
+        else return (Double) m.getInfo();
     }
 
     public Double covar(Block b, Cell c, Boolean ref){ //sii
-        if(b_selected.allDouble() && b.allDouble()){
-            if(ref && overlapping(b_selected, create_block(c,c))) System.out.println("Error. Cell contained in the block.");
-            else{
-                Cell m = b_selected.covar(b, c, ref);
-                cells.elementAt(m.getRow()).setElementAt(m, m.getColumn());
-                if (ref) return (Double) m.getContent();
-                else return (Double) m.getInfo();
-            }
-        }
-        else System.out.println("Error. Not all cells are of type Number.");
-        return null;
+        Cell m = b_selected.covar(b, c, ref);
+        cells.elementAt(m.getRow()).setElementAt(m, m.getColumn());
+        if (ref) return (Double) m.getContent();
+        else return (Double) m.getInfo();
     }
 
     public Double std(Cell c, Boolean ref){
-        if(b_selected.allDouble()){
-            if(ref && overlapping(b_selected, create_block(c,c))) System.out.println("Error. Cell contained in the block.");
-            else{
-                Cell m = b_selected.std(c, ref);
-                cells.elementAt(m.getRow()).setElementAt(m, m.getColumn());
-                if (ref) return (Double) m.getContent();
-                else return (Double) m.getInfo();
-            }
-        }
-        else System.out.println("Error. Not all cells are of type Number.");
-        return null;
+        Cell m = b_selected.std(c, ref);
+        cells.elementAt(m.getRow()).setElementAt(m, m.getColumn());
+        if (ref) return (Double) m.getContent();
+        else return (Double) m.getInfo();
     }
 
     public Double CPearson(Block b, Cell c, Boolean ref){
-        if(b_selected.allDouble() && b.allDouble()){
-            if(ref && overlapping(b_selected, create_block(c,c))) System.out.println("Error. Cell contained in the block.");
-            else{
-                Cell m = b_selected.CPearson(b, c, ref);
-                cells.elementAt(m.getRow()).setElementAt(m, m.getColumn());
-                if (ref) return (Double) m.getContent();
-                else return (Double) m.getInfo();
-            }
-        }
-        else System.out.println("Error. Not all cells are of type Number.");
-        return null;
+        Cell m = b_selected.CPearson(b, c, ref);
+        cells.elementAt(m.getRow()).setElementAt(m, m.getColumn());
+        if (ref) return (Double) m.getContent();
+        else return (Double) m.getInfo();
     }
 
 }

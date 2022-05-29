@@ -138,9 +138,6 @@ public class Block {
         return ch;
     }
 
-    public void CopyB () {
-        // copy to clipboard
-    }
 
     public void opBlock (String op, double x) {
 
@@ -446,13 +443,14 @@ public class Block {
         dr = this.block[size_r-1][size_c-1];
     }
 
-    public Cell find (Object n) {
+    public Vector<Cell> find (Object n) {
+        Vector<Cell> v = new Vector<>();
         for (Cell[] cells : block) {
             for (int j = 0; j < block[0].length; ++j) {
-                if (Objects.equals(cells[j].getInfo(), n)) return cells[j];
+                if (Objects.equals(cells[j].getInfo(), n)) v.add(cells[j]);
             }
         }
-        return null;
+        return v;
     }
 
     public Object[] findAndReplace (Object n, Object change) {
