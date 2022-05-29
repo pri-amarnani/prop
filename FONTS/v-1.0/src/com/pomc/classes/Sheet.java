@@ -338,6 +338,16 @@ public class Sheet {
         update(b2);
     }
 
+    public void concatenate(Block b1, Block b2, Boolean ref){
+        if (b_selected.allText() && b1.allText()){
+            if(ref && overlapping(b_selected, b2)) System.out.println("Error. The blocks selected are overlapped.");
+            else if(ref && overlapping(b1, b2)) System.out.println("Error. The blocks selected are overlapped.");
+            else b_selected.concatenate(b1, b2, ref);
+        }
+        else System.out.println("Error. Not all cells are of type Text.");
+        update(b2);
+    }
+
     public void extract(Block b1,Boolean ref, String ex){
 
         b_selected.extract(b1, ref, ex);

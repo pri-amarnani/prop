@@ -403,6 +403,33 @@ public class Block {
         b.dr=b.getCell(b.size_r-1,b.size_c-1);
     }
 
+    public void concatenate (Block b1, Block b2, Boolean ref) {
+        for (int i = 0; i < this.block.length; ++i) {
+            for (int j = 0; j < this.block[0].length; ++j) {
+                //System.out.println("concatenate");
+                Cell n = (Cell) b2.getCell(i, j).changeValue((String) this.block[i][j].getInfo() + (String) b1.getCell(i, j).getInfo());
+                b2.setCell(i,j,n);
+                if (ref) {
+                    ReferencedCell rc = new ReferencedCell(n.getRow(),n.getColumn(),"=concatenate");
+                    rc.setContent(n.getInfo());
+                    b2.setCell(i,j,rc);
+                    Vector<Cell> s = new Vector<>(2);
+                    s.add(this.block[i][j]);
+                    s.add(b1.getCell(i, j));
+                    this.block[i][j].AddRef(rc);
+                    b1.getCell(i, j).AddRef(rc);
+                    Map.Entry<String, Vector<Cell>> r = new AbstractMap.SimpleEntry<>("concatenate", s);
+
+                    b2.getCell(i, j).setRefInfo(r);
+
+                    n=null;
+                }
+            }
+        }
+        b2.ul=b2.getCell(0,0);
+        b2.dr=b2.getCell(b2.size_r-1,b2.size_c-1);
+    }
+
     public void sum (Block b1, Block b2, Boolean ref) {
         for (int i = 0; i < this.block.length; ++i) {
             for (int j = 0; j < this.block[0].length; ++j) {

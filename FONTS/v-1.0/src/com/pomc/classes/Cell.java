@@ -165,6 +165,15 @@ public abstract class Cell {
                 }
                 c.setContent(newvalue);
             }
+
+            if (Objects.equals(op, "concatenate")) {
+                String newvalue = "";
+                for (int j=0;j<cellsref.size();j++){
+                    newvalue= newvalue + (String) ((cellsref.elementAt(j)).getInfo());
+                }
+                c.setContent(newvalue);
+            }
+
             else if(Objects.equals(op, "floor")){
                 Double newvalue = (Double) cellsref.elementAt(0).getInfo();
                 newvalue= Math.floor(newvalue);

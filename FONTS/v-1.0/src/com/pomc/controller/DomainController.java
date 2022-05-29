@@ -238,6 +238,13 @@ public class DomainController {
         Block b2 = createBlock(Block2);
         docSheet.div(b1,b2,ref);
     }
+
+    public static void funcConcatenate(Integer[] Block1, Integer[] Block2, boolean ref) {
+        Block b1 = createBlock(Block1);
+        Block b2 = createBlock(Block2);
+        docSheet.concatenate(b1,b2,ref);
+    }
+
     public static Double funcMax(Integer i, Integer j, boolean val, boolean ref ){
         Cell cell = null;
         if (val) cell = docSheet.getCells().get(i-1).get(j-1);
