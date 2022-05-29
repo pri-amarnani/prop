@@ -215,8 +215,8 @@ public class Block {
     }
 
     public void convert (Block b, Boolean ref, String from, String to) {
-        for (int i = 0; i < b.number_rows(); ++i) {
-            for (int j = 0; j < b.number_cols(); ++j) {
+        for (int i = 0; i < this.block.length; ++i) {
+            for (int j = 0; j < this.block[0].length; ++j) {
                 NumCell N = (NumCell) this.block[i][j];
 
                 Cell n = (Cell) b.getCell(i, j).changeValue(N.conversion(from,to));
@@ -399,17 +399,17 @@ public class Block {
         for (Cell[] cells : this.block) {
             for (int j = 0; j < this.block[0].length; ++j) {
                 String s = (String) cells[j].getInfo();
-                if (Objects.equals(criteria, "all caps")) {
+                if (Objects.equals(criteria, "All caps")) {
                     Cell n = (Cell) cells[j].changeValue(s.toUpperCase(Locale.ROOT));
                     cells[j] = n;
                 }
 
-                else if (Objects.equals(criteria, "all not caps")) {
+                else if (Objects.equals(criteria, "All lowercase")) {
                     Cell n = (Cell) cells[j].changeValue(s.toLowerCase(Locale.ROOT));
                     cells[j] = n;
                 }
 
-                else if (Objects.equals(criteria, "cap first letter")) {
+                else if (Objects.equals(criteria, "Cap first letter")) {
                     Cell n = (Cell) cells[j].changeValue(s.substring(0, 1).toUpperCase(Locale.ROOT)
                             + s.substring(1));
                     cells[j] = n;

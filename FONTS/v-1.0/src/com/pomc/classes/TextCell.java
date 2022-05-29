@@ -17,34 +17,33 @@ public class TextCell extends Cell {
     }
 
     public void replace(String criteria){ //return String??
-        if (Objects.equals(criteria, "all caps")) {
+        if (Objects.equals(criteria, "All caps")) {
             info= info.toUpperCase();
         }
-        else if (Objects.equals(criteria, "all not caps")){
+        else if (Objects.equals(criteria, "All lowercase")){
             info=info.toLowerCase();
         }
-        else if (Objects.equals(criteria, "cap_first_letter")){
+        else if (Objects.equals(criteria, "Cap first letter")){
             String aux;
             aux=info.substring(0,1).toUpperCase()+info.substring(1);
             info=aux;
         }
-        //not cientifica a num??
     }
 
     public int length(String criteria){
-        if  (Objects.equals(criteria, "words")){ //falta comprovar!!!!!!
+        if  (Objects.equals(criteria, "Words")){ //falta comprovar!!!!!!
             String [] aux;
             aux= info.split("\\s+");
             return aux.length;
         }
-        else if (Objects.equals(criteria, "letters")){
+        else if (Objects.equals(criteria, "Letters")){
             int count=0;
             for (int i=0;i<info.length();i++){
                 if(info.charAt(i)!=' ') count++;
             }
             return count;
         }
-        else if (Objects.equals(criteria, "characters")){
+        else if (Objects.equals(criteria, "Characters")){
             return info.length();
         }
         return -1;

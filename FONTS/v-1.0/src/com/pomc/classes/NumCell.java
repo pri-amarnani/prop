@@ -30,23 +30,23 @@ public class NumCell extends Cell {
     public double conversion(String convFrom, String convTo) {
         UnitOf.Length length = new UnitOf.Length();
         if (Objects.equals(convFrom, "m")) {
-            if (Objects.equals(convTo, "cm")) this.info= length.fromMeters(info).toCentimeters();
-            if (Objects.equals(convTo, "km")) this.info=length.fromMeters(info).toKilometers();
-            if (Objects.equals(convTo, "inches")) this.info=length.fromMeters(info).toInches();
+            if (Objects.equals(convTo, "cm")) return length.fromMeters(info).toCentimeters();
+            if (Objects.equals(convTo, "km")) return length.fromMeters(info).toKilometers();
+            if (Objects.equals(convTo, "inches")) return length.fromMeters(info).toInches();
         }
 
-        if (Objects.equals(convFrom, "inches")) this.info=length.fromInches(info).toMeters();
+        if (Objects.equals(convFrom, "inches")) return length.fromInches(info).toMeters();
 
         if (Objects.equals(convFrom, "km")) {
-            if (Objects.equals(convTo, "m")) this.info=length.fromKilometers(info).toMeters();
-            if (Objects.equals(convTo, "cm")) this.info=length.fromKilometers(info).toCentimeters();
+            if (Objects.equals(convTo, "m")) return length.fromKilometers(info).toMeters();
+            if (Objects.equals(convTo, "cm"))return length.fromKilometers(info).toCentimeters();
         }
 
         if (Objects.equals(convFrom, "cm")) {
-            if (Objects.equals(convTo, "m")) this.info=length.fromCentimeters(info).toMeters();
-            if (Objects.equals(convTo, "km")) this.info=length.fromMeters(info).toKilometers();
+            if (Objects.equals(convTo, "m")) return length.fromCentimeters(info).toMeters();
+            if (Objects.equals(convTo, "km")) return length.fromMeters(info).toKilometers();
         }
-        return info; //si devuelve -1 falla la conv
+        return -1; //si devuelve -1 falla la conv
     }
 
 

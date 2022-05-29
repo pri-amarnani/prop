@@ -178,7 +178,7 @@ public class DomainController {
 
 
     public static Block createBlock(Integer[] blockCells, String name) {
-        if (name != null) {
+        if (name != null&&blockCells[0]!=-1) {
             Sheet s=doc.getSheet(name);
             if (blockCells[0] <= blockCells[2] && blockCells[1] <= blockCells[3]) {
                 Cell c1 = s.getCell(blockCells[0] - 1, blockCells[1] - 1);
@@ -256,7 +256,7 @@ public class DomainController {
         doc.getSheet(name).floor(block,ref);
     }
 
-    public static void currentBlockConvert(Integer[] blockCells, boolean ref, String from, String to, String sheetname){
+    public static void blockConvert(Integer[] blockCells, boolean ref, String from, String to, String sheetname){
         Block block = createBlock(blockCells,sheetname);
         doc.getSheet(sheetname).convert(block, ref, from, to);
     }
@@ -351,9 +351,9 @@ public class DomainController {
         doc.getSheet(sheetname).replaceWithCriteriaText(criteria);
     }
 
-    public static Integer funcLength(Integer i, Integer j, String Criterio,String sheetname) {
-        Cell cell = doc.getSheet(sheetname).getCells().get(i).get(j);
-        return doc.getSheet(sheetname).length((TextCell) cell,Criterio);
+    public static void funcLength(Integer[] block, String Criterio,boolean ref,String sheetname) {
+        Block b= createBlock(block,sheetname);
+        doc.getSheet(sheetname).length(b,ref,Criterio);
     }
 
     public static String getCellInfo(int r, int c, String sheetname){

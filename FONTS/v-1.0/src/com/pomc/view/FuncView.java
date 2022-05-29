@@ -115,17 +115,17 @@ public class FuncView {
 
 
     public static Integer[] addAOp() {
-        Integer[] b1 = new Integer[4]; //segundo operando
-        Integer[] b2 = new Integer[5];//donde se imprime
-        b2[4] = 0;
+        Integer[] b1 = {-1,-1,-1,-1}; //segundo operando
+        Integer[] b2 = {-1,-1,-1,-1,0};//donde se imprime
+        //b2[4] = 0;
 
         Object[] selectionValues = {"Addition", "Substraction", "Multiplication", "Division"};
         String initialSelection = "Addition";
         Object selection = JOptionPane.showInputDialog(null, "Choose the type of arithmetic operation",
                 "Arithmetic operations", JOptionPane.QUESTION_MESSAGE, null, selectionValues, initialSelection);
-
-        b2 = Operation(b1,b2,selection.toString());
-
+        if(selection!=null) {
+            b2 = Operation(b1,b2,selection.toString());
+        }
         return b2;
     }
 
@@ -214,9 +214,9 @@ public class FuncView {
                             b2[2] = (Integer) drr.getValue();
                             b2[3] = (Integer) drc.getValue();
                         }
-                        else return null;
+                        b2[4] = -1;
                     }
-                    b2[4] = -1;
+
                 } else {
                     ref.setSelected(false);
                     b2[0] = b1[0];
@@ -240,28 +240,28 @@ public class FuncView {
                         PresentationController.blockDiv(b1, b2, b, SheetView.currentSheetName());
                         break;
                 }
-                return b2;
+
             }
         }
-        return null;
+        return b2;
     }
 
     public static Integer[] addSOp() {
-        Integer[] a = new Integer[2];
+        Integer[] a = {-1,-1};
         Object[] selectionValues = {"Mean", "Median", "Variance", "Covariance","Standard Deviation", "Pearson correlation coefficient"};
         String initialSelection = "Mean";
         Object selection = JOptionPane.showInputDialog(null, "Choose the type of statistic operation",
                 "Statistic operations", JOptionPane.QUESTION_MESSAGE, null, selectionValues, initialSelection);
-
-        if (selection.toString().equals("Covariance") || selection.toString().equals("Pearson correlation coefficient") ) {
-            a =operationS2(a,selection.toString());
+        if(selection!=null) {
+            if (selection.toString().equals("Covariance") || selection.toString().equals("Pearson correlation coefficient")) {
+                a = operationS2(a, selection.toString());
+            } else a = operationS1(selection.toString());
         }
-        else a =operationS1(selection.toString());
         return a;
 
     }
     public static Integer[] operationS1(String op) {
-        Integer[] b1 = new Integer[2];
+        Integer[] b1 = {-1,-1};
         JCheckBox ref = new JCheckBox("Reference the result ?");
         Object[] fields = new Object[]{
                 ref,
@@ -316,17 +316,16 @@ public class FuncView {
                             PresentationController.blockSTD(b1, b, SheetView.currentSheetName());
                             break;
                     }
-                    return b1;
+
                 }
             }
         }
-        return null;
+        return b1;
     }
 
 
     public static Integer[] operationS2(Integer[] a,String op) {
-        Integer[] b1 = new Integer[5];//donde se imprime
-        b1[4] = 0;
+        Integer[] b1 = {-1,-1,-1,-1,0};//donde se imprime
         int trows = SheetView.getCurrentTable().getModel().getRowCount();
         int tcols = SheetView.getCurrentTable().getModel().getColumnCount();
         SpinnerNumberModel ulrm = new SpinnerNumberModel(1, 1, trows, 1);
@@ -400,17 +399,16 @@ public class FuncView {
                         } else {
                             PresentationController.blockCPearson(a,b1, b, SheetView.currentSheetName());
                         }
-                        return a;
+
                     }
                 }
             }
         }
-        return null;
+        return a;
     }
 
     public static Integer[] addSingleOp(String op) {
-        Integer[] ids = new Integer[5];
-        ids[4] = 0;
+        Integer[] ids = {-1,-1,-1,-1,0};
         JCheckBox printb = new JCheckBox("Print the result in another block");
         JCheckBox ref = new JCheckBox("Reference the result");
         Object[] fields = new Object[]{
@@ -496,10 +494,88 @@ public class FuncView {
     }
 
 
+    public static Integer[] moveBlock(){
+        Integer[] ids = {-1,-1,-1,-1};
+        JCheckBox ref = new JCheckBox("Reference the result");
+        Object[] fields = new Object[]{
+                ref,
+        };
+        int result = JOptionPane.showConfirmDialog(
+                null,
+                fields,
+                "Move block",
+                JOptionPane.OK_CANCEL_OPTION,
+                JOptionPane.PLAIN_MESSAGE,
+                null
+
+        );
+        if (result == JOptionPane.OK_OPTION) {
+
+            int ulrowaux = PresentationController.blockFirstRow(SheetView.currentSheetName());
+            int ulcolaux = PresentationController.blockFirstCol(SheetView.currentSheetName());
+            int drrow = ulrowaux + SheetView.getCurrentTable().getSelectedRowCount();
+            int drcol = ulcolaux + SheetView.getCurrentTable().getSelectedColumnCount();
+            int ulrow = ulrowaux + 1;
+            int ulcol = ulcolaux + 1;
+
+//              System.out.println("ul: "+ulrow+" , "+ulcol);
+//              System.out.println("dr: "+drrow+" , "+drcol);
+
+
+                int confirm = showConfirmDialog(null, "The information from the cells will be lost.\n Are you sure", "Alert!", JOptionPane.YES_NO_OPTION);
+                if (confirm == JOptionPane.YES_OPTION) {
+                    int trows = SheetView.getCurrentTable().getModel().getRowCount();
+                    int tcols = SheetView.getCurrentTable().getModel().getColumnCount();
+                    SpinnerNumberModel ulrm = new SpinnerNumberModel(1, 1, trows, 1);
+                    SpinnerNumberModel ulcm = new SpinnerNumberModel(1, 1, tcols, 1);
+                    JSpinner ulr = new JSpinner(ulrm);
+                    JSpinner ulc = new JSpinner(ulcm);
+
+                    SpinnerNumberModel drrm = new SpinnerNumberModel(trows, 1, trows, 1);
+                    SpinnerNumberModel drcm = new SpinnerNumberModel(tcols, 1, tcols, 1);
+                    JSpinner drr = new JSpinner(drrm);
+                    JSpinner drc = new JSpinner(drcm);
+
+                    Object[] fields2 = new Object[]{
+                            "Select the upper left cell's row", ulr,
+                            "Select the upper left cell's column", ulc,
+                            "Select the down right cell's row", drr,
+                            "Select the down right cell's column", drc,
+                    };
+                    int result2 = JOptionPane.showConfirmDialog(
+                            null,
+                            fields2,
+                            "Move block to: ",
+                            JOptionPane.OK_CANCEL_OPTION,
+                            JOptionPane.PLAIN_MESSAGE,
+                            null
+
+                    );
+                    if (result2 == JOptionPane.OK_OPTION) {
+                        ulrow = (Integer) ulr.getValue();
+                        ulcol = (Integer) ulc.getValue();
+                        drrow = (Integer) drr.getValue();
+                        drcol = (Integer) drc.getValue();
+                    }
+                }
+
+            boolean b = false;
+            if (ref.isSelected()) b = true;
+            PresentationController.moveBlock(ulrow,ulcol,drrow,drcol,b,SheetView.currentSheetName());
+            ids[0] = ulrow - 1;
+            ids[1] = ulcol - 1;
+            ids[2] = drrow - 1;
+            ids[3] = drcol - 1;
+        }
+        return ids;
+    }
+
+
+
+
 
     public static Integer[] addSingleOpCrit(String op) {
-        Integer[] ids = new Integer[5];
-        ids[4] = 0;
+        Integer[] ids = {-1,-1,-1,-1,0};
         JCheckBox printb = new JCheckBox("Print the result in another block");
         JCheckBox ref = new JCheckBox("Reference the result");
         Object[] fields = new Object[]{
@@ -516,12 +592,37 @@ public class FuncView {
 
         );
         if (result == JOptionPane.OK_OPTION) {
+            Object selection="-1";
+            String s;
+            String from="";
+            String to ="";
+            if(op.equals("Extract")) {
+                Object[] selectionValues = {"Day", "Month", "Year"};
+                String initialSelection = "Day";
+                selection = JOptionPane.showInputDialog(null, "Select the criteria",
+                        "Extraction", JOptionPane.QUESTION_MESSAGE, null, selectionValues, initialSelection);
+            }
+            else if(op.equals("Convert")){
+                Object[] selectionValues = {"mTOcm", "mTOkm", "mTOinches","inchesTOm","kmTOm","kmTOcm","cmTOm","cmTOkm"};
+                String initialSelection = "mTOcm";
+                selection = JOptionPane.showInputDialog(null, "Select the criteria",
+                        "Convert", JOptionPane.QUESTION_MESSAGE, null, selectionValues, initialSelection);
+                if(selection!=null){
+                    s=selection.toString();
+                    String[] sconvert=s.split("TO");
+                    from=sconvert[0];
+                    to=sconvert[1];
+                }
 
-            Object[] selectionValues = {"Day", "Month", "Year"};
-            String initialSelection = "Day";
-            Object selection = JOptionPane.showInputDialog(null, "Select the criteria",
-                    "Extraction", JOptionPane.QUESTION_MESSAGE, null, selectionValues, initialSelection);
 
+            }
+
+            else if(op.equals("Length")){
+                Object[] selectionValues = {"Words","Letters","Characters"};
+                String initialSelection = "Words";
+                selection = JOptionPane.showInputDialog(null, "Select the criteria",
+                        "Text length", JOptionPane.QUESTION_MESSAGE, null, selectionValues, initialSelection);
+            }
 
             int ulrowaux = PresentationController.blockFirstRow(SheetView.currentSheetName());
             int ulcolaux = PresentationController.blockFirstCol(SheetView.currentSheetName());
@@ -574,18 +675,36 @@ public class FuncView {
             } else ref.setSelected(false);
             boolean b = false;
             if (ref.isSelected()) b = true;
-            switch (op) {
-                case "Extract": PresentationController.blockExtract(ulrow, ulcol, drrow, drcol,b,selection.toString(),SheetView.currentSheetName());
-                    break;
-                default:
-                    break;
+            if(selection!=null) {
+                switch (op) {
+                    case "Extract":
+                        PresentationController.blockExtract(ulrow, ulcol, drrow, drcol, b, selection.toString(), SheetView.currentSheetName());
+                        break;
+                    case "Convert":
+                        PresentationController.blockConvert(ulrow, ulcol, drrow, drcol, b, from, to, SheetView.currentSheetName());
+                        break;
+                    case "Length":
+                        PresentationController.blockLength(ulrow, ulcol, drrow, drcol, b, SheetView.currentSheetName(), selection.toString());
+                        break;
+                    default:
+                        break;
+                }
+
+                ids[0] = ulrow - 1;
+                ids[1] = ulcol - 1;
+                ids[2] = drrow - 1;
+                ids[3] = drcol - 1;
             }
-            ids[0] = ulrow - 1;
-            ids[1] = ulcol - 1;
-            ids[2] = drrow - 1;
-            ids[3] = drcol - 1;
         }
         return ids;
+    }
+
+    public static void addReplaceWC(){
+        Object[] selectionValues = {"All caps","All lowercase","Cap first letter"};
+        String initialSelection = "All caps";
+        Object selection = JOptionPane.showInputDialog(null, "Select the criteria",
+                "Replace with criteria", JOptionPane.QUESTION_MESSAGE, null, selectionValues, initialSelection);
+        if(selection!=null) PresentationController.blockReplaceWC(SheetView.currentSheetName(),selection.toString());
     }
 
 }

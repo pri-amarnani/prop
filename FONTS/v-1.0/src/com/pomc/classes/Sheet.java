@@ -15,11 +15,13 @@ public class Sheet {
 
 
     public void update(Block b){
-        Cell ul = b.ul;
-        for(int i = 0; i < b.number_rows(); ++ i){
-            for(int j = 0; j < b.number_cols(); ++j){
-                cells.elementAt(ul.getRow() + i).setElementAt(b.getCell(i,j),ul.getColumn() + j);
-              //  System.out.println("SHEET PRINT: "+getCell(ul.getRow()+i,ul.getColumn()+j).getInfo());
+        if (b != null) {
+            Cell ul = b.ul;
+            for (int i = 0; i < b.number_rows(); ++i) {
+                for (int j = 0; j < b.number_cols(); ++j) {
+                    cells.elementAt(ul.getRow() + i).setElementAt(b.getCell(i, j), ul.getColumn() + j);
+                    //  System.out.println("SHEET PRINT: "+getCell(ul.getRow()+i,ul.getColumn()+j).getInfo());
+                }
             }
         }
     }
@@ -304,7 +306,7 @@ public class Sheet {
 
     public void convert(Block b, Boolean ref, String from, String to){
         b_selected.convert(b, ref, from, to);
-        update(b_selected);
+        update(b);
     }
 
     public void sum(Block b1, Block b2, Boolean ref){
@@ -368,10 +370,10 @@ public class Sheet {
         update(b_selected);
     }
 
-    public int length(TextCell c, String criteria){
-        if(c.getType() == "T") return c.length(criteria);
-        else System.out.println("Error. Cell is not of type Text.");
-        return -1;
+    public void length(Block b, boolean ref, String criteria){
+       // if(b_selected.allText()) b_selected.length(b,ref,criteria);
+        /*else*/ System.out.println("Error. Not all cells are of type Text.");
+        update(b_selected);
     }
 
     public Double mean(Cell c, Boolean ref, Boolean val){
