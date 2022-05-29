@@ -91,6 +91,38 @@ public class Block {
         // copy to clipboard
     }
 
+    public void opBlock (String op, double x) {
+        for (int i = 0; i < this.block.length; ++i) {
+            for (int j = 0; j < this.block[0].length; ++j) {
+
+                if (this.block[i][j].isNum() && this.block[i][j].getInfo() != null ) {
+                    if(op == "sum") {
+                        Cell n = this.block[i][j];
+                        this.block[i][j].changeValue((Double) this.block[i][j].getInfo() + x);
+                        setCell(i, j, n);
+                    }
+                    if(op == "sub") {
+                        Cell n = this.block[i][j];
+                        this.block[i][j].changeValue((Double) this.block[i][j].getInfo() - x);
+                        setCell(i, j, n);
+                    }
+                    if(op == "div") {
+                        Cell n = this.block[i][j];
+                        this.block[i][j].changeValue((Double) this.block[i][j].getInfo() / x);
+                        setCell(i, j, n);
+                    }
+                    if(op == "mult") {
+                        Cell n = this.block[i][j];
+                        this.block[i][j].changeValue((Double) this.block[i][j].getInfo() * x);
+                        setCell(i, j, n);
+                    }
+                }
+            }
+        }
+        ul= getCell(0,0);
+        dr= getCell(size_r-1,size_c-1);
+    }
+
     public void length(Block b, Boolean ref, String criteria){
         for (int i = 0; i < this.block.length; ++i) {
             for (int j = 0; j < this.block[0].length; ++j) {
@@ -99,7 +131,6 @@ public class Block {
                     b.getCell(i,j).changeValue((Double) c.length(criteria));
                     Cell n = (Cell) b.getCell(i,j);
                     b.setCell(i,j,n);
-                    System.out.println(b.getCell(i,j).getInfo());
                     if (ref) {
                         ReferencedCell rc = new ReferencedCell(n.getRow(),n.getColumn(),"length" + criteria);
                         rc.setContent(n.getInfo());
@@ -116,14 +147,6 @@ public class Block {
         }
         b.ul = b.getCell(0,0);
         b.dr = b.getCell(b.size_r -1,b.size_c -1);
-        System.out.println("segundo for");
-
-        for (int i = 0; i < this.block.length; ++i) {
-            for (int j = 0; j < this.block[0].length; ++j) {
-                System.out.println(b.getCell(i,j).getInfo());
-            }
-        }
-        System.out.println("fin for");
     }
 
     //copy values from one block to another
@@ -149,9 +172,9 @@ public class Block {
                     n = null;
                 }
             }
-            }
-            b.ul = b.getCell(0,0);
-            b.dr = b.getCell(b.size_r -1,b.size_c -1);
+        }
+        b.ul = b.getCell(0,0);
+        b.dr = b.getCell(b.size_r -1,b.size_c -1);
     }
 
 
