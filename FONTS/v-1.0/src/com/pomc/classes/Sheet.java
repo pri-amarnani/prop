@@ -1,5 +1,6 @@
 package com.pomc.classes;
 
+import org.knowm.xchart.PieChart;
 import org.knowm.xchart.XYChart;
 
 import java.util.Vector;
@@ -133,6 +134,10 @@ public class Sheet {
 
     public XYChart graficXY(String title, String x, String y, String func){
         return b_selected.graficXY(title, x, y, func);
+    }
+
+    public PieChart graficPie(){
+        return b_selected.graficPie();
     }
 
     public void NewRow(int pos){

@@ -1,5 +1,6 @@
 package com.pomc.controller;
 import com.pomc.classes.*;
+import org.knowm.xchart.PieChart;
 import org.knowm.xchart.SwingWrapper;
 import org.knowm.xchart.XYChart;
 
@@ -112,6 +113,16 @@ public class DomainController {
         if(docSheet != null){
             XYChart chart = docSheet.graficXY(title, x, y, func);
             // Show it
+            new SwingWrapper(chart).displayChart();
+        }
+
+        //return chart;
+    }
+
+    public static void graficPie(){
+        if(docSheet != null){
+            PieChart chart = docSheet.graficPie();
+
             new SwingWrapper(chart).displayChart();
         }
 

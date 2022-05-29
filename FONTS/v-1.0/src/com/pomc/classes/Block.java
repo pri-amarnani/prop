@@ -1,5 +1,6 @@
 package com.pomc.classes;
 
+import org.knowm.xchart.PieChart;
 import org.knowm.xchart.QuickChart;
 import org.knowm.xchart.XYChart;
 
@@ -91,18 +92,50 @@ public class Block {
     }
 
     public XYChart graficXY(String title, String x, String y, String func){
-        double[] xData = new double[block[0].length] ;
-        double[] yData = new double[block[1].length];
-        for (int i = 0; i < block[0].length; i++) {
-            xData[i] = (double) block[0][i].getInfo();
+        Cell [][] aux = new Cell[this.block.length][this.block[0].length];
+
+        for (int i = 0; i < this.block.length; ++i) {
+            for (int j = 0; j < this.block[0].length; ++j) {
+                aux[i][j] = block[i][j];
+            }
         }
-        for (int i = 0; i < block[1].length; i++) {
-            yData[i] = (double) block[1][i].getInfo();
+
+        Arrays.sort(aux, (a, b) -> Double.compare((double) a[0].getInfo(), (double) b[0].getInfo()));
+
+        double[] xData = new double[block.length];
+        double[] yData = new double[block.length];
+
+        for (int i = 0; i < block.length; i++) {
+            xData[i] = (double) aux[i][0].getInfo();
+        }
+        for (int i = 0; i < block.length; i++) {
+            yData[i] = (double) aux[i][1].getInfo();
         }
 
         // Create Chart
         XYChart chart = QuickChart.getChart(title, x, y, func, xData, yData);
         return chart;
+    }
+
+    public PieChart graficPie(){
+        PieChart ch = new PieChart(500, 500);
+
+        String[] labels = new String[this.block.length];
+        double[] values = new double[this.block.length];
+
+        for (int i = 0; i < this.block.length; ++i) {
+            labels[i] = (String) this.block[i][0].getInfo();
+        }
+
+        for (int i = 0; i < this.block.length; ++i) {
+            values[i] = (double) this.block[i][1].getInfo();
+        }
+
+        for (int i = 0; i < this.block.length; ++i) {
+            ch.addSeries(labels[i], values[i]);
+        }
+
+        return ch;
     }
 
     public void CopyB () {

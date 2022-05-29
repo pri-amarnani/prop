@@ -1,10 +1,7 @@
 package com.pomc.view;
 
 import com.pomc.controller.DomainController;
-import org.knowm.xchart.BitmapEncoder;
-import org.knowm.xchart.QuickChart;
-import org.knowm.xchart.SwingWrapper;
-import org.knowm.xchart.XYChart;
+import org.knowm.xchart.*;
 
 import java.io.IOException;
 import java.util.Scanner;
@@ -543,9 +540,10 @@ public class Main {
             System.out.println("(9) Text Operations");
             System.out.println("(10) Move Block");
             System.out.println("(11) Grafica");
+            System.out.println("(12) GraficaPie");
             System.out.println("(0) Go back");
             System.out.println("\n \n Enter number:");
-            Integer num = numberInsertion(11,0);
+            Integer num = numberInsertion(12,0);
             if (num != null) {
                 System.out.println("\n");
                 switch (num) {
@@ -729,6 +727,9 @@ public class Main {
                         }
                     case 11:
                         DomainController.graficXY("hola", "x", "y", "Y(x)");
+                        break;
+                    case 12:
+                        DomainController.graficPie();
                         break;
                     default:
                         System.out.println("\n");
@@ -982,5 +983,15 @@ public class Main {
         System.out.println("\n");
         DomainController.initializeDoc(title);
         menuDocument();
+
+        /*PieChart  ch = new PieChart(500, 500);
+        ch.addSeries("Omar", 10);
+        ch.addSeries("Priyanka", 234);
+        ch.addSeries("Cristina", 190);
+        ch.addSeries("Mark", 23);
+
+        new SwingWrapper(ch).displayChart();*/
+
+
     }
 }
