@@ -1,12 +1,6 @@
 package com.pomc.view;
 
-import com.sun.tools.javac.Main;
-
-import javax.sql.RowSetReader;
 import javax.swing.*;
-import javax.swing.border.Border;
-import javax.swing.event.CellEditorListener;
-import javax.swing.event.ChangeEvent;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.*;
@@ -15,15 +9,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.EventObject;
-import java.util.List;
-import java.util.Vector;
 
 import static java.lang.Math.*;
 import static javax.swing.JOptionPane.showMessageDialog;
-import static javax.swing.JOptionPane.showOptionDialog;
 
 public class SheetView {
     static JTabbedPane sheets = new JTabbedPane();
@@ -589,6 +578,24 @@ public class SheetView {
                         public void actionPerformed(ActionEvent e) {
                             Integer[] coif=FuncView.addSOp("countif");
                             if(coif[0]!=-1) writeBlock(coif[0], coif[1], coif[0], coif[1]);
+                        }
+                    });
+
+
+                    ImageIcon OpBIcon= new ImageIcon("res/iconoopblock.png");
+                    Image obicon=OpBIcon.getImage();
+                    Image opb=obicon.getScaledInstance(40,40,Image.SCALE_DEFAULT);
+                    OpBIcon.setImage(opb);
+                    JButton opBlock = new JButton(OpBIcon);
+                    opBlock.setToolTipText("Unitary operations");
+                    opBlock.setBackground(blockBar.getBackground());
+                    opBlock.setBorder(BorderFactory.createLineBorder(c,1));
+                    blockBar.add(opBlock,blockBar.getMenuCount()-1);
+                    opBlock.addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            FuncView.unitOp();
+                            rewriteBlock();
                         }
                     });
 

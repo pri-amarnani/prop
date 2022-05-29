@@ -233,7 +233,7 @@ public class MenuViews {
         int result = selectFile.showOpenDialog(null);
         if(result == JFileChooser.APPROVE_OPTION) {
             System.out.println(selectFile.getCurrentDirectory());
-            PresentationController.open(selectFile.getSelectedFile());
+         //   PresentationController.open(selectFile.getSelectedFile());
             BorderLayout blayout = (BorderLayout) MainMenu.frame.getContentPane().getLayout();
             MainMenu.frame.getContentPane().remove(blayout.getLayoutComponent(BorderLayout.CENTER));
             MainMenu.frame.repaint();
@@ -243,7 +243,7 @@ public class MenuViews {
                 MainMenu.menuUpdated = true;
                 SheetView.updateMenu(MainMenu.mb);
             }
-            MainMenu.frame.setTitle(PresentationController.getTitle() + " - POMC WORKSHEETS");
+            //MainMenu.frame.setTitle(PresentationController.getTitle() + " - POMC WORKSHEETS");
             MainMenu.frame.setVisible(true);
         }
     }

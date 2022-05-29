@@ -242,6 +242,8 @@ public class PresentationController {
 
     public static void blockCountIf(Integer[]a,boolean ref,String sheetName, double eq, String crit){ DomainController.funcCountIf(a[0],a[1],ref,eq,crit,sheetName);}
 
+    public static void blockOpBlock(String op, double x,String sheetName ){DomainController.opBlock(op, x,sheetName);
+    }
 
 
 }

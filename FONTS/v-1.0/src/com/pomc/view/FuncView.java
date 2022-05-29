@@ -769,6 +769,27 @@ public class FuncView {
         if(selection!=null) PresentationController.blockReplaceWC(SheetView.currentSheetName(),selection.toString());
     }
 
+    public static void unitOp(){
+        Object[] selectionValues = {"Addition","Substraction","Multiplication","Division","Modulus","Power"};
+        JComboBox selection= new JComboBox<>(selectionValues);
+        JTextField num= new JTextField();
+        Object[] fields = new Object[]{
+                "Select the operation: ", selection,
+                "Enter a number: ",num,
+        };
+        int result=showConfirmDialog(
+                null,
+                fields,
+                "Unitary operations",
+                JOptionPane.OK_CANCEL_OPTION,
+                JOptionPane.PLAIN_MESSAGE,
+                null
+        );
+        if(result==JOptionPane.OK_OPTION){
+            PresentationController.blockOpBlock((String) selection.getSelectedItem(),Double.parseDouble(num.getText()),SheetView.currentSheetName());
+        }
+    }
+
 
 
     public static String[] numtoAlphabetCols(Integer[] cols){

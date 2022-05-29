@@ -143,36 +143,37 @@ public class Block {
     }
 
     public void opBlock (String op, double x) {
+
         for (int i = 0; i < this.block.length; ++i) {
             for (int j = 0; j < this.block[0].length; ++j) {
 
                 if (this.block[i][j].isNum() && this.block[i][j].getInfo() != null ) {
-                    if(op == "sum") {
+                    if(op == "Addition") {
                         Cell n = this.block[i][j];
                         this.block[i][j].changeValue((Double) this.block[i][j].getInfo() + x);
                         setCell(i, j, n);
                     }
-                    if(op == "sub") {
+                    if(op == "Substraction") {
                         Cell n = this.block[i][j];
                         this.block[i][j].changeValue((Double) this.block[i][j].getInfo() - x);
                         setCell(i, j, n);
                     }
-                    if(op == "div") {
+                    if(op == "Division") {
                         Cell n = this.block[i][j];
-                        this.block[i][j].changeValue((Double) this.block[i][j].getInfo() / x);
+                        this.block[i][j].changeValue((Double) this.block[i][j].getInfo() / (Double) x);
                         setCell(i, j, n);
                     }
-                    if(op == "mult") {
+                    if(op == "Multiplication") {
                         Cell n = this.block[i][j];
                         this.block[i][j].changeValue((Double) this.block[i][j].getInfo() * x);
                         setCell(i, j, n);
                     }
-                    if(op == "mod") {
+                    if(op == "Modulus") {
                         Cell n = this.block[i][j];
                         this.block[i][j].changeValue((Double) this.block[i][j].getInfo() % x);
                         setCell(i, j, n);
                     }
-                    if(op == "pow") {
+                    if(op == "Power") {
                         Cell n = this.block[i][j];
                         this.block[i][j].changeValue( Math.pow((Double) this.block[i][j].getInfo(), x));
                         setCell(i, j, n);
