@@ -14,7 +14,6 @@ import static java.lang.String.valueOf;
 public class DomainController {
     static Document doc ;
 
-    static Block block;
 
 
     //------------------------------------------------DOCS FUNCTS--------------------------------------
@@ -26,6 +25,14 @@ public class DomainController {
     //retorna el nom del doc
     public static String getDocName() {
         return doc.getTitle();
+    }
+
+    public static Document getDoc() {
+        return doc;
+    }
+
+    public static void setDoc(Document doc) {
+        DomainController.doc = doc;
     }
 
     public static int getNumSheet(){return doc.getNumSheet();}
@@ -171,7 +178,7 @@ public class DomainController {
         if (blockCells[0] <= blockCells[2]  && blockCells[1]  <= blockCells[3] ) {
             Cell c1 = doc.getSheet(sheetname).getCell(blockCells[0] , blockCells[1] );
             Cell c2 = doc.getSheet(sheetname).getCell(blockCells[2] , blockCells[3] );
-            block = doc.getSheet(sheetname).SelectBlock(c1,c2);
+            doc.getSheet(sheetname).SelectBlock(c1,c2);
             return true;
         }
         return false;

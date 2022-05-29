@@ -17,6 +17,7 @@ public class MainMenu {
     static boolean menuUpdated=false;
     static JFrame frame = new JFrame("POMC WORKSHEETS");
 
+    static JMenuBar mb = new JMenuBar();
     public static void main(String args[]) throws IOException {
         // MARCO DE TO DO
         frame.repaint();
@@ -24,7 +25,6 @@ public class MainMenu {
         frame.setSize(900, 900);
 
         //MENU DE ARRIBA
-        JMenuBar mb = new JMenuBar();
         JMenu m1 = new JMenu("File");
         JMenu m2 = new JMenu("HELP");
         mb.add(m1);

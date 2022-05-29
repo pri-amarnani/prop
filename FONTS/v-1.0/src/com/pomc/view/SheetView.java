@@ -4,6 +4,7 @@ import com.sun.tools.javac.Main;
 
 import javax.sql.RowSetReader;
 import javax.swing.*;
+import javax.swing.border.Border;
 import javax.swing.event.CellEditorListener;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.TableModelEvent;
@@ -283,7 +284,6 @@ public class SheetView {
         return frame;
     }
     public static void updateMenu(JMenuBar mb) {
-
         JMenu m = mb.getMenu(0);
         JMenuItem saveB = new JMenuItem("Save");
         JMenuItem saveAsB = new JMenuItem("Save As...");
@@ -698,11 +698,7 @@ public class SheetView {
 
             blockBar.repaint();
             blockBar.revalidate();
-//            JPanel mp= (JPanel) MainMenu.getCurrentFrame().getContentPane().getComponent(0);
-//            mp.add(BorderLayout.CENTER,blockBar);
-//
-//           // MainMenu.getCurrentFrame().repaint();
-//            mp.repaint();
+
         }
     }
 
@@ -951,13 +947,14 @@ public class SheetView {
     }
 
     public static void rewriteModel(int col){
+        writeChange=true;
         TableModel tm = getCurrentTable().getModel();
         for (int i = 0; i < tm.getRowCount(); i++) {
             for (int j = col; j <tm.getColumnCount() ; j++) {
                 tm.setValueAt(PresentationController.getCellInfo(i,j,currentSheetName()),i,j);
             }
-
         }
+        writeChange=false;
 
     }
 

@@ -22,7 +22,7 @@ public class PersistenceController {
     private final gestorTXT Txt;
     private final ExportPdf Pdf;
 
-    private final gestorPOMC Pomc;
+    private static gestorPOMC Pomc = new gestorPOMC();
 
     private final Path dataDirectory = Paths.get("..", "..", "..", "..", "EXE", "dades");
 
@@ -35,10 +35,8 @@ public class PersistenceController {
 
 
     //Save Files
-    public void save(String path_doc, Document doc) throws IOException {
+    public static void save(String path_doc, Document doc) throws IOException {
         Vector<Sheet> sh = doc.getDocSheets();
-        //String name = doc.getTitle();  //esto lo comprueba team presentacion
-        //String path_doc = path + name + ".pomc";
         Pomc.writePOMC(path_doc,sh);
     }
 
@@ -66,7 +64,7 @@ public class PersistenceController {
 
 
     //Read Files
-    public Document open(String path) throws IOException {
+    public static Document open(String path) throws IOException {
         Vector<String> path_split = new Vector<>();
         path_split.addAll(Arrays.asList(path.split("/")));
 
@@ -82,6 +80,9 @@ public class PersistenceController {
         }
 
         Vector<Sheet> sh = Pomc.readPOMC(path);
+        for (int j = 0; j < sh.size(); ++j) {
+            sh.elementAt(j).setTitle(sh.elementAt(j).getTitle().substring(1,sh.elementAt(j).getTitle().length()-1));
+        }
         Document doc = new Document(title);
         doc.createDocWithSheet(sh);
         return doc;
