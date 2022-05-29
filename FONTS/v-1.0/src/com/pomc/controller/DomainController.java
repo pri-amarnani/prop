@@ -322,6 +322,14 @@ public class DomainController {
         docSheet.MoveBlock(b1,ref);
     }
 
+    public static void modifyBlock(Object o){
+        docSheet.ModifyBlock(o);
+    }
+
+    public static void opBlock(String op, double x){
+        docSheet.opBlock(op, x);
+    }
+
     public static void funcReplaceCriteria(String criteria){
         docSheet.replaceWithCriteriaText(criteria);
     }

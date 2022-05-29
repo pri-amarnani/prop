@@ -275,6 +275,14 @@ public class Sheet {
         return true;
     }
 
+    public void opBlock(String op, double x){
+        if (b_selected.allDouble()){
+            b_selected.opBlock(op, x);
+        }
+        else System.out.println("Error. Not all cells are of type Number.");
+        update(b_selected);
+    }
+
     public void floor(Block b, Boolean ref){
         if (b_selected.allDouble() && b.allDouble()){
             if(ref && overlapping(b_selected, b)) System.out.println("Error. The blocks selected are overlapped.");

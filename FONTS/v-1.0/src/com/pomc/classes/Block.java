@@ -116,6 +116,16 @@ public class Block {
                         this.block[i][j].changeValue((Double) this.block[i][j].getInfo() * x);
                         setCell(i, j, n);
                     }
+                    if(op == "mod") {
+                        Cell n = this.block[i][j];
+                        this.block[i][j].changeValue((Double) this.block[i][j].getInfo() % x);
+                        setCell(i, j, n);
+                    }
+                    if(op == "pow") {
+                        Cell n = this.block[i][j];
+                        this.block[i][j].changeValue( Math.pow((Double) this.block[i][j].getInfo(), x));
+                        setCell(i, j, n);
+                    }
                 }
             }
         }
