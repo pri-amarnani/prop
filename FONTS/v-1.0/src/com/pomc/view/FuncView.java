@@ -148,13 +148,18 @@ public class FuncView {
         if (result == JOptionPane.OK_OPTION) {
             int trows = SheetView.getCurrentTable().getModel().getRowCount();
             int tcols = SheetView.getCurrentTable().getModel().getColumnCount();
+            Integer[] cols=getCols(tcols);
+            String [] alphCols=numtoAlphabetCols(cols);
+
             SpinnerNumberModel ulrm = new SpinnerNumberModel(1, 1, trows, 1);
-            SpinnerNumberModel ulcm = new SpinnerNumberModel(1, 1, tcols, 1);
+            //SpinnerNumberModel ulcm = new SpinnerNumberModel(1, 1, tcols, 1);
+            SpinnerListModel ulcm= new SpinnerListModel(alphCols);
             JSpinner ulr = new JSpinner(ulrm);
             JSpinner ulc = new JSpinner(ulcm);
 
             SpinnerNumberModel drrm = new SpinnerNumberModel(trows, 1, trows, 1);
-            SpinnerNumberModel drcm = new SpinnerNumberModel(tcols, 1, tcols, 1);
+            //SpinnerNumberModel drcm = new SpinnerNumberModel(tcols, 1, tcols, 1);
+            SpinnerListModel drcm= new SpinnerListModel(alphCols);
             JSpinner drr = new JSpinner(drrm);
             JSpinner drc = new JSpinner(drcm);
 
@@ -185,19 +190,19 @@ public class FuncView {
 
                         SpinnerNumberModel ulrm2 = new SpinnerNumberModel(1, 1, trows, 1);
                         SpinnerNumberModel ulcm2 = new SpinnerNumberModel(1, 1, tcols, 1);
-                        JSpinner ulr2 = new JSpinner(ulrm);
-                        JSpinner ulc2 = new JSpinner(ulcm);
+                        JSpinner ulr2 = new JSpinner(ulrm2);
+                        JSpinner ulc2 = new JSpinner(ulcm2);
 
                         SpinnerNumberModel drrm2 = new SpinnerNumberModel(trows, 1, trows, 1);
                         SpinnerNumberModel drcm2 = new SpinnerNumberModel(tcols, 1, tcols, 1);
-                        JSpinner drr2 = new JSpinner(drrm);
-                        JSpinner drc2 = new JSpinner(drcm);
+                        JSpinner drr2 = new JSpinner(drrm2);
+                        JSpinner drc2 = new JSpinner(drcm2);
 
                         Object[] fields22 = new Object[]{
-                                "Select the upper left cell's row", ulr,
-                                "Select the upper left cell's column", ulc,
-                                "Select the down right cell's row", drr,
-                                "Select the down right cell's column", drc,
+                                "Select the upper left cell's row", ulr2,
+                                "Select the upper left cell's column", ulc2,
+                                "Select the down right cell's row", drr2,
+                                "Select the down right cell's column", drc2,
                         };
                         int result22 = JOptionPane.showConfirmDialog(
                                 null,
@@ -209,10 +214,10 @@ public class FuncView {
 
                         );
                         if (result22 == JOptionPane.OK_OPTION) {
-                            b2[0] = (Integer) ulr.getValue();
-                            b2[1] = (Integer) ulc.getValue();
-                            b2[2] = (Integer) drr.getValue();
-                            b2[3] = (Integer) drc.getValue();
+                            b2[0] = (Integer) ulr2.getValue();
+                            b2[1] = (Integer) ulc2.getValue();
+                            b2[2] = (Integer) drr2.getValue();
+                            b2[3] = (Integer) drc2.getValue();
                         }
                         b2[4] = -1;
                     }
@@ -705,6 +710,39 @@ public class FuncView {
         Object selection = JOptionPane.showInputDialog(null, "Select the criteria",
                 "Replace with criteria", JOptionPane.QUESTION_MESSAGE, null, selectionValues, initialSelection);
         if(selection!=null) PresentationController.blockReplaceWC(SheetView.currentSheetName(),selection.toString());
+    }
+
+
+
+    public static String[] numtoAlphabetCols(Integer[] cols){
+        String[] result= new String[cols.length];
+        for (int i = 0; i < cols.length; i++) {
+            result[i]=numToAlphabet(cols[i]);
+        }
+        return result;
+    }
+    public static String numToAlphabet(int i) {
+        if( i<0 ) {
+            return "-"+numToAlphabet(-i-1);
+        }
+
+        int quot = i/26;
+        int rem = i%26;
+        char letter = (char)((int)'A' + rem);
+        if( quot == 0 ) {
+            return ""+letter;
+        } else {
+            return numToAlphabet(quot-1) + letter;
+        }
+    }
+
+    public static Integer[] getCols(int n){
+        Integer[] result= new Integer[n];
+        for (int i = 0; i < n; i++) {
+            result[i]=i;
+
+        }
+        return result;
     }
 
 }
