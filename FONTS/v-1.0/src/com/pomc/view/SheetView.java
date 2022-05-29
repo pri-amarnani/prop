@@ -265,11 +265,6 @@ public class SheetView {
         });
 
 
-
-
-
-
-
         return frame;
     }
     public static void updateMenu(JMenuBar mb) {
@@ -278,12 +273,10 @@ public class SheetView {
         JMenuItem saveAsB = new JMenuItem("Save As...");
         JMenuItem exportB = new JMenuItem("Export...");
         JMenuItem propertiesB = new JMenuItem("Properties");
-        JMenuItem closeB = new JMenuItem("Close");
         m.add(saveB,3);
         m.add(saveAsB,4);
         m.add(exportB,5);
         m.add(propertiesB,6);
-        m.add(closeB,7);
         JMenu block= new JMenu("Block");
         JMenuItem create= new JMenuItem("Create");
         JMenuItem create_and_func= new JMenuItem("Create & Apply function");
@@ -385,8 +378,6 @@ public class SheetView {
             @Override
             public void actionPerformed(ActionEvent e) {MenuViews.export();}});
 
-        closeB.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {MenuViews.close();}});
 
         change_name.addActionListener(new ActionListener() {
             @Override
@@ -859,8 +850,8 @@ public class SheetView {
     public static JTable getCurrentTable(){
         int a= sheets.getSelectedIndex();
         JScrollPane sp;
-        if (a==0){ sp=(JScrollPane) sheets.getComponent(a);}
-        else {sp= (JScrollPane) sheets.getComponent(a+1);}
+        if (a==0){ sp=(JScrollPane) sheets.getComponentAt(a);}
+        else {sp= (JScrollPane) sheets.getComponentAt(a+1);}
         return (JTable) sp.getViewport().getComponent(0);
     }
 
@@ -984,7 +975,6 @@ public class SheetView {
         String cs = currentSheetName();
         int firstrow = PresentationController.blockFirstRow(cs);
         int firstcol = PresentationController.blockFirstCol(cs);
-        //System.out.println("firstcol ====" + firstcol);
         for (int i = 0; i < PresentationController.blockRows(cs); i++) {
             for (int j = 0; j < PresentationController.blockCols(cs); j++) {
                   tm.setValueAt(PresentationController.getCellInfo(firstrow+i,firstcol+j,cs),firstrow+i,firstcol+j);

@@ -1,13 +1,16 @@
 package com.pomc.view;
 
 import com.digidemic.unitof.I;
+import com.itextpdf.text.DocumentException;
 import com.pomc.classes.Block;
 import com.pomc.classes.Cell;
 import com.pomc.classes.Document;
 import com.pomc.classes.Sheet;
 import com.pomc.controller.DomainController;
+import com.pomc.controller.PersistenceController;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Vector;
 
 public class PresentationController {
@@ -31,7 +34,7 @@ public class PresentationController {
         return DomainController.showSheets();
     }
 
-
+    public static String getTitle() { return DomainController.getDocName();}
 
 
     //_-------------------------SHEET FUNCTIONS -------------------------------
@@ -200,27 +203,71 @@ public class PresentationController {
     }
 
     public static void save() {
-        //TODO enviar path y doc a persistencia
+        try {
+            PersistenceController.save(path,DomainController.getDoc());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public static void saveAs(File selectedFile) {
-        //TODO enviar titulo, path y doc a persistencia y guardar current path y cambiar titulo si es distinto
         String[] extension = selectedFile.getName().split("\\.(?=[^\\.]+$)");
         if (extension.length> 1){
-            if(extension[1].equals("pomc")) path= selectedFile.getName();
+            if(extension[1].equals("pomc")) path= selectedFile.getAbsolutePath();
             else {
-                path = selectedFile.getName()+".pomc";
+                path = selectedFile.getAbsolutePath()+".pomc";
             }
         }
-        else path = selectedFile.getName()+".pomc";
-        System.out.println(path);
+        else path = selectedFile.getAbsolutePath()+".pomc";
+        save();
     }
 
     public static void export(File selectedFile) {
-        //TODO enviar titulo, path, format y doc a persistencia y formato
+        String[] extension = selectedFile.getName().split("\\.(?=[^\\.]+$)");
+        if (extension.length> 1){
+            if(extension[1].equals("csv") ||extension[1].equals("txt") || extension[1].equals("pdf")) {
+                try {
+                    PersistenceController.export(selectedFile.getAbsolutePath(),DomainController.getDoc(),extension[1]);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                } catch (DocumentException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }
     }
 
+    public static boolean open(File selectedFile) {
+        String[] extension = selectedFile.getName().split("\\.(?=[^\\.]+$)");
+        if (extension.length > 1) {
+            if (extension[1].equals("pomc")) {
+                path = selectedFile.getAbsolutePath();
+                try {
+                    DomainController.setDoc(PersistenceController.open(path));
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+                return true;
+            }
+        }
+        return false;
+    }
 
+    public static boolean Import(File selectedFile) {
+        String[] extension = selectedFile.getName().split("\\.(?=[^\\.]+$)");
+        if (extension.length > 1) {
+            if (extension[1].equals("csv") || extension[1].equals("txt")) {
+                path = selectedFile.getAbsolutePath();
+                try {
+                    DomainController.setDoc(PersistenceController.imports(path,extension[1]));
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+                return true;
+            }
+        }
+        return false;
+    }
     //-------------------------OPCIONALES-----------------------------
     public static void blockCeil(int ulr, int ulc, int drr, int drc, boolean ref, String sheetName){
         Integer[] ints= {ulr,ulc,drr,drc};
@@ -244,6 +291,9 @@ public class PresentationController {
 
     public static void blockOpBlock(String op, double x,String sheetName ){DomainController.opBlock(op, x,sheetName);
     }
+
+
+
 
 
 }

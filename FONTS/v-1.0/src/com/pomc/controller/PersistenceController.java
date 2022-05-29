@@ -18,21 +18,13 @@ public class PersistenceController {
 
     String path = "";
 
-    private final gestorCSV Csv;
-    private final gestorTXT Txt;
-    private final ExportPdf Pdf;
+    private static gestorCSV Csv = new gestorCSV();
+    private static gestorTXT Txt = new gestorTXT();
+    private static ExportPdf Pdf = new ExportPdf();
 
     private static gestorPOMC Pomc = new gestorPOMC();
 
     private final Path dataDirectory = Paths.get("..", "..", "..", "..", "EXE", "dades");
-
-    public PersistenceController(gestorCSV csv, gestorTXT txt, ExportPdf pdf, gestorPOMC pomc) {
-        Csv = csv;
-        Txt = txt;
-        Pdf = pdf;
-        Pomc = pomc;
-    }
-
 
     //Save Files
     public static void save(String path_doc, Document doc) throws IOException {
@@ -42,16 +34,16 @@ public class PersistenceController {
 
 
 
-    public void export(String path_doc, Document doc, String type) throws IOException, DocumentException {
+    public static void export(String path_doc, Document doc, String type) throws IOException, DocumentException {
         Vector<Sheet> sh = doc.getDocSheets();
 
-        if(type == "csv"){
+        if(type.equals("csv")){
             Csv.writeCSV(path_doc, sh.elementAt(0));
         }
-        else if(type == "txt"){
+        else if(type.equals("txt")){
             Txt.writeTXT(path_doc, sh.elementAt(0));
         }
-        else if(type == "pdf"){
+        else if(type.equals("pdf")){
             Vector<String> v = new Vector<>();
             v.addAll(Arrays.asList(path_doc.split(".")));
             Csv.writeCSV(v.elementAt(0)+".csv", sh.elementAt(0));
@@ -88,7 +80,7 @@ public class PersistenceController {
         return doc;
     }
 
-    public Document imports(String path, String type) throws IOException {
+    public static Document imports(String path, String type) throws IOException {
         Vector<String> path_split = new Vector<>();
         path_split.addAll(Arrays.asList(path.split("/")));
 
