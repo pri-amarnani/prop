@@ -157,20 +157,32 @@ public class MainMenu {
                                 Integer numfil = Integer.parseInt(nrows.getText());
                                 Integer numcol = Integer.parseInt(ncolumns.getText());
                                 if (numfil > 0 && numcol > 0) {
-                                    PresentationController.newDoc(result2);
-                                    BorderLayout blayout = (BorderLayout) frame.getContentPane().getLayout();
-                                    frame.getContentPane().remove(blayout.getLayoutComponent(BorderLayout.CENTER));
-                                    frame.repaint();
+                                    if (!menuUpdated) {
+                                        PresentationController.newDoc(result2);
+                                        BorderLayout blayout = (BorderLayout) frame.getContentPane().getLayout();
+                                        frame.getContentPane().remove(blayout.getLayoutComponent(BorderLayout.CENTER));
+                                        frame.repaint();
                                         ok = true;
                                         PresentationController.newSheet(newsheet_title.getText(), numfil, numcol);
                                         frame.getContentPane().add(BorderLayout.CENTER, SheetView.cambio());
+                                        menuUpdated = true;
+                                        SheetView.updateMenu(mb);
 
-                                        if (!menuUpdated) {
-                                            menuUpdated = true;
-                                            SheetView.updateMenu(mb);
-                                        }
                                         frame.setTitle(result2 + " - POMC WORKSHEETS");
                                         frame.setVisible(true);
+
+                                    }
+                                    else {//TODO preguntar si seguro
+                                        PresentationController.newDoc(result2);
+                                        frame.getContentPane().removeAll();
+                                        frame.repaint();
+                                        ok = true;
+                                        PresentationController.newSheet(newsheet_title.getText(), numfil, numcol);
+                                        frame.getContentPane().add(BorderLayout.NORTH,menuPanel);
+                                        frame.getContentPane().add(BorderLayout.CENTER, SheetView.cambio());
+                                        frame.setTitle(result2 + " - POMC WORKSHEETS");
+                                        frame.setVisible(true);
+                                    }
                                 }
 
 
