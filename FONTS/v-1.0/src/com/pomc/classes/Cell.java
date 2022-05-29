@@ -229,6 +229,45 @@ public abstract class Cell {
                 newvalue=auxsum/cellsref.size();
                 c.setContent(newvalue);
             }
+            else if(Objects.equals(op, "sumAll")){
+                double auxsum=0;
+                double newvalue;
+                for(int j=0; j<cellsref.size(); j++){
+                    auxsum += (Double) cellsref.elementAt(j).getInfo();
+                }
+                newvalue=auxsum;
+                c.setContent(newvalue);
+            }
+            else if(Objects.equals(op, "subAll")){
+                double auxsum=0;
+                double newvalue;
+                for(int j=0; j<cellsref.size(); j++){
+                    Double val = (Double) cellsref.elementAt(j).getInfo();
+
+                    if (val < 0) auxsum += (-1)*val;
+                    else auxsum += val;
+                }
+                newvalue=auxsum;
+                c.setContent(newvalue);
+            }
+            else if(Objects.equals(op, "multAll")){
+                double auxsum=0;
+                double newvalue;
+                for(int j=0; j<cellsref.size(); j++){
+                    auxsum *= (Double) cellsref.elementAt(j).getInfo();
+                }
+                newvalue=auxsum;
+                c.setContent(newvalue);
+            }
+            else if(Objects.equals(op, "divAll")){
+                double auxsum=0;
+                double newvalue;
+                for(int j=0; j<cellsref.size(); j++){
+                    auxsum /= (Double) cellsref.elementAt(j).getInfo();
+                }
+                newvalue=auxsum;
+                c.setContent(newvalue);
+            }
             else if(Objects.equals(op, "median")){
                 Double [] arr= new Double [cellsref.size()];
                 int i2=0;

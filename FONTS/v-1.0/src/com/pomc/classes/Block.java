@@ -3,6 +3,8 @@ package com.pomc.classes;
 import java.time.LocalDate;
 import java.util.*;
 
+import static java.lang.Math.abs;
+
 public class Block {
     Cell [][] block;
     Cell ul;
@@ -452,7 +454,122 @@ public class Block {
         }
     }
 
-    // val = true means we want to put value in cell, else just show value.
+    public Cell sumAll (Cell c, Boolean ref) {
+
+        double sum = 0;
+        Vector<Cell> s = new Vector<>();
+        for (Cell[] cells : this.block) {
+            for (int j = 0; j < this.block[0].length; ++j) {
+                sum += (double) cells[j].getInfo();
+                s.add(cells[j]);
+            }
+        }
+
+        c = (Cell) c.changeValue(sum);
+
+        if (ref) {
+            //System.out.println("entra1");
+            ReferencedCell rc = new ReferencedCell(c.getRow(),c.getColumn(),"=sumAll");
+            rc.setContent(c.getInfo());
+            c = rc;
+            Map.Entry<String, Vector<Cell>> r = new AbstractMap.SimpleEntry<>("sumAll", s);
+            c.setRefInfo(r);
+            for (int x=0;x<s.size();x++){
+                Cell a= s.elementAt(x);
+                a.AddRef(rc);
+            }
+        }
+
+        return c;
+    }
+
+    public Cell subAll (Cell c, Boolean ref) {
+
+        double sum = 0;
+        Vector<Cell> s = new Vector<>();
+        for (Cell[] cells : this.block) {
+            for (int j = 0; j < this.block[0].length; ++j) {
+                sum += abs((double) cells[j].getInfo());
+                s.add(cells[j]);
+            }
+        }
+
+        c = (Cell) c.changeValue(-sum);
+
+        if (ref) {
+            //System.out.println("entra1");
+            ReferencedCell rc = new ReferencedCell(c.getRow(),c.getColumn(),"=subAll");
+            rc.setContent(c.getInfo());
+            c = rc;
+            Map.Entry<String, Vector<Cell>> r = new AbstractMap.SimpleEntry<>("subAll", s);
+            c.setRefInfo(r);
+            for (int x=0;x<s.size();x++){
+                Cell a= s.elementAt(x);
+                a.AddRef(rc);
+            }
+        }
+
+        return c;
+    }
+
+    public Cell multAll (Cell c, Boolean ref) {
+
+        double sum = 1;
+        Vector<Cell> s = new Vector<>();
+        for (Cell[] cells : this.block) {
+            for (int j = 0; j < this.block[0].length; ++j) {
+                sum *= (double) cells[j].getInfo();
+                s.add(cells[j]);
+            }
+        }
+
+        c = (Cell) c.changeValue(sum);
+
+        if (ref) {
+            //System.out.println("entra1");
+            ReferencedCell rc = new ReferencedCell(c.getRow(),c.getColumn(),"=multAll");
+            rc.setContent(c.getInfo());
+            c = rc;
+            Map.Entry<String, Vector<Cell>> r = new AbstractMap.SimpleEntry<>("multAll", s);
+            c.setRefInfo(r);
+            for (int x=0;x<s.size();x++){
+                Cell a= s.elementAt(x);
+                a.AddRef(rc);
+            }
+        }
+
+        return c;
+    }
+
+    public Cell divAll (Cell c, Boolean ref) {
+
+        double sum = 1;
+        Vector<Cell> s = new Vector<>();
+        for (Cell[] cells : this.block) {
+            for (int j = 0; j < this.block[0].length; ++j) {
+                sum /= (double) cells[j].getInfo();
+                s.add(cells[j]);
+            }
+        }
+
+        c = (Cell) c.changeValue(sum);
+
+        if (ref) {
+            //System.out.println("entra1");
+            ReferencedCell rc = new ReferencedCell(c.getRow(),c.getColumn(),"=divAll");
+            rc.setContent(c.getInfo());
+            c = rc;
+            Map.Entry<String, Vector<Cell>> r = new AbstractMap.SimpleEntry<>("divAll", s);
+            c.setRefInfo(r);
+            for (int x=0;x<s.size();x++){
+                Cell a= s.elementAt(x);
+                a.AddRef(rc);
+            }
+        }
+
+        return c;
+    }
+
     public Cell mean (Cell c, Boolean ref) {
 
         double sum = 0;
