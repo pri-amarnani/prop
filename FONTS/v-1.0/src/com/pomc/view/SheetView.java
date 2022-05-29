@@ -477,6 +477,26 @@ public class SheetView {
                         }
                     });
 
+                    ImageIcon ceilIcon= new ImageIcon("res/iconoceil.png");
+                    Image ceIcon=ceilIcon.getImage();
+                    Image ceilb=ceIcon.getScaledInstance(40,40,Image.SCALE_DEFAULT);
+                    ceilIcon.setImage(ceilb);
+                    JButton ceil= new JButton(ceilIcon);
+                    ceil.setToolTipText("Ceil");
+                    ceil.setBackground(blockBar.getBackground());
+                    ceil.setBorder(BorderFactory.createLineBorder(c,1));
+                    blockBar.add(ceil,blockBar.getMenuCount()-1);
+                    ceil.addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            Integer[] c=FuncView.addSingleOp("ceil");
+                            if(c[0]!=-1) {
+                                if (c[4] == -1) writeBlock(c[0], c[1], c[2], c[3]);
+                                else rewriteBlock();
+                            }
+                        }
+                    });
+
 
                     ImageIcon convertIcon= new ImageIcon("res/iconoconvert.png");
                     Image cIcon=convertIcon.getImage();
@@ -535,25 +555,7 @@ public class SheetView {
                         }
                     });
 
-                    ImageIcon ceilIcon= new ImageIcon("res/iconoceil.png");
-                    Image ceIcon=ceilIcon.getImage();
-                    Image ceilb=ceIcon.getScaledInstance(40,40,Image.SCALE_DEFAULT);
-                    ceilIcon.setImage(ceilb);
-                    JButton ceil= new JButton(ceilIcon);
-                    ceil.setToolTipText("Ceil");
-                    ceil.setBackground(blockBar.getBackground());
-                    ceil.setBorder(BorderFactory.createLineBorder(c,1));
-                    blockBar.add(ceil,blockBar.getMenuCount()-1);
-                    ceil.addActionListener(new ActionListener() {
-                        @Override
-                        public void actionPerformed(ActionEvent e) {
-                            Integer[] c=FuncView.addSingleOp("ceil");
-                            if(c[0]!=-1) {
-                                if (c[4] == -1) writeBlock(c[0], c[1], c[2], c[3]);
-                                else rewriteBlock();
-                            }
-                        }
-                    });
+
 
 
                     ImageIcon maxIcon= new ImageIcon("res/iconomax.png");
