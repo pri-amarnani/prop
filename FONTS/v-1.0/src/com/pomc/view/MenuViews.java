@@ -1,16 +1,18 @@
 package com.pomc.view;
 
+import com.pomc.controller.DomainController;
+
 import javax.swing.*;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
+import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import static com.pomc.view.SheetView.currentSheetName;
-import static com.pomc.view.SheetView.getCurrentTable;
+import static com.pomc.view.SheetView.*;
 
 public class MenuViews {
     public static void close() {
@@ -231,7 +233,18 @@ public class MenuViews {
         int result = selectFile.showOpenDialog(null);
         if(result == JFileChooser.APPROVE_OPTION) {
             System.out.println(selectFile.getCurrentDirectory());
-            PresentationController.export(selectFile.getSelectedFile());
+            PresentationController.open(selectFile.getSelectedFile());
+            BorderLayout blayout = (BorderLayout) MainMenu.frame.getContentPane().getLayout();
+            MainMenu.frame.getContentPane().remove(blayout.getLayoutComponent(BorderLayout.CENTER));
+            MainMenu.frame.repaint();
+            MainMenu.frame.getContentPane().add(BorderLayout.CENTER, SheetView.cambio());
+            rewriteModel(0);
+            if (!MainMenu.menuUpdated) {
+                MainMenu.menuUpdated = true;
+                SheetView.updateMenu(MainMenu.mb);
+            }
+            MainMenu.frame.setTitle(PresentationController.getTitle() + " - POMC WORKSHEETS");
+            MainMenu.frame.setVisible(true);
         }
     }
 }

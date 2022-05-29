@@ -6,8 +6,10 @@ import com.pomc.classes.Cell;
 import com.pomc.classes.Document;
 import com.pomc.classes.Sheet;
 import com.pomc.controller.DomainController;
+import com.pomc.controller.PersistenceController;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Vector;
 
 public class PresentationController {
@@ -200,26 +202,44 @@ public class PresentationController {
     }
 
     public static void save() {
-        //TODO enviar path y doc a persistencia
+        try {
+            PersistenceController.save(path,DomainController.getDoc());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public static void saveAs(File selectedFile) {
-        //TODO enviar titulo, path y doc a persistencia y guardar current path y cambiar titulo si es distinto
         String[] extension = selectedFile.getName().split("\\.(?=[^\\.]+$)");
         if (extension.length> 1){
-            if(extension[1].equals("pomc")) path= selectedFile.getName();
+            if(extension[1].equals("pomc")) path= selectedFile.getAbsolutePath();
             else {
-                path = selectedFile.getName()+".pomc";
+                path = selectedFile.getAbsolutePath()+".pomc";
             }
         }
-        else path = selectedFile.getName()+".pomc";
-        System.out.println(path);
+        else path = selectedFile.getAbsolutePath()+".pomc";
+        save();
     }
 
     public static void export(File selectedFile) {
         //TODO enviar titulo, path, format y doc a persistencia y formato
     }
+    public static boolean open(File selectedFile) {
+        String[] extension = selectedFile.getName().split("\\.(?=[^\\.]+$)");
+        if (extension.length > 1) {
+            if (extension[1].equals("pomc")) {
+                path = selectedFile.getAbsolutePath();
+                try {
+                    DomainController.setDoc(PersistenceController.open(path));
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+                return true;
+            }
+        }
+    return false;
+    }
 
 
-
+    public static String getTitle() { return DomainController.getDocName();}
 }
