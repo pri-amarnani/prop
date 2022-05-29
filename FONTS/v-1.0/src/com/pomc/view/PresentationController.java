@@ -119,8 +119,29 @@ public class PresentationController {
 
     public static void blockExtract(int ulr, int ulc, int drr, int drc, boolean ref,String criteria, String sheetName){
         Integer[] ints= {ulr,ulc,drr,drc};
-        DomainController.funcExtract(ints,ref,criteria,sheetName);
+        if(!criteria.equals("-1")) DomainController.funcExtract(ints,ref,criteria,sheetName);
     }
+
+    public static void blockConvert(int ulr, int ulc,int drr, int drc, boolean ref,String from,String to, String sheetName){
+        Integer[] ints= {ulr,ulc,drr,drc};
+        if(!from.equals("") && !to.equals(""))DomainController.blockConvert(ints,ref,from,to,sheetName);
+    }
+
+    public static void moveBlock(int ulr, int ulc,int drr, int drc, boolean ref, String sheetName){
+        Integer[] ints= {ulr,ulc,drr,drc};
+        DomainController.moveBlock(ints,ref,sheetName);
+    }
+
+    public static void blockLength(int ulr, int ulc,int drr, int drc, boolean ref, String sheetName,String criteria){
+        Integer[] ints= {ulr,ulc,drr,drc};
+        DomainController.funcLength(ints,criteria,ref,sheetName);
+    }
+
+    public static void blockReplaceWC(String sheetName,String criteria){
+        DomainController.funcReplaceCriteria(criteria,sheetName);
+    }
+
+
 
 
     //-----------------------CELL FUNCTIONS--------------------------------
@@ -159,15 +180,15 @@ public class PresentationController {
         return i;
     }
 
-    public static void showTcells(String name){
-        String[][] cellsContents = DomainController.currentSheetCells(name);
-        for(int i = 0; i < cellsContents.length ; ++i) {
-            for (int j = 0; j < cellsContents[0].length ; ++j) {
-                System.out.print(" | " + cellsContents[i][j]);
-            }
-            System.out.print(" | \n");
-        }
-    }
+//    public static void showTcells(String name){
+//        String[][] cellsContents = DomainController.currentSheetCells(name);
+//        for(int i = 0; i < cellsContents.length ; ++i) {
+//            for (int j = 0; j < cellsContents[0].length ; ++j) {
+//                System.out.print(" | " + cellsContents[i][j]);
+//            }
+//            System.out.print(" | \n");
+//        }
+//    }
 
 
 
