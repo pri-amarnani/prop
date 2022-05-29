@@ -1,5 +1,7 @@
 package com.pomc.classes;
 
+import org.knowm.xchart.XYChart;
+
 import java.util.Vector;
 
 public class Sheet {
@@ -127,6 +129,10 @@ public class Sheet {
         if(id != -1) cells.elementAt(id2).setElementAt((Cell) o1, id);
         else System.out.println("Cell not found");
         System.out.println(cells.elementAt(id2).elementAt(id).getType());
+    }
+
+    public XYChart graficXY(String title, String x, String y, String func){
+        return b_selected.graficXY(title, x, y, func);
     }
 
     public void NewRow(int pos){
@@ -273,6 +279,14 @@ public class Sheet {
         if(b2.dr.getColumn() < b1.ul.getColumn()) return false;
         if(b2.dr.getRow() < b1.ul.getRow()) return false;
         return true;
+    }
+
+    public void opBlock(String op, double x){
+        if (b_selected.allDouble()){
+            b_selected.opBlock(op, x);
+        }
+        else System.out.println("Error. Not all cells are of type Number.");
+        update(b_selected);
     }
 
     public void floor(Block b, Boolean ref){

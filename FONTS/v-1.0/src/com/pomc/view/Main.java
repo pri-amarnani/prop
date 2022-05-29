@@ -1,8 +1,12 @@
 package com.pomc.view;
 
 import com.pomc.controller.DomainController;
+import org.knowm.xchart.BitmapEncoder;
+import org.knowm.xchart.QuickChart;
+import org.knowm.xchart.SwingWrapper;
+import org.knowm.xchart.XYChart;
 
-import java.sql.SQLOutput;
+import java.io.IOException;
 import java.util.Scanner;
 
 public class Main {
@@ -192,10 +196,11 @@ public class Main {
             System.out.println("(12) SubAll");
             System.out.println("(13) MultAll");
             System.out.println("(14) DivAll");
-            System.out.println("(15) CountIf");
+            System.out.println("(16) CountIf");
+            System.out.println("(15) Op in a block by a num");
             System.out.println("(0) Go back");
             System.out.println("\n \n Enter number:");
-            Integer num = numberInsertion(15,0);
+            Integer num = numberInsertion(20,0);
             if (num != null) {
                 System.out.println("\n");
                 switch (num) {
@@ -459,8 +464,36 @@ public class Main {
                         }
                         else System.out.println("Invalid answer");
                         break;
-
                     case 15:
+                        System.out.println(" (1) Sum \n (2) Substract \n (3) Divide \n (4) Multiply \n (5) Modulus \n (4) Power");
+                        Integer x = Integer.valueOf(userInput.nextLine());
+                        System.out.println("Print the number to do the operation ");
+                        Integer y = Integer.valueOf(userInput.nextLine());
+                        switch(x) {
+                            case 1:
+                                DomainController.opBlock("sum", y);
+                                break;
+                            case 2:
+                                DomainController.opBlock("sub", y);
+                                break;
+                            case 3:
+                                DomainController.opBlock("div", y);
+                                break;
+                            case 4:
+                                DomainController.opBlock("mult", y);
+                                break;
+                            case 5:
+                                DomainController.opBlock("mod", y);
+                                break;
+                            case 6:
+                                DomainController.opBlock("pow", y);
+                                break;
+                            default:
+                                System.out.println("\n");
+                                break;
+                        }
+
+                    case 16:
                         System.out.println("Input the criteria for counting:");
                         String criteria = userInput.nextLine();
                         System.out.println("Input the val for counting:");
@@ -509,9 +542,10 @@ public class Main {
             System.out.println("(8) Date Operations");
             System.out.println("(9) Text Operations");
             System.out.println("(10) Move Block");
+            System.out.println("(11) Grafica");
             System.out.println("(0) Go back");
             System.out.println("\n \n Enter number:");
-            Integer num = numberInsertion(10,0);
+            Integer num = numberInsertion(11,0);
             if (num != null) {
                 System.out.println("\n");
                 switch (num) {
@@ -693,6 +727,9 @@ public class Main {
                             DomainController.moveBlock(blockCells3,isReferencing());
                             break;
                         }
+                    case 11:
+                        DomainController.graficXY("hola", "x", "y", "Y(x)");
+                        break;
                     default:
                         System.out.println("\n");
                         break;

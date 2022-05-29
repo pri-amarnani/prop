@@ -58,6 +58,7 @@ public class PersistenceController {
             v.addAll(Arrays.asList(path_doc.split(".")));
             Csv.writeCSV(v.elementAt(0)+".csv", sh.elementAt(0));
             Pdf.exportPDF(path_doc, v.elementAt(0)+".csv");
+            Csv.deleteCSV(v.elementAt(0)+".csv");
         }
 
         else System.out.println("Extension not valid, try again.");
