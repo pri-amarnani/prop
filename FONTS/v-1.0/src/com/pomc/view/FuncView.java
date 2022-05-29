@@ -186,8 +186,7 @@ public class FuncView {
                 b1[3] = SheetView.alphabetToNum((String) drc.getValue())+1;
 
                 if (printb.isSelected()) {
-                    int confirm = showConfirmDialog(null, "The information from the cells will be lost.\n Are you sure", "Alert!", JOptionPane.YES_NO_OPTION);
-                    if (confirm == JOptionPane.YES_OPTION) {
+
 
                         SpinnerNumberModel ulrm2 = new SpinnerNumberModel(1, 1, trows, 1);
                         SpinnerListModel ulcm2 = new SpinnerListModel(alphCols);
@@ -215,13 +214,30 @@ public class FuncView {
 
                         );
                         if (result22 == JOptionPane.OK_OPTION) {
-                            b2[0] = (Integer) ulr2.getValue();
-                            b2[1] = SheetView.alphabetToNum((String) ulc2.getValue())+1;
-                            b2[2] = (Integer) drr2.getValue();
-                            b2[3] = SheetView.alphabetToNum((String) drc2.getValue())+1;
+                            int ul=(Integer) ulr2.getValue();
+                            int uc=SheetView.alphabetToNum((String) ulc2.getValue())+1;
+                            int dl= (Integer) drr2.getValue();
+                            int dc=SheetView.alphabetToNum((String) drc2.getValue())+1;
+                            int x=PresentationController.blockWRefs(ul,uc,dl,dc,SheetView.currentSheetName());
+                            int confirm=-1;
+                            if(x!=-1){
+                                switch (x){
+                                    case 0:  confirm = showConfirmDialog(null, "Watch out! There are references in the selected block, the content and references will be lost after the print. \n Are you sure?", "References!", JOptionPane.YES_NO_OPTION);
+                                        break;
+                                    case 1: confirm = showConfirmDialog(null,"Watch out! There is information in the selected block, the content  will be lost after the print. \n Are you sure?","Alert", YES_NO_OPTION);
+                                        break;
+                                    default:
+                                        break;
+                                }
+                                if (confirm == JOptionPane.YES_OPTION) {
+                                b2[0] = (Integer) ulr2.getValue();
+                                b2[1] = SheetView.alphabetToNum((String) ulc2.getValue())+1;
+                                b2[2] = (Integer) drr2.getValue();
+                                b2[3] = SheetView.alphabetToNum((String) drc2.getValue())+1;
+                            }
+                            b2[4] = -1;
                         }
-                        b2[4] = -1;
-                    }
+                        }
 
                 } else {
                     ref.setSelected(false);

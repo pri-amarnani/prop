@@ -417,6 +417,26 @@ public class DomainController {
         return rids.toArray();
     }
 
+    public static int isRef (int ulr, int ulc, int drr, int drc, String sheetName){
+        Block block;
+        Integer [] ints={ulr,ulc,drr,drc};
+        Cell c1= doc.getSheet(sheetName).getCell(ulr,ulc);
+        Cell c2= doc.getSheet(sheetName).getCell(drr,drc);
+        block= doc.getSheet(sheetName).create_block(c1,c2);
+
+
+        for (int i = 0; i < block.number_rows(); i++) {
+            for (int j = 0; j < block.number_cols(); j++) {
+                Cell c= block.getCell(i,j);
+                if (c.getType().equals("R")) return 0; //el bloque tiene una o + celdas con ref
+                else if(c.getInfo()!=null) return 1;
+            }
+
+        }
+
+        return -1;
+    }
+
     //-----------------------------------OPCIONALES-----------------------------------
 
     public static void graficXY(String title, String x, String y, String func, String sheetName){
