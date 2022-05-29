@@ -6,8 +6,7 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.time.temporal.JulianFields;
 
-import static javax.swing.JOptionPane.showConfirmDialog;
-import static javax.swing.JOptionPane.showMessageDialog;
+import static javax.swing.JOptionPane.*;
 
 public class FuncView {
 
@@ -788,6 +787,24 @@ public class FuncView {
         if(result==JOptionPane.OK_OPTION){
             PresentationController.blockOpBlock((String) selection.getSelectedItem(),Double.parseDouble(num.getText()),SheetView.currentSheetName());
         }
+    }
+
+    public static void modifyB(){
+        if (SheetView.emptyBlock()) {
+            PresentationController.createBlock(0, 0, SheetView.getCurrentTable().getRowCount() - 1, SheetView.getCurrentTable().getColumnCount() - 1, SheetView.currentSheetName());
+        }
+        JTextField o= new JTextField();
+        int pop= JOptionPane.showConfirmDialog(
+                null,
+                o,
+                "Modify block",
+                JOptionPane.OK_CANCEL_OPTION,
+                JOptionPane.PLAIN_MESSAGE,
+                null
+
+        );
+        if(pop==OK_OPTION) PresentationController.blockModify(o.getText(),SheetView.currentSheetName());
+
     }
 
 
