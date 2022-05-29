@@ -44,10 +44,12 @@ public class PersistenceController {
             Txt.writeTXT(path_doc, sh.elementAt(0));
         }
         else if(type.equals("pdf")){
+            Vector<String> v2 = new Vector<>();
+            v2.addAll(Arrays.asList(path_doc.split("/")));
             Vector<String> v = new Vector<>();
-            v.addAll(Arrays.asList(path_doc.split(".")));
+            v.addAll(Arrays.asList(v2.elementAt(v2.size()-1).split("\\.(?=[^\\.]+$)")));
             Csv.writeCSV(v.elementAt(0)+".csv", sh.elementAt(0));
-            Pdf.exportPDF(path_doc, v.elementAt(0)+".csv");
+            Pdf.exportPDF(v.elementAt(0)+".csv",path_doc);
             Csv.deleteCSV(v.elementAt(0)+".csv");
         }
 
@@ -97,13 +99,15 @@ public class PersistenceController {
 
         Vector<Sheet> sh = new Vector<>();
 
-        if(type == "csv"){
+        if(type.equals("csv")){
             sh.add(Csv.readCSV(path));
         }
-        else if(type == "txt"){
+        else if(type.equals("txt")){
             sh.add(Txt.readTXT(path));
         }
-
+        for (int j = 0; j < sh.size(); ++j) {
+            sh.elementAt(j).setTitle(sh.elementAt(j).getTitle().substring(1,sh.elementAt(j).getTitle().length()-1));
+        }
         Document doc = new Document(title);
         doc.createDocWithSheet(sh);
         return doc;

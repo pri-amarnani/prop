@@ -105,8 +105,14 @@ public class ExportPdf {
 
 
             for (int i = 0; i < cols; ++i) {
-                PdfPCell c1 = new PdfPCell(new Phrase(row_doc.elementAt(i)));
-                t.addCell(c1);
+                if (row_doc.elementAt(i).equals("null")) {
+                    PdfPCell c1 = new PdfPCell(new Phrase(""));
+                    t.addCell(c1);
+                }
+                else {
+                    PdfPCell c1 = new PdfPCell(new Phrase(row_doc.elementAt(i)));
+                    t.addCell(c1);
+                }
             }
             row_doc = new Vector<>();
         }
@@ -120,71 +126,5 @@ public class ExportPdf {
         document.close();
         pdfWriter.close();
 
-
-
-        /*
-        Path path = p;
-
-        byte[] bytes = Files.readAllBytes(path);
-
-        String str = new String(bytes);
-
-        String[] splitted = Arrays.stream(str.split("\n")).map(String::trim).toArray(String[]::new);
-
-        // System.out.println(Arrays.toString(splitted));
-
-        List<String> list = Arrays.asList(splitted);
-
-        Document document = new Document(PageSize.A4, 25, 25, 25, 25);
-        PdfWriter pdfWriter = PdfWriter.getInstance(document, new FileOutputStream(p2));
-
-        document.open();
-
-        Paragraph heading = new Paragraph(" Student Details ",
-                FontFactory.getFont(FontFactory.HELVETICA, 20, Font.BOLD, new BaseColor(0, 150, 150)));
-
-        document.add(heading);
-
-        PdfPTable t = new PdfPTable(4);
-        t.setSpacingBefore(25);
-        t.setSpacingAfter(25);
-
-        boolean isHeader = true;
-        for (String record : list) {
-            String[] line = Arrays.stream(record.split(",")).map(String::trim).toArray(String[]::new);
-
-            String id = line[0];
-            //String dob = line[1];
-            //String email = line[2];
-            //String address = line[3];
-
-
-            if (isHeader) {
-                PdfPCell c1 = new PdfPCell(new Phrase(id));
-                t.addCell(c1);
-
-            } else {
-                PdfPCell c1 = new PdfPCell(new Phrase(9));
-                t.addCell(c1);
-
-                PdfPCell c2 = new PdfPCell(new Phrase(7));
-                t.addCell(c2);
-
-                PdfPCell c3 = new PdfPCell(new Phrase(6));
-                t.addCell(c3);
-
-                PdfPCell c4 = new PdfPCell(new Phrase(3));
-                t.addCell(c4);
-            }
-
-        }
-
-        document.add(t);
-
-        document.close();
-        pdfWriter.close();
-
-
-         */
     }
 }

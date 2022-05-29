@@ -102,7 +102,7 @@ public class gestorCSV {
                     sh[i_aux][i] = new NumCell(i_aux,i,null);
                 }
 
-                else if (!Objects.equals(row_doc.elementAt(i), "")) {
+                else if (!Objects.equals(row_doc.elementAt(i), "null")) {
                     Object aux = Parse(row_doc.elementAt(i));
                     if (aux.getClass() == Double.class) {
                         sh[i_aux][i] = new NumCell(i_aux,i,(Double) aux);

@@ -410,20 +410,6 @@ public class Block {
 
         if (Objects.equals(criteria, "<")) {
             if (Objects.equals(type, "N")) {
-                Arrays.sort(block, (a, b) -> Double.compare((double) a[n_col].getInfo(), (double) b[n_col].getInfo()));
-            }
-            else if (Objects.equals(type, "T")) {
-                Arrays.sort(block, (a, b) -> ((String) a[n_col].getInfo()).compareTo((String) b[n_col].getInfo()));
-            }
-
-            else if (Objects.equals(type, "D")) {
-                Arrays.sort(block, (a, b) -> ((LocalDate) a[n_col].getInfo()).compareTo((LocalDate) b[n_col].getInfo()));
-            }
-        }
-
-        // >
-        else {
-            if (Objects.equals(type, "N")) {
                 Arrays.sort(block, (a, b) -> Double.compare((double) b[n_col].getInfo(), (double) a[n_col].getInfo()));
             }
             else if (Objects.equals(type, "T")) {
@@ -432,6 +418,20 @@ public class Block {
 
             else if (Objects.equals(type, "D")) {
                 Arrays.sort(block, (a, b) -> ((LocalDate) b[n_col].getInfo()).compareTo((LocalDate) a[n_col].getInfo()));
+            }
+        }
+
+        // >
+        else {
+            if (Objects.equals(type, "N")) {
+                Arrays.sort(block, (a, b) -> Double.compare((double) a[n_col].getInfo(), (double) b[n_col].getInfo()));
+            }
+            else if (Objects.equals(type, "T")) {
+                Arrays.sort(block, (a, b) -> ((String) a[n_col].getInfo()).compareTo((String) b[n_col].getInfo()));
+            }
+
+            else if (Objects.equals(type, "D")) {
+                Arrays.sort(block, (a, b) -> ((LocalDate) a[n_col].getInfo()).compareTo((LocalDate) b[n_col].getInfo()));
             }
         }
 

@@ -207,7 +207,9 @@ public class MenuViews {
         int result = selectFile.showSaveDialog(null);
         if(result == JFileChooser.APPROVE_OPTION) {
             System.out.println(selectFile.getCurrentDirectory());
-            PresentationController.export(selectFile.getSelectedFile());
+            int desLength = selectFile.getFileFilter().getDescription().length();
+            String ext =selectFile.getFileFilter().getDescription().substring(desLength-4,desLength-1);
+            PresentationController.export(selectFile.getSelectedFile(), ext);
         }
     }
 
@@ -243,19 +245,31 @@ public class MenuViews {
         selectFile.setFileFilter(pomc);
         int result = selectFile.showOpenDialog(null);
         if(result == JFileChooser.APPROVE_OPTION) {
-            System.out.println(selectFile.getCurrentDirectory());
-         //   PresentationController.open(selectFile.getSelectedFile());
-            BorderLayout blayout = (BorderLayout) MainMenu.frame.getContentPane().getLayout();
-            MainMenu.frame.getContentPane().remove(blayout.getLayoutComponent(BorderLayout.CENTER));
-            MainMenu.frame.repaint();
-            MainMenu.frame.getContentPane().add(BorderLayout.CENTER, SheetView.cambio());
-            rewriteModel(0);
             if (!MainMenu.menuUpdated) {
+                PresentationController.open(selectFile.getSelectedFile());
+                BorderLayout blayout = (BorderLayout) MainMenu.frame.getContentPane().getLayout();
+                MainMenu.frame.getContentPane().remove(blayout.getLayoutComponent(BorderLayout.CENTER));
+                MainMenu.frame.repaint();
+                MainMenu.frame.getContentPane().add(BorderLayout.CENTER, SheetView.cambio());
                 MainMenu.menuUpdated = true;
                 SheetView.updateMenu(MainMenu.mb);
+                MainMenu.frame.setTitle(PresentationController.getTitle() + " - POMC WORKSHEETS");
+                MainMenu.frame.setVisible(true);
+                SheetView.rewriteModel(0);
+
             }
-            //MainMenu.frame.setTitle(PresentationController.getTitle() + " - POMC WORKSHEETS");
-            MainMenu.frame.setVisible(true);
+            else {//TODO preguntar si seguro
+                PresentationController.open(selectFile.getSelectedFile());
+                BorderLayout blayout = (BorderLayout) MainMenu.frame.getContentPane().getLayout();
+                MainMenu.frame.getContentPane().remove(blayout.getLayoutComponent(BorderLayout.CENTER));
+                MainMenu.frame.repaint();
+                MainMenu.frame.getContentPane().add(BorderLayout.CENTER, SheetView.cambio());
+                MainMenu.menuUpdated = true;
+                SheetView.updateMenu(MainMenu.mb);
+                MainMenu.frame.setTitle(PresentationController.getTitle() + " - POMC WORKSHEETS");
+                MainMenu.frame.setVisible(true);
+                SheetView.rewriteModel(0);
+            }
         }
     }
 }
