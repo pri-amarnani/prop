@@ -237,11 +237,14 @@ public class DomainController {
 
     public static String[] blockFind(String value,String sheetName) {
         Object parsedValue = Parse(value);
+        Vector<Cell> v = doc.getSheet(sheetName).find(parsedValue);
+        Cell[] res = new Cell[v.size()];
         if (sheetName != null) {
             doc.getSheet(sheetName);
             if (doc.getSheet(sheetName).find(parsedValue) != null) {
-                Cell searchedCell = doc.getSheet(sheetName).find(parsedValue);
-                return new String[]{String.valueOf(searchedCell.getRow() +1), String.valueOf(searchedCell.getColumn() +1)};
+                for (int i = 0; i < v.size(); i++) {
+                    res[i] = v.elementAt(i);
+                }
             }
             else return new String[]{"Not Found"};
         }
