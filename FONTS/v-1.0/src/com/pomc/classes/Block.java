@@ -401,6 +401,8 @@ public class Block {
     }
 
     public void SortBlock (int n_col, String criteria, String type) {
+        int firstCol=ul.getColumn();
+        int firstRow=ul.getRow();
 
         if (Objects.equals(criteria, "<")) {
             if (Objects.equals(type, "N")) {
@@ -429,10 +431,11 @@ public class Block {
             }
         }
 
+
         for (int i = 0; i < size_r; ++i) {
             for (int j = 0; j < size_c; ++j) {
-                this.block[i][j].setRow(i);
-                this.block[i][j].setColumn(j);
+                this.block[i][j].setRow(firstRow+i);
+                this.block[i][j].setColumn(firstCol+j);
             }
         }
         ul = this.block[0][0];
@@ -448,15 +451,20 @@ public class Block {
         return null;
     }
 
-    public void findAndReplace (Object n, Object change) {
+    public Object[] findAndReplace (Object n, Object change) {
+        Vector<Integer> results = new Vector<>();
         for (Cell[] cells : block) {
             for (int j = 0; j < block[0].length; ++j) {
                 if (Objects.equals(cells[j].getInfo(), n)) {
+                    results.add(cells[j].getRow());
+                    results.add(cells[j].getColumn());
                     Cell nw = (Cell) cells[j].changeValue(change);
                     cells[j] = nw;
                 }
             }
         }
+
+        return  results.toArray();
     }
 
     public void floor (Block b, Boolean ref) {
@@ -487,8 +495,8 @@ public class Block {
     }
 
     public void convert (Block b, Boolean ref, String from, String to) {
-        for (int i = 0; i < b.number_rows(); ++i) {
-            for (int j = 0; j < b.number_cols(); ++j) {
+        for (int i = 0; i < this.block.length; ++i) {
+            for (int j = 0; j < this.block[0].length; ++j) {
                 NumCell N = (NumCell) this.block[i][j];
 
                 Cell n = (Cell) b.getCell(i, j).changeValue(N.conversion(from,to));
@@ -698,17 +706,17 @@ public class Block {
         for (Cell[] cells : this.block) {
             for (int j = 0; j < this.block[0].length; ++j) {
                 String s = (String) cells[j].getInfo();
-                if (Objects.equals(criteria, "all caps")) {
+                if (Objects.equals(criteria, "All caps")) {
                     Cell n = (Cell) cells[j].changeValue(s.toUpperCase(Locale.ROOT));
                     cells[j] = n;
                 }
 
-                else if (Objects.equals(criteria, "all not caps")) {
+                else if (Objects.equals(criteria, "All lowercase")) {
                     Cell n = (Cell) cells[j].changeValue(s.toLowerCase(Locale.ROOT));
                     cells[j] = n;
                 }
 
-                else if (Objects.equals(criteria, "cap first letter")) {
+                else if (Objects.equals(criteria, "Cap first letter")) {
                     Cell n = (Cell) cells[j].changeValue(s.substring(0, 1).toUpperCase(Locale.ROOT)
                             + s.substring(1));
                     cells[j] = n;

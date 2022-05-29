@@ -3,6 +3,7 @@ package com.pomc.classes;
 import org.knowm.xchart.PieChart;
 import org.knowm.xchart.XYChart;
 
+import java.util.Map;
 import java.util.Vector;
 
 public class Sheet {
@@ -15,13 +16,13 @@ public class Sheet {
 
 
     public void update(Block b){
-
-        Cell ul = b.ul;
-
-        for(int i = 0; i < b.number_rows(); ++ i){
-            for(int j = 0; j < b.number_cols(); ++j){
-                System.out.print(" t: "+ul.getType());
-                cells.elementAt(ul.getRow() + i).setElementAt(b.getCell(i,j),ul.getColumn() + j);
+        if (b != null) {
+            Cell ul = b.ul;
+            for (int i = 0; i < b.number_rows(); ++i) {
+                for (int j = 0; j < b.number_cols(); ++j) {
+                    cells.elementAt(ul.getRow() + i).setElementAt(b.getCell(i, j), ul.getColumn() + j);
+                    //  System.out.println("SHEET PRINT: "+getCell(ul.getRow()+i,ul.getColumn()+j).getInfo());
+                }
             }
         }
     }
@@ -126,10 +127,20 @@ public class Sheet {
                 break;
             }
         }
+        if(c.getType()=="R"){
+           ReferencedCell rcell= (ReferencedCell) c;
+            Map.Entry<String,Vector<Cell>> rcellRefs=rcell.getRefInfo();
+            Vector<Cell> rcellCells= rcellRefs.getValue();
+            for (int i = 0; i < rcellCells.size(); i++) {
+                Cell delRef=rcellCells.elementAt(i);
+                System.out.println("DEPENDIA DE: "+delRef.getRow()+", "+delRef.getColumn());
+                delRef.deleteRefCell(rcell);
+            }
+        }
         Object o1 = c.changeValue(o);
         if(id != -1) cells.elementAt(id2).setElementAt((Cell) o1, id);
         else System.out.println("Cell not found");
-        System.out.println(cells.elementAt(id2).elementAt(id).getType());
+
     }
 
     public XYChart graficXY(String title, String x, String y, String func){
@@ -179,7 +190,7 @@ public class Sheet {
         if(num_rows <= 1) System.out.println("Error. Not enough rows.");
         else{
             --num_rows;
-            cells.removeElement(pos);
+            cells.removeElementAt(pos);
             for(int i = pos; i < num_rows; ++i){
                 Vector<Cell> row = cells.elementAt(i);
                 for(int j = 0; j < num_cols; ++j){
@@ -223,14 +234,19 @@ public class Sheet {
     }
 
     public Block SelectBlock(Cell c1, Cell c2){
-        System.out.println(c1.getRow() + " " + c2.getRow());
-        System.out.println(c1.getInfo() + " " + c2.getInfo());
         b_selected = null;
         Block b = create_block(c1,c2);
         b_selected = b;
         return b;
     }
 
+
+    public int blockFirstRow(){
+        return b_selected.ul.getRow();
+    }
+    public int blockFirstCol(){
+       return b_selected.ul.getColumn();
+    }
     public void CopyB(){
         b_selected.CopyB();
     }
@@ -273,9 +289,10 @@ public class Sheet {
         return b_selected.find(o);
     }
 
-    public void findAndReplace(Object n, Object r){
-        b_selected.findAndReplace(n, r);
+    public Object[] findAndReplace(Object n, Object r){
+        Object[] result = b_selected.findAndReplace(n, r);
         update(b_selected);
+        return result;
     }
 
     public Boolean overlapping(Block b1, Block b2){
@@ -295,7 +312,7 @@ public class Sheet {
     }
 
     public void floor(Block b, Boolean ref){
-        if (b_selected.allDouble() && b.allDouble()){
+        if (b_selected.allDouble()){
             if(ref && overlapping(b_selected, b)) System.out.println("Error. The blocks selected are overlapped.");
             else b_selected.floor(b, ref);
         }
@@ -314,7 +331,7 @@ public class Sheet {
 
     public void convert(Block b, Boolean ref, String from, String to){
         b_selected.convert(b, ref, from, to);
-        update(b_selected);
+        update(b);
     }
 
     public void sum(Block b1, Block b2, Boolean ref){
