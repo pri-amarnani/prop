@@ -186,7 +186,6 @@ public class SheetView {
                             row2=row;
 
                             PresentationController.createBlock(min(row1,row2),min(col1,col2),max(row1,row2),max(col1,col2),currentSheetName());
-                            PresentationController.showTcells(currentSheetName());
                             updateBlockMenu(jmbar_sheet);
                             System.out.println();
                         }
@@ -445,6 +444,16 @@ public class SheetView {
             moveBlock.setBackground(blockBar.getBackground());
             moveBlock.setBorder(BorderFactory.createLineBorder(c,1));
             blockBar.add(moveBlock,blockBar.getMenuCount()-1);
+
+            moveBlock.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    Integer[] move_b=FuncView.moveBlock();
+                    if(move_b[0]!=-1) writeBlock(move_b[0],move_b[1],move_b[2],move_b[3]);
+                }
+            });
+
+
             switch (blockType){
                 case "N":
                     ImageIcon floorIcon= new ImageIcon("res/iconofloor.png");
@@ -462,9 +471,10 @@ public class SheetView {
                         @Override
                         public void actionPerformed(ActionEvent e) {
                             Integer[] floored=FuncView.addSingleOp("floor");
-                            if(floored[4]==-1) writeBlock(floored[0],floored[1],floored[2],floored[3]);
-                            else rewriteBlock();
-                            PresentationController.showTcells(currentSheetName());
+                            if(floored[0]!=-1) {
+                                if (floored[4] == -1) writeBlock(floored[0], floored[1], floored[2], floored[3]);
+                                else rewriteBlock();
+                            }
                         }
                     });
 
@@ -478,7 +488,16 @@ public class SheetView {
                     convert.setBackground(blockBar.getBackground());
                     convert.setBorder(BorderFactory.createLineBorder(c,1));
                     blockBar.add(convert,blockBar.getMenuCount()-1);
-
+                    convert.addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            Integer[] conv= FuncView.addSingleOpCrit("Convert");
+                            if(conv[0]!=-1) {
+                                if (conv[4] == -1) writeBlock(conv[0], conv[1], conv[2], conv[3]);
+                                else rewriteBlock();
+                            }
+                        }
+                    });
                     ImageIcon AOpIcon= new ImageIcon("res/iconoaritmetic.png");
                     Image aopIcon=AOpIcon.getImage();
                     Image ao=aopIcon.getScaledInstance(40,40,Image.SCALE_DEFAULT);
@@ -493,7 +512,7 @@ public class SheetView {
                         @Override
                         public void actionPerformed(ActionEvent e) {
                             Integer[] Aop=FuncView.addAOp();
-                            if (Aop != null)writeBlock(Aop[0]-1,Aop[1]-1,Aop[2]-1,Aop[3]-1);
+                            if (Aop[0] != -1)writeBlock(Aop[0]-1,Aop[1]-1,Aop[2]-1,Aop[3]-1);
                         }
                     });
 
@@ -513,7 +532,7 @@ public class SheetView {
                         @Override
                         public void actionPerformed(ActionEvent e) {
                             Integer[] Sop=FuncView.addSOp();
-                            if(Sop != null) writeBlock(Sop[0],Sop[1],Sop[0],Sop[1]);
+                            if(Sop[0]!=-1) writeBlock(Sop[0],Sop[1],Sop[0],Sop[1]);
                         }
                     });
                     break;
@@ -531,8 +550,8 @@ public class SheetView {
                     length.addActionListener(new ActionListener() {
                         @Override
                         public void actionPerformed(ActionEvent e) {
-                            Integer[] L=FuncView.addSingleOp("length");
-                            if(L != null) writeBlock(L[0],L[1],L[0],L[1]);
+                            Integer[] L=FuncView.addSingleOpCrit("Length");
+                            if(L[0]!=-1) writeBlock(L[0],L[1],L[0],L[1]);
                         }
                     });
 
@@ -546,6 +565,15 @@ public class SheetView {
                     replace.setBackground(blockBar.getBackground());
                     replace.setBorder(BorderFactory.createLineBorder(c,1));
                     blockBar.add(replace,blockBar.getMenuCount()-1);
+                    replace.addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            FuncView.addReplaceWC();
+                            rewriteBlock();
+                        }
+                    });
+
+
                     break;
                 case "D":
                     ImageIcon extractIcon= new ImageIcon("res/iconoextract.png");
@@ -562,7 +590,7 @@ public class SheetView {
                         @Override
                         public void actionPerformed(ActionEvent e) {
                             Integer [] ex= FuncView.addSingleOpCrit("Extract");
-                            if(ex!=null) writeBlock(ex[0],ex[1],ex[2],ex[3]);
+                            if(ex[0]!=-1) writeBlock(ex[0],ex[1],ex[2],ex[3]);
                         }
                     });
 
@@ -579,7 +607,7 @@ public class SheetView {
                         @Override
                         public void actionPerformed(ActionEvent e) {
                             Integer [] dtw=FuncView.addSingleOp("Day of the week");
-                            if(dtw != null) writeBlock(dtw[0],dtw[1],dtw[2],dtw[3]);
+                            if(dtw[0]!=-1) writeBlock(dtw[0],dtw[1],dtw[2],dtw[3]);
                         }
                     });
                     break;
