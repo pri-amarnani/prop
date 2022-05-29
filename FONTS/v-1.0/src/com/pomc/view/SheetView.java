@@ -867,13 +867,14 @@ public class SheetView {
     }
 
     public static void rewriteModel(int col){
+        writeChange=true;
         TableModel tm = getCurrentTable().getModel();
         for (int i = 0; i < tm.getRowCount(); i++) {
             for (int j = col; j <tm.getColumnCount() ; j++) {
                 tm.setValueAt(PresentationController.getCellInfo(i,j,currentSheetName()),i,j);
             }
-
         }
+        writeChange=false;
 
     }
 

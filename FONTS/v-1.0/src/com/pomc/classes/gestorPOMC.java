@@ -36,11 +36,12 @@ public class gestorPOMC {
                         ReferencedCell c = (ReferencedCell) sh.getCell(i, j);
                         Map.Entry<String, Vector<Cell>> ref = c.getRefInfo();
                         Vector<Cell> v = ref.getValue();
-                        file.write(ref.getKey() + "=");
+                        file.write("=" + ref.getKey()+"( ");
 
                         for (int k = 0; k < v.size(); ++k) {
                             file.write("(" + v.elementAt(k).getRow() + "," + v.elementAt(k).getColumn() + ")");
                         }
+                        file.write(" )");
                     } else if (sh.getCell(i, j).getClass() == TextCell.class) {
                         file.write('"' + (String) sh.getCell(i, j).getInfo() + '"');
                     } else {
@@ -130,7 +131,7 @@ public class gestorPOMC {
                 for (int i = 0; i < cols; ++i) {
                     if (i == row_doc.size() && row_doc.size() < cols) {
                         sh[i_aux][i] = new NumCell(i_aux, i, null);
-                    } else if (!Objects.equals(row_doc.elementAt(i), "")) {
+                    } else if (!Objects.equals(row_doc.elementAt(i), "null")) {
                         Object aux = Parse(row_doc.elementAt(i));
                         if (aux.getClass() == Double.class) {
                             sh[i_aux][i] = new NumCell(i_aux, i, (Double) aux);
@@ -162,8 +163,8 @@ public class gestorPOMC {
                             }
 
                             Vector<Cell> r = new Vector<>();
-
-                            for (k = k + 1; k < info.length(); k += 2) {
+                            k +=2;
+                            for (k = k + 1; k < info.length()-2; k += 2) {
                                 String x = "";
 
                                 while (k < info.length() && info.charAt(k) != ',') {
@@ -181,7 +182,7 @@ public class gestorPOMC {
                             }
 
 
-                            ReferencedCell rc = new ReferencedCell(i, j, op);
+                            ReferencedCell rc = new ReferencedCell(i, j, "="+op);
 
                             // random value
                             rc.setContent(4.0);
