@@ -350,10 +350,46 @@ public class Sheet {
         update(b_selected);
     }
 
+    public void trim(){
+        if (b_selected.allText()) b_selected.trim();
+        else System.out.println("Error. Not all cells are of type Text.");
+        update(b_selected);
+    }
+
     public double length(TextCell c, String criteria){
         if(c.getType() == "T") return c.length(criteria);
         else System.out.println("Error. Cell is not of type Text.");
         return -1;
+    }
+
+    public Double max(Cell c, Boolean ref, Boolean val){
+        if(b_selected.allDouble()){
+            if (ref && overlapping(b_selected, create_block(c,c))) System.out.println("Error. Cell contained in the block.");
+            else{
+                Cell m = b_selected.max(c, ref);
+                if(val) cells.elementAt(m.getRow()).setElementAt(m, m.getColumn());
+                if (ref) return (Double) m.getContent();
+                else return (Double) m.getInfo();
+            }
+        }
+        else System.out.println("Error. Not all cells are of type Number.");
+
+        return null;
+    }
+
+    public Double min(Cell c, Boolean ref, Boolean val){
+        if(b_selected.allDouble()){
+            if (ref && overlapping(b_selected, create_block(c,c))) System.out.println("Error. Cell contained in the block.");
+            else{
+                Cell m = b_selected.min(c, ref);
+                if(val) cells.elementAt(m.getRow()).setElementAt(m, m.getColumn());
+                if (ref) return (Double) m.getContent();
+                else return (Double) m.getInfo();
+            }
+        }
+        else System.out.println("Error. Not all cells are of type Number.");
+
+        return null;
     }
 
     public Double sumAll(Cell c, Boolean ref, Boolean val){

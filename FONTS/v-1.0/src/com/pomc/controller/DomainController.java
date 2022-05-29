@@ -233,6 +233,16 @@ public class DomainController {
         Block b2 = createBlock(Block2);
         docSheet.div(b1,b2,ref);
     }
+    public static Double funcMax(Integer i, Integer j, boolean val, boolean ref ){
+        Cell cell = null;
+        if (val) cell = docSheet.getCells().get(i-1).get(j-1);
+        return docSheet.max(cell,ref,val);
+    }
+    public static Double funcMin(Integer i, Integer j, boolean val, boolean ref ){
+        Cell cell = null;
+        if (val) cell = docSheet.getCells().get(i-1).get(j-1);
+        return docSheet.min(cell,ref,val);
+    }
     public static Double funcSumAll(Integer i, Integer j, boolean val, boolean ref ){
         Cell cell = null;
         if (val) cell = docSheet.getCells().get(i-1).get(j-1);
@@ -302,6 +312,10 @@ public class DomainController {
 
     public static void funcReplaceCriteria(String criteria){
         docSheet.replaceWithCriteriaText(criteria);
+    }
+
+    public static void funcTrim(String criteria){
+        docSheet.trim();
     }
 
     public static double funcLength(Integer i, Integer j, String Criterio) {

@@ -229,6 +229,30 @@ public abstract class Cell {
                 newvalue=auxsum/cellsref.size();
                 c.setContent(newvalue);
             }
+            else if(Objects.equals(op, "max")){
+                double auxsum=0;
+                double newvalue;
+                boolean first = true;
+                for(int j=0; j<cellsref.size(); j++){
+                    if (first) auxsum = (Double) cellsref.elementAt(j).getInfo();
+                    else auxsum = Math.max(auxsum, (Double) cellsref.elementAt(j).getInfo());
+                    first = false;
+                }
+                newvalue=auxsum;
+                c.setContent(newvalue);
+            }
+            else if(Objects.equals(op, "min")){
+                double auxsum=0;
+                double newvalue;
+                boolean first = true;
+                for(int j=0; j<cellsref.size(); j++){
+                    if (first) auxsum = (Double) cellsref.elementAt(j).getInfo();
+                    else auxsum = Math.min(auxsum, (Double) cellsref.elementAt(j).getInfo());
+                    first = false;
+                }
+                newvalue=auxsum;
+                c.setContent(newvalue);
+            }
             else if(Objects.equals(op, "sumAll")){
                 double auxsum=0;
                 double newvalue;

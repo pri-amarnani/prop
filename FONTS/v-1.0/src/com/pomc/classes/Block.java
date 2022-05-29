@@ -123,6 +123,111 @@ public class Block {
         dr= getCell(size_r-1,size_c-1);
     }
 
+    public void trim () {
+        for (int i = 0; i < this.block.length; ++i) {
+            for (int j = 0; j < this.block[0].length; ++j) {
+                TextCell tc = (TextCell) this.block[i][j];
+
+                this.block[i][j].changeValue(((String) tc.getInfo()).trim());
+            }
+        }
+        ul= getCell(0,0);
+        dr= getCell(size_r-1,size_c-1);
+    }
+
+    public void ceiling (Block b, Boolean ref) {
+        for (int i = 0; i < this.block.length; ++i) {
+            for (int j = 0; j < this.block[0].length; ++j) {
+
+                if (this.block[i][j].isNum()) {
+                    Cell n = (Cell) b.getCell(i, j).changeValue(Math.ceil((double) this.block[i][j].getInfo()));
+                    b.setCell(i,j,n);
+                    if (ref) {
+                        ReferencedCell rc = new ReferencedCell(n.getRow(),n.getColumn(),"=ceil");
+                        rc.setContent(n.getInfo());
+                        b.setCell(i, j, rc);
+                        Vector<Cell> s = new Vector<>(1);
+                        s.add(this.block[i][j]);
+                        this.block[i][j].AddRef((ReferencedCell) b.getCell(i, j));
+                        Map.Entry<String, Vector<Cell>> r = new AbstractMap.SimpleEntry<>("ceil", s);
+
+                        b.getCell(i, j).setRefInfo(r);
+
+                        n = null;
+                    }
+                }
+            }
+        }
+        b.ul=b.getCell(0,0);
+        b.dr=b.getCell(b.size_r-1,b.size_c-1);
+    }
+
+    public Cell max (Cell c, Boolean ref) {
+        boolean first = true;
+        double max = 0;
+        Vector<Cell> s = new Vector<>();
+
+        for (Cell[] cells : this.block) {
+            for (int j = 0; j < this.block[0].length; ++j) {
+                if (cells[j] != null) {
+                    if (first) max = (double) cells[j].getInfo();
+                    else max = Math.max(max, (double) cells[j].getInfo());
+                    first = false;
+                }
+            }
+        }
+
+        c = (Cell) c.changeValue(max);
+
+        if (ref) {
+            //System.out.println("entra1");
+            ReferencedCell rc = new ReferencedCell(c.getRow(),c.getColumn(),"=max");
+            rc.setContent(c.getInfo());
+            c = rc;
+            Map.Entry<String, Vector<Cell>> r = new AbstractMap.SimpleEntry<>("max", s);
+            c.setRefInfo(r);
+            for (int x=0;x<s.size();x++){
+                Cell a= s.elementAt(x);
+                a.AddRef(rc);
+            }
+        }
+
+        return c;
+    }
+
+    public Cell min (Cell c, Boolean ref) {
+        boolean first = true;
+        double min = 0;
+        Vector<Cell> s = new Vector<>();
+
+        for (Cell[] cells : this.block) {
+            for (int j = 0; j < this.block[0].length; ++j) {
+                if (cells[j] != null) {
+                    if (first) min = (double) cells[j].getInfo();
+                    else min = Math.min(min, (double) cells[j].getInfo());
+                    first = false;
+                }
+            }
+        }
+
+        c = (Cell) c.changeValue(min);
+
+        if (ref) {
+            //System.out.println("entra1");
+            ReferencedCell rc = new ReferencedCell(c.getRow(),c.getColumn(),"=min");
+            rc.setContent(c.getInfo());
+            c = rc;
+            Map.Entry<String, Vector<Cell>> r = new AbstractMap.SimpleEntry<>("min", s);
+            c.setRefInfo(r);
+            for (int x=0;x<s.size();x++){
+                Cell a= s.elementAt(x);
+                a.AddRef(rc);
+            }
+        }
+
+        return c;
+    }
+
     public void length(Block b, Boolean ref, String criteria){
         for (int i = 0; i < this.block.length; ++i) {
             for (int j = 0; j < this.block[0].length; ++j) {
