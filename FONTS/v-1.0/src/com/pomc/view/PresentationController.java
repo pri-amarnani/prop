@@ -66,7 +66,7 @@ public class PresentationController {
     public static boolean createBlock(int ulr,int ulc,int drr,int drc, String name){
         //FALTA id de la hoja en la que estamos
 
-        Integer[] cells= new Integer[]{ulr,ulc,drr,drc};
+        Integer[] cells= {ulr,ulc,drr,drc};
         return DomainController.initializeBlock(cells,name);
     }
 
@@ -245,5 +245,6 @@ public class PresentationController {
     public static void blockOpBlock(String op, double x,String sheetName ){DomainController.opBlock(op, x,sheetName);
     }
 
+    public static void blockModify(String o, String sheetName){DomainController.modifyBlock(o,sheetName);}
 
 }

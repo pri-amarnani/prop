@@ -360,8 +360,9 @@ public class DomainController {
         doc.getSheet(sheetname).replaceWithCriteriaText(criteria);
     }
 
-    public static void funcLength(Integer[] block, String Criterio,boolean ref,String sheetname) {
-
+    public static void funcLength(Integer[] block, String criteria,boolean ref,String sheetname) {
+        Block b1 = createBlock(block, sheetname);
+        doc.getSheet(sheetname).lengthBlock(b1,ref, criteria);
     }
 
     public static String getCellInfo(int r, int c, String sheetname){
@@ -487,16 +488,16 @@ public class DomainController {
         doc.getSheet(sheetName).opBlock(op, x);
     }
 
-    public static void modifyBlock(Object o,String sheetName){doc.getSheet(sheetName).ModifyBlock(o);}
+    public static void modifyBlock(String o,String sheetName){
+        Object ob= Parse(o);
+        doc.getSheet(sheetName).ModifyBlock(ob);
+    }
 
     public static void funcTrim(String criteria,String sheetName){
         doc.getSheet(sheetName).trim();
     }
 
-    public static void lengthBlock(Integer[] Block1, boolean ref, String criteria,String sheetName) {
-        Block b1 = createBlock(Block1, sheetName);
-        doc.getSheet(sheetName).lengthBlock(b1,ref, criteria);
-    }
+
 
 
 

@@ -147,7 +147,7 @@ public class SheetView {
                     table.clearSelection();
                     if(changedMenu) {
                         int count=jmbar_sheet.getMenuCount();
-                        for (int j = count-2; j >= 4; j--) {
+                        for (int j = count-2; j >= 5; j--) {
                             jmbar_sheet.remove(j);
 
                         }
@@ -330,6 +330,8 @@ public class SheetView {
             public void actionPerformed(ActionEvent e) {FuncView.addFind();}
         });
 
+
+
         ImageIcon findRIcon= new ImageIcon("res/findR.png");
         Image fRcon=findRIcon.getImage();
         Image fr=fRcon.getScaledInstance(40,40,Image.SCALE_DEFAULT);
@@ -365,6 +367,22 @@ public class SheetView {
         });
 
 
+        ImageIcon MoIcon= new ImageIcon("res/iconomodify.png");
+        Image moI=MoIcon.getImage();
+        Image micon=moI.getScaledInstance(40,40,Image.SCALE_DEFAULT);
+        MoIcon.setImage(micon);
+        JButton modifyBlock = new JButton(MoIcon);
+        modifyBlock.setToolTipText("Modify block");
+        modifyBlock.setBackground(jmbar_sheet.getBackground());
+        modifyBlock.setBorder(BorderFactory.createLineBorder(c,1));
+        jmbar_sheet.add(BorderLayout.CENTER,modifyBlock);
+        modifyBlock.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                FuncView.modifyB();
+                rewriteBlock();
+            }
+        });
 
 
         jmbar_sheet.add(Box.createHorizontalGlue());
@@ -615,7 +633,10 @@ public class SheetView {
                         @Override
                         public void actionPerformed(ActionEvent e) {
                             Integer[] L=FuncView.addSingleOpCrit("Length");
-                            if(L[0]!=-1) writeBlock(L[0],L[1],L[0],L[1]);
+                            if(L[0]!=-1){
+                                if(L[4]==-1)writeBlock(L[0],L[1],L[2],L[3]);
+                                else rewriteBlock();
+                            }
                         }
                     });
 

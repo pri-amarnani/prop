@@ -469,17 +469,17 @@ public abstract class Cell {
             else if (Objects.equals(op,"equal")){
                 c.setContent(cellsref.elementAt(i).getInfo());
             }
-            else if(Objects.equals(op, "lengthwords")){
+            else if(Objects.equals(op, "lengthWords")){
                 TextCell tc = (TextCell) cellsref.elementAt(0);
-                c.setContent(tc.length("words"));
+                c.setContent(tc.length("Words"));
             }
-            else if(Objects.equals(op, "lengthletters")){
+            else if(Objects.equals(op, "lengthLetters")){
                 TextCell tc = (TextCell) cellsref.elementAt(0);
-                c.setContent(tc.length("letters"));
+                c.setContent(tc.length("Letters"));
             }
-            else if(Objects.equals(op, "lengthcharacters")){
+            else if(Objects.equals(op, "lengthCharacters")){
                 TextCell tc = (TextCell) cellsref.elementAt(0);
-                c.setContent(tc.length("characters"));
+                c.setContent(tc.length("Characters"));
             }
         }
     }

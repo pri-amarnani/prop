@@ -31,19 +31,19 @@ public class TextCell extends Cell {
     }
 
     public double length(String criteria){
-        if  (Objects.equals(criteria, "words")){ //falta comprovar!!!!!!
+        if  (Objects.equals(criteria, "Words")){ //falta comprovar!!!!!!
             String [] aux;
             aux= info.split("\\s+");
             return ((double) aux.length);
         }
-        else if (Objects.equals(criteria, "letters")){
+        else if (Objects.equals(criteria, "Letters")){
             int count=0;
             for (int i=0;i<info.length();i++){
                 if(info.charAt(i)!=' ') count++;
             }
             return (double) count;
         }
-        else if (Objects.equals(criteria, "characters")){
+        else if (Objects.equals(criteria, "Characters")){
             return (double) info.length();
         }
         return -1;

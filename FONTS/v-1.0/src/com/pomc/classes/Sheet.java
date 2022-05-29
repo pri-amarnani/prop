@@ -270,6 +270,7 @@ public class Sheet {
     }
 
     public void ModifyBlock(Object o){
+
         b_selected.ModifyBlock(o);
         update(b_selected);
     }

@@ -393,12 +393,15 @@ public class Block {
 
 
     public void ModifyBlock(Object n) {
-        for (Cell[] cells : block) {
-            for (int j = 0; j < block[0].length; ++j) {
-                Cell nw = (Cell) cells[j].changeValue(n);
-                cells[j] = nw;
+        for (int i=0; i<this.block.length;++i) {
+            for (int j = 0; j < this.block[0].length; ++j) {
+                Cell old = getCell(i,j);
+                Cell nw= (Cell) old.changeValue(n);
+                this.setCell(i,j,nw);
             }
         }
+        ul = this.block[0][0];
+        dr = this.block[size_r-1][size_c-1];
     }
 
     public void SortBlock (int n_col, String criteria, String type) {
