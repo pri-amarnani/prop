@@ -430,23 +430,19 @@ public abstract class Cell {
                 if (cp<-1.0) cp=-1.0;
                 c.setContent(cp);
             }
-            else if(Objects.equals(op, "day")){
-                System.out.println("ENTRA DAY!");
+            else if(Objects.equals(op, "Day")){
                 LocalDate newvaluedate= (LocalDate) cellsref.elementAt((0)).getInfo();
-                System.out.println(newvaluedate);
                 Double newvalue=0.0;
                 newvalue= Double.valueOf(newvaluedate.getDayOfMonth());
                 c.setContent(newvalue);
-                System.out.println(newvalue);
-                System.out.println(this.getType());
             }
-            else if(Objects.equals(op, "month")){
+            else if(Objects.equals(op, "Month")){
                 LocalDate newvaluedate= (LocalDate) cellsref.elementAt((0)).getInfo();
                 Double newvalue=0.0;
                 newvalue= Double.valueOf(newvaluedate.getMonthValue());
                 c.setContent(newvalue);
             }
-            else if(Objects.equals(op, "year")){
+            else if(Objects.equals(op, "Year")){
                 LocalDate newvaluedate= (LocalDate) cellsref.elementAt(0).getInfo();
                 Double newvalue=0.0;
                 newvalue= Double.valueOf(newvaluedate.getYear());

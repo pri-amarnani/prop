@@ -31,7 +31,6 @@ public class gestorPOMC {
                     if (!first) file.write(";");
 
                     if (sh.getCell(i, j).getClass() == ReferencedCell.class) {
-                        //file.write(sh.getCell(i, j).getInfo().toString());
 
                         ReferencedCell c = (ReferencedCell) sh.getCell(i, j);
                         Map.Entry<String, Vector<Cell>> ref = c.getRefInfo();
@@ -45,7 +44,7 @@ public class gestorPOMC {
                     } else if (sh.getCell(i, j).getClass() == TextCell.class) {
                         file.write('"' + (String) sh.getCell(i, j).getInfo() + '"');
                     } else {
-                        if (sh.getCell(i, j).getInfo() == null) file.write("null");
+                        if (sh.getCell(i, j).getInfo() == null || Objects.equals(sh.getCell(i, j).getInfo(), "")) file.write("null");
                         else file.write(sh.getCell(i, j).getInfo().toString());
                     }
 

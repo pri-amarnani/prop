@@ -31,7 +31,7 @@ public class gestorCSV {
                 }
 
                 else {
-                    if (sh.getCell(i,j).getInfo() == null) file.write("null");
+                    if (sh.getCell(i,j).getInfo() == null || Objects.equals(sh.getCell(i, j).getInfo(), "")) file.write("null");
                     else file.write(sh.getCell(i,j).getInfo().toString());
                 }
 

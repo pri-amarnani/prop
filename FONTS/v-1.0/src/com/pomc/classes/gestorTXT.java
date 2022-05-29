@@ -10,13 +10,6 @@ import java.util.Vector;
 public class gestorTXT {
 
     public void writeTXT(String path, Sheet sh) throws IOException {
-        /*
-        File check = new File(location);
-        if (check.isDirectory()) {
-            location = location + "/" + tempName + ".txt";
-        }
-
-         */
         BufferedWriter file = new BufferedWriter(new FileWriter(path));
         file.write('"' + sh.getTitle() + '"' + ';' + sh.getNumRows() + ";" + sh.getNumCols() + "\n");
 
@@ -34,7 +27,7 @@ public class gestorTXT {
                 }
 
                 else {
-                    if (sh.getCell(i,j).getInfo() == null) file.write("null");
+                    if (sh.getCell(i,j).getInfo() == null || Objects.equals(sh.getCell(i, j).getInfo(), "")) file.write("null");
                     else file.write(sh.getCell(i,j).getInfo().toString());
                 }
 
