@@ -178,27 +178,31 @@ public abstract class Cell {
             else if (op.length() >= 10 && Objects.equals(op.substring(0,9), "countIf==")) {
                 Double newvalue = 0.0;
                 Double val =  Double.parseDouble(op.substring(9));
-
                 for (int j=0;j<cellsref.size();j++){
-                    if ((Double) (cellsref.elementAt(j)).getInfo() == val) ++newvalue;
+                    Double d=(Double) (cellsref.elementAt(j)).getInfo();
+                    if (d.compareTo(val)==0) {
+                        newvalue=newvalue+1.0;
+                    }
                 }
                 c.setContent(newvalue);
             }
-            else if (op.length() >= 9 && Objects.equals(op.substring(0,8), "countIf<")) {
+            else if (op.length() >= 9 && Objects.equals(op.substring(0,8), "countIf<")&& !Objects.equals(op.substring(0,9), "countIf<=")) {
                 Double newvalue = 0.0;
                 Double val =  Double.parseDouble(op.substring(8));
 
                 for (int j=0;j<cellsref.size();j++){
-                    if ((Double) (cellsref.elementAt(j)).getInfo() < val) ++newvalue;
+                    Double d=(Double) (cellsref.elementAt(j)).getInfo();
+                    if (d.compareTo(val)<0) ++newvalue;
                 }
                 c.setContent(newvalue);
             }
-            else if (op.length() >= 9 && Objects.equals(op.substring(0,8), "countIf>")) {
+            else if (op.length() >= 9 && Objects.equals(op.substring(0,8), "countIf>") && !Objects.equals(op.substring(0,9), "countIf>=")) {
                 Double newvalue = 0.0;
                 Double val =  Double.parseDouble(op.substring(8));
 
                 for (int j=0;j<cellsref.size();j++){
-                    if ((Double) (cellsref.elementAt(j)).getInfo() > val) ++newvalue;
+                    Double d=(Double) (cellsref.elementAt(j)).getInfo();
+                    if (d.compareTo(val)>0) ++newvalue;
                 }
                 c.setContent(newvalue);
             }
@@ -207,7 +211,8 @@ public abstract class Cell {
                 Double val =  Double.parseDouble(op.substring(9));
 
                 for (int j=0;j<cellsref.size();j++){
-                    if ((Double) (cellsref.elementAt(j)).getInfo() <= val) ++newvalue;
+                    Double d=(Double) (cellsref.elementAt(j)).getInfo();
+                    if (d.compareTo(val)<=0) ++newvalue;
                 }
                 c.setContent(newvalue);
             }
@@ -217,7 +222,8 @@ public abstract class Cell {
                 Double val =  Double.parseDouble(op.substring(9));
 
                 for (int j=0;j<cellsref.size();j++){
-                    if ((Double) (cellsref.elementAt(j)).getInfo() >= val) ++newvalue;
+                    Double d=(Double) (cellsref.elementAt(j)).getInfo();
+                    if (d.compareTo(val)>=0) ++newvalue;
                 }
                 c.setContent(newvalue);
             }
@@ -536,6 +542,8 @@ public abstract class Cell {
         Double cov= sum/(x.length-1);
         return cov;
     }
+
+
 
 
 }

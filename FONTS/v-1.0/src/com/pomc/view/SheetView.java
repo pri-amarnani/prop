@@ -146,6 +146,7 @@ public class SheetView {
 
 
                     }
+                    PresentationController.showTcells(currentSheetName());
                 }
             });
 
@@ -511,7 +512,7 @@ public class SheetView {
                     AritOp.addActionListener(new ActionListener() {
                         @Override
                         public void actionPerformed(ActionEvent e) {
-                            Integer[] Aop=FuncView.addAOp();
+                            Integer[] Aop=FuncView.addAOp("arit");
                             if (Aop[0] != -1)writeBlock(Aop[0]-1,Aop[1]-1,Aop[2]-1,Aop[3]-1);
                         }
                     });
@@ -531,10 +532,66 @@ public class SheetView {
                     stat.addActionListener(new ActionListener() {
                         @Override
                         public void actionPerformed(ActionEvent e) {
-                            Integer[] Sop=FuncView.addSOp();
+                            Integer[] Sop=FuncView.addSOp("stat");
                             if(Sop[0]!=-1) writeBlock(Sop[0],Sop[1],Sop[0],Sop[1]);
                         }
                     });
+
+                    ImageIcon ceilIcon= new ImageIcon("res/iconoceil.png");
+                    Image ceIcon=ceilIcon.getImage();
+                    Image ceilb=ceIcon.getScaledInstance(40,40,Image.SCALE_DEFAULT);
+                    ceilIcon.setImage(ceilb);
+                    JButton ceil= new JButton(ceilIcon);
+                    ceil.setToolTipText("Ceil");
+                    ceil.setBackground(blockBar.getBackground());
+                    ceil.setBorder(BorderFactory.createLineBorder(c,1));
+                    blockBar.add(ceil,blockBar.getMenuCount()-1);
+                    ceil.addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            Integer[] c=FuncView.addSingleOp("ceil");
+                            if(c[0]!=-1) {
+                                if (c[4] == -1) writeBlock(c[0], c[1], c[2], c[3]);
+                                else rewriteBlock();
+                            }
+                        }
+                    });
+
+
+                    ImageIcon maxIcon= new ImageIcon("res/iconomax.png");
+                    Image mIcon=maxIcon.getImage();
+                    Image maxb=mIcon.getScaledInstance(40,40,Image.SCALE_DEFAULT);
+                    maxIcon.setImage(maxb);
+                    JButton max= new JButton(maxIcon);
+                    max.setToolTipText("Max/Min");
+                    max.setBackground(blockBar.getBackground());
+                    max.setBorder(BorderFactory.createLineBorder(c,1));
+                    blockBar.add(max,blockBar.getMenuCount()-1);
+                    max.addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            Integer[] maxx=FuncView.addSOp("maxmin");
+                            if(maxx[0]!=-1) writeBlock(maxx[0], maxx[1], maxx[0], maxx[1]);
+                        }
+                    });
+
+                    ImageIcon CountiIcon= new ImageIcon("res/iconocountif.png");
+                    Image ciIcon=CountiIcon.getImage();
+                    Image cif=ciIcon.getScaledInstance(40,40,Image.SCALE_DEFAULT);
+                    CountiIcon.setImage(cif);
+                    JButton countIf= new JButton(CountiIcon);
+                    countIf.setToolTipText("Count if...");
+                    countIf.setBackground(blockBar.getBackground());
+                    countIf.setBorder(BorderFactory.createLineBorder(c,1));
+                    blockBar.add(countIf,blockBar.getMenuCount()-1);
+                    countIf.addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            Integer[] coif=FuncView.addSOp("countif");
+                            if(coif[0]!=-1) writeBlock(coif[0], coif[1], coif[0], coif[1]);
+                        }
+                    });
+
                     break;
                 case "T":
                     ImageIcon lengthIcon= new ImageIcon("res/iconolength.png");
@@ -572,6 +629,29 @@ public class SheetView {
                             rewriteBlock();
                         }
                     });
+
+                    ImageIcon concatIcon= new ImageIcon("res/iconoconcat.png");
+                    Image concIcon=concatIcon.getImage();
+                    Image conc=concIcon.getScaledInstance(40,40,Image.SCALE_DEFAULT);
+                    concatIcon.setImage(conc);
+                    JButton concat= new JButton(concatIcon);
+                    concat.setToolTipText("Concatenate");
+                    concat.setBackground(blockBar.getBackground());
+                    concat.setBorder(BorderFactory.createLineBorder(c,1));
+                    blockBar.add(concat,blockBar.getMenuCount()-1);
+                    concat.addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            Integer[] con=FuncView.addAOp("Concatenate");
+                            if(con[0]!=-1) {
+                                if (con[4] == -1) writeBlock(con[0]-1, con[1]-1, con[2]-1, con[3]-1);
+                                else rewriteBlock();
+                            }
+                        }
+                    });
+
+
+
 
 
                     break;

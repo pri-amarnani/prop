@@ -321,7 +321,7 @@ public class Sheet {
     }
 
     public void ceil(Block b, Boolean ref){
-        if (b_selected.allDouble() && b.allDouble()){
+        if (b_selected.allDouble()){
             if(ref && overlapping(b_selected, b)) System.out.println("Error. The blocks selected are overlapped.");
             else b_selected.ceiling(b, ref);
         }
@@ -417,12 +417,12 @@ public class Sheet {
         return -1;
     }
 
-    public Double countIf(Cell c, Boolean ref, Boolean val, double eq, String criteria){
+    public Double countIf(Cell c, Boolean ref, double eq, String criteria){
         if(b_selected.allDouble()){
             if (ref && overlapping(b_selected, create_block(c,c))) System.out.println("Error. Cell contained in the block.");
             else{
                 Cell m = b_selected.countIf(c, ref, eq, criteria);
-                if (val) cells.elementAt(m.getRow()).setElementAt(m, m.getColumn());
+                cells.elementAt(m.getRow()).setElementAt(m, m.getColumn());
                 if (ref) return (Double) m.getContent();
                 else return (Double) m.getInfo();
             }
@@ -432,12 +432,12 @@ public class Sheet {
         return null;
     }
 
-    public Double max(Cell c, Boolean ref, Boolean val){
+    public Double max(Cell c, Boolean ref){
         if(b_selected.allDouble()){
             if (ref && overlapping(b_selected, create_block(c,c))) System.out.println("Error. Cell contained in the block.");
             else{
                 Cell m = b_selected.max(c, ref);
-                if(val) cells.elementAt(m.getRow()).setElementAt(m, m.getColumn());
+                cells.elementAt(m.getRow()).setElementAt(m, m.getColumn());
                 if (ref) return (Double) m.getContent();
                 else return (Double) m.getInfo();
             }
@@ -447,12 +447,12 @@ public class Sheet {
         return null;
     }
 
-    public Double min(Cell c, Boolean ref, Boolean val){
+    public Double min(Cell c, Boolean ref){
         if(b_selected.allDouble()){
             if (ref && overlapping(b_selected, create_block(c,c))) System.out.println("Error. Cell contained in the block.");
             else{
                 Cell m = b_selected.min(c, ref);
-                if(val) cells.elementAt(m.getRow()).setElementAt(m, m.getColumn());
+                cells.elementAt(m.getRow()).setElementAt(m, m.getColumn());
                 if (ref) return (Double) m.getContent();
                 else return (Double) m.getInfo();
             }
@@ -522,12 +522,12 @@ public class Sheet {
         return null;
     }
 
-    public Double mean(Cell c, Boolean ref, Boolean val){
+    public Double mean(Cell c, Boolean ref){
         if(b_selected.allDouble()){
             if (ref && overlapping(b_selected, create_block(c,c))) System.out.println("Error. Cell contained in the block.");
             else{
                 Cell m = b_selected.mean(c, ref);
-                if(val) cells.elementAt(m.getRow()).setElementAt(m, m.getColumn());
+                cells.elementAt(m.getRow()).setElementAt(m, m.getColumn());
                 if (ref) return (Double) m.getContent();
                 else return (Double) m.getInfo();
             }
@@ -537,12 +537,12 @@ public class Sheet {
         return null;
     }
 
-    public Double median(Cell c, Boolean ref, Boolean val){
+    public Double median(Cell c, Boolean ref){
         if(b_selected.allDouble()){
             if(ref && overlapping(b_selected, create_block(c,c))) System.out.println("Error. Cell contained in the block.");
             else{
                 Cell m = b_selected.median(c, ref);
-                if(val) cells.elementAt(m.getRow()).setElementAt(m, m.getColumn());
+                cells.elementAt(m.getRow()).setElementAt(m, m.getColumn());
                 if (ref) return (Double) m.getContent();
                 else return (Double) m.getInfo();
             }
@@ -551,13 +551,12 @@ public class Sheet {
         return null;
     }
 
-    public Double var(Cell c, Boolean ref, Boolean val){
+    public Double var(Cell c, Boolean ref){
         if(b_selected.allDouble()){
             if(ref && overlapping(b_selected, create_block(c,c))) System.out.println("Error. Cell contained in the block.");
             else{
                 Cell m = b_selected.var(c, ref);
-                if(val) cells.elementAt(m.getRow()).setElementAt(m, m.getColumn());
-                if(val) cells.elementAt(m.getRow()).setElementAt(m, m.getColumn());
+                cells.elementAt(m.getRow()).setElementAt(m, m.getColumn());
                 if (ref) return (Double) m.getContent();
                 else return (Double) m.getInfo();
             }
@@ -566,13 +565,12 @@ public class Sheet {
         return null;
     }
 
-    public Double covar(Block b, Cell c, Boolean ref, Boolean val){ //sii
+    public Double covar(Block b, Cell c, Boolean ref){ //sii
         if(b_selected.allDouble() && b.allDouble()){
             if(ref && overlapping(b_selected, create_block(c,c))) System.out.println("Error. Cell contained in the block.");
             else{
                 Cell m = b_selected.covar(b, c, ref);
-                if(val) cells.elementAt(m.getRow()).setElementAt(m, m.getColumn());
-                if(val) cells.elementAt(m.getRow()).setElementAt(m, m.getColumn());
+                cells.elementAt(m.getRow()).setElementAt(m, m.getColumn());
                 if (ref) return (Double) m.getContent();
                 else return (Double) m.getInfo();
             }
@@ -581,13 +579,12 @@ public class Sheet {
         return null;
     }
 
-    public Double std(Cell c, Boolean ref, Boolean val){
+    public Double std(Cell c, Boolean ref){
         if(b_selected.allDouble()){
             if(ref && overlapping(b_selected, create_block(c,c))) System.out.println("Error. Cell contained in the block.");
             else{
                 Cell m = b_selected.std(c, ref);
-                if(val) cells.elementAt(m.getRow()).setElementAt(m, m.getColumn());
-                if(val) cells.elementAt(m.getRow()).setElementAt(m, m.getColumn());
+                cells.elementAt(m.getRow()).setElementAt(m, m.getColumn());
                 if (ref) return (Double) m.getContent();
                 else return (Double) m.getInfo();
             }
@@ -596,12 +593,12 @@ public class Sheet {
         return null;
     }
 
-    public Double CPearson(Block b, Cell c, Boolean ref, Boolean val){
+    public Double CPearson(Block b, Cell c, Boolean ref){
         if(b_selected.allDouble() && b.allDouble()){
             if(ref && overlapping(b_selected, create_block(c,c))) System.out.println("Error. Cell contained in the block.");
             else{
                 Cell m = b_selected.CPearson(b, c, ref);
-                if(val) cells.elementAt(m.getRow()).setElementAt(m, m.getColumn());
+                cells.elementAt(m.getRow()).setElementAt(m, m.getColumn());
                 if (ref) return (Double) m.getContent();
                 else return (Double) m.getInfo();
             }

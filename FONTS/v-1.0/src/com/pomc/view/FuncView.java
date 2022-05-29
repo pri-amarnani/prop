@@ -4,6 +4,7 @@ import com.pomc.classes.Sheet;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
+import java.time.temporal.JulianFields;
 
 import static javax.swing.JOptionPane.showConfirmDialog;
 import static javax.swing.JOptionPane.showMessageDialog;
@@ -114,17 +115,21 @@ public class FuncView {
 
 
 
-    public static Integer[] addAOp() {
+    public static Integer[] addAOp(String func) {
         Integer[] b1 = {-1,-1,-1,-1}; //segundo operando
         Integer[] b2 = {-1,-1,-1,-1,0};//donde se imprime
-        //b2[4] = 0;
 
-        Object[] selectionValues = {"Addition", "Substraction", "Multiplication", "Division"};
-        String initialSelection = "Addition";
-        Object selection = JOptionPane.showInputDialog(null, "Choose the type of arithmetic operation",
-                "Arithmetic operations", JOptionPane.QUESTION_MESSAGE, null, selectionValues, initialSelection);
-        if(selection!=null) {
-            b2 = Operation(b1,b2,selection.toString());
+        if(func.equals("arit")) {
+            Object[] selectionValues = {"Addition", "Substraction", "Multiplication", "Division"};
+            String initialSelection = "Addition";
+            Object selection = JOptionPane.showInputDialog(null, "Choose the type of arithmetic operation",
+                    "Arithmetic operations", JOptionPane.QUESTION_MESSAGE, null, selectionValues, initialSelection);
+            if (selection != null) {
+                b2 = Operation(b1, b2, selection.toString());
+            }
+        }
+        else{
+            b2=Operation(b1,b2,func);
         }
         return b2;
     }
@@ -139,7 +144,7 @@ public class FuncView {
         int result = JOptionPane.showConfirmDialog(
                 null,
                 fields,
-                "Arithmetic operations : " + op,
+                op,
                 JOptionPane.OK_CANCEL_OPTION,
                 JOptionPane.PLAIN_MESSAGE,
                 null
@@ -169,7 +174,7 @@ public class FuncView {
             int result2 = JOptionPane.showConfirmDialog(
                     null,
                     fields2,
-                    "Select the second block for the addition",
+                    "Select the second block ",
                     JOptionPane.OK_CANCEL_OPTION,
                     JOptionPane.PLAIN_MESSAGE,
                     null
@@ -238,6 +243,9 @@ public class FuncView {
                     case "Multiplication":
                         PresentationController.blockMult(b1, b2, b, SheetView.currentSheetName());
                         break;
+                    case "Concatenate":
+                        PresentationController.blockConcat(b1,b2,b,SheetView.currentSheetName());
+                        break;
                     default:
                         PresentationController.blockDiv(b1, b2, b, SheetView.currentSheetName());
                         break;
@@ -248,21 +256,57 @@ public class FuncView {
         return b2;
     }
 
-    public static Integer[] addSOp() {
+    public static Integer[] addSOp(String func) {
         Integer[] a = {-1,-1};
-        Object[] selectionValues = {"Mean", "Median", "Variance", "Covariance","Standard Deviation", "Pearson correlation coefficient"};
-        String initialSelection = "Mean";
-        Object selection = JOptionPane.showInputDialog(null, "Choose the type of statistic operation",
-                "Statistic operations", JOptionPane.QUESTION_MESSAGE, null, selectionValues, initialSelection);
-        if(selection!=null) {
-            if (selection.toString().equals("Covariance") || selection.toString().equals("Pearson correlation coefficient")) {
-                a = operationS2(a, selection.toString());
-            } else a = operationS1(selection.toString());
+        if(func.equals("stat")) {
+            Object[] selectionValues = {"Mean", "Median", "Variance", "Covariance", "Standard Deviation", "Pearson correlation coefficient"};
+            String initialSelection = "Mean";
+            Object selection = JOptionPane.showInputDialog(null, "Choose the type of statistic operation",
+                    "Statistic operations", JOptionPane.QUESTION_MESSAGE, null, selectionValues, initialSelection);
+            if (selection != null) {
+                if (selection.toString().equals("Covariance") || selection.toString().equals("Pearson correlation coefficient")) {
+                    a = operationS2(a, selection.toString());
+                } else a = operationS1(selection.toString(),"",-1);
+            }
+        }
+        else if (func.equals("maxmin")){
+            Object[] selectionValues = {"Max", "Min"};
+            String initialSelection = "Max";
+            Object selection = JOptionPane.showInputDialog(null, "Choose the operation",
+                    "Max/Min", JOptionPane.QUESTION_MESSAGE, null, selectionValues, initialSelection);
+            if (selection != null) {
+                 a = operationS1(selection.toString(),"",-1);
+            }
+        }
+        else{
+            Object[] selectionValues = {"==", ">","<",">=","<="};
+            String initialSelection = "==";
+            Object selection = JOptionPane.showInputDialog(null, "Choose the criteria",
+                    "Criteria", JOptionPane.QUESTION_MESSAGE, null, selectionValues, initialSelection);
+            JTextField eq= new JTextField();
+            Object[] fields= new Object[]{
+                    "The choosen criteria is: ",selection,
+                    "Choose the number to compare",eq,
+            };
+
+            int countiff = JOptionPane.showConfirmDialog(
+                    null,
+                    fields,
+                    "Count if...",
+                    JOptionPane.OK_CANCEL_OPTION,
+                    JOptionPane.PLAIN_MESSAGE,
+                    null
+
+            );
+
+            if (countiff==JOptionPane.OK_OPTION) {
+                a = operationS1("Count if",selection.toString(),Double.parseDouble(eq.getText()));
+            }
         }
         return a;
 
     }
-    public static Integer[] operationS1(String op) {
+    public static Integer[] operationS1(String op, String crit,double eq) {
         Integer[] b1 = {-1,-1};
         JCheckBox ref = new JCheckBox("Reference the result ?");
         Object[] fields = new Object[]{
@@ -271,7 +315,7 @@ public class FuncView {
         int result = JOptionPane.showConfirmDialog(
                 null,
                 fields,
-                "Statistic operations : " + op,
+                op,
                 JOptionPane.OK_CANCEL_OPTION,
                 JOptionPane.PLAIN_MESSAGE,
                 null
@@ -314,6 +358,15 @@ public class FuncView {
                             break;
                         case "Variance":
                             PresentationController.blockVariance(b1, b, SheetView.currentSheetName());
+                            break;
+                        case "Max":
+                            PresentationController.blockMax(b1,b,SheetView.currentSheetName());
+                            break;
+                        case "Min":
+                            PresentationController.blockMin(b1,b,SheetView.currentSheetName());
+                            break;
+                        case "Count if":
+                            PresentationController.blockCountIf(b1,b,SheetView.currentSheetName(),eq,crit);
                             break;
                         default:
                             PresentationController.blockSTD(b1, b, SheetView.currentSheetName());
@@ -486,6 +539,8 @@ public class FuncView {
                 case "floor": PresentationController.blockFloor(ulrow, ulcol, drrow, drcol,b,SheetView.currentSheetName());
                 break;
                 case "Day of the week": PresentationController.blockDOTW(ulrow, ulcol, drrow, drcol,b,SheetView.currentSheetName());
+                break;
+                case "ceil": PresentationController.blockCeil(ulrow,ulcol,drrow,drcol,b,SheetView.currentSheetName());
                 break;
                 default:
                     break;

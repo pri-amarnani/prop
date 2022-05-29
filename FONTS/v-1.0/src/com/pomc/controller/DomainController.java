@@ -303,35 +303,34 @@ public class DomainController {
         doc.getSheet(sheetname).div(b1,b2,ref);
     }
 
-    public static Double funcMean(Integer i, Integer j, boolean val, boolean ref, String sheetname){
-        Cell cell = null;
-        if (val) cell =   doc.getSheet(sheetname).getCells().get(i).get(j);
-        return   doc.getSheet(sheetname).mean(cell,ref,val);
-    }
-    public static Double funcMedian(Integer i, Integer j,boolean val, boolean ref,String sheetname ){
+    public static Double funcMean(Integer i, Integer j, boolean ref, String sheetname){
         Cell cell = doc.getSheet(sheetname).getCells().get(i).get(j);
-        return doc.getSheet(sheetname).median(cell,ref,val);
+        return   doc.getSheet(sheetname).mean(cell,ref);
     }
-    public static Double funcVariance(Integer i, Integer j,boolean val, boolean ref ,String sheetname){
+    public static Double funcMedian(Integer i, Integer j, boolean ref,String sheetname ){
         Cell cell = doc.getSheet(sheetname).getCells().get(i).get(j);
-        return doc.getSheet(sheetname).var(cell,ref,val);
+        return doc.getSheet(sheetname).median(cell,ref);
+    }
+    public static Double funcVariance(Integer i, Integer j, boolean ref ,String sheetname){
+        Cell cell = doc.getSheet(sheetname).getCells().get(i).get(j);
+        return doc.getSheet(sheetname).var(cell,ref);
     }
 
-    public static Double funcCovariance(Integer[] block,Integer i, Integer j,boolean val, boolean ref,String sheetname ){
+    public static Double funcCovariance(Integer[] block,Integer i, Integer j, boolean ref,String sheetname ){
         Block b1 = createBlock(block,sheetname);
         Cell cell = doc.getSheet(sheetname).getCells().get(i).get(j);
-        return doc.getSheet(sheetname).covar(b1,cell,ref,val);
+        return doc.getSheet(sheetname).covar(b1,cell,ref);
     }
 
-    public static Double funcStandardDeviation(Integer i, Integer j,boolean val, boolean ref,String sheetname ){
+    public static Double funcStandardDeviation(Integer i, Integer j, boolean ref,String sheetname ){
         Cell cell = doc.getSheet(sheetname).getCells().get(i).get(j);
-        return doc.getSheet(sheetname).std(cell,ref,val);
+        return doc.getSheet(sheetname).std(cell,ref);
     }
 
-    public static Double funcCPearson(Integer[] block,Integer i, Integer j,boolean val, boolean ref,String sheetname ){
+    public static Double funcCPearson(Integer[] block,Integer i, Integer j, boolean ref,String sheetname ){
         Block b1 = createBlock(block,sheetname);
         Cell cell = doc.getSheet(sheetname).getCells().get(i).get(j);
-        return doc.getSheet(sheetname).CPearson(b1,cell,ref,val);
+        return doc.getSheet(sheetname).CPearson(b1,cell,ref);
     }
 
 
@@ -399,7 +398,7 @@ public class DomainController {
         if(sheetName!=null){
             Sheet s=doc.getSheet(sheetName);
             int rsize=s.getCell(r,c).getRefs().size();
-            for (int i = 0; i <rsize; i+=2) {
+            for (int i = 0; i <rsize; i++) {
                 int row=s.getCell(r,c).getRefs().elementAt(i).getRow();
                 int col=s.getCell(r,c).getRefs().elementAt(i).getColumn();
                 rids.add(row);
@@ -431,7 +430,7 @@ public class DomainController {
 
         //return chart;
     }
-    public static void currentBlockCeil(Integer[] blockCells, boolean ref,String sheetName){
+    public static void blockCeil(Integer[] blockCells, boolean ref,String sheetName){
         Block block = createBlock(blockCells, sheetName);
         doc.getSheet(sheetName).ceil(block,ref);
     }
@@ -442,47 +441,47 @@ public class DomainController {
         doc.getSheet(sheetName).concatenate(b1,b2,ref);
     }
 
-    public static Double funcMax(Integer i, Integer j, boolean val, boolean ref,String sheetName ){
-        Cell cell = null;
-        if (val) cell = doc.getSheet(sheetName).getCells().get(i-1).get(j-1);
-        return doc.getSheet(sheetName).max(cell,ref,val);
+    public static Double funcMax(Integer i, Integer j, boolean ref,String sheetName ){
+        Cell cell =doc.getSheet(sheetName).getCells().get(i).get(j);
+        return doc.getSheet(sheetName).max(cell,ref);
     }
-    public static Double funcMin(Integer i, Integer j, boolean val, boolean ref ,String sheetName){
-        Cell cell = null;
-        if (val) cell = doc.getSheet(sheetName).getCells().get(i-1).get(j-1);
-        return doc.getSheet(sheetName).min(cell,ref,val);
+    public static Double funcMin(Integer i, Integer j, boolean ref ,String sheetName){
+        Cell cell = doc.getSheet(sheetName).getCells().get(i).get(j);
+        return doc.getSheet(sheetName).min(cell,ref);
     }
 
-    // public Double countIf(Cell c, Boolean ref, Boolean val, double eq, String criteria){
-    public static Double funcCountIf(Integer i, Integer j, boolean val, boolean ref, double eq, String criteria,String sheetName){
-        Cell cell = null;
-        if (val) cell = doc.getSheet(sheetName).getCells().get(i-1).get(j-1);
-        return doc.getSheet(sheetName).countIf(cell,ref,val,eq,criteria);
+
+    public static Double funcCountIf(Integer i, Integer j,boolean ref, double eq, String criteria,String sheetName){
+        Cell cell = doc.getSheet(sheetName).getCells().get(i).get(j);
+        return doc.getSheet(sheetName).countIf(cell,ref,eq,criteria);
     }
 
-    public static Double funcSumAll(Integer i, Integer j, boolean val, boolean ref ,String sheetName){
-        Cell cell = null;
-        if (val) cell = doc.getSheet(sheetName).getCells().get(i-1).get(j-1);
-        return doc.getSheet(sheetName).sumAll(cell,ref,val);
-    }
-    public static Double funcSubAll(Integer i, Integer j, boolean val, boolean ref,String sheetName ){
-        Cell cell = null;
-        if (val) cell = doc.getSheet(sheetName).getCells().get(i-1).get(j-1);
-        return doc.getSheet(sheetName).subAll(cell,ref,val);
-    }
-    public static Double funcMultAll(Integer i, Integer j, boolean val, boolean ref,String sheetName ){
-        Cell cell = null;
-        if (val) cell = doc.getSheet(sheetName).getCells().get(i-1).get(j-1);
-        return doc.getSheet(sheetName).multAll(cell,ref,val);
-    }
-    public static Double funcDivAll(Integer i, Integer j, boolean val, boolean ref,String sheetName ){
-        Cell cell = null;
-        if (val) cell = doc.getSheet(sheetName).getCells().get(i-1).get(j-1);
-        return doc.getSheet(sheetName).divAll(cell,ref,val);
-    }
+//    public static Double funcSumAll(Integer i, Integer j, boolean val, boolean ref ,String sheetName){
+//        Cell cell = null;
+//        if (val) cell = doc.getSheet(sheetName).getCells().get(i).get(j);
+//        return doc.getSheet(sheetName).sumAll(cell,ref,val);
+//    }
+//    public static Double funcSubAll(Integer i, Integer j, boolean val, boolean ref,String sheetName ){
+//        Cell cell = null;
+//        if (val) cell = doc.getSheet(sheetName).getCells().get(i).get(j);
+//        return doc.getSheet(sheetName).subAll(cell,ref,val);
+//    }
+//    public static Double funcMultAll(Integer i, Integer j, boolean val, boolean ref,String sheetName ){
+//        Cell cell = null;
+//        if (val) cell = doc.getSheet(sheetName).getCells().get(i).get(j);
+//        return doc.getSheet(sheetName).multAll(cell,ref,val);
+//    }
+//    public static Double funcDivAll(Integer i, Integer j, boolean val, boolean ref,String sheetName ){
+//        Cell cell = null;
+//        if (val) cell = doc.getSheet(sheetName).getCells().get(i).get(j);
+//        return doc.getSheet(sheetName).divAll(cell,ref,val);
+//    }
     public static void opBlock(String op, double x,String sheetName){
         doc.getSheet(sheetName).opBlock(op, x);
     }
+
+    public static void modifyBlock(Object o,String sheetName){doc.getSheet(sheetName).ModifyBlock(o);}
+
     public static void funcTrim(String criteria,String sheetName){
         doc.getSheet(sheetName).trim();
     }
