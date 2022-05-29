@@ -197,6 +197,11 @@ public class DomainController {
         docSheet.floor(block,ref);
     }
 
+    public static void currentBlockCeil(Integer[] blockCells, boolean ref){
+        Block block = createBlock(blockCells);
+        docSheet.ceil(block,ref);
+    }
+
     public static void currentBlockConvert(Integer[] blockCells, boolean ref, String from, String to){
         Block block = createBlock(blockCells);
         docSheet.convert(block, ref, from, to);

@@ -171,6 +171,12 @@ public abstract class Cell {
                 c.setContent(newvalue);
             }
 
+            else if(Objects.equals(op, "ceil")){
+                Double newvalue = (Double) cellsref.elementAt(0).getInfo();
+                newvalue= Math.ceil(newvalue);
+                c.setContent(newvalue);
+            }
+
             else if(Objects.equals(op, "mTOcm")){
                 UnitOf.Length length = new UnitOf.Length();
                 Double newvalue= (Double) cellsref.elementAt(0).getInfo();

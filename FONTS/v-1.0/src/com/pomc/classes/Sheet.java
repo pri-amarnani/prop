@@ -284,6 +284,15 @@ public class Sheet {
         update(b);
     }
 
+    public void ceil(Block b, Boolean ref){
+        if (b_selected.allDouble() && b.allDouble()){
+            if(ref && overlapping(b_selected, b)) System.out.println("Error. The blocks selected are overlapped.");
+            else b_selected.ceiling(b, ref);
+        }
+        else System.out.println("Error. Not all cells are of type Number.");
+        update(b);
+    }
+
     public void convert(Block b, Boolean ref, String from, String to){
         b_selected.convert(b, ref, from, to);
         update(b_selected);
