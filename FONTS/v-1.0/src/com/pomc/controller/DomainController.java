@@ -255,6 +255,14 @@ public class DomainController {
         if (val) cell = docSheet.getCells().get(i-1).get(j-1);
         return docSheet.min(cell,ref,val);
     }
+
+    // public Double countIf(Cell c, Boolean ref, Boolean val, double eq, String criteria){
+    public static Double funcCountIf(Integer i, Integer j, boolean val, boolean ref, double eq, String criteria ){
+        Cell cell = null;
+        if (val) cell = docSheet.getCells().get(i-1).get(j-1);
+        return docSheet.countIf(cell,ref,val,eq,criteria);
+    }
+
     public static Double funcSumAll(Integer i, Integer j, boolean val, boolean ref ){
         Cell cell = null;
         if (val) cell = docSheet.getCells().get(i-1).get(j-1);

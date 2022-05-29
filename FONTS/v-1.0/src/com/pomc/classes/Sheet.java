@@ -381,6 +381,21 @@ public class Sheet {
         return -1;
     }
 
+    public Double countIf(Cell c, Boolean ref, Boolean val, double eq, String criteria){
+        if(b_selected.allDouble()){
+            if (ref && overlapping(b_selected, create_block(c,c))) System.out.println("Error. Cell contained in the block.");
+            else{
+                Cell m = b_selected.countIf(c, ref, eq, criteria);
+                if (val) cells.elementAt(m.getRow()).setElementAt(m, m.getColumn());
+                if (ref) return (Double) m.getContent();
+                else return (Double) m.getInfo();
+            }
+        }
+        else System.out.println("Error. Not all cells are of type Number.");
+
+        return null;
+    }
+
     public Double max(Cell c, Boolean ref, Boolean val){
         if(b_selected.allDouble()){
             if (ref && overlapping(b_selected, create_block(c,c))) System.out.println("Error. Cell contained in the block.");

@@ -2,6 +2,7 @@ package com.pomc.view;
 
 import com.pomc.controller.DomainController;
 
+import java.sql.SQLOutput;
 import java.util.Scanner;
 
 public class Main {
@@ -191,9 +192,10 @@ public class Main {
             System.out.println("(12) SubAll");
             System.out.println("(13) MultAll");
             System.out.println("(14) DivAll");
+            System.out.println("(15) CountIf");
             System.out.println("(0) Go back");
             System.out.println("\n \n Enter number:");
-            Integer num = numberInsertion(14,0);
+            Integer num = numberInsertion(15,0);
             if (num != null) {
                 System.out.println("\n");
                 switch (num) {
@@ -457,6 +459,31 @@ public class Main {
                         }
                         else System.out.println("Invalid answer");
                         break;
+
+                    case 15:
+                        System.out.println("Input the criteria for counting:");
+                        String criteria = userInput.nextLine();
+                        System.out.println("Input the val for counting:");
+                        Integer val = numberInsertion(DomainController.currentSheetRows(),1);
+                        System.out.println("Want to print the result in a cell? (y/n)");
+                        userInM = userInput.nextLine();
+                        if (userInM.equals("y") || userInM.equals("yes") )  {
+                            System.out.println("Input the row of the Cell to print the result:");
+                            Integer cellIM = numberInsertion(DomainController.currentSheetRows(), 1);
+                            System.out.println("Input the column of the Cell to print the result:");
+                            Integer cellJM = numberInsertion(DomainController.currentSheetCols(), 1);
+                            if (cellIM > 0 && cellJM > 0) {
+                                Double result = DomainController.funcCountIf(cellIM,cellJM,true, isReferencing(), val, criteria);
+                                System.out.println("The COUNT of the block is " + result + " and it was printed!");
+                            }
+                            else System.out.println("Cell not found");
+                        }
+                        else if (userInM.equals("n") || userInM.equals("no")){
+                            System.out.println("The COUNT of the block is " + DomainController.funcCountIf(0,0,false,false, val, criteria));
+                        }
+                        else System.out.println("Invalid answer");
+                        break;
+
                     default:
                         System.out.println("\n");
                         break;

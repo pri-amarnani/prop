@@ -173,6 +173,7 @@ public class Block {
                     if (first) max = (double) cells[j].getInfo();
                     else max = Math.max(max, (double) cells[j].getInfo());
                     first = false;
+                    s.add(cells[j]);
                 }
             }
         }
@@ -195,6 +196,51 @@ public class Block {
         return c;
     }
 
+    // criteria == <, >, ==, >=, <=
+    public Cell countIf (Cell c, Boolean ref, double val, String criteria) {
+        double count = 0;
+        Vector<Cell> s = new Vector<>();
+
+        for (Cell[] cells : this.block) {
+            for (int j = 0; j < this.block[0].length; ++j) {
+                if (cells[j] != null) {
+                    if (Objects.equals(criteria, "==")) {
+                        if ((double) cells[j].getInfo() == val) ++count;
+                    }
+                    else if (Objects.equals(criteria, "<")) {
+                        if ((double) cells[j].getInfo() < val) ++count;
+                    }
+                    else if (Objects.equals(criteria, ">")) {
+                        if ((double) cells[j].getInfo() > val) ++count;
+                    }
+                    else if (Objects.equals(criteria, "<=")) {
+                        if ((double) cells[j].getInfo() <= val) ++count;
+                    }
+                    else if (Objects.equals(criteria, ">=")) {
+                        if ((double) cells[j].getInfo() >= val) ++count;
+                    }
+                    s.add(cells[j]);
+                }
+            }
+        }
+
+        c = (Cell) c.changeValue(count);
+
+        if (ref) {
+            ReferencedCell rc = new ReferencedCell(c.getRow(),c.getColumn(),"=countIf"+ criteria + val);
+            rc.setContent(c.getInfo());
+            c = rc;
+            Map.Entry<String, Vector<Cell>> r = new AbstractMap.SimpleEntry<>("countIf"+ criteria + val, s);
+            c.setRefInfo(r);
+            for (int x=0;x<s.size();x++){
+                Cell a= s.elementAt(x);
+                a.AddRef(rc);
+            }
+        }
+
+        return c;
+    }
+
     public Cell min (Cell c, Boolean ref) {
         boolean first = true;
         double min = 0;
@@ -206,6 +252,7 @@ public class Block {
                     if (first) min = (double) cells[j].getInfo();
                     else min = Math.min(min, (double) cells[j].getInfo());
                     first = false;
+                    s.add(cells[j]);
                 }
             }
         }

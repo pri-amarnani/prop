@@ -166,7 +166,54 @@ public abstract class Cell {
                 c.setContent(newvalue);
             }
 
-            if (Objects.equals(op, "concatenate")) {
+            else if (op.length() >= 10 && Objects.equals(op.substring(0,9), "countIf==")) {
+                Double newvalue = 0.0;
+                Double val =  Double.parseDouble(op.substring(9));
+
+                for (int j=0;j<cellsref.size();j++){
+                    if ((Double) (cellsref.elementAt(j)).getInfo() == val) ++newvalue;
+                }
+                c.setContent(newvalue);
+            }
+            else if (op.length() >= 9 && Objects.equals(op.substring(0,8), "countIf<")) {
+                Double newvalue = 0.0;
+                Double val =  Double.parseDouble(op.substring(8));
+
+                for (int j=0;j<cellsref.size();j++){
+                    if ((Double) (cellsref.elementAt(j)).getInfo() < val) ++newvalue;
+                }
+                c.setContent(newvalue);
+            }
+            else if (op.length() >= 9 && Objects.equals(op.substring(0,8), "countIf>")) {
+                Double newvalue = 0.0;
+                Double val =  Double.parseDouble(op.substring(8));
+
+                for (int j=0;j<cellsref.size();j++){
+                    if ((Double) (cellsref.elementAt(j)).getInfo() > val) ++newvalue;
+                }
+                c.setContent(newvalue);
+            }
+            else if (op.length() >= 10 && Objects.equals(op.substring(0,9), "countIf<=")) {
+                Double newvalue = 0.0;
+                Double val =  Double.parseDouble(op.substring(9));
+
+                for (int j=0;j<cellsref.size();j++){
+                    if ((Double) (cellsref.elementAt(j)).getInfo() <= val) ++newvalue;
+                }
+                c.setContent(newvalue);
+            }
+
+            else if (op.length() >= 10 && Objects.equals(op.substring(0,9), "countIf>=")) {
+                Double newvalue = 0.0;
+                Double val =  Double.parseDouble(op.substring(9));
+
+                for (int j=0;j<cellsref.size();j++){
+                    if ((Double) (cellsref.elementAt(j)).getInfo() >= val) ++newvalue;
+                }
+                c.setContent(newvalue);
+            }
+
+            else if (Objects.equals(op, "concatenate")) {
                 String newvalue = "";
                 for (int j=0;j<cellsref.size();j++){
                     newvalue= newvalue + (String) ((cellsref.elementAt(j)).getInfo());
