@@ -397,7 +397,7 @@ public class DomainController {
         if(sheetName!=null){
             Sheet s=doc.getSheet(sheetName);
              int rsize=s.getCell(r,c).getRefs().size();
-            for (int i = 0; i <rsize; i++) {
+            for (int i = 0; i <rsize; i+=2) {
                 int row=s.getCell(r,c).getRefs().elementAt(i).getRow();
                 int col=s.getCell(r,c).getRefs().elementAt(i).getColumn();
                 rids.add(row);
