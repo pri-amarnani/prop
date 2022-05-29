@@ -1,5 +1,7 @@
 package com.pomc.controller;
 import com.pomc.classes.*;
+import org.knowm.xchart.SwingWrapper;
+import org.knowm.xchart.XYChart;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
@@ -104,6 +106,16 @@ public class DomainController {
             cellsContents.add(Contents.get(k).toArray(new String[Contents.get(k).size()]));
         }
         return cellsContents.toArray(new String[Contents.size()][]);
+    }
+
+    public static void graficXY(String title, String x, String y, String func){
+        if(docSheet != null){
+            XYChart chart = docSheet.graficXY(title, x, y, func);
+            // Show it
+            new SwingWrapper(chart).displayChart();
+        }
+
+        //return chart;
     }
 
     //adds an empty row to the specified position

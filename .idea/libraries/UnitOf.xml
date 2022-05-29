@@ -5,6 +5,7 @@
       <root url="jar://$PROJECT_DIR$/v-1.0/libs/UnitOf.jar!/" />
       <root url="jar://$PROJECT_DIR$/FONTS/v-1.0/libs/UnitOf.jar!/" />
       <root url="jar://$PROJECT_DIR$/FONTS/v-1.0/libs/itextpdf-5.5.13.3.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../xchart-3.8.1/xchart-3.8.1.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />

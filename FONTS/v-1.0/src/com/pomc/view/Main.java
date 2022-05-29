@@ -1,7 +1,12 @@
 package com.pomc.view;
 
 import com.pomc.controller.DomainController;
+import org.knowm.xchart.BitmapEncoder;
+import org.knowm.xchart.QuickChart;
+import org.knowm.xchart.SwingWrapper;
+import org.knowm.xchart.XYChart;
 
+import java.io.IOException;
 import java.util.Scanner;
 
 public class Main {
@@ -511,9 +516,10 @@ public class Main {
             System.out.println("(8) Date Operations");
             System.out.println("(9) Text Operations");
             System.out.println("(10) Move Block");
+            System.out.println("(11) Grafica");
             System.out.println("(0) Go back");
             System.out.println("\n \n Enter number:");
-            Integer num = numberInsertion(10,0);
+            Integer num = numberInsertion(11,0);
             if (num != null) {
                 System.out.println("\n");
                 switch (num) {
@@ -695,6 +701,9 @@ public class Main {
                             DomainController.moveBlock(blockCells3,isReferencing());
                             break;
                         }
+                    case 11:
+                        DomainController.graficXY("hola", "x", "y", "Y(x)");
+                        break;
                     default:
                         System.out.println("\n");
                         break;
@@ -939,7 +948,29 @@ public class Main {
     }
 
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
+
+        /*
+        double[] xData = new double[] { 0.0, 1.0, 2.0 };
+        double[] yData = new double[] { 2.0, 1.0, 0.0 };
+
+// Create Chart
+        XYChart chart = QuickChart.getChart("Sample Chart", "X", "Y", "y(x)", xData, yData);
+
+// Show it
+        new SwingWrapper(chart).displayChart();
+
+// Save it
+        BitmapEncoder.saveBitmap(chart, "./Sample_Chart", BitmapEncoder.BitmapFormat.PNG);
+
+// or save it in high-res
+        BitmapEncoder.saveBitmapWithDPI(chart, "./Sample_Chart_300_DPI", BitmapEncoder.BitmapFormat.PNG, 300);
+
+
+         */
+
+        //DomainController.graficXY("hola", "x", "y", "Y(x)");
+
         System.out.println("\n POMC WORKSHEETS");
         System.out.println("------------------------------");
         System.out.println("Enter title for document:");                //TODO nombre default y unico

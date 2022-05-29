@@ -1,5 +1,8 @@
 package com.pomc.classes;
 
+import org.knowm.xchart.QuickChart;
+import org.knowm.xchart.XYChart;
+
 import java.time.LocalDate;
 import java.util.*;
 
@@ -85,6 +88,21 @@ public class Block {
             }
         }
         return true;
+    }
+
+    public XYChart graficXY(String title, String x, String y, String func){
+        double[] xData = new double[block[0].length] ;
+        double[] yData = new double[block[1].length];
+        for (int i = 0; i < block[0].length; i++) {
+            xData[i] = (double) block[0][i].getInfo();
+        }
+        for (int i = 0; i < block[1].length; i++) {
+            yData[i] = (double) block[1][i].getInfo();
+        }
+
+        // Create Chart
+        XYChart chart = QuickChart.getChart(title, x, y, func, xData, yData);
+        return chart;
     }
 
     public void CopyB () {
