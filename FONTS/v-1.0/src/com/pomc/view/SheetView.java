@@ -171,15 +171,13 @@ public class SheetView {
                     int row=table.rowAtPoint(e.getPoint());
                     int col=table.columnAtPoint(e.getPoint());
                     if(row<table.getRowCount() && row>=0 && col>=0 && col<table.getColumnCount() ){
-                        if (row1 != row || col1 != col ) {
-                            bar.setText(PresentationController.cellInfo(row,col,currentSheetName()));
-                            col2=col;
-                            row2=row;
+                        bar.setText(PresentationController.cellInfo(row,col,currentSheetName()));
+                        col2=col;
+                        row2=row;
 
-                            PresentationController.createBlock(min(row1,row2),min(col1,col2),max(row1,row2),max(col1,col2),currentSheetName());
-                            updateBlockMenu(jmbar_sheet);
-                            System.out.println();
-                        }
+                        PresentationController.createBlock(min(row1,row2),min(col1,col2),max(row1,row2),max(col1,col2),currentSheetName());
+                        updateBlockMenu(jmbar_sheet);
+                        System.out.println();
                     }
                 }
 

@@ -1,17 +1,11 @@
 package com.pomc.view;
 
-import com.digidemic.unitof.I;
 import com.itextpdf.text.DocumentException;
-import com.pomc.classes.Block;
-import com.pomc.classes.Cell;
-import com.pomc.classes.Document;
-import com.pomc.classes.Sheet;
 import com.pomc.controller.DomainController;
 import com.pomc.controller.PersistenceController;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Vector;
 
 public class PresentationController {
 
@@ -222,7 +216,7 @@ public class PresentationController {
         save();
     }
 
-    public static void export(File selectedFile) {
+    public static void export(File selectedFile, String ext) {
         String[] extension = selectedFile.getName().split("\\.(?=[^\\.]+$)");
         if (extension.length> 1){
             if(extension[1].equals("csv") ||extension[1].equals("txt") || extension[1].equals("pdf")) {
@@ -233,6 +227,25 @@ public class PresentationController {
                 } catch (DocumentException e) {
                     throw new RuntimeException(e);
                 }
+            }
+        }
+        else {
+            try {
+            switch (ext) {
+                    case "csv":
+                        PersistenceController.export(selectedFile.getAbsolutePath() + ".csv", DomainController.getDoc(), "csv");
+                        break;
+                    case "txt":
+                        PersistenceController.export(selectedFile.getAbsolutePath() + ".txt", DomainController.getDoc(), "txt");
+                        break;
+                    case "pdf":
+                        PersistenceController.export(selectedFile.getAbsolutePath() + ".pdf", DomainController.getDoc(), "pdf");
+                        break;
+                }
+            }catch (IOException e) {
+                throw new RuntimeException(e);
+            } catch (DocumentException e) {
+                throw new RuntimeException(e);
             }
         }
     }
