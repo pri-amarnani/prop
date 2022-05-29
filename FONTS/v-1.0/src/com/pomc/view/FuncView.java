@@ -148,17 +148,14 @@ public class FuncView {
         if (result == JOptionPane.OK_OPTION) {
             int trows = SheetView.getCurrentTable().getModel().getRowCount();
             int tcols = SheetView.getCurrentTable().getModel().getColumnCount();
-            Integer[] cols=getCols(tcols);
-            String [] alphCols=numtoAlphabetCols(cols);
+            String [] alphCols=numtoAlphabetCols(getCols(tcols));
 
             SpinnerNumberModel ulrm = new SpinnerNumberModel(1, 1, trows, 1);
-            //SpinnerNumberModel ulcm = new SpinnerNumberModel(1, 1, tcols, 1);
             SpinnerListModel ulcm= new SpinnerListModel(alphCols);
             JSpinner ulr = new JSpinner(ulrm);
             JSpinner ulc = new JSpinner(ulcm);
 
             SpinnerNumberModel drrm = new SpinnerNumberModel(trows, 1, trows, 1);
-            //SpinnerNumberModel drcm = new SpinnerNumberModel(tcols, 1, tcols, 1);
             SpinnerListModel drcm= new SpinnerListModel(alphCols);
             JSpinner drr = new JSpinner(drrm);
             JSpinner drc = new JSpinner(drcm);
@@ -180,21 +177,21 @@ public class FuncView {
             );
             if (result2 == JOptionPane.OK_OPTION) {
                 b1[0] = (Integer) ulr.getValue();
-                b1[1] = (Integer) ulc.getValue();
+                b1[1] = SheetView.alphabetToNum((String) ulc.getValue())+1;
                 b1[2] = (Integer) drr.getValue();
-                b1[3] = (Integer) drc.getValue();
+                b1[3] = SheetView.alphabetToNum((String) drc.getValue())+1;
 
                 if (printb.isSelected()) {
                     int confirm = showConfirmDialog(null, "The information from the cells will be lost.\n Are you sure", "Alert!", JOptionPane.YES_NO_OPTION);
                     if (confirm == JOptionPane.YES_OPTION) {
 
                         SpinnerNumberModel ulrm2 = new SpinnerNumberModel(1, 1, trows, 1);
-                        SpinnerNumberModel ulcm2 = new SpinnerNumberModel(1, 1, tcols, 1);
+                        SpinnerListModel ulcm2 = new SpinnerListModel(alphCols);
                         JSpinner ulr2 = new JSpinner(ulrm2);
                         JSpinner ulc2 = new JSpinner(ulcm2);
 
                         SpinnerNumberModel drrm2 = new SpinnerNumberModel(trows, 1, trows, 1);
-                        SpinnerNumberModel drcm2 = new SpinnerNumberModel(tcols, 1, tcols, 1);
+                        SpinnerListModel drcm2 =  new SpinnerListModel(alphCols);
                         JSpinner drr2 = new JSpinner(drrm2);
                         JSpinner drc2 = new JSpinner(drcm2);
 
@@ -215,9 +212,9 @@ public class FuncView {
                         );
                         if (result22 == JOptionPane.OK_OPTION) {
                             b2[0] = (Integer) ulr2.getValue();
-                            b2[1] = (Integer) ulc2.getValue();
+                            b2[1] = SheetView.alphabetToNum((String) ulc2.getValue())+1;
                             b2[2] = (Integer) drr2.getValue();
-                            b2[3] = (Integer) drc2.getValue();
+                            b2[3] = SheetView.alphabetToNum((String) drc2.getValue())+1;
                         }
                         b2[4] = -1;
                     }
@@ -285,8 +282,9 @@ public class FuncView {
             if (confirm == JOptionPane.YES_OPTION) {
                 int trows = SheetView.getCurrentTable().getModel().getRowCount();
                 int tcols = SheetView.getCurrentTable().getModel().getColumnCount();
+                String [] alphCols=numtoAlphabetCols(getCols(tcols));
                 SpinnerNumberModel ulrm = new SpinnerNumberModel(1, 1, trows, 1);
-                SpinnerNumberModel ulcm = new SpinnerNumberModel(1, 1, tcols, 1);
+                SpinnerListModel ulcm = new SpinnerListModel(alphCols);
                 JSpinner cr = new JSpinner(ulrm);
                 JSpinner cc = new JSpinner(ulcm);
 
@@ -305,7 +303,7 @@ public class FuncView {
                 );
                 if (result2 == JOptionPane.OK_OPTION) {
                     b1[0] = (Integer) cr.getValue()-1;
-                    b1[1] = (Integer) cc.getValue()-1;
+                    b1[1] = SheetView.alphabetToNum((String) cc.getValue());
                     boolean b = ref.isSelected();
                     switch(op) {
                         case "Mean":
@@ -333,13 +331,14 @@ public class FuncView {
         Integer[] b1 = {-1,-1,-1,-1,0};//donde se imprime
         int trows = SheetView.getCurrentTable().getModel().getRowCount();
         int tcols = SheetView.getCurrentTable().getModel().getColumnCount();
+        String [] alphCols=numtoAlphabetCols(getCols(tcols));
         SpinnerNumberModel ulrm = new SpinnerNumberModel(1, 1, trows, 1);
-        SpinnerNumberModel ulcm = new SpinnerNumberModel(1, 1, tcols, 1);
+        SpinnerListModel ulcm= new SpinnerListModel(alphCols);
         JSpinner ulr = new JSpinner(ulrm);
         JSpinner ulc = new JSpinner(ulcm);
 
         SpinnerNumberModel drrm = new SpinnerNumberModel(trows, 1, trows, 1);
-        SpinnerNumberModel drcm = new SpinnerNumberModel(tcols, 1, tcols, 1);
+        SpinnerListModel drcm= new SpinnerListModel(alphCols);
         JSpinner drr = new JSpinner(drrm);
         JSpinner drc = new JSpinner(drcm);
 
@@ -360,9 +359,9 @@ public class FuncView {
         );
         if (result2 == JOptionPane.OK_OPTION) {
             b1[0] = (Integer) ulr.getValue();
-            b1[1] = (Integer) ulc.getValue();
+            b1[1] = SheetView.alphabetToNum((String) ulc.getValue())+1;
             b1[2] = (Integer) drr.getValue();
-            b1[3] = (Integer) drc.getValue();
+            b1[3] = SheetView.alphabetToNum((String) drc.getValue())+1;
 
             JCheckBox ref = new JCheckBox("Reference the result ?");
             Object[] fields = new Object[]{
@@ -397,7 +396,7 @@ public class FuncView {
                     );
                     if (result3 == JOptionPane.OK_OPTION) {
                         a[0] = (Integer) cr.getValue()-1;
-                        a[1] = (Integer) cc.getValue()-1;
+                        a[1] =SheetView.alphabetToNum((String) cc.getValue());
                         boolean b = ref.isSelected();
                         if ("Covariance".equals(op)) {
                             PresentationController.blockCovar(a,b1, b, SheetView.currentSheetName());
@@ -446,13 +445,14 @@ public class FuncView {
                 if (confirm == JOptionPane.YES_OPTION) {
                     int trows = SheetView.getCurrentTable().getModel().getRowCount();
                     int tcols = SheetView.getCurrentTable().getModel().getColumnCount();
+                    String [] alphCols=numtoAlphabetCols(getCols(tcols));
                     SpinnerNumberModel ulrm = new SpinnerNumberModel(1, 1, trows, 1);
-                    SpinnerNumberModel ulcm = new SpinnerNumberModel(1, 1, tcols, 1);
+                    SpinnerListModel ulcm= new SpinnerListModel(alphCols);
                     JSpinner ulr = new JSpinner(ulrm);
                     JSpinner ulc = new JSpinner(ulcm);
 
                     SpinnerNumberModel drrm = new SpinnerNumberModel(trows, 1, trows, 1);
-                    SpinnerNumberModel drcm = new SpinnerNumberModel(tcols, 1, tcols, 1);
+                    SpinnerListModel drcm= new SpinnerListModel(alphCols);
                     JSpinner drr = new JSpinner(drrm);
                     JSpinner drc = new JSpinner(drcm);
 
@@ -473,9 +473,9 @@ public class FuncView {
                     );
                     if (result2 == JOptionPane.OK_OPTION) {
                         ulrow = (Integer) ulr.getValue();
-                        ulcol = (Integer) ulc.getValue();
+                        ulcol = SheetView.alphabetToNum((String) ulc.getValue())+1;
                         drrow = (Integer) drr.getValue();
-                        drcol = (Integer) drc.getValue();
+                        drcol = SheetView.alphabetToNum((String) drc.getValue())+1;
                     }
                 }
                 ids[4] = -1;
@@ -531,13 +531,14 @@ public class FuncView {
                 if (confirm == JOptionPane.YES_OPTION) {
                     int trows = SheetView.getCurrentTable().getModel().getRowCount();
                     int tcols = SheetView.getCurrentTable().getModel().getColumnCount();
+                    String [] alphCols=numtoAlphabetCols(getCols(tcols));
                     SpinnerNumberModel ulrm = new SpinnerNumberModel(1, 1, trows, 1);
-                    SpinnerNumberModel ulcm = new SpinnerNumberModel(1, 1, tcols, 1);
+                    SpinnerListModel ulcm= new SpinnerListModel(alphCols);
                     JSpinner ulr = new JSpinner(ulrm);
                     JSpinner ulc = new JSpinner(ulcm);
 
                     SpinnerNumberModel drrm = new SpinnerNumberModel(trows, 1, trows, 1);
-                    SpinnerNumberModel drcm = new SpinnerNumberModel(tcols, 1, tcols, 1);
+                    SpinnerListModel drcm= new SpinnerListModel(alphCols);
                     JSpinner drr = new JSpinner(drrm);
                     JSpinner drc = new JSpinner(drcm);
 
@@ -558,9 +559,9 @@ public class FuncView {
                     );
                     if (result2 == JOptionPane.OK_OPTION) {
                         ulrow = (Integer) ulr.getValue();
-                        ulcol = (Integer) ulc.getValue();
+                        ulcol = SheetView.alphabetToNum((String) ulc.getValue())+1;
                         drrow = (Integer) drr.getValue();
-                        drcol = (Integer) drc.getValue();
+                        drcol = SheetView.alphabetToNum((String) drc.getValue())+1;
                     }
                 }
 
@@ -644,13 +645,14 @@ public class FuncView {
                 if (confirm == JOptionPane.YES_OPTION) {
                     int trows = SheetView.getCurrentTable().getModel().getRowCount();
                     int tcols = SheetView.getCurrentTable().getModel().getColumnCount();
+                    String [] alphCols=numtoAlphabetCols(getCols(tcols));
                     SpinnerNumberModel ulrm = new SpinnerNumberModel(1, 1, trows, 1);
-                    SpinnerNumberModel ulcm = new SpinnerNumberModel(1, 1, tcols, 1);
+                    SpinnerListModel ulcm= new SpinnerListModel(alphCols);
                     JSpinner ulr = new JSpinner(ulrm);
                     JSpinner ulc = new JSpinner(ulcm);
 
                     SpinnerNumberModel drrm = new SpinnerNumberModel(trows, 1, trows, 1);
-                    SpinnerNumberModel drcm = new SpinnerNumberModel(tcols, 1, tcols, 1);
+                    SpinnerListModel drcm= new SpinnerListModel(alphCols);
                     JSpinner drr = new JSpinner(drrm);
                     JSpinner drc = new JSpinner(drcm);
 
@@ -671,9 +673,9 @@ public class FuncView {
                     );
                     if (result2 == JOptionPane.OK_OPTION) {
                         ulrow = (Integer) ulr.getValue();
-                        ulcol = (Integer) ulc.getValue();
+                        ulcol = SheetView.alphabetToNum((String) ulc.getValue())+1;
                         drrow = (Integer) drr.getValue();
-                        drcol = (Integer) drc.getValue();
+                        drcol = SheetView.alphabetToNum((String) drc.getValue())+1;
                     }
                 }
                 ids[4] = -1;
@@ -740,7 +742,6 @@ public class FuncView {
         Integer[] result= new Integer[n];
         for (int i = 0; i < n; i++) {
             result[i]=i;
-
         }
         return result;
     }
