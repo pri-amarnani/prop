@@ -27,23 +27,40 @@ public class Document {
         Title = title;
     }
 
-    //Sheet management
+    /**
+     * Crea una hoja con el titulo pasado por parámetro y las celdas vacías
+     * @param title
+     */
     public void createSheet(String title) {
         Sheet newSheet = new Sheet(title);
         docSheets.add(newSheet);
     }
 
+    /**
+     * Crea un documento con una sola hoja (a)
+     * @param a
+     */
     public void createDocWithSheet(Vector<Sheet> a) {
         for(int i = 0; i < a.size(); ++i) {
             docSheets.add(a.elementAt(i));
         }
     }
 
+    /**
+     * Crea una hoja con el número de filas y columnas y el título indicado, y añade la hoja al documento
+     * @param rows
+     * @param columns
+     * @param title
+     */
     public void createSheet(int rows, int columns, String title) {
         Sheet newSheet = new Sheet(rows,columns,title);
         docSheets.add(newSheet);
     }
 
+    /**
+     * Elimina la hoja con el titulo indicado(title) del documento
+     * @param title
+     */
     public void deleteSheet(String title) {
         for (int i = 0; i < docSheets.size(); ++i) {
             if (docSheets.get(i).title.equals(title) ) {
@@ -51,7 +68,6 @@ public class Document {
                 return;
             }
         }
-        System.out.println("Unexistent Sheet");
         return;
     }
 
@@ -59,6 +75,11 @@ public class Document {
         return docSheets.size();
     }
 
+    /**
+     * Encuentra en las hojas del documento la hoja con el nombre indicado (name)
+     * @param name
+     * @return devuelve la hoja
+     */
     public Sheet getSheet(String name){
         int i=0;
         boolean found=false;

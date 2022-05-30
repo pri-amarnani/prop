@@ -635,9 +635,16 @@ public class Block {
     public void concatenate (Block b1, Block b2, Boolean ref) {
         for (int i = 0; i < this.block.length; ++i) {
             for (int j = 0; j < this.block[0].length; ++j) {
-                //System.out.println("concatenate");
-                Cell n = (Cell) b2.getCell(i, j).changeValue((String) this.block[i][j].getInfo() + (String) b1.getCell(i, j).getInfo());
-                b2.setCell(i,j,n);
+                Cell n;
+
+                if(b1.getCell(i,j).getInfo() == null){   //nullpointer
+                    n = (Cell) b2.getCell(i, j).changeValue((String) this.block[i][j].getInfo());
+                    b2.setCell(i,j,n);
+                }
+                else{
+                    n = (Cell) b2.getCell(i, j).changeValue((String) this.block[i][j].getInfo() + (String) b1.getCell(i, j).getInfo());
+                    b2.setCell(i,j,n);
+                }
                 if (ref) {
                     ReferencedCell rc = new ReferencedCell(n.getRow(),n.getColumn(),"=concatenate");
                     rc.setContent(n.getInfo());
