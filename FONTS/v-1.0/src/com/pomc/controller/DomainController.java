@@ -199,6 +199,21 @@ public class DomainController {
         return null;
     }
 
+    public static int selectedBlockCols (String sheetName){
+        if(sheetName!=null){
+            return doc.getSheet(sheetName).getSelectedBlock().number_cols();
+        }
+        else return -1;
+    }
+
+    public static int selectedBlockRows(String sheetName){
+        if(sheetName!=null){
+            return doc.getSheet(sheetName).getSelectedBlock().number_rows();
+        }
+        else return -1;
+    }
+
+
     public static String[][] currentBlockCells(String name){
         if (name != null) {
             Vector<Vector<String>> Contents = new Vector<Vector<String>>();

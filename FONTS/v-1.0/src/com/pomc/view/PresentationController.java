@@ -156,6 +156,11 @@ public class PresentationController {
 
     public static int blockWRefs(int ulr, int ulc, int drr, int drc, String sheetName){return DomainController.isRef(ulr-1,ulc,drr-1,drc,sheetName);}
 
+
+    public static int selectedBRows(String sheetName) {return DomainController.selectedBlockRows(sheetName);}
+
+    public static int selectedBCols(String sheetName) {return DomainController.selectedBlockCols(sheetName);}
+
     public static String cellInfo(int r, int c, String name){
         String t= DomainController.getCellType(r,c,name);
         if(t.equals("N")) t="Number";
