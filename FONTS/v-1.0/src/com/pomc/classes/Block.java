@@ -375,7 +375,6 @@ public class Block {
         c = (Cell) c.changeValue(min);
 
         if (ref) {
-            //System.out.println("entra1");
             ReferencedCell rc = new ReferencedCell(c.getRow(),c.getColumn(),"=min");
             rc.setContent(c.getInfo());
             c = rc;

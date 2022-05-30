@@ -136,7 +136,6 @@ public class CellStub extends Cell {
             System.gc();
             return d;
         }
-        //System.out.println("HHH");
         return null;
     }
 

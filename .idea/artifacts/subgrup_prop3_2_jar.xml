@@ -18,6 +18,11 @@
       <element id="extracted-dir" path="$PROJECT_DIR$/FONTS/v-1.0/libs/itextpdf-5.5.13.3.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$USER_HOME$/Desktop/xchart-3.8.1.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$PROJECT_DIR$/FONTS/v-1.0/lib/xchart-3.8.1.jar" path-in-jar="/" />
+      <element id="archive" name="prop.jar">
+        <element id="directory" name="META-INF">
+          <element id="file-copy" path="$PROJECT_DIR$/DOCS/META-INF/MANIFEST.MF" />
+        </element>
+      </element>
     </root>
   </artifact>
 </component>

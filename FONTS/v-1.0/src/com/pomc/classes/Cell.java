@@ -408,7 +408,6 @@ public abstract class Cell {
                 }
 
                 Double cov= calccovar(v1,v2);
-                System.out.print(cov);
                 c.setContent(cov);
             }
 

@@ -158,7 +158,6 @@ public class gestorTXT {
         }
     }
     public static String AntiParse(Object o) {
-        System.out.println(o);
         if (o.getClass() == Double.class) return String.valueOf(o);
         else if (o.getClass()== LocalDate.class) return o.toString();
         else return (String) o;

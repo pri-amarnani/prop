@@ -53,8 +53,6 @@ public class PersistenceController {
             Pdf.exportPDF(v.elementAt(0)+".csv",path_doc);
             Csv.deleteCSV(v.elementAt(0)+".csv");
         }
-
-        else System.out.println("Extension not valid, try again.");
     }
 
 
@@ -141,5 +139,14 @@ public class PersistenceController {
 
     public static void main(String[] args) {
         openUG();
+    }
+
+    public static void openChart(String path) {
+        File myFile = new File(path);
+        try {
+            Desktop.getDesktop().open(myFile);
+        } catch (IOException e) {
+
+        }
     }
 }

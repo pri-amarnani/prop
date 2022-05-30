@@ -177,7 +177,6 @@ public class SheetView {
 
                         PresentationController.createBlock(min(row1,row2),min(col1,col2),max(row1,row2),max(col1,col2),currentSheetName());
                         updateBlockMenu(jmbar_sheet);
-                        System.out.println();
                     }
                 }
 
@@ -380,7 +379,6 @@ public class SheetView {
                             for (int j = 0; j < Rmodify.length; j+=2) {
                                 int rRow= (int) Rmodify[j];
                                 int rCol= (int) Rmodify[j+1];
-                               // System.out.println("refs ids: "+rRow+" , "+rCol);
                                 writeBlock(rRow,rCol,rRow,rCol);
                             }
                     }

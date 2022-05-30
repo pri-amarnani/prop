@@ -210,16 +210,6 @@ public class PresentationController {
         return i;
     }
 
-    public static void showTcells(String name){
-        String[][] cellsContents = DomainController.currentSheetCells(name);
-        for(int i = 0; i < cellsContents.length ; ++i) {
-            for (int j = 0; j < cellsContents[0].length ; ++j) {
-                System.out.print(" | " + cellsContents[i][j]);
-            }
-            System.out.print(" | \n");
-        }
-    }
-
 
 
 
@@ -326,7 +316,6 @@ public class PresentationController {
 
     public static void blockConcat (Integer[] b1,Integer[] b2, boolean ref, String sheetName){
         DomainController.funcConcatenate(b1,b2,ref,sheetName);
-        showTcells(sheetName);
     }
 
     public static void blockMax(Integer[] a, boolean ref, String sheetName){
