@@ -162,7 +162,6 @@ public class Block {
         for (int i = 0; i < this.block.length; ++i) {
             ch.addSeries(labels[i], values[i]);
         }
-
         return ch;
     }
 

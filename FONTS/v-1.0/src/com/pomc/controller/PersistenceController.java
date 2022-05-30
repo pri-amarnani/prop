@@ -129,4 +129,17 @@ public class PersistenceController {
 
         }
     }
+
+    public static void openChart(String path) {
+        File myFile = new File(path);
+        try {
+            Desktop.getDesktop().open(myFile);
+        } catch (IOException e) {
+
+        }
+    }
+
+    public static void main(String[] args) {
+        openUG();
+    }
 }

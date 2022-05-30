@@ -480,7 +480,7 @@ public class SheetView {
             Image gr= grIcon.getScaledInstance(40,40,Image.SCALE_DEFAULT);
             graficIcon.setImage(gr);
             JButton graf = new JButton(graficIcon);
-            graf.setToolTipText("Graph");
+            graf.setToolTipText("Chart");
             graf.setBackground(blockBar.getBackground());
             graf.setBorder(BorderFactory.createLineBorder(c,1));
             blockBar.add(graf,blockBar.getMenuCount()-1);
@@ -489,6 +489,14 @@ public class SheetView {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     FuncView.addGraph();
+                }
+            });
+
+            graf.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    FuncView.graph();
+
                 }
             });
 
@@ -695,17 +703,6 @@ public class SheetView {
 
 
 
-                    graf.addActionListener(new ActionListener() {
-                        @Override
-                        public void actionPerformed(ActionEvent e) {
-                            Integer[] grafFunc = FuncView.addSingleOp("graph");
-                            if(grafFunc!=null && grafFunc[0]!=-1) {
-                                if (grafFunc[4] == -1) writeBlock(grafFunc[0], grafFunc[1], grafFunc[2], grafFunc[3]);
-                                else rewriteBlock();
-                            }
-                        }
-                    });
-
                     break;
                 case "T":
                     ImageIcon lengthIcon= new ImageIcon("res/iconolength.png");
@@ -805,18 +802,6 @@ public class SheetView {
                     });
 
 
-                    graf.addActionListener(new ActionListener() {
-                        @Override
-                        public void actionPerformed(ActionEvent e) {
-                            Integer[] grafFunc = FuncView.addSingleOp("graph");
-                            if(grafFunc!=null && grafFunc[0]!=-1) {
-                                if (grafFunc[4] == -1) writeBlock(grafFunc[0], grafFunc[1], grafFunc[2], grafFunc[3]);
-                                else rewriteBlock();
-                            }
-                        }
-                    });
-
-
 
 
 
@@ -857,18 +842,6 @@ public class SheetView {
                         }
                     });
 
-
-
-                    graf.addActionListener(new ActionListener() {
-                        @Override
-                        public void actionPerformed(ActionEvent e) {
-                            Integer[] grafFunc = FuncView.addSingleOp("graph");
-                            if(grafFunc!=null && grafFunc[0]!=-1) {
-                                if (grafFunc[4] == -1) writeBlock(grafFunc[0], grafFunc[1], grafFunc[2], grafFunc[3]);
-                                else rewriteBlock();
-                            }
-                        }
-                    });
                     break;
                 default:
                     break;

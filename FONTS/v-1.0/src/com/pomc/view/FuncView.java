@@ -9,6 +9,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.time.temporal.JulianFields;
 import java.util.ArrayList;
+import java.util.Objects;
 
 import static javax.swing.JOptionPane.*;
 
@@ -139,6 +140,37 @@ public class FuncView {
                 showMessageDialog(null, "Value not found! :(\nTry again", "Error!", JOptionPane.ERROR_MESSAGE);
             }
         }
+    }
+
+    public static void graph(){
+        Integer[] b1 = {-1,-1,-1,-1}; //segundo operando
+        Integer[] b2 = {-1,-1,-1,-1,0};//donde se imprime
+
+
+        Object[] selectionValues = {"Linear", "Pie"};
+        String initialSelection = "Linear";
+        Object selection = JOptionPane.showInputDialog(null, "Choose the type of chart",
+                "Charts", JOptionPane.QUESTION_MESSAGE, null, selectionValues, initialSelection);
+        if (selection != null) {
+            if(selection.toString().equals("Linear")){
+                if (!Objects.equals(PresentationController.blockType(SheetView.currentSheetName()), "N")) {
+                    showMessageDialog(null, "Cant generate a linear chart with the selected block.\nTry again", "Error!", JOptionPane.ERROR_MESSAGE);
+                }
+                else PresentationController.showGraphXY("","x", "y", "y(x)", SheetView.currentSheetName());
+            }
+            else{
+
+                if (!PresentationController.showGraphPie(SheetView.currentSheetName())){
+                    showMessageDialog(null, "Cant generate a pie chart with the selected block.\nTry again", "Error!", JOptionPane.ERROR_MESSAGE);
+                }
+
+            }
+        }
+
+
+
+
+        //return b1;   //cambiar
     }
 
 

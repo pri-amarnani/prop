@@ -3,6 +3,7 @@ package com.pomc.view;
 import com.itextpdf.text.DocumentException;
 import com.pomc.controller.DomainController;
 import com.pomc.controller.PersistenceController;
+import org.knowm.xchart.PieChart;
 
 import javax.swing.*;
 import java.awt.*;
@@ -146,6 +147,20 @@ public class PresentationController {
         DomainController.funcReplaceCriteria(criteria,sheetName);
     }
 
+    public static void showGraphXY(String title, String x, String y, String func, String sheetName){
+        DomainController.graficXY(title, x, y, func, sheetName);
+        PersistenceController.openChart("./LinearChart.png");
+    }
+
+
+    public static boolean showGraphPie(String sheetName){
+        PieChart p  = DomainController.graficPie(sheetName);
+        if (p.getHeight() == 500){
+            PersistenceController.openChart("./PieChart.png");
+            return  true;
+        }
+        return false;
+    }
 
 
 

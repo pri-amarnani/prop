@@ -1,9 +1,11 @@
 package com.pomc.controller;
 import com.pomc.classes.*;
+import org.knowm.xchart.BitmapEncoder;
 import org.knowm.xchart.PieChart;
 import org.knowm.xchart.SwingWrapper;
 import org.knowm.xchart.XYChart;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
@@ -479,24 +481,60 @@ public class DomainController {
 
     //-----------------------------------OPCIONALES-----------------------------------
 
-    public static void graficXY(String title, String x, String y, String func, String sheetName){
-        if(doc.getSheet(sheetName) != null){
-            XYChart chart = doc.getSheet(sheetName).graficXY(title, x, y, func);
+    public static XYChart graficXY(String title, String x, String y, String func, String sheetName){
+        if(doc.getSheet(sheetName).getSelectedBlock() != null){
+            XYChart chart = doc.getSheet(sheetName).getSelectedBlock().graficXY(title, x, y, func);
             // Show it
-            new SwingWrapper(chart).displayChart();
+            //noinspection rawtypes
+            //new SwingWrapper(chart).displayChart();
+
+            try {
+                BitmapEncoder.saveBitmap(chart, "./LinearChart", BitmapEncoder.BitmapFormat.PNG);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            return chart;
         }
 
-        //return chart;
+        return null;
     }
 
-    public static void graficPie(String sheetName){
-        if(doc.getSheet(sheetName) != null){
-            PieChart chart = doc.getSheet(sheetName).graficPie();
+    public static PieChart graficPie(String sheetName){
+        PieChart ch = new PieChart(5, 5);
+        if(doc.getSheet(sheetName).getSelectedBlock() != null){
+            Block b1 = doc.getSheet(sheetName).getSelectedBlock();
+            boolean correct = true;
+            if(b1.number_cols() != 2) correct = false;
+            Vector<String> v = new Vector<>();
 
-            new SwingWrapper(chart).displayChart();
+            for(int i = 0; i < b1.number_rows() && correct; ++i){
+                if(!b1.getCell(i,0).getType().equals("T")) correct = false;
+                if(!b1.getCell(i,1).getType().equals("N")) correct = false;
+                if(b1.getCell(i,0).getType().equals("T")) v.add((String) b1.getCell(i,0).getInfo());
+            }
+            for (int i = 0; i < v.size() && correct; i++) {
+                for (int j = i + 1; j < v.size() && correct; j++) {
+                    if(v.elementAt(i).equals(v.elementAt(j))) correct = false;
+                }
+            }
+
+
+            if(!correct){
+                return ch;
+            }
+            else{
+                PieChart chart = doc.getSheet(sheetName).getSelectedBlock().graficPie();
+
+                try {
+                    BitmapEncoder.saveBitmap(chart, "./PieChart", BitmapEncoder.BitmapFormat.PNG);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+                return chart;
+            }
+
         }
-
-        //return chart;
+        return ch;
     }
     public static void blockCeil(Integer[] blockCells, boolean ref,String sheetName){
         Block block = createBlock(blockCells, sheetName);
