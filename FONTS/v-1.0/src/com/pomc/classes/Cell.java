@@ -240,8 +240,8 @@ public abstract class Cell {
 
             else if (Objects.equals(op, "concatenate")) {
                 String newvalue = "";
-                for (int j=0;j<cellsref.size();j++){
-                    newvalue= newvalue + (String) ((cellsref.elementAt(j)).getInfo());
+                for (int j=0;j < cellsref.size();j++){
+                    newvalue= newvalue + (String) cellsref.elementAt(j).getInfo();
                 }
                 c.setContent(newvalue);
             }
