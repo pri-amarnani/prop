@@ -306,6 +306,7 @@ public class Sheet {
        return b_selected.ul.getColumn();
     }
 
+
     /**
      * Mueve un bloque a otra posición de la hoja con posibilidad de referencia
      * @param b

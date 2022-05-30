@@ -29,8 +29,8 @@ public class SheetView {
 
 
         for (int i = 0; i < sheets_names.length; i++) {
-            int numfil=PresentationController.getSheetRows(i,sheets_names[i]);
-            int numcol= PresentationController.getSheetCols(i,sheets_names[i]);
+            int numfil=PresentationController.getSheetRows(sheets_names[i]);
+            int numcol= PresentationController.getSheetCols(sheets_names[i]);
             //TABLE
             JTable table = new JTable();
             table.putClientProperty("terminateEditOnFocusLost", true);
@@ -379,6 +379,22 @@ public class SheetView {
             public void actionPerformed(ActionEvent e) {
                 FuncView.modifyB();
                 rewriteBlock();
+                Object[] updater=PresentationController.getSBlockids(currentSheetName());
+                if(updater!=null){
+                    for (int i = 0; i < updater.length; i+=2) {
+                        boolean b=PresentationController.hasRefs((int)updater[i],(int)updater[i+1],currentSheetName());
+                        if(b){
+                            Object[] Rmodify= PresentationController.getRefsIds((int)updater[i],(int)updater[i+1],currentSheetName());
+                            for (int j = 0; j < Rmodify.length; j+=2) {
+                                int rRow= (int) Rmodify[j];
+                                int rCol= (int) Rmodify[j+1];
+                               // System.out.println("refs ids: "+rRow+" , "+rCol);
+                                writeBlock(rRow,rCol,rRow,rCol);
+                            }
+                    }
+
+                    }
+                }
             }
         });
 
@@ -626,6 +642,21 @@ public class SheetView {
                         public void actionPerformed(ActionEvent e) {
                             FuncView.unitOp();
                             rewriteBlock();
+                            Object[] updater=PresentationController.getSBlockids(currentSheetName());
+                            if(updater!=null){
+                                for (int i = 0; i < updater.length; i+=2) {
+                                    boolean b=PresentationController.hasRefs((int)updater[i],(int)updater[i+1],currentSheetName());
+                                    if(b){
+                                        Object[] Rmodify= PresentationController.getRefsIds((int)updater[i],(int)updater[i+1],currentSheetName());
+                                        for (int j = 0; j < Rmodify.length; j+=2) {
+                                            int rRow= (int) Rmodify[j];
+                                            int rCol= (int) Rmodify[j+1];
+                                            writeBlock(rRow,rCol,rRow,rCol);
+                                        }
+                                    }
+
+                                }
+                            }
                         }
                     });
 
@@ -726,6 +757,22 @@ public class SheetView {
                         public void actionPerformed(ActionEvent e) {
                             FuncView.addReplaceWC();
                             rewriteBlock();
+                            Object[] updater=PresentationController.getSBlockids(currentSheetName());
+                            if(updater!=null){
+                                for (int i = 0; i < updater.length; i+=2) {
+                                    boolean b=PresentationController.hasRefs((int)updater[i],(int)updater[i+1],currentSheetName());
+                                    if(b){
+                                        Object[] Rmodify= PresentationController.getRefsIds((int)updater[i],(int)updater[i+1],currentSheetName());
+                                        for (int j = 0; j < Rmodify.length; j+=2) {
+                                            int rRow= (int) Rmodify[j];
+                                            int rCol= (int) Rmodify[j+1];
+                                            // System.out.println("refs ids: "+rRow+" , "+rCol);
+                                            writeBlock(rRow,rCol,rRow,rCol);
+                                        }
+                                    }
+
+                                }
+                            }
                         }
                     });
 

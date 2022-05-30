@@ -33,11 +33,11 @@ public class PresentationController {
 
     //_-------------------------SHEET FUNCTIONS -------------------------------
 
-    public static int getSheetRows(int i,String name){
+    public static int getSheetRows(String name){
         return DomainController.sheetRows(name);
     }
 
-    public static int getSheetCols(int i,String name){
+    public static int getSheetCols(String name){
         return DomainController.sheetCols(name);
     }
     public static void changeSheetName(String name,String newname){
@@ -164,6 +164,8 @@ public class PresentationController {
     public static int selectedBRows(String sheetName) {return DomainController.selectedBlockRows(sheetName);}
 
     public static int selectedBCols(String sheetName) {return DomainController.selectedBlockCols(sheetName);}
+
+    public static Object[] getSBlockids (String sheetName) {return DomainController.getSBlockids(sheetName);}
 
     public static String cellInfo(int r, int c, String name){
         String t= DomainController.getCellType(r,c,name);

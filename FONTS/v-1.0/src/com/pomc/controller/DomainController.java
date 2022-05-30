@@ -458,6 +458,25 @@ public class DomainController {
         return -1;
     }
 
+    public static Object[] getSBlockids(String sheetName){
+        Block b=doc.getSheet(sheetName).getSelectedBlock();
+        Vector<Integer> result=new Vector<Integer>();
+//       int sbrows=doc.getSheet(sheetName).getSelectedBlock().number_rows();
+//       int sbcols= doc.getSheet(sheetName).getSelectedBlock().number_cols();
+//       Integer[] result= new Integer[(sbrows*sbcols)*2];
+//        for (int k = 0; k < (sbcols*sbrows)*2 ; k+=2) {
+//                    result[k]=k+blockFirstRow(sheetName);
+//                    result[k+1]=k+blockFirstCol(sheetName);
+//        }
+        for (int i = 0; i < b.number_rows() ; i++) {
+            for (int j = 0; j < b.number_cols(); j++) {
+                result.add(b.getCell(i,j).getRow());
+                result.add(b.getCell(i,j).getColumn());
+            }
+        }
+        return result.toArray();
+    }
+
     //-----------------------------------OPCIONALES-----------------------------------
 
     public static void graficXY(String title, String x, String y, String func, String sheetName){
