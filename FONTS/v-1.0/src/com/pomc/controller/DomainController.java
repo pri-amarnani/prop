@@ -1,6 +1,5 @@
 package com.pomc.controller;
 import com.pomc.classes.*;
-import com.pomc.view.PresentationController;
 import org.knowm.xchart.PieChart;
 import org.knowm.xchart.SwingWrapper;
 import org.knowm.xchart.XYChart;
@@ -199,6 +198,21 @@ public class DomainController {
         }
         return null;
     }
+
+    public static int selectedBlockCols (String sheetName){
+        if(sheetName!=null){
+            return doc.getSheet(sheetName).getSelectedBlock().number_cols();
+        }
+        else return -1;
+    }
+
+    public static int selectedBlockRows(String sheetName){
+        if(sheetName!=null){
+            return doc.getSheet(sheetName).getSelectedBlock().number_rows();
+        }
+        else return -1;
+    }
+
 
     public static String[][] currentBlockCells(String name){
         if (name != null) {
@@ -518,7 +532,7 @@ public class DomainController {
         doc.getSheet(sheetName).ModifyBlock(ob);
     }
 
-    public static void funcTrim(String criteria,String sheetName){
+    public static void funcTrim(String sheetName){
         doc.getSheet(sheetName).trim();
     }
 

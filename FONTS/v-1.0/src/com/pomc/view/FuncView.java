@@ -183,15 +183,15 @@ public class FuncView {
         if (result == JOptionPane.OK_OPTION) {
             int trows = SheetView.getCurrentTable().getModel().getRowCount();
             int tcols = SheetView.getCurrentTable().getModel().getColumnCount();
-            String [] alphCols=numtoAlphabetCols(getCols(tcols));
+            String[] alphCols = numtoAlphabetCols(getCols(tcols));
 
             SpinnerNumberModel ulrm = new SpinnerNumberModel(1, 1, trows, 1);
-            SpinnerListModel ulcm= new SpinnerListModel(alphCols);
+            SpinnerListModel ulcm = new SpinnerListModel(alphCols);
             JSpinner ulr = new JSpinner(ulrm);
             JSpinner ulc = new JSpinner(ulcm);
 
             SpinnerNumberModel drrm = new SpinnerNumberModel(trows, 1, trows, 1);
-            SpinnerListModel drcm= new SpinnerListModel(alphCols);
+            SpinnerListModel drcm = new SpinnerListModel(alphCols);
             JSpinner drr = new JSpinner(drrm);
             JSpinner drc = new JSpinner(drcm);
 
@@ -211,21 +211,28 @@ public class FuncView {
 
             );
             if (result2 == JOptionPane.OK_OPTION) {
+                int selectedBrows = PresentationController.selectedBRows(SheetView.currentSheetName());
+                int selectedBcols = PresentationController.selectedBCols(SheetView.currentSheetName());
+
                 b1[0] = (Integer) ulr.getValue();
-                b1[1] = SheetView.alphabetToNum((String) ulc.getValue())+1;
+                b1[1] = SheetView.alphabetToNum((String) ulc.getValue()) + 1;
                 b1[2] = (Integer) drr.getValue();
-                b1[3] = SheetView.alphabetToNum((String) drc.getValue())+1;
+                b1[3] = SheetView.alphabetToNum((String) drc.getValue()) + 1;
 
-                if (printb.isSelected()) {
+                int b1rows = b1[2] - b1[0] + 1;
+                int b1cols = b1[3] - b1[1] + 1;
 
-
+                if (b1rows - selectedBrows != 0 || b1cols - selectedBcols != 0) {
+                    showMessageDialog(null, "The selected blocks are of different sizes.\nTry again", "Error!", JOptionPane.ERROR_MESSAGE);
+                } else {
+                    if (printb.isSelected()) {
                         SpinnerNumberModel ulrm2 = new SpinnerNumberModel(1, 1, trows, 1);
                         SpinnerListModel ulcm2 = new SpinnerListModel(alphCols);
                         JSpinner ulr2 = new JSpinner(ulrm2);
                         JSpinner ulc2 = new JSpinner(ulcm2);
 
                         SpinnerNumberModel drrm2 = new SpinnerNumberModel(trows, 1, trows, 1);
-                        SpinnerListModel drcm2 =  new SpinnerListModel(alphCols);
+                        SpinnerListModel drcm2 = new SpinnerListModel(alphCols);
                         JSpinner drr2 = new JSpinner(drrm2);
                         JSpinner drc2 = new JSpinner(drcm2);
 
@@ -245,63 +252,73 @@ public class FuncView {
 
                         );
                         if (result22 == JOptionPane.OK_OPTION) {
-                            int ul=(Integer) ulr2.getValue();
-                            int uc=SheetView.alphabetToNum((String) ulc2.getValue())+1;
-                            int dl= (Integer) drr2.getValue();
-                            int dc=SheetView.alphabetToNum((String) drc2.getValue())+1;
-                            int x=PresentationController.blockWRefs(ul,uc,dl,dc,SheetView.currentSheetName());
-                            int confirm=-1;
-                            if(x!=-1) {
-                                switch (x) {
-                                    case 0:
-                                        confirm = showConfirmDialog(null, "Watch out! There are references in the selected block, the content and references will be lost after the print. \n Are you sure?", "References!", JOptionPane.YES_NO_OPTION);
-                                        break;
-                                    case 1:
-                                        confirm = showConfirmDialog(null, "Watch out! There is information in the selected block, the content  will be lost after the print. \n Are you sure?", "Alert", YES_NO_OPTION);
-                                        break;
-                                    default:
-                                        break;
+                            int ul = (Integer) ulr2.getValue();
+                            int uc = SheetView.alphabetToNum((String) ulc2.getValue()) + 1;
+                            int dl = (Integer) drr2.getValue();
+                            int dc = SheetView.alphabetToNum((String) drc2.getValue()) + 1;
+
+                            int b2rows = dl - ul + 1;
+                            int b2cols = dc - uc + 1;
+                            if (b2rows - selectedBrows != 0 || b2cols - selectedBcols != 0) {
+                                showMessageDialog(null, "The selected blocks are of different sizes.\nTry again", "Error!", JOptionPane.ERROR_MESSAGE);
+                                return null;
+                            }
+                            else {
+                                int x = PresentationController.blockWRefs(ul, uc, dl, dc, SheetView.currentSheetName());
+                                int confirm = -1;
+                                if (x != -1) {
+                                    switch (x) {
+                                        case 0:
+                                            confirm = showConfirmDialog(null, "Watch out! There are references in the selected block, the content and references will be lost after the print. \n Are you sure?", "References!", JOptionPane.YES_NO_OPTION);
+                                            break;
+                                        case 1:
+                                            confirm = showConfirmDialog(null, "Watch out! There is information in the selected block, the content  will be lost after the print. \n Are you sure?", "Alert", YES_NO_OPTION);
+                                            break;
+                                        default:
+                                            break;
+                                    }
                                 }
-                            }
                                 if (confirm == JOptionPane.YES_OPTION || x == -1) {
-                                b2[0] = (Integer) ulr2.getValue();
-                                b2[1] = SheetView.alphabetToNum((String) ulc2.getValue())+1;
-                                b2[2] = (Integer) drr2.getValue();
-                                b2[3] = SheetView.alphabetToNum((String) drc2.getValue())+1;
+                                    b2[0] = (Integer) ulr2.getValue();
+                                    b2[1] = SheetView.alphabetToNum((String) ulc2.getValue()) + 1;
+                                    b2[2] = (Integer) drr2.getValue();
+                                    b2[3] = SheetView.alphabetToNum((String) drc2.getValue()) + 1;
+                                } else return null;
+                                b2[4] = -1;
                             }
-                                else return null;
-                            b2[4] = -1;
-                        }
-                        else return null;
 
-                } else {
-                    ref.setSelected(false);
-                    b2[0] = b1[0];
-                    b2[1] = b1[1];
-                    b2[2] = b1[2];
-                    b2[3] = b1[3];
+                    }
+                       else return null;
                 }
-                boolean b = false;
-                if (ref.isSelected()) b = true;
-                switch(op) {
-                    case "Addition":
-                        PresentationController.blockAdd(b1, b2, b, SheetView.currentSheetName());
-                        break;
-                    case "Substraction":
-                        PresentationController.blockSubs(b1, b2, b, SheetView.currentSheetName());
-                        break;
-                    case "Multiplication":
-                        PresentationController.blockMult(b1, b2, b, SheetView.currentSheetName());
-                        break;
-                    case "Concatenate":
-                        PresentationController.blockConcat(b1,b2,b,SheetView.currentSheetName());
-                        break;
-                    default:
-                        PresentationController.blockDiv(b1, b2, b, SheetView.currentSheetName());
-                        break;
-                }
-
+                    else {
+                        ref.setSelected(false);
+                        b2[0] = b1[0];
+                        b2[1] = b1[1];
+                        b2[2] = b1[2];
+                        b2[3] = b1[3];
+                    }
+                    boolean b = false;
+                    if (ref.isSelected()) b = true;
+                    switch (op) {
+                        case "Addition":
+                            PresentationController.blockAdd(b1, b2, b, SheetView.currentSheetName());
+                            break;
+                        case "Substraction":
+                            PresentationController.blockSubs(b1, b2, b, SheetView.currentSheetName());
+                            break;
+                        case "Multiplication":
+                            PresentationController.blockMult(b1, b2, b, SheetView.currentSheetName());
+                            break;
+                        case "Concatenate":
+                            PresentationController.blockConcat(b1, b2, b, SheetView.currentSheetName());
+                            break;
+                        default:
+                            PresentationController.blockDiv(b1, b2, b, SheetView.currentSheetName());
+                            break;
+                    }
             }
+        }
+            else return null;
         }
         return b2;
     }
@@ -316,6 +333,8 @@ public class FuncView {
             if (selection != null) {
                 if (selection.toString().equals("Covariance") || selection.toString().equals("Pearson correlation coefficient")) {
                     a = operationS2(a, selection.toString());
+                    a[0] = a[0] - 1;
+                    a[1] = a[1] - 1;
                 } else a = operationS1(selection.toString(),"",-1);
             }
         }
@@ -435,6 +454,8 @@ public class FuncView {
                                 PresentationController.blockSTD(b1, b, SheetView.currentSheetName());
                                 break;
                         }
+                        b1[0] = b1[0] - 1;
+                        b1[1] = b1[1] - 1;
                         return b1;
                     }else return null;
                 }else return null;
@@ -473,45 +494,53 @@ public class FuncView {
 
         );
         if (result2 == JOptionPane.OK_OPTION) {
+            int selectedBrows = PresentationController.selectedBRows(SheetView.currentSheetName());
+            int selectedBcols = PresentationController.selectedBCols(SheetView.currentSheetName());
             b1[0] = (Integer) ulr.getValue();
             b1[1] = SheetView.alphabetToNum((String) ulc.getValue()) + 1;
             b1[2] = (Integer) drr.getValue();
             b1[3] = SheetView.alphabetToNum((String) drc.getValue()) + 1;
 
-            JCheckBox ref = new JCheckBox("Reference the result ?");
-            Object[] fields = new Object[]{
-                    ref,
-            };
-            int result = JOptionPane.showConfirmDialog(
-                    null,
-                    fields,
-                    "Statistic operations : " + op,
-                    JOptionPane.OK_CANCEL_OPTION,
-                    JOptionPane.PLAIN_MESSAGE,
-                    null
-
-            );
-            if (result == JOptionPane.OK_OPTION) {
-                JSpinner cr = new JSpinner(ulrm);
-                JSpinner cc = new JSpinner(ulcm);
-                Object[] fields3 = new Object[]{
-                        "Select the cell's row", cr,
-                        "Select the cell's column", cc
+            int b1rows = b1[2] - b1[0] + 1;
+            int b1cols = b1[3] - b1[1] + 1;
+            if (b1rows - selectedBrows != 0 || b1cols - selectedBcols != 0) {
+                showMessageDialog(null, "The selected blocks are of different sizes.\nTry again", "Error!", JOptionPane.ERROR_MESSAGE);
+            }
+            else{
+                JCheckBox ref = new JCheckBox("Reference the result ?");
+                Object[] fields = new Object[]{
+                        ref,
                 };
-                int result3 = JOptionPane.showConfirmDialog(
+                int result = JOptionPane.showConfirmDialog(
                         null,
-                        fields3,
-                        "Select the cell to print the result",
+                        fields,
+                        "Statistic operations : " + op,
                         JOptionPane.OK_CANCEL_OPTION,
                         JOptionPane.PLAIN_MESSAGE,
                         null
 
                 );
-                if (result3 == JOptionPane.OK_OPTION) {
-                    a[0] = (Integer) cr.getValue();
-                    a[1] = SheetView.alphabetToNum((String) cc.getValue()) + 1;
-                    int x = PresentationController.blockWRefs(a[0], a[1], a[0], a[1], SheetView.currentSheetName());
-                    int confirm = -1;
+                if (result == JOptionPane.OK_OPTION) {
+                    JSpinner cr = new JSpinner(ulrm);
+                    JSpinner cc = new JSpinner(ulcm);
+                    Object[] fields3 = new Object[]{
+                            "Select the cell's row", cr,
+                            "Select the cell's column", cc
+                    };
+                    int result3 = JOptionPane.showConfirmDialog(
+                            null,
+                            fields3,
+                            "Select the cell to print the result",
+                            JOptionPane.OK_CANCEL_OPTION,
+                            JOptionPane.PLAIN_MESSAGE,
+                            null
+
+                    );
+                    if (result3 == JOptionPane.OK_OPTION) {
+                        a[0] = (Integer) cr.getValue();
+                        a[1] = SheetView.alphabetToNum((String) cc.getValue()) + 1;
+                        int x = PresentationController.blockWRefs(a[0], a[1], a[0], a[1], SheetView.currentSheetName());
+                        int confirm = -1;
                         switch (x) {
                             case 0:
                                 confirm = showConfirmDialog(null, "Watch out! There are references in the selected block, the content and references will be lost after the print. \n Are you sure?", "References!", JOptionPane.YES_NO_OPTION);
@@ -532,9 +561,12 @@ public class FuncView {
                             }
                             return a;
                         } else return null;
-                } else return null;
-            } else return null;
-        }else return null;
+                    } else return null;
+                }
+            }
+            return null;
+        }
+        else return null;
     }
 
     public static Integer[] addSingleOp(String op) {

@@ -86,6 +86,10 @@ public class PresentationController {
         DomainController.blockFloor(b_ids,ref,Sheetname);
     }
 
+    public static void blockTrim(String Sheetname){
+        DomainController.funcTrim(Sheetname);
+    }
+
     public static void blockAdd(Integer[] block1, Integer[] block2, boolean ref, String sheetName){DomainController.funcAddition(block1,block2,ref,sheetName);}
 
     public static void blockSubs(Integer[] block1, Integer[] block2, boolean ref, String sheetName){DomainController.funcSubstraction(block1,block2,ref,sheetName);}
@@ -94,17 +98,17 @@ public class PresentationController {
 
     public static void blockDiv(Integer[] block1, Integer[] block2, boolean ref, String sheetName){DomainController.funcDivide(block1,block2,ref,sheetName);}
 
-    public static void blockMean(Integer[] b1, boolean ref, String sheetName) {DomainController.funcMean(b1[0],b1[1],ref,sheetName);}
+    public static void blockMean(Integer[] b1, boolean ref, String sheetName) {DomainController.funcMean(b1[0]-1,b1[1]-1,ref,sheetName);}
 
-    public static void blockMedian(Integer[] b1, boolean ref, String sheetName) {DomainController.funcMedian(b1[0],b1[1],ref,sheetName);}
+    public static void blockMedian(Integer[] b1, boolean ref, String sheetName) {DomainController.funcMedian(b1[0]-1,b1[1]-1,ref,sheetName);}
 
-    public static void blockVariance(Integer[] b1, boolean ref, String sheetName) {DomainController.funcVariance(b1[0],b1[1],ref,sheetName); }
+    public static void blockVariance(Integer[] b1, boolean ref, String sheetName) {DomainController.funcVariance(b1[0]-1,b1[1]-1,ref,sheetName); }
 
-    public static void blockSTD(Integer[] b1, boolean ref, String sheetName) {DomainController.funcStandardDeviation(b1[0],b1[1],ref,sheetName);}
+    public static void blockSTD(Integer[] b1, boolean ref, String sheetName) {DomainController.funcStandardDeviation(b1[0]-1,b1[1]-1,ref,sheetName);}
 
-    public static void blockCovar(Integer[] a, Integer[] b1, boolean ref, String sheetName) {DomainController.funcCovariance(b1,a[0],a[1],ref,sheetName);}
+    public static void blockCovar(Integer[] a, Integer[] b1, boolean ref, String sheetName) {DomainController.funcCovariance(b1,a[0]-1,a[1]-1,ref,sheetName);}
 
-    public static void blockCPearson(Integer[] a, Integer[] b1, boolean ref, String sheetName) {DomainController.funcCPearson(b1,a[0],a[1],ref,sheetName);}
+    public static void blockCPearson(Integer[] a, Integer[] b1, boolean ref, String sheetName) {DomainController.funcCPearson(b1,a[0]-1,a[1]-1,ref,sheetName);}
 
 //    public static void blockLength(int ulr, int ulc, boolean ref,String Sheetname){
 //        DomainController.blockFloor(b_ids,ref,Sheetname);
@@ -154,7 +158,12 @@ public class PresentationController {
         return DomainController.getRefsIds(r,c,sheetName);
     }
 
-    public static int blockWRefs(int ulr, int ulc, int drr, int drc, String sheetName){return DomainController.isRef(ulr-1,ulc,drr-1,drc,sheetName);}
+    public static int blockWRefs(int ulr, int ulc, int drr, int drc, String sheetName){return DomainController.isRef(ulr-1,ulc-1,drr-1,drc-1,sheetName);}
+
+
+    public static int selectedBRows(String sheetName) {return DomainController.selectedBlockRows(sheetName);}
+
+    public static int selectedBCols(String sheetName) {return DomainController.selectedBlockCols(sheetName);}
 
     public static String cellInfo(int r, int c, String name){
         String t= DomainController.getCellType(r,c,name);
@@ -296,14 +305,14 @@ public class PresentationController {
     }
 
     public static void blockMax(Integer[] a, boolean ref, String sheetName){
-        DomainController.funcMax(a[0],a[1],ref,sheetName);
+        DomainController.funcMax(a[0]-1,a[1]-1,ref,sheetName);
     }
 
     public static void blockMin(Integer[] a, boolean ref, String sheetName){
-        DomainController.funcMin(a[0],a[1],ref,sheetName);
+        DomainController.funcMin(a[0]-1,a[1]-1,ref,sheetName);
     }
 
-    public static void blockCountIf(Integer[]a,boolean ref,String sheetName, double eq, String crit){ DomainController.funcCountIf(a[0],a[1],ref,eq,crit,sheetName);}
+    public static void blockCountIf(Integer[]a,boolean ref,String sheetName, double eq, String crit){ DomainController.funcCountIf(a[0]-1,a[1]-1,ref,eq,crit,sheetName);}
 
     public static void blockOpBlock(String op, double x,String sheetName ){DomainController.opBlock(op, x,sheetName);
     }
