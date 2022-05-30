@@ -3,12 +3,20 @@ package com.pomc.view;
 import com.pomc.classes.Sheet;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.TableModel;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.time.temporal.JulianFields;
+import java.util.ArrayList;
 
 import static javax.swing.JOptionPane.*;
 
 public class FuncView {
+
+
+    static String foundVal = null;
+    static ArrayList<Integer> foundCols = new ArrayList<>();
 
 
     public static void addSort() {
@@ -62,19 +70,42 @@ public class FuncView {
         );
         if (value != null) {
             if (SheetView.emptyBlock()) {
-
                 PresentationController.createBlock(0, 0, SheetView.getCurrentTable().getRowCount() - 1, SheetView.getCurrentTable().getColumnCount() - 1, SheetView.currentSheetName());
             }
-            String[] cellFound = PresentationController.blockFind(value, SheetView.currentSheetName());
-            if (cellFound.length > 1) {
-                int row = Integer.parseInt(cellFound[0]);
-                int col = Integer.parseInt(cellFound[1]);
-                SheetView.getCurrentTable().changeSelection(row - 1, col - 1, false, false);
 
+            Integer[] cellFound = PresentationController.blockFind(value, SheetView.currentSheetName());
+
+            if (cellFound.length > 1) {
+                foundVal =value;
+                SheetView.getCurrentTable().clearSelection();
+               for (int i = 0; i < cellFound.length; i++) {
+                    int col = cellFound[i];
+                    foundCols.add(col);
+                    SheetView.getCurrentTable().getColumnModel().getColumn(col).setCellRenderer(new DefaultTableCellRenderer(){
+                        @Override
+                        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int col) {
+
+                            //Cells are by default rendered as a JLabel.
+                            JLabel l = (JLabel) super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, col);
+
+                            if(foundVal != null && foundVal.equals(value)) {
+                                l.setBackground(new Color(141, 190, 227, 194));
+                            }
+                            else l.setBackground(table.getBackground());
+                            return l;
+
+                        }
+                    } );
+               }
+                SheetView.getCurrentTable().changeSelection(0,0,false,false);
+                SheetView.getCurrentTable().changeSelection(SheetView.getCurrentTable().getRowCount()-1,cellFound[cellFound.length-1],false,true);
+                SheetView.getCurrentTable().clearSelection();
             } else {
                 showMessageDialog(null, "Value not found! :(\nTry again", "Error!", JOptionPane.ERROR_MESSAGE);
             }
+            return;
         }
+        return;
 
     }
 
@@ -98,7 +129,7 @@ public class FuncView {
             if (SheetView.emptyBlock()) {
                 PresentationController.createBlock(0, 0, SheetView.getCurrentTable().getRowCount() - 1, SheetView.getCurrentTable().getColumnCount() - 1, SheetView.currentSheetName());
             }
-            String[] cellFound = PresentationController.blockFind(value.getText(), SheetView.currentSheetName());
+            Integer[] cellFound = PresentationController.blockFind(value.getText(), SheetView.currentSheetName());
             if (cellFound.length > 1 && !value.getText().equals("")) {
                 Object[] replaces = PresentationController.blockFindAndReplace(value.getText(), replace.getText(), SheetView.currentSheetName());
                 if (replaces != null) {

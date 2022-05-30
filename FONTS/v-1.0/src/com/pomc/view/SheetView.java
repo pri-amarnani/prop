@@ -144,6 +144,13 @@ public class SheetView {
                 int row1,col1,row2,col2;
                 @Override
                 public void mousePressed(MouseEvent e) {
+                    if (FuncView.foundVal != null) {
+                        FuncView.foundVal = null;
+                        for (int i = 0; i < FuncView.foundCols.size(); i++) {
+                            getCurrentTable().getColumnModel().getColumn(FuncView.foundCols.get(i)).setCellRenderer(new DefaultTableCellRenderer());
+                        }
+                        FuncView.foundCols.clear();
+                    }
                     table.clearSelection();
                     if(changedMenu) {
                         int count=jmbar_sheet.getMenuCount();
@@ -877,6 +884,8 @@ public class SheetView {
             int row1,col1,row2,col2;
             @Override
             public void mousePressed(MouseEvent e) {
+
+                table.repaint();
                 table.clearSelection();
                 int row=table.rowAtPoint(e.getPoint());
                 int col=table.columnAtPoint(e.getPoint());

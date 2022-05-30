@@ -59,7 +59,7 @@ public class MainMenu {
 
         aboutB.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                showMessageDialog(null, "Hello People", "About", JOptionPane.PLAIN_MESSAGE);
+                showMessageDialog(null, "POMC WORKSHEETS\nCreated by: \n     Priyanka Amarnani \n     Cristina Bretons \n     Omar T. Butt \n     Mark Smithson \nFor 2021-22 QP PROP ", "About", JOptionPane.PLAIN_MESSAGE);
             }
         });
 
