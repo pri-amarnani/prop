@@ -136,8 +136,4 @@ public class PersistenceController {
 
         }
     }
-
-    public static void main(String[] args) {
-        openUG();
-    }
 }

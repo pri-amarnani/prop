@@ -249,7 +249,6 @@ public class MenuViews {
         selectFile.setDialogTitle("Select location to save the file");
         int result = selectFile.showSaveDialog(null);
         if(result == JFileChooser.APPROVE_OPTION) {
-            System.out.println(selectFile.getCurrentDirectory());
             PresentationController.saveAs(selectFile.getSelectedFile());
             showMessageDialog(null, "Saved correctly !", "Saved", JOptionPane.INFORMATION_MESSAGE);
         }
@@ -266,7 +265,6 @@ public class MenuViews {
         selectFile.setApproveButtonText("Export");
         int result = selectFile.showSaveDialog(null);
         if(result == JFileChooser.APPROVE_OPTION) {
-            System.out.println(selectFile.getCurrentDirectory());
             int desLength = selectFile.getFileFilter().getDescription().length();
             String ext =selectFile.getFileFilter().getDescription().substring(desLength-4,desLength-1);
             PresentationController.export(selectFile.getSelectedFile(), ext);
@@ -285,7 +283,6 @@ public class MenuViews {
         int result = selectFile.showOpenDialog(null);
         if(result == JFileChooser.APPROVE_OPTION) {
             if (!MainMenu.menuUpdated) {
-            System.out.println(selectFile.getCurrentDirectory());
             PresentationController.Import(selectFile.getSelectedFile());
             BorderLayout blayout = (BorderLayout) MainMenu.frame.getContentPane().getLayout();
             MainMenu.frame.getContentPane().remove(blayout.getLayoutComponent(BorderLayout.CENTER));
