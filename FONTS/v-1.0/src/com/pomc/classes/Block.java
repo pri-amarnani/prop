@@ -179,33 +179,29 @@ public class Block {
             for (int j = 0; j < this.block[0].length; ++j) {
 
                 if (this.block[i][j].isNum() && this.block[i][j].getInfo() != null ) {
-                    if(op == "Addition") {
-                        Cell n = this.block[i][j];
+                    Cell n = this.block[i][j];
+                    deleteReff(n);
+                    if(op .equals("Addition")) {
                         this.block[i][j].changeValue((Double) this.block[i][j].getInfo() + x);
                         setCell(i, j, n);
                     }
-                    if(op == "Substraction") {
-                        Cell n = this.block[i][j];
+                    if(op.equals("Substraction")) {
                         this.block[i][j].changeValue((Double) this.block[i][j].getInfo() - x);
                         setCell(i, j, n);
                     }
-                    if(op == "Division") {
-                        Cell n = this.block[i][j];
+                    if(op.equals("Division")) {
                         this.block[i][j].changeValue((Double) this.block[i][j].getInfo() / (Double) x);
                         setCell(i, j, n);
                     }
-                    if(op == "Multiplication") {
-                        Cell n = this.block[i][j];
+                    if(op.equals("Multiplication")) {
                         this.block[i][j].changeValue((Double) this.block[i][j].getInfo() * x);
                         setCell(i, j, n);
                     }
-                    if(op == "Modulus") {
-                        Cell n = this.block[i][j];
+                    if(op.equals("Modulus")) {
                         this.block[i][j].changeValue((Double) this.block[i][j].getInfo() % x);
                         setCell(i, j, n);
                     }
-                    if(op == "Power") {
-                        Cell n = this.block[i][j];
+                    if(op.equals("Power")) {
                         this.block[i][j].changeValue( Math.pow((Double) this.block[i][j].getInfo(), x));
                         setCell(i, j, n);
                     }
@@ -223,7 +219,7 @@ public class Block {
         for (int i = 0; i < this.block.length; ++i) {
             for (int j = 0; j < this.block[0].length; ++j) {
                 TextCell tc = (TextCell) this.block[i][j];
-
+                deleteReff(tc);
                 this.block[i][j].changeValue(((String) tc.getInfo()).trim());
             }
         }
@@ -241,6 +237,7 @@ public class Block {
             for (int j = 0; j < this.block[0].length; ++j) {
 
                 if (this.block[i][j].isNum()) {
+                    deleteReff(b.getCell(i, j));
                     Cell n = (Cell) b.getCell(i, j).changeValue(Math.ceil((double) this.block[i][j].getInfo()));
                     b.setCell(i,j,n);
                     if (ref) {
@@ -284,7 +281,7 @@ public class Block {
                 }
             }
         }
-
+        deleteReff(c);
         c = (Cell) c.changeValue(max);
 
         if (ref) {
@@ -338,7 +335,7 @@ public class Block {
                 }
             }
         }
-
+        deleteReff(c);
         c = (Cell) c.changeValue(count);
 
         if (ref) {
@@ -377,7 +374,7 @@ public class Block {
                 }
             }
         }
-
+        deleteReff(c);
         c = (Cell) c.changeValue(min);
 
         if (ref) {
@@ -407,6 +404,7 @@ public class Block {
             for (int j = 0; j < this.block[0].length; ++j) {
                 if (this.block[i][j].getInfo() != null) {
                     TextCell c = (TextCell)  this.block[i][j];
+                    deleteReff(b.getCell(i,j));
                     b.getCell(i,j).changeValue((Double) c.length(criteria));
                     Cell n = (Cell) b.getCell(i,j);
                     b.setCell(i,j,n);
@@ -438,7 +436,7 @@ public class Block {
             for (int j = 0; j < this.block[0].length; ++j) {
                 Cell n =  b.getCell(i,j);
                 if (this.block[i][j].getInfo() != null) {
-
+                    deleteReff(b.getCell(i,j));
                     n = (Cell) b.getCell(i,j).changeValue(this.block[i][j].getInfo());
                     b.setCell(i,j,n);
 
@@ -469,6 +467,7 @@ public class Block {
         for (int i=0; i<this.block.length;++i) {
             for (int j = 0; j < this.block[0].length; ++j) {
                 Cell old = getCell(i,j);
+                deleteReff(old);
                 Cell nw= (Cell) old.changeValue(n);
                 this.setCell(i,j,nw);
             }
@@ -553,6 +552,7 @@ public class Block {
                 if (Objects.equals(cells[j].getInfo(), n)) {
                     results.add(cells[j].getRow());
                     results.add(cells[j].getColumn());
+                    deleteReff(cells[j]);
                     Cell nw = (Cell) cells[j].changeValue(change);
                     cells[j] = nw;
                 }
@@ -572,6 +572,7 @@ public class Block {
             for (int j = 0; j < this.block[0].length; ++j) {
 
                 if (this.block[i][j].isNum()) {
+                    deleteReff(b.getCell(i, j));
                     Cell n = (Cell) b.getCell(i, j).changeValue(Math.floor((double) this.block[i][j].getInfo()));
                     b.setCell(i,j,n);
                     if (ref) {
@@ -605,7 +606,7 @@ public class Block {
         for (int i = 0; i < this.block.length; ++i) {
             for (int j = 0; j < this.block[0].length; ++j) {
                 NumCell N = (NumCell) this.block[i][j];
-
+                deleteReff(b.getCell(i, j));
                 Cell n = (Cell) b.getCell(i, j).changeValue(N.conversion(from,to));
                 b.setCell(i,j,n);
                 if (ref) {
@@ -638,10 +639,12 @@ public class Block {
                 Cell n;
 
                 if(b1.getCell(i,j).getInfo() == null){   //nullpointer
+                    b2.getCell(i, j);
                     n = (Cell) b2.getCell(i, j).changeValue((String) this.block[i][j].getInfo());
                     b2.setCell(i,j,n);
                 }
                 else{
+                    b2.getCell(i, j);
                     n = (Cell) b2.getCell(i, j).changeValue((String) this.block[i][j].getInfo() + (String) b1.getCell(i, j).getInfo());
                     b2.setCell(i,j,n);
                 }
@@ -675,6 +678,7 @@ public class Block {
     public void sum (Block b1, Block b2, Boolean ref) {
         for (int i = 0; i < this.block.length; ++i) {
             for (int j = 0; j < this.block[0].length; ++j) {
+                deleteReff(b2.getCell(i, j));
                 Cell n = (Cell) b2.getCell(i, j).changeValue((double) this.block[i][j].getInfo() + (double) b1.getCell(i, j).getInfo());
                 b2.setCell(i,j,n);
                 if (ref) {
@@ -707,7 +711,7 @@ public class Block {
     public void mult (Block b1, Block b2, Boolean ref) {
         for (int i = 0; i < this.block.length; ++i) {
             for (int j = 0; j < this.block[0].length; ++j) {
-
+                deleteReff(b2.getCell(i, j));
                 Cell n = (Cell) b2.getCell(i, j).changeValue((double) this.block[i][j].getInfo() * (double) b1.getCell(i, j).getInfo());
                 b2.setCell(i,j,n);
                 if (ref) {
@@ -740,7 +744,7 @@ public class Block {
     public void div (Block b1, Block b2, Boolean ref) {
         for (int i = 0; i < this.block.length; ++i) {
             for (int j = 0; j < this.block[0].length; ++j) {
-
+                deleteReff(b2.getCell(i, j));
                 Cell n = (Cell) b2.getCell(i, j).changeValue((double) this.block[i][j].getInfo() / (double) b1.getCell(i, j).getInfo());
                 b2.setCell(i,j,n);
                 if (ref) {
@@ -773,6 +777,7 @@ public class Block {
     public void substract (Block b1, Block b2, Boolean ref) {
         for (int i = 0; i < this.block.length; ++i) {
             for (int j = 0; j < this.block[0].length; ++j) {
+                deleteReff(b2.getCell(i, j));
                 Cell n = (Cell) b2.getCell(i, j).changeValue((double) this.block[i][j].getInfo() - (double) b1.getCell(i, j).getInfo());
                 b2.setCell(i,j,n);
                 if (ref) {
@@ -804,7 +809,7 @@ public class Block {
         for (int i = 0; i < b.number_rows(); ++i) {
             for (int j = 0; j < b.number_cols(); ++j) {
                 DateCell N = (DateCell) this.block[i][j];
-
+                deleteReff(b.getCell(i, j));
                 Cell n = (Cell) b.getCell(i, j).changeValue(N.extract(ex));
                 b.setCell(i,j,n);
                 if (ref) {
@@ -833,7 +838,7 @@ public class Block {
         for (int i = 0; i < b.number_rows(); ++i) {
             for (int j = 0; j < b.number_cols(); ++j) {
                 DateCell N = (DateCell) this.block[i][j];
-
+                deleteReff(b.getCell(i, j));
                 Cell n = (Cell) b.getCell(i, j).changeValue(N.getDayofTheWeek());
                 b.setCell(i,j,n);
                 if (ref) {
@@ -862,6 +867,7 @@ public class Block {
         for (Cell[] cells : this.block) {
             for (int j = 0; j < this.block[0].length; ++j) {
                 String s = (String) cells[j].getInfo();
+                deleteReff(cells[j]);
                 if (Objects.equals(criteria, "All caps")) {
                     Cell n = (Cell) cells[j].changeValue(s.toUpperCase(Locale.ROOT));
                     cells[j] = n;
@@ -897,7 +903,7 @@ public class Block {
                 s.add(cells[j]);
             }
         }
-
+        deleteReff(c);
         c = (Cell) c.changeValue(sum);
 
         if (ref) {
@@ -931,7 +937,7 @@ public class Block {
                 s.add(cells[j]);
             }
         }
-
+        deleteReff(c);
         c = (Cell) c.changeValue(-sum);
 
         if (ref) {
@@ -966,7 +972,7 @@ public class Block {
                 s.add(cells[j]);
             }
         }
-
+        deleteReff(c);
         c = (Cell) c.changeValue(sum);
 
         if (ref) {
@@ -1001,7 +1007,7 @@ public class Block {
                 s.add(cells[j]);
             }
         }
-
+        deleteReff(c);
         c = (Cell) c.changeValue(sum);
 
         if (ref) {
@@ -1037,7 +1043,7 @@ public class Block {
                 s.add(cells[j]);
             }
         }
-
+        deleteReff(c);
         c = (Cell) c.changeValue(sum/s.size());
 
         if (ref) {
@@ -1076,7 +1082,7 @@ public class Block {
         }
 
         Arrays.sort(arr);
-
+        deleteReff(c);
         c = (Cell) c.changeValue(arr[arr.length/2]);
 
         if (ref) {
@@ -1103,7 +1109,7 @@ public class Block {
      */
     public Cell var (Cell c, Boolean ref) {
         double d = Math.pow((double) this.std(c, false).getInfo(), 2);
-
+        deleteReff(c);
         c = (Cell) c.changeValue(d);
 
         if (ref) {
@@ -1126,6 +1132,18 @@ public class Block {
         return c;
     }
 
+
+    public double meanAux(){
+        double sum = 0;
+        Vector<Cell> s = new Vector<>();
+        for (Cell[] cells : this.block) {
+            for (int j = 0; j < this.block[0].length; ++j) {
+                sum += (double) cells[j].getInfo();
+                s.add(cells[j]);
+            }
+        }
+        return sum/s.size();
+    }
     /**
      * Hace la covarianza de dos bloques y escribe el valor en una celda
      * @param b
@@ -1134,8 +1152,8 @@ public class Block {
      * @return devuelve la celda modificada
      */
     public Cell covar (Block b, Cell c, Boolean ref) {
-        double mean1 = (double) this.mean(c,false).getInfo();
-        double mean2 = (double) b.mean(c,false).getInfo();
+        double mean1 = this.meanAux();
+        double mean2 = b.meanAux();
 
         double [] x = new double[this.block.length*this.block[0].length];
         double [] y = new double[this.block.length*this.block[0].length];
@@ -1165,6 +1183,7 @@ public class Block {
 
         double cov = sum/(x.length-1);
 
+        deleteReff(c);
         c = (Cell) c.changeValue(cov);
 
         if (ref) {
@@ -1210,6 +1229,7 @@ public class Block {
         }
         double stdd = Math.sqrt(std/arr.length);
 
+        deleteReff(c);
         c = (Cell) c.changeValue(stdd);
 
         if (ref) {
@@ -1227,6 +1247,78 @@ public class Block {
         return c;
     }
 
+    public double stdAux (){
+        double sum = 0, std = 0;
+        double [] arr = new double[this.block.length*this.block[0].length];
+        Vector<Cell> s = new Vector<>();
+        int ii = 0;
+        for (int i = 0; i < this.block.length; ++i) {
+            for (int j = 0; j < this.block[0].length; ++j) {
+                arr[ii] = (double) this.block[i][j].getInfo();
+                s.add(this.block[i][j]);
+                sum += (double) this.block[i][j].getInfo();
+
+                ii += 1;
+            }
+        }
+
+        double mean = sum/arr.length;
+
+        for (double num: arr) {
+            std += Math.pow(num - mean, 2);
+        }
+       return Math.sqrt(std/arr.length);
+
+    }
+
+    public double covarAux(Block b){
+        double mean1 = this.meanAux();
+        double mean2 = b.meanAux();
+
+        double [] x = new double[this.block.length*this.block[0].length];
+        double [] y = new double[this.block.length*this.block[0].length];
+
+        int ii = 0;
+        int jj = 0;
+
+        Vector<Cell> s = new Vector<>();
+
+        for (int i = 0; i < this.block.length; ++i) {
+            for (int j = 0; j < this.block[0].length; ++j) {
+                x[ii] = (double) this.block[i][j].getInfo();
+                s.add(this.block[i][j]);
+                y[jj] = (double) b.getCell(i,j).getInfo();
+                s.add(b.getCell(i,j));
+
+                ii += 1;
+                jj += 1;
+            }
+        }
+
+        double sum = 0;
+
+        for (int i = 0; i < x.length; ++i) {
+            sum += (x[i] - mean1)*(y[i] - mean2);
+        }
+
+        double cov = sum/(x.length-1);
+
+        return cov;
+    }
+
+    public void deleteReff(Cell c){
+        if(c.getType().equals("R")){
+            ReferencedCell rcell= (ReferencedCell) c;
+            Map.Entry<String,Vector<Cell>> rcellRefs=rcell.getRefInfo();
+            Vector<Cell> rcellCells= rcellRefs.getValue();
+            for (int i = 0; i < rcellCells.size(); i++) {
+                Cell delRef=rcellCells.elementAt(i);
+                System.out.println("DEPENDIA DE: "+delRef.getRow()+", "+delRef.getColumn());
+                delRef.deleteRefCell(rcell);
+            }
+        }
+    }
+
     /**
      * Calcula el coeficiente de pearson entre dos bloques y escribe el resultado en una celda
      * Puede tener referencias
@@ -1236,11 +1328,11 @@ public class Block {
      * @return devlve la celda modificada
      */
     public Cell CPearson (Block b, Cell c, Boolean ref) {
-        double d1 = (double) b.std(c,false).getInfo();
-        double d2 = (double) this.std(c, false).getInfo();
+        double d1 = b.stdAux();
+        double d2 = this.stdAux();
 
         double cp;
-        double covv = (double) this.covar(b,c,false).getInfo();
+        double covv = this.covarAux(b);
 
         if (d1 == 0 || d2 == 0) cp = 1;
         else cp = covv/(d1*d2);
@@ -1248,6 +1340,7 @@ public class Block {
         if (cp > 1.0) cp = 1.0;
         if (cp < -1) cp = -1.0;
 
+        deleteReff(c);
         c = (Cell) c.changeValue(cp);
 
         if (ref) {

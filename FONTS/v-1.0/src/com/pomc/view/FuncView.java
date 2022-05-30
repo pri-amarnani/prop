@@ -594,6 +594,9 @@ public class FuncView {
 
                 );
                 if (result2 == JOptionPane.OK_OPTION) {
+                    int selectedBrows = PresentationController.selectedBRows(SheetView.currentSheetName());
+                    int selectedBcols = PresentationController.selectedBCols(SheetView.currentSheetName());
+
                     int ul = (Integer) ulr.getValue();
                     int uc = SheetView.alphabetToNum((String) ulc.getValue()) + 1;
                     int dl = (Integer) drr.getValue();

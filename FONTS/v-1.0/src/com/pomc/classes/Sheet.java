@@ -151,7 +151,7 @@ public class Sheet {
                 break;
             }
         }
-        if(c.getType()=="R"){
+        if(c.getType().equals("R")){
            ReferencedCell rcell= (ReferencedCell) c;
             Map.Entry<String,Vector<Cell>> rcellRefs=rcell.getRefInfo();
             Vector<Cell> rcellCells= rcellRefs.getValue();
