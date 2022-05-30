@@ -126,7 +126,7 @@ public class SheetView {
                                 for (int i = 0; i < Rmodify.length; i+=2) {
                                     int rRow= (int) Rmodify[i];
                                     int rCol= (int) Rmodify[i+1];
-                                    System.out.println("refs ids: "+rRow+" , "+rCol);
+
                                     writeBlock(rRow,rCol,rRow,rCol);
                                 }
                             }
@@ -484,6 +484,13 @@ public class SheetView {
             graf.setBorder(BorderFactory.createLineBorder(c,1));
             blockBar.add(graf,blockBar.getMenuCount()-1);
 
+            graf.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    FuncView.addGraph();
+                }
+            });
+
 
             switch (blockType){
                 case "N":
@@ -766,7 +773,7 @@ public class SheetView {
                                         for (int j = 0; j < Rmodify.length; j+=2) {
                                             int rRow= (int) Rmodify[j];
                                             int rCol= (int) Rmodify[j+1];
-                                            // System.out.println("refs ids: "+rRow+" , "+rCol);
+
                                             writeBlock(rRow,rCol,rRow,rCol);
                                         }
                                     }
@@ -947,7 +954,7 @@ public class SheetView {
                         PresentationController.editedCell(rowChanged, colIndex, newValue, currentSheetName());
                         boolean b=PresentationController.hasRefs(rowChanged,colIndex,currentSheetName());
                         if(b){
-                            System.out.println("  LLEGA HASTA AQUÍ ;)  ");
+
                             Object[] Rmodify=PresentationController.getRefsIds(rowChanged,colIndex,currentSheetName());
                             for (int i = 0; i < Rmodify.length; i+=2) {
                                 int rRow= (int) Rmodify[i];

@@ -78,11 +78,14 @@ public class MenuViews {
     }
 
     public static void colsInsert() {
+        int tcols = SheetView.getCurrentTable().getModel().getColumnCount();
+        String[] alphCols = FuncView.numtoAlphabetCols(FuncView.getCols(tcols));
+        SpinnerListModel ulcm = new SpinnerListModel(alphCols);
 
         SpinnerNumberModel snm= new SpinnerNumberModel(1,1,100000,1);
-        SpinnerNumberModel snm2= new SpinnerNumberModel(getCurrentTable().getModel().getColumnCount(),1,getCurrentTable().getModel().getColumnCount(),1);
+        //SpinnerNumberModel snm2= new SpinnerNumberModel(getCurrentTable().getModel().getColumnCount(),1,getCurrentTable().getModel().getColumnCount(),1);
         JSpinner jsp=new JSpinner(snm);
-        JSpinner jsp2=new JSpinner(snm2);
+        JSpinner jsp2=new JSpinner(ulcm);
         Object [] spinners= {
                 "Insert the number of columns to add",jsp,
                 "Insert the position where you want to add the columns",jsp2
@@ -97,17 +100,17 @@ public class MenuViews {
 
         );
         if (addC==JOptionPane.OK_OPTION) {
-            PresentationController.addCols(currentSheetName(), (Integer) jsp.getValue(), (Integer) jsp2.getValue());
+            int jsp2val=  SheetView.alphabetToNum((String) jsp2.getValue())+1;
+            PresentationController.addCols(currentSheetName(), (Integer) jsp.getValue(), jsp2val);
             DefaultTableModel tmodel = (DefaultTableModel) getCurrentTable().getModel();
 
             for (int k = 0; k < (Integer) jsp.getValue(); k++) {
                 TableColumn col= new TableColumn(tmodel.getColumnCount());
                 getCurrentTable().setAutoCreateColumnsFromModel(false);
                 getCurrentTable().addColumn(col);
-                int a=(Integer)jsp2.getValue();
-                tmodel.addColumn( getCurrentTable().getColumnModel().getColumn(a).getHeaderValue());//NO SE ACTUALIZA BIEN SI NO SE AÑADE AL FINAL
+                tmodel.addColumn( getCurrentTable().getColumnModel().getColumn(jsp2val).getHeaderValue());//NO SE ACTUALIZA BIEN SI NO SE AÑADE AL FINAL
                 int b = getCurrentTable().getColumnCount()-1;
-                getCurrentTable().moveColumn(b,a+k);
+                getCurrentTable().moveColumn(b,jsp2val+k);
             }
             SheetView.updateColHeaders();
         }
@@ -144,11 +147,14 @@ public class MenuViews {
     }
 
     public static void colsDelete() {
+        int tcols = SheetView.getCurrentTable().getModel().getColumnCount();
+        String[] alphCols = FuncView.numtoAlphabetCols(FuncView.getCols(tcols));
+        SpinnerListModel ulcm = new SpinnerListModel(alphCols);
 
         SpinnerNumberModel snm= new SpinnerNumberModel(1,1,getCurrentTable().getModel().getColumnCount(),1);
-        SpinnerNumberModel snm2= new SpinnerNumberModel(1,1,getCurrentTable().getModel().getColumnCount(),1);
+        //SpinnerNumberModel snm2= new SpinnerNumberModel(1,1,getCurrentTable().getModel().getColumnCount(),1);
         JSpinner jsp=new JSpinner(snm);
-        JSpinner jsp2=new JSpinner(snm2);
+        JSpinner jsp2=new JSpinner(ulcm);
         //FALTA PREGUNTAR ON
         Object [] spinners= {
                 "Insert the number of columns to delete",jsp,
@@ -163,17 +169,17 @@ public class MenuViews {
                 null
         );
         if (DelC==JOptionPane.OK_OPTION) {
-            int a=(int) jsp2.getValue()-1;
-            PresentationController.delCols(currentSheetName(), (Integer) jsp.getValue(), a);
+            int jsp2val=  SheetView.alphabetToNum((String) jsp2.getValue());
+            PresentationController.delCols(currentSheetName(), (Integer) jsp.getValue(), jsp2val);
             for (int k = 0; k < (int) jsp.getValue(); k++) {
                 getCurrentTable().setAutoCreateColumnsFromModel(true);
-                TableColumn t= getCurrentTable().getColumnModel().getColumn(a);
+                TableColumn t= getCurrentTable().getColumnModel().getColumn(jsp2val);
                 System.out.println("HEADERRR:..............."+t.getHeaderValue());
                 getCurrentTable().removeColumn(t);
                 getCurrentTable().revalidate();
             }
             SheetView.updateColHeaders();
-            SheetView.rewriteModel(a);
+            SheetView.rewriteModel(jsp2val);
         }
     }
 

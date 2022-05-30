@@ -24,7 +24,7 @@ public class Sheet {
             for (int i = 0; i < b.number_rows(); ++i) {
                 for (int j = 0; j < b.number_cols(); ++j) {
                     cells.elementAt(ul.getRow() + i).setElementAt(b.getCell(i, j), ul.getColumn() + j);
-                    //  System.out.println("SHEET PRINT: "+getCell(ul.getRow()+i,ul.getColumn()+j).getInfo());
+
                 }
             }
         }
@@ -157,13 +157,13 @@ public class Sheet {
             Vector<Cell> rcellCells= rcellRefs.getValue();
             for (int i = 0; i < rcellCells.size(); i++) {
                 Cell delRef=rcellCells.elementAt(i);
-                System.out.println("DEPENDIA DE: "+delRef.getRow()+", "+delRef.getColumn());
+
                 delRef.deleteRefCell(rcell);
             }
         }
         Object o1 = c.changeValue(o);
         if(id != -1) cells.elementAt(id2).setElementAt((Cell) o1, id);
-        else System.out.println("Cell not found");
+
 
     }
 

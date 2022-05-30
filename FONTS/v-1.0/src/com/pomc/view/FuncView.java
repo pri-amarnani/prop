@@ -224,6 +224,7 @@ public class FuncView {
 
                 if (b1rows - selectedBrows != 0 || b1cols - selectedBcols != 0) {
                     showMessageDialog(null, "The selected blocks are of different sizes.\nTry again", "Error!", JOptionPane.ERROR_MESSAGE);
+                    return null;
                 } else {
                     if (printb.isSelected()) {
                         SpinnerNumberModel ulrm2 = new SpinnerNumberModel(1, 1, trows, 1);
@@ -505,6 +506,7 @@ public class FuncView {
             int b1cols = b1[3] - b1[1] + 1;
             if (b1rows - selectedBrows != 0 || b1cols - selectedBcols != 0) {
                 showMessageDialog(null, "The selected blocks are of different sizes.\nTry again", "Error!", JOptionPane.ERROR_MESSAGE);
+                return null;
             }
             else{
                 JCheckBox ref = new JCheckBox("Reference the result ?");
@@ -638,7 +640,7 @@ public class FuncView {
 
                     if (b1rows - selectedBrows != 0 || b1cols - selectedBcols != 0) {
                         showMessageDialog(null, "The selected blocks are of different sizes.\nTry again", "Error!", JOptionPane.ERROR_MESSAGE);
-
+                        return null;
                     }
             else{
                     int x = PresentationController.blockWRefs(ul, uc, dl, dc, SheetView.currentSheetName());
@@ -758,6 +760,7 @@ public class FuncView {
 
                 if (b1rows - selectedBrows != 0 || b1cols - selectedBcols != 0) {
                     showMessageDialog(null, "The selected blocks are of different sizes.\nTry again", "Error!", JOptionPane.ERROR_MESSAGE);
+                    return null;
                 } else {
                     int x = PresentationController.blockWRefs(ulrow, ulcol, drrow, drcol, SheetView.currentSheetName());
                     int confirm = -1;
@@ -813,7 +816,7 @@ public class FuncView {
 
         );
         if (result == JOptionPane.OK_OPTION) {
-            Object selection = "-1";
+            Object selection = null;
             String s;
             String from = "";
             String to = "";
@@ -847,8 +850,6 @@ public class FuncView {
             int ulrow = ulrowaux + 1;
             int ulcol = ulcolaux + 1;
 
-//              System.out.println("ul: "+ulrow+" , "+ulcol);
-//              System.out.println("dr: "+drrow+" , "+drcol);
 
             if (selection != null) {
                 if (printb.isSelected()) {
@@ -892,7 +893,7 @@ public class FuncView {
                         int b1cols = dc - uc + 1;
                         if (b1rows - selectedBrows != 0 || b1cols - selectedBcols != 0) {
                             showMessageDialog(null, "The selected blocks are of different sizes.\nTry again", "Error!", JOptionPane.ERROR_MESSAGE);
-
+                            return null;
                         }
                         else{
                             int x = PresentationController.blockWRefs(ul, uc, dl, dc, SheetView.currentSheetName());
@@ -914,14 +915,15 @@ public class FuncView {
                             ulcol = SheetView.alphabetToNum((String) ulc.getValue()) + 1;
                             drrow = (Integer) drr.getValue();
                             drcol = SheetView.alphabetToNum((String) drc.getValue()) + 1;
-                        } else return null;
-                        ids[4] = -1;
-                    }
+                        }
+                        else return null;
+
+                    } ids[4] = -1;
                     } else return null;
                 } else ref.setSelected(false);
                 boolean b = false;
                 if (ref.isSelected()) b = true;
-                if (selection != null) {
+
                     switch (op) {
                         case "Extract":
                             PresentationController.blockExtract(ulrow, ulcol, drrow, drcol, b, selection.toString(), SheetView.currentSheetName());
@@ -940,7 +942,6 @@ public class FuncView {
                     ids[1] = ulcol - 1;
                     ids[2] = drrow - 1;
                     ids[3] = drcol - 1;
-                }
             }
         }
         return ids;
@@ -990,6 +991,10 @@ public class FuncView {
 
         );
         if(pop==OK_OPTION) PresentationController.blockModify(o.getText(),SheetView.currentSheetName());
+    }
+
+    public static void addGraph(){
+
     }
 
 

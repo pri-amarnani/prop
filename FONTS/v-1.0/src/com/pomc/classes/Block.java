@@ -49,13 +49,11 @@ public class Block {
     public boolean allDouble() {
         for (int i = 0; i < this.block.length; ++i) {
             for (int j = 0; j < this.block[0].length; ++j) {
-                //System.out.println(this.block[i][j].getRow() +" "+this.block[i][j].getColumn());
+
                 if (this.block[i][j].getInfo() == null){
-                    //System.out.println(this.block[i][j].getRow() +" ola "+this.block[i][j].getColumn() + " " + this.block[i][j].getType());
                     return false;
                 }
                 else if (!this.block[i][j].isNum()) {
-                    //System.out.println(this.block[i][j].getRow() +" qw1 "+this.block[i][j].getColumn());
                     return false;
                 }
             }
@@ -285,7 +283,6 @@ public class Block {
         c = (Cell) c.changeValue(max);
 
         if (ref) {
-            //System.out.println("entra1");
             ReferencedCell rc = new ReferencedCell(c.getRow(),c.getColumn(),"=max");
             rc.setContent(c.getInfo());
             c = rc;
@@ -856,7 +853,7 @@ public class Block {
         }
         b.ul=b.getCell(0,0);
         b.dr=b.getCell(b.size_r-1,b.size_c-1);
-      //  System.out.println(b.getCell(0,0).getType());
+
     }
 
     /**
@@ -941,7 +938,7 @@ public class Block {
         c = (Cell) c.changeValue(-sum);
 
         if (ref) {
-            //System.out.println("entra1");
+
             ReferencedCell rc = new ReferencedCell(c.getRow(),c.getColumn(),"=subAll");
             rc.setContent(c.getInfo());
             c = rc;
@@ -976,7 +973,7 @@ public class Block {
         c = (Cell) c.changeValue(sum);
 
         if (ref) {
-            //System.out.println("entra1");
+
             ReferencedCell rc = new ReferencedCell(c.getRow(),c.getColumn(),"=multAll");
             rc.setContent(c.getInfo());
             c = rc;
@@ -1011,7 +1008,7 @@ public class Block {
         c = (Cell) c.changeValue(sum);
 
         if (ref) {
-            //System.out.println("entra1");
+
             ReferencedCell rc = new ReferencedCell(c.getRow(),c.getColumn(),"=divAll");
             rc.setContent(c.getInfo());
             c = rc;
@@ -1047,7 +1044,7 @@ public class Block {
         c = (Cell) c.changeValue(sum/s.size());
 
         if (ref) {
-            //System.out.println("entra1");
+
             ReferencedCell rc = new ReferencedCell(c.getRow(),c.getColumn(),"=mean");
             rc.setContent(c.getInfo());
             c = rc;
@@ -1313,7 +1310,6 @@ public class Block {
             Vector<Cell> rcellCells= rcellRefs.getValue();
             for (int i = 0; i < rcellCells.size(); i++) {
                 Cell delRef=rcellCells.elementAt(i);
-                System.out.println("DEPENDIA DE: "+delRef.getRow()+", "+delRef.getColumn());
                 delRef.deleteRefCell(rcell);
             }
         }
