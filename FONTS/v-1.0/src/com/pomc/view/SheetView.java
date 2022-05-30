@@ -114,9 +114,6 @@ public class SheetView {
                         if (rowChanged >= 0 && rowChanged < getCurrentTable().getRowCount() && colChanged >= 0 && colChanged < getCurrentTable().getColumnCount()) {
                            //si no son ref:
                             int colIndex = getCurrentTable().convertColumnIndexToView(colChanged);
-
-                            TableModel tm = getCurrentTable().getModel();
-
                             String newValue = (String) table.getValueAt(rowChanged, colIndex);
                             PresentationController.editedCell(rowChanged, colIndex, newValue, currentSheetName());
 
@@ -132,11 +129,7 @@ public class SheetView {
                             }
 
                         }
-
-
-
                     }
-                    PresentationController.showTcells(currentSheetName());
                 }
             });
 
@@ -678,31 +671,6 @@ public class SheetView {
                         }
                     });
 
-
-                    ImageIcon opAllIcon = new ImageIcon("res/iconoallfinal.png");
-                    Image oaIcon = opAllIcon.getImage();
-                    Image opa= oaIcon.getScaledInstance(40,40,Image.SCALE_DEFAULT);
-                    opAllIcon.setImage(opa);
-                    JButton opAll = new JButton(opAllIcon);
-                    opAll.setToolTipText("Op All");
-                    opAll.setBackground(blockBar.getBackground());
-                    opAll.setBorder(BorderFactory.createLineBorder(c,1));
-                    blockBar.add(opAll,blockBar.getMenuCount()-1);
-
-
-                    opAll.addActionListener(new ActionListener() {
-                        @Override
-                        public void actionPerformed(ActionEvent e) {
-                            Integer[] opA = FuncView.addSingleOp("All Op Block");
-                            if(opA!=null && opA[0]!=-1) {
-                                if (opA[4] == -1) writeBlock(opA[0], opA[1], opA[2], opA[3]);
-                                else rewriteBlock();
-                            }
-                        }
-                    });
-
-
-
                     break;
                 case "T":
                     ImageIcon lengthIcon= new ImageIcon("res/iconolength.png");
@@ -862,7 +830,10 @@ public class SheetView {
 
         //TABLE
         JTable table = new JTable(numfil,numcol );
-        DefaultTableModel model;
+        table.putClientProperty("terminateEditOnFocusLost", true);
+        table.getTableHeader().setReorderingAllowed(false);
+        DefaultTableModel model=new DefaultTableModel(numfil,numcol);
+        table.setModel(model);
 
         ArrayList<String> headers = new ArrayList<>(numfil);
         for (int j = 1; j <= numfil; j++) {
@@ -879,6 +850,11 @@ public class SheetView {
                 return headers.get(index);
             }
         };
+
+        for (int j=0;j<numcol;j++){
+            table.getColumnModel().getColumn(j).setHeaderValue(numToAlphabet(j));
+        }
+
         JList rowHeader = new JList(l);
 
         rowHeader.setFixedCellWidth(50);
@@ -911,32 +887,28 @@ public class SheetView {
         model.addTableModelListener(new TableModelListener() {
             @Override
             public void tableChanged(TableModelEvent e) {
-                if (e.getType() == TableModelEvent.UPDATE) {
+                if (e.getType() == 0 && !writeChange) {
                     int rowChanged = e.getFirstRow();
                     int colChanged = e.getColumn();
 
-
                     if (rowChanged >= 0 && rowChanged < getCurrentTable().getRowCount() && colChanged >= 0 && colChanged < getCurrentTable().getColumnCount()) {
-//                       String colName = getCurrentTable().getModel().getColumnName(colChanged);
-//
-//                        int colValue= alphabetToNum(colName);
+                        //si no son ref:
                         int colIndex = getCurrentTable().convertColumnIndexToView(colChanged);
-
-                        TableModel tm = getCurrentTable().getModel();
                         String newValue = (String) table.getValueAt(rowChanged, colIndex);
                         PresentationController.editedCell(rowChanged, colIndex, newValue, currentSheetName());
+
                         boolean b=PresentationController.hasRefs(rowChanged,colIndex,currentSheetName());
                         if(b){
-
-                            Object[] Rmodify=PresentationController.getRefsIds(rowChanged,colIndex,currentSheetName());
+                            Object[] Rmodify= PresentationController.getRefsIds(rowChanged,colIndex,currentSheetName());
                             for (int i = 0; i < Rmodify.length; i+=2) {
                                 int rRow= (int) Rmodify[i];
-                                int rCol=(int) Rmodify[i+1];
+                                int rCol= (int) Rmodify[i+1];
+
                                 writeBlock(rRow,rCol,rRow,rCol);
                             }
                         }
-                    }
 
+                    }
                 }
             }
         });
@@ -945,9 +917,24 @@ public class SheetView {
             int row1,col1,row2,col2;
             @Override
             public void mousePressed(MouseEvent e) {
-
-                table.repaint();
+                if (FuncView.foundVal != null) {
+                    FuncView.foundVal = null;
+                    for (int i = 0; i < FuncView.foundCols.size(); i++) {
+                        getCurrentTable().getColumnModel().getColumn(FuncView.foundCols.get(i)).setCellRenderer(new DefaultTableCellRenderer());
+                    }
+                    FuncView.foundCols.clear();
+                }
                 table.clearSelection();
+                if(changedMenu) {
+                    int count=jmbar_sheet.getMenuCount();
+                    for (int j = count-2; j >= 5; j--) {
+                        jmbar_sheet.remove(j);
+
+                    }
+                    jmbar_sheet.repaint();
+                    jmbar_sheet.revalidate();
+                    changedMenu=false;
+                }
                 int row=table.rowAtPoint(e.getPoint());
                 int col=table.columnAtPoint(e.getPoint());
                 if(row<table.getRowCount() && row>=0 && col>=0 && col<table.getColumnCount()){
@@ -964,13 +951,13 @@ public class SheetView {
                 int row=table.rowAtPoint(e.getPoint());
                 int col=table.columnAtPoint(e.getPoint());
                 if(row<table.getRowCount() && row>=0 && col>=0 && col<table.getColumnCount() ){
-                    if (row1 != row || col1 != col ) {
-                        bar.setText(PresentationController.cellInfo(row,col,currentSheetName()));
-                        col2=col;
-                        row2=row;
-                        PresentationController.createBlock(min(row1,row2),min(col1,col2),max(row1,row2),max(col1,col2),currentSheetName());
-                        updateBlockMenu(jmbar_sheet);
-                    }
+                    bar.setText(PresentationController.cellInfo(row,col,currentSheetName()));
+                    col2=col;
+                    row2=row;
+
+                    PresentationController.createBlock(min(row1,row2),min(col1,col2),max(row1,row2),max(col1,col2),currentSheetName());
+                    updateBlockMenu(jmbar_sheet);
+                    System.out.println();
                 }
             }
 
@@ -980,6 +967,7 @@ public class SheetView {
         table.setColumnSelectionAllowed(false);
         table.setRowSelectionAllowed(false);
         table.setCellSelectionEnabled(true);
+        PresentationController.createBlock(0,0,numfil-1,numcol-1,title);
 
         return scrollPane;
 
@@ -1008,8 +996,7 @@ public class SheetView {
     public static JTable getCurrentTable(){
         int a= sheets.getSelectedIndex();
         JScrollPane sp;
-        if (a==0){ sp=(JScrollPane) sheets.getComponentAt(a);}
-        else {sp= (JScrollPane) sheets.getComponentAt(a+1);}
+        sp=(JScrollPane) sheets.getComponentAt(a);
         return (JTable) sp.getViewport().getComponent(0);
     }
 
