@@ -4,6 +4,8 @@ import com.itextpdf.text.DocumentException;
 import com.pomc.controller.DomainController;
 import com.pomc.controller.PersistenceController;
 
+import javax.swing.*;
+import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 
@@ -11,7 +13,9 @@ public class PresentationController {
 
     private static String path = null;
 
-
+    public static String getPath() {
+        return path;
+    }
     //------------------------------DOC FUNCTIONS -------------------------------------
 
     public static void newDoc(String d){
@@ -206,13 +210,12 @@ public class PresentationController {
 
     //-------------------------FILE MANAGEMENT-----------------------------
 
-    public static boolean isFileSaved() {
-        return (path != null);
-    }
+    public static boolean isFileSaved() {return (path != null);}
 
     public static void save() {
         try {
             PersistenceController.save(path,DomainController.getDoc());
+
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -224,9 +227,14 @@ public class PresentationController {
             if(extension[1].equals("pomc")) path= selectedFile.getAbsolutePath();
             else {
                 path = selectedFile.getAbsolutePath()+".pomc";
+                MainMenu.frame.setTitle(extension[0] + " - POMC WORKSHEETS");
             }
         }
-        else path = selectedFile.getAbsolutePath()+".pomc";
+        else {
+            path = selectedFile.getAbsolutePath()+".pomc";
+            MainMenu.frame.setTitle(selectedFile.getName() + " - POMC WORKSHEETS");
+        }
+
         save();
     }
 
@@ -272,7 +280,7 @@ public class PresentationController {
                 try {
                     DomainController.setDoc(PersistenceController.open(path));
                 } catch (IOException e) {
-                    throw new RuntimeException(e);
+                    return false;
                 }
                 return true;
             }
@@ -322,6 +330,5 @@ public class PresentationController {
     public static void blockModify(String o, String sheetName){DomainController.modifyBlock(o,sheetName);}
 
 
-
-
+    public static void openUserGuide() { PersistenceController.openUG();}
 }

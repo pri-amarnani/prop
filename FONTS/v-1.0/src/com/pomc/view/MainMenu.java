@@ -27,7 +27,7 @@ public class MainMenu {
 
         //MENU DE ARRIBA
         JMenu m1 = new JMenu("File");
-        JMenu m2 = new JMenu("HELP");
+        JMenu m2 = new JMenu("Help");
         mb.add(m1);
         mb.add(m2);
         JMenuItem newDocB = new JMenuItem("New");
@@ -73,16 +73,8 @@ public class MainMenu {
         userGuideB.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
-                try{
-                    Desktop.getDesktop().browse(new URI("https://www.google.com/"));
-                }
-                catch (URISyntaxException | IOException e2){
-                    e2.printStackTrace();
-                }
-
+                    PresentationController.openUserGuide();
                 };
-
         });
 
 
@@ -150,8 +142,6 @@ public class MainMenu {
                                 JOptionPane.OK_CANCEL_OPTION,
                                 JOptionPane.PLAIN_MESSAGE,
                                 null
-
-
                         );
                         if (nrows.getText()!= null&&ncolumns.getText()!=null && isNumeric(nrows.getText()) && isNumeric(ncolumns.getText())) {
                             if (result3 == JOptionPane.OK_OPTION) {
@@ -173,8 +163,8 @@ public class MainMenu {
                                         frame.setVisible(true);
 
                                     }
-                                    else {//TODO preguntar si seguro
-                                        int confirm=showConfirmDialog(null, "Beware! You'll loose the current information. \n Are you sure?", "Unsaved changes!", JOptionPane.YES_NO_OPTION);
+                                    else {
+                                        int confirm=showConfirmDialog(null, "Beware! Not saved changes will be lost. \n Are you sure?", "Unsaved changes!", JOptionPane.YES_NO_OPTION);
                                         if(confirm==JOptionPane.OK_OPTION) {
                                             PresentationController.newDoc(result2);
                                             frame.getContentPane().removeAll();

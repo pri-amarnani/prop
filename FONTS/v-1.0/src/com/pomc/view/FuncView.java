@@ -93,7 +93,6 @@ public class FuncView {
                             }
                             else l.setBackground(table.getBackground());
                             return l;
-
                         }
                     } );
                }
@@ -846,9 +845,6 @@ public class FuncView {
             int drcol = ulcolaux + SheetView.getCurrentTable().getSelectedColumnCount();
             int ulrow = ulrowaux + 1;
             int ulcol = ulcolaux + 1;
-
-//              System.out.println("ul: "+ulrow+" , "+ulcol);
-//              System.out.println("dr: "+drrow+" , "+drcol);
 
             if (selection != null) {
                 if (printb.isSelected()) {

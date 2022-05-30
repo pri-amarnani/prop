@@ -309,7 +309,6 @@ public class SheetView {
 
 
         jmbar_sheet.add(Box.createHorizontalGlue());
-        // TODO: 18/5/22 persistencia
         ImageIcon findIcon= new ImageIcon("res/find.png");
         Image fIcon=findIcon.getImage();
         Image fi=fIcon.getScaledInstance(40,40,Image.SCALE_DEFAULT);
@@ -418,7 +417,9 @@ public class SheetView {
             @Override
             public void actionPerformed(ActionEvent e) {MenuViews.export();}});
 
-
+        propertiesB.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {MenuViews.propertiesB();}});
         change_name.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {  sheets.setTitleAt(sheets.getSelectedIndex(),MenuViews.changeName());}});
