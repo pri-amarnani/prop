@@ -188,7 +188,7 @@ public class DomainController {
 
 
     public static Block createBlock(Integer[] blockCells, String name) {
-        if (name != null&&blockCells[0]!=-1) {
+        if (name != null && blockCells[0]!=-1) {
             Sheet s=doc.getSheet(name);
             if (blockCells[0] <= blockCells[2] && blockCells[1] <= blockCells[3]) {
                 Cell c1 = s.getCell(blockCells[0] - 1, blockCells[1] - 1);

@@ -12,7 +12,6 @@ public abstract class Cell {
     private Integer row;
     private Integer column;
     private Vector<ReferencedCell> refs= new Vector<>();
-  //  private Map.Entry<String,Vector<Cell>> refInfo; //celdas y operaciones (la información que yo guardo).
 
 
     /**
