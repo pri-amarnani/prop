@@ -16,6 +16,11 @@ public class DateCell extends Cell {
         this.info= info;
     }
 
+    /**
+     * Obtiene el día/mes/año de la fecha
+     * @param criteria
+     * @return devuelve el valor
+     */
     public Double extract(String criteria){ //tendría que devolver localdate???????
         if (Objects.equals(criteria, "Day")) return Double.valueOf((info.getDayOfMonth()));
         else if (Objects.equals(criteria, "Month")) return Double.valueOf(info.getMonthValue());
@@ -23,6 +28,10 @@ public class DateCell extends Cell {
         return Double.valueOf(-1);
     }
 
+    /**
+     * Obtiene el día de la semana de una fecha
+     * @return devuelve el valor
+     */
     public String getDayofTheWeek(){
         DayOfWeek d= info.getDayOfWeek();
         int day= d.getValue();
@@ -46,6 +55,11 @@ public class DateCell extends Cell {
         return info;
     }
 
+    /**
+     * Cambia el valor de una celda por el indicado (o)
+     * @param o
+     * @return devuelve la celda modificada
+     */
     @Override
     public Object changeValue(Object o) {
         if (o.getClass()==LocalDate.class) {

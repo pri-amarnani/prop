@@ -16,19 +16,11 @@ public class TextCell extends Cell {
         this.info= info;
     }
 
-    public void replace(String criteria){ //return String??
-        if (Objects.equals(criteria, "All caps")) {
-            info= info.toUpperCase();
-        }
-        else if (Objects.equals(criteria, "All lowercase")){
-            info=info.toLowerCase();
-        }
-        else if (Objects.equals(criteria, "Cap first letter")){
-            String aux;
-            aux=info.substring(0,1).toUpperCase()+info.substring(1);
-            info=aux;
-        }
-    }
+    /**
+     * Calcula el tamaño en palabras/letras/caracteres de una celda
+     * @param criteria
+     * @return devuelve el tamaño
+     */
 
     public double length(String criteria){
         if  (Objects.equals(criteria, "Words")){ //falta comprovar!!!!!!
@@ -60,6 +52,11 @@ public class TextCell extends Cell {
         return info;
     }
 
+    /**
+     * Cambia el valor de una celda por el indicado (o)
+     * @param o
+     * @return devuelve la celda modificada
+     */
     @Override
     public Object changeValue(Object o) {
         if (o.getClass()==String.class && !((String) o).startsWith("=")) {

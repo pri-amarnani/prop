@@ -154,7 +154,7 @@ public class PresentationController {
         return DomainController.getRefsIds(r,c,sheetName);
     }
 
-    public static int blockWRefs(int ulr, int ulc, int drr, int drc, String sheetName){return DomainController.isRef(ulr,ulc,drr,drc,sheetName);}
+    public static int blockWRefs(int ulr, int ulc, int drr, int drc, String sheetName){return DomainController.isRef(ulr-1,ulc,drr-1,drc,sheetName);}
 
     public static String cellInfo(int r, int c, String name){
         String t= DomainController.getCellType(r,c,name);
