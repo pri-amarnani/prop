@@ -558,10 +558,6 @@ public class DomainController {
     }
 
 
-
-
-
-
     //-----------------------------------AUXILIAR-----------------------------
     public static Object Parse(String input) {
         try{

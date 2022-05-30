@@ -951,12 +951,18 @@ public class FuncView {
         return ids;
     }
 
-    public static void addReplaceWC(){
-        Object[] selectionValues = {"All caps","All lowercase","Cap first letter"};
-        String initialSelection = "All caps";
-        Object selection = JOptionPane.showInputDialog(null, "Select the criteria",
-                "Replace with criteria", JOptionPane.QUESTION_MESSAGE, null, selectionValues, initialSelection);
-        if(selection!=null) PresentationController.blockReplaceWC(SheetView.currentSheetName(),selection.toString());
+    public static void addSameBlockOp(int op){
+        if(op==1) {
+            Object[] selectionValues = {"All caps", "All lowercase", "Cap first letter"};
+            String initialSelection = "All caps";
+            Object selection = JOptionPane.showInputDialog(null, "Select the criteria",
+                    "Replace with criteria", JOptionPane.QUESTION_MESSAGE, null, selectionValues, initialSelection);
+            if (selection != null)
+                PresentationController.blockReplaceWC(SheetView.currentSheetName(), selection.toString());
+        }
+        else{
+            PresentationController.blockTrim(SheetView.currentSheetName());
+        }
     }
 
     public static void unitOp(){

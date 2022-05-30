@@ -742,11 +742,8 @@ public class SheetView {
                     trim.addActionListener(new ActionListener() {
                         @Override
                         public void actionPerformed(ActionEvent e) {
-                            Integer[] trimm = FuncView.addSingleOp("trim");
-                            if(trimm!=null && trimm[0]!=-1) {
-                                if (trimm[4] == -1) writeBlock(trimm[0], trimm[1], trimm[2], trimm[3]);
-                                else rewriteBlock();
-                            }
+                            FuncView.addSameBlockOp(2);
+                            rewriteBlock();
                         }
                     });
 
@@ -763,7 +760,7 @@ public class SheetView {
                     replace.addActionListener(new ActionListener() {
                         @Override
                         public void actionPerformed(ActionEvent e) {
-                            FuncView.addReplaceWC();
+                            FuncView.addSameBlockOp(1);
                             rewriteBlock();
                             Object[] updater=PresentationController.getSBlockids(currentSheetName());
                             if(updater!=null){
