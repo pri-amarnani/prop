@@ -16,8 +16,7 @@ import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
 
 import static com.pomc.view.SheetView.*;
-import static javax.swing.JOptionPane.showConfirmDialog;
-import static javax.swing.JOptionPane.showMessageDialog;
+import static javax.swing.JOptionPane.*;
 
 public class MenuViews {
 
@@ -182,15 +181,31 @@ public class MenuViews {
                 if (jsp2val + jspval > getCurrentTable().getColumnCount()) {
                     showMessageDialog(null, "Can't delete columns from here ", "Error!", JOptionPane.ERROR_MESSAGE);
                 } else {
-                    PresentationController.delCols(currentSheetName(), (Integer) jsp.getValue(), jsp2val);
-                    for (int k = 0; k < (int) jsp.getValue(); k++) {
-                        getCurrentTable().setAutoCreateColumnsFromModel(true);
-                        TableColumn t = getCurrentTable().getColumnModel().getColumn(jsp2val);
-                        getCurrentTable().removeColumn(t);
-                        getCurrentTable().revalidate();
+                    int x = PresentationController.blockWRefs(1,jsp2val+1,getCurrentTable().getRowCount(), jsp2val+jspval, SheetView.currentSheetName());
+                    int confirm=-1;
+                    if(x!=-1){
+                        switch (x) {
+                            case 0:
+                                confirm = showConfirmDialog(null, "Watch out! There are references in the selected block, the content and references will be lost after the print. \n Are you sure?", "References!", JOptionPane.YES_NO_OPTION);
+                                break;
+                            case 1:
+                                confirm = showConfirmDialog(null, "Watch out! There is information in the selected block, the content  will be lost after the print. \n Are you sure?", "Alert", YES_NO_OPTION);
+                                break;
+                            default:
+                                break;
+                        }
                     }
-                    SheetView.updateColHeaders();
-                    SheetView.rewriteModel(jsp2val);
+                    if (confirm == JOptionPane.YES_OPTION || x == -1) {
+                        PresentationController.delCols(currentSheetName(), (Integer) jsp.getValue(), jsp2val);
+                        for (int k = 0; k < (int) jsp.getValue(); k++) {
+                            getCurrentTable().setAutoCreateColumnsFromModel(true);
+                            TableColumn t = getCurrentTable().getColumnModel().getColumn(jsp2val);
+                            getCurrentTable().removeColumn(t);
+                            getCurrentTable().revalidate();
+                        }
+                        SheetView.updateColHeaders();
+                        SheetView.rewriteModel(jsp2val);
+                    }
                 }
             }
         }
