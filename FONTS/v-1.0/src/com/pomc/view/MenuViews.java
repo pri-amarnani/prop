@@ -113,68 +113,86 @@ public class MenuViews {
     }
 
     public static void rowsDelete() {
-
-        SpinnerNumberModel snm= new SpinnerNumberModel(1,1,getCurrentTable().getModel().getRowCount(),1);
-        SpinnerNumberModel snm2= new SpinnerNumberModel(1,1,getCurrentTable().getModel().getRowCount(),1);
-        JSpinner jsp=new JSpinner(snm);
-        JSpinner jsp2=new JSpinner(snm2);
-        Object [] spinners= {
-                "Insert the number of rows to delete",jsp,
-                "Insert the position from where you want to delete the rows",jsp2
-        };
-        int DelR = JOptionPane.showConfirmDialog(
-                null,
-                spinners,
-                "Delete rows",
-                JOptionPane.OK_CANCEL_OPTION,
-                JOptionPane.PLAIN_MESSAGE,
-                null
-        );
-        if (DelR==JOptionPane.OK_OPTION) {
-            int a2=(int) jsp.getValue();
-            int b=(int) jsp2.getValue()-1;
-            PresentationController.delRow(currentSheetName(), a2, b);
-            DefaultTableModel tmodel = (DefaultTableModel) getCurrentTable().getModel();
-            for (int k = 0; k < (int) jsp.getValue(); ++k) {
-                tmodel.removeRow(b);
+        if(getCurrentTable().getModel().getRowCount() <= 1) {
+            showMessageDialog(null, "Can't delete a single row ", "Error!", JOptionPane.ERROR_MESSAGE);
+        }
+        else {
+            SpinnerNumberModel snm = new SpinnerNumberModel(1, 1, getCurrentTable().getModel().getRowCount()-1, 1);
+            SpinnerNumberModel snm2 = new SpinnerNumberModel(1, 1, getCurrentTable().getModel().getRowCount(), 1);
+            JSpinner jsp = new JSpinner(snm);
+            JSpinner jsp2 = new JSpinner(snm2);
+            Object[] spinners = {
+                    "Insert the number of rows to delete", jsp,
+                    "Insert the position from where you want to delete the rows", jsp2
+            };
+            int DelR = JOptionPane.showConfirmDialog(
+                    null,
+                    spinners,
+                    "Delete rows",
+                    JOptionPane.OK_CANCEL_OPTION,
+                    JOptionPane.PLAIN_MESSAGE,
+                    null
+            );
+            if (DelR == JOptionPane.OK_OPTION) {
+                int a2 = (int) jsp.getValue();
+                int b = (int) jsp2.getValue() - 1;
+                if (a2 +b > (getCurrentTable().getRowCount())) {
+                    showMessageDialog(null, "Can't delete rows from here ", "Error!", JOptionPane.ERROR_MESSAGE);
+                }
+                else {
+                    PresentationController.delRow(currentSheetName(), a2, b);
+                    DefaultTableModel tmodel = (DefaultTableModel) getCurrentTable().getModel();
+                    for (int k = 0; k < (int) jsp.getValue(); ++k) {
+                        tmodel.removeRow(b);
+                    }
+                    SheetView.updateRowHeaders();
+                }
             }
-            SheetView.updateRowHeaders();
         }
     }
 
     public static void colsDelete() {
         int tcols = SheetView.getCurrentTable().getModel().getColumnCount();
-        String[] alphCols = FuncView.numtoAlphabetCols(FuncView.getCols(tcols));
-        SpinnerListModel ulcm = new SpinnerListModel(alphCols);
+        if (tcols <= 1) {
+            showMessageDialog(null, "Can't delete a single column ", "Error!", JOptionPane.ERROR_MESSAGE);
+        }
+        else {
+            String[] alphCols = FuncView.numtoAlphabetCols(FuncView.getCols(tcols));
+            SpinnerListModel ulcm = new SpinnerListModel(alphCols);
 
-        SpinnerNumberModel snm= new SpinnerNumberModel(1,1,getCurrentTable().getModel().getColumnCount(),1);
-        //SpinnerNumberModel snm2= new SpinnerNumberModel(1,1,getCurrentTable().getModel().getColumnCount(),1);
-        JSpinner jsp=new JSpinner(snm);
-        JSpinner jsp2=new JSpinner(ulcm);
-        //FALTA PREGUNTAR ON
-        Object [] spinners= {
-                "Insert the number of columns to delete",jsp,
-                "Insert the position from where you want to delete the columns",jsp2
-        };
-        int DelC = JOptionPane.showConfirmDialog(
-                null,
-                spinners,
-                "Delete columns",
-                JOptionPane.OK_CANCEL_OPTION,
-                JOptionPane.PLAIN_MESSAGE,
-                null
-        );
-        if (DelC==JOptionPane.OK_OPTION) {
-            int jsp2val=  SheetView.alphabetToNum((String) jsp2.getValue());
-            PresentationController.delCols(currentSheetName(), (Integer) jsp.getValue(), jsp2val);
-            for (int k = 0; k < (int) jsp.getValue(); k++) {
-                getCurrentTable().setAutoCreateColumnsFromModel(true);
-                TableColumn t= getCurrentTable().getColumnModel().getColumn(jsp2val);
-                getCurrentTable().removeColumn(t);
-                getCurrentTable().revalidate();
+            SpinnerNumberModel snm = new SpinnerNumberModel(1, 1, getCurrentTable().getModel().getColumnCount()-1, 1);
+            JSpinner jsp = new JSpinner(snm);
+            JSpinner jsp2 = new JSpinner(ulcm);
+            //FALTA PREGUNTAR ON
+            Object[] spinners = {
+                    "Insert the number of columns to delete", jsp,
+                    "Insert the position from where you want to delete the columns", jsp2
+            };
+            int DelC = JOptionPane.showConfirmDialog(
+                    null,
+                    spinners,
+                    "Delete columns",
+                    JOptionPane.OK_CANCEL_OPTION,
+                    JOptionPane.PLAIN_MESSAGE,
+                    null
+            );
+            if (DelC == JOptionPane.OK_OPTION) {
+                int jsp2val = SheetView.alphabetToNum((String) jsp2.getValue());
+                int jspval = (int) jsp.getValue();
+                if (jsp2val + jspval > getCurrentTable().getColumnCount()) {
+                    showMessageDialog(null, "Can't delete columns from here ", "Error!", JOptionPane.ERROR_MESSAGE);
+                } else {
+                    PresentationController.delCols(currentSheetName(), (Integer) jsp.getValue(), jsp2val);
+                    for (int k = 0; k < (int) jsp.getValue(); k++) {
+                        getCurrentTable().setAutoCreateColumnsFromModel(true);
+                        TableColumn t = getCurrentTable().getColumnModel().getColumn(jsp2val);
+                        getCurrentTable().removeColumn(t);
+                        getCurrentTable().revalidate();
+                    }
+                    SheetView.updateColHeaders();
+                    SheetView.rewriteModel(jsp2val);
+                }
             }
-            SheetView.updateColHeaders();
-            SheetView.rewriteModel(jsp2val);
         }
     }
 
