@@ -429,14 +429,19 @@ public class Block {
      * @param b
      * @param ref
      */
-    public void ref(Block b, Boolean ref) {
+    public boolean ref(Block b, Boolean ref) {
         for (int i = 0; i < this.block.length; ++i) {
             for (int j = 0; j < this.block[0].length; ++j) {
                 Cell n =  b.getCell(i,j);
                 if (this.block[i][j].getInfo() != null) {
-                    deleteReff(b.getCell(i,j));
-                    n = (Cell) b.getCell(i,j).changeValue(this.block[i][j].getInfo());
-                    b.setCell(i,j,n);
+                    if(this.block[i][j].getType().equals("R")){
+                        return false;
+                    }
+                    else {
+                        deleteReff(b.getCell(i, j));
+                        n = (Cell) b.getCell(i, j).changeValue(this.block[i][j].getInfo());
+                        b.setCell(i, j, n);
+                    }
 
                 }
                 if (ref) {
@@ -454,6 +459,7 @@ public class Block {
         }
         b.ul = b.getCell(0,0);
         b.dr = b.getCell(b.size_r -1,b.size_c -1);
+        return true;
     }
 
 

@@ -170,7 +170,6 @@ public class MenuViews {
             for (int k = 0; k < (int) jsp.getValue(); k++) {
                 getCurrentTable().setAutoCreateColumnsFromModel(true);
                 TableColumn t= getCurrentTable().getColumnModel().getColumn(jsp2val);
-                System.out.println("HEADERRR:..............."+t.getHeaderValue());
                 getCurrentTable().removeColumn(t);
                 getCurrentTable().revalidate();
             }

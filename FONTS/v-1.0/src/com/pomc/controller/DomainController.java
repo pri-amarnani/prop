@@ -372,9 +372,9 @@ public class DomainController {
         doc.getSheet(sheetname).dayOfTheWeek(b1,ref);
     }
 
-    public static void moveBlock(Integer[] block,boolean ref,String sheetname){
+    public static boolean moveBlock(Integer[] block,boolean ref,String sheetname){
         Block b1 = createBlock(block,sheetname);
-        doc.getSheet(sheetname).MoveBlock(b1,ref);
+        return doc.getSheet(sheetname).MoveBlock(b1,ref);
     }
 
     public static void funcReplaceCriteria(String criteria,String sheetname){

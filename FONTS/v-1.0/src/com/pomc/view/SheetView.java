@@ -1157,13 +1157,13 @@ public class SheetView {
 
     public static void rewriteBlock(){
         writeChange=true;
-        TableModel tm = getCurrentTable().getModel();
+       // TableModel tm = getCurrentTable().getModel();
         String cs = currentSheetName();
         int firstrow = PresentationController.blockFirstRow(cs);
         int firstcol = PresentationController.blockFirstCol(cs);
         for (int i = 0; i < PresentationController.blockRows(cs); i++) {
             for (int j = 0; j < PresentationController.blockCols(cs); j++) {
-                  tm.setValueAt(PresentationController.getCellInfo(firstrow+i,firstcol+j,cs),firstrow+i,firstcol+j);
+                  getCurrentTable().setValueAt(PresentationController.getCellInfo(firstrow+i,firstcol+j,cs),firstrow+i,firstcol+j);
             }
         }
         writeChange=false;
@@ -1171,12 +1171,12 @@ public class SheetView {
 
     public static void writeBlock(int ulr,int ulc,int drr,int drc){
         writeChange=true;
-        TableModel tm = getCurrentTable().getModel();
+        //TableModel tm = getCurrentTable().getModel();
         String cs = currentSheetName();
         for (int i = ulr; i <=drr; i++) {
             for (int j = ulc; j <=drc; j++) {
                 String s=PresentationController.getCellInfo(i,j,cs);
-                tm.setValueAt(s,i,j);
+                getCurrentTable().setValueAt(s,i,j);
             }
         }
         writeChange=false;

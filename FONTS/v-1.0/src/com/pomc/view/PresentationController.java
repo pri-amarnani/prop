@@ -132,9 +132,9 @@ public class PresentationController {
         if(!from.equals("") && !to.equals(""))DomainController.blockConvert(ints,ref,from,to,sheetName);
     }
 
-    public static void moveBlock(int ulr, int ulc,int drr, int drc, boolean ref, String sheetName){
+    public static boolean moveBlock(int ulr, int ulc,int drr, int drc, boolean ref, String sheetName){
         Integer[] ints= {ulr,ulc,drr,drc};
-        DomainController.moveBlock(ints,ref,sheetName);
+        return DomainController.moveBlock(ints,ref,sheetName);
     }
 
     public static void blockLength(int ulr, int ulc,int drr, int drc, boolean ref, String sheetName,String criteria){

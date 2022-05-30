@@ -778,12 +778,17 @@ public class FuncView {
                     if (confirm == JOptionPane.YES_OPTION || x == -1) {
                         boolean b = false;
                         if (ref.isSelected()) b = true;
-                        PresentationController.moveBlock(ulrow, ulcol, drrow, drcol, b, SheetView.currentSheetName());
-                        ids[0] = ulrow - 1;
+                        boolean moved= PresentationController.moveBlock(ulrow, ulcol, drrow, drcol, b, SheetView.currentSheetName());
+                        if(!moved){
+                            showMessageDialog(null, "A block with references can't be copied.\nTry again", "Error!", JOptionPane.ERROR_MESSAGE);
+                            return null;
+                        }
+                            ids[0] = ulrow - 1;
                         ids[1] = ulcol - 1;
                         ids[2] = drrow - 1;
                         ids[3] = drcol - 1;
                         return ids;
+
                     }
                 }
             } else return null;

@@ -312,9 +312,10 @@ public class Sheet {
      * @param b
      * @param ref
      */
-    public void MoveBlock(Block b, Boolean ref){
-        b_selected.ref(b, ref);
+    public boolean MoveBlock(Block b, Boolean ref){
+        boolean m= b_selected.ref(b, ref);
         update(b);
+        return m;
     }
 
     /**
