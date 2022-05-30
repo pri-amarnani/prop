@@ -10,7 +10,6 @@ public class gestorPOMC {
     public void writePOMC(String path, Vector<Sheet> sh_t) throws IOException {
         BufferedWriter file = new BufferedWriter(new FileWriter(path));
 
-
         file.write(sh_t.size() + "\n");
         int u = 0;
 
@@ -235,62 +234,6 @@ public class gestorPOMC {
             catch (DateTimeParseException d) {
                 return input;
             }
-        }
-    }
-
-    // testing purpose
-    public static void main(String[] args) throws IOException {
-        gestorPOMC g = new gestorPOMC();
-
-        Cell [][] b = new Cell[10][10];
-        for(int i = 0; i < 10; ++i){
-            for(int j = 0; j < 10; ++j){
-                if (i+j == 0) b[i][j] = new NumCell(i, j, null);
-                else if (i + j >= 5)  {
-                    ReferencedCell r = new ReferencedCell(1,1,"=floor");
-
-                    NumCell n= new NumCell(2,2,3.0);
-
-                    Vector<Cell> v= new Vector<>();
-                    v.add(n);
-
-                    Map.Entry<String, Vector<Cell>> re = new AbstractMap.SimpleEntry<>("floor", v);
-                    r.setRefInfo(re);
-
-                    b[i][j] = r;
-                }
-
-                else if (i + j < 5) {
-                    b[i][j] = new NumCell(i, j, 6.6);
-                }
-            }
-        }
-
-        Vector<Sheet> aux = new Vector<>();
-        Sheet sheet = new Sheet( b ,"hoja");
-        aux.add(sheet);
-        aux.add(sheet);
-        g.writePOMC("/home/mark/Desktop/test_write.pomc", aux);
-
-        Vector<Sheet> s_t = g.readPOMC("/home/mark/Desktop/test_write.pomc");
-        Cell c = s_t.elementAt(0).getCell(2,2);
-
-        s_t.elementAt(0).change_value(c, 9.5);
-
-        for (int u = 0; u < s_t.size(); ++u) {
-            Sheet s = s_t.elementAt(u);
-
-            for (int i = 0; i < s.getNumRows(); ++i) {
-                for (int j = 0; j < s.getNumCols(); ++j) {
-                    if (s.getCell(i, j).getClass() == ReferencedCell.class)
-                        System.out.print(s.getCell(i, j).getContent() + " ");
-                    else System.out.print(s.getCell(i, j).getInfo() + " ");
-                }
-                System.out.println();
-            }
-
-            System.out.println();
-            System.out.println();
         }
     }
 }
