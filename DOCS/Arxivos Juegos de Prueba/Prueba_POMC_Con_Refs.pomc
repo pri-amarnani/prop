@@ -1,0 +1,8 @@
+1
+"sheet 1";5;5
+=Day( (0,1) );2003-05-18;null;null;null
+null;null;null;null;null
+null;2019-03-29;2011-05-03;=dayoftheWeek( (2,1) );=dayoftheWeek( (2,2) )
+null;2012-04-21;2001-03-17;=dayoftheWeek( (3,1) );=dayoftheWeek( (3,2) )
+null;null;null;null;null
+

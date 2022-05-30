@@ -24,12 +24,6 @@ import com.itextpdf.text.pdf.PdfWriter;
 
 public class ExportPdf {
 
-    public static void main(String[] args) throws IOException, DocumentException {
-        String path = "/home/crisbret/Desktop/test_write.csv";
-        String path2 = "/home/crisbret/Desktop/student.pdf";
-        exportPDF(path, path2);
-    }
-
     public static void exportPDF(String p, String p2) throws IOException, DocumentException {
 
         BufferedReader file = new BufferedReader(new FileReader(p));
