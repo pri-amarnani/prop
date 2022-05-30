@@ -694,7 +694,6 @@ public class SheetView {
                         }
                     });
 
-
                     ImageIcon trimIcon = new ImageIcon("res/iconotrim.png");
                     Image trIcon = trimIcon.getImage();
                     Image tr= trIcon.getScaledInstance(40,40,Image.SCALE_DEFAULT);
