@@ -17,6 +17,7 @@ import java.util.ArrayList;
 
 import static com.pomc.view.SheetView.*;
 import static javax.swing.JOptionPane.*;
+import static javax.swing.JOptionPane.YES_OPTION;
 
 public class MenuViews {
 
@@ -139,12 +140,27 @@ public class MenuViews {
                     showMessageDialog(null, "Can't delete rows from here ", "Error!", JOptionPane.ERROR_MESSAGE);
                 }
                 else {
-                    PresentationController.delRow(currentSheetName(), a2, b);
-                    DefaultTableModel tmodel = (DefaultTableModel) getCurrentTable().getModel();
-                    for (int k = 0; k < (int) jsp.getValue(); ++k) {
-                        tmodel.removeRow(b);
+                    int refs = PresentationController.blockWRefs(b+1,1,(b+a2), getCurrentTable().getColumnCount(),currentSheetName());
+                    int confirm = -1;
+                    switch (refs){
+                        case 0:
+                            confirm = showConfirmDialog(null, "Watch out! There are references in the selected block, the content and references will be lost after deleting. \n Are you sure?", "References!", JOptionPane.YES_NO_OPTION);
+                            break;
+                        case 1:
+                            confirm = showConfirmDialog(null, "Watch out! There is information in the selected block, the content will be lost after deleting. \n Are you sure?", "Information!", YES_NO_OPTION);
+                            break;
+                        case -1:
+                            confirm = YES_OPTION;
+                            break;
                     }
-                    SheetView.updateRowHeaders();
+                    if (confirm == YES_OPTION) {
+                        PresentationController.delRow(currentSheetName(), a2, b);
+                        DefaultTableModel tmodel = (DefaultTableModel) getCurrentTable().getModel();
+                        for (int k = 0; k < (int) jsp.getValue(); ++k) {
+                            tmodel.removeRow(b);
+                        }
+                        SheetView.updateRowHeaders();
+                    }
                 }
             }
         }
