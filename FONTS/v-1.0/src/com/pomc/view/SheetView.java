@@ -462,7 +462,7 @@ public class SheetView {
             Image mv=mvbi.getScaledInstance(40,40,Image.SCALE_DEFAULT);
             moveBlockIcon.setImage(mv);
             JButton moveBlock= new JButton(moveBlockIcon);
-            moveBlock.setToolTipText("Move block");
+            moveBlock.setToolTipText("Copy");
             moveBlock.setBackground(blockBar.getBackground());
             moveBlock.setBorder(BorderFactory.createLineBorder(c,1));
             blockBar.add(moveBlock,blockBar.getMenuCount()-1);
@@ -495,6 +495,26 @@ public class SheetView {
 
             switch (blockType){
                 case "N":
+
+                    ImageIcon statIcon= new ImageIcon("res/iconoest.png");
+                    Image stIcon=statIcon.getImage();
+                    Image st=stIcon.getScaledInstance(40,40,Image.SCALE_DEFAULT);
+                    statIcon.setImage(st);
+                    JButton stat= new JButton(statIcon);
+                    stat.setToolTipText("Statistic operations");
+                    stat.setBackground(blockBar.getBackground());
+                    stat.setBorder(BorderFactory.createLineBorder(c,1));
+                    blockBar.add(stat,blockBar.getMenuCount()-1);
+
+                    stat.addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            Integer[] Sop=FuncView.addSOp("stat");
+                            if(Sop != null && Sop[0]!=-1) writeBlock(Sop[0],Sop[1],Sop[0],Sop[1]);
+                        }
+                    });
+
+
                     ImageIcon floorIcon= new ImageIcon("res/iconofloor.png");
                     Image flIcon=floorIcon.getImage();
                     Image fl=flIcon.getScaledInstance(40,40,Image.SCALE_DEFAULT);
@@ -596,6 +616,8 @@ public class SheetView {
                         }
                     });
 
+
+
                     ImageIcon AOpIcon= new ImageIcon("res/iconoaritmetic.png");
                     Image aopIcon=AOpIcon.getImage();
                     Image ao=aopIcon.getScaledInstance(40,40,Image.SCALE_DEFAULT);
@@ -611,26 +633,6 @@ public class SheetView {
                         public void actionPerformed(ActionEvent e) {
                             Integer[] Aop=FuncView.addAOp("arit");
                             if (Aop!=null && Aop[0] != -1)writeBlock(Aop[0]-1,Aop[1]-1,Aop[2]-1,Aop[3]-1);
-                        }
-                    });
-
-
-
-                    ImageIcon statIcon= new ImageIcon("res/iconoest.png");
-                    Image stIcon=statIcon.getImage();
-                    Image st=stIcon.getScaledInstance(40,40,Image.SCALE_DEFAULT);
-                    statIcon.setImage(st);
-                    JButton stat= new JButton(statIcon);
-                    stat.setToolTipText("Statistic operations");
-                    stat.setBackground(blockBar.getBackground());
-                    stat.setBorder(BorderFactory.createLineBorder(c,1));
-                    blockBar.add(stat,blockBar.getMenuCount()-1);
-
-                    stat.addActionListener(new ActionListener() {
-                        @Override
-                        public void actionPerformed(ActionEvent e) {
-                            Integer[] Sop=FuncView.addSOp("stat");
-                            if(Sop != null && Sop[0]!=-1) writeBlock(Sop[0],Sop[1],Sop[0],Sop[1]);
                         }
                     });
 

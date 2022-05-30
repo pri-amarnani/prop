@@ -47,7 +47,6 @@ public class FuncView {
             String criteria = "<";
             if (optionList.getSelectedItem().equals("Ascending")) criteria = ">";
             int col = (int) jsp.getValue() - 1;
-            //int ncol = PresentationController.blockFirstCol(currentSheetName()) + col - 1;
             Boolean sort = PresentationController.blockSort(col, criteria, SheetView.currentSheetName());
             if (!sort) {
                 showMessageDialog(null, "Couldn't sort \nTry again", "Error!", JOptionPane.ERROR_MESSAGE);
@@ -702,7 +701,7 @@ public class FuncView {
         int result = JOptionPane.showConfirmDialog(
                 null,
                 fields,
-                "Move block",
+                "Copy block",
                 JOptionPane.OK_CANCEL_OPTION,
                 JOptionPane.PLAIN_MESSAGE,
                 null
@@ -740,7 +739,7 @@ public class FuncView {
             int result2 = JOptionPane.showConfirmDialog(
                     null,
                     fields2,
-                    "Move block to: ",
+                    "Copy block to: ",
                     JOptionPane.OK_CANCEL_OPTION,
                     JOptionPane.PLAIN_MESSAGE,
                     null

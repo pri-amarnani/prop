@@ -347,12 +347,13 @@ public class Sheet {
     public boolean SortBlock(int n_col, String Criteria){
         Cell c = b_selected.getCell(0,n_col);
         Cell c2 = b_selected.getCell(b_selected.number_rows()-1,n_col);
-
         Block b = create_block(c, c2);
-
-        b_selected.SortBlock(n_col, Criteria, c.getType());
-        update(b_selected);
-        return true;
+        if (!b.allText() && !b.allDate() && !b.allDouble() ) return false;
+        else {
+            b_selected.SortBlock(n_col, Criteria, c.getType());
+            update(b_selected);
+            return true;
+        }
     }
 
     /**
