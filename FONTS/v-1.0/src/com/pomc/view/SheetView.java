@@ -479,13 +479,6 @@ public class SheetView {
             graf.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    FuncView.addGraph();
-                }
-            });
-
-            graf.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
                     FuncView.graph();
 
                 }

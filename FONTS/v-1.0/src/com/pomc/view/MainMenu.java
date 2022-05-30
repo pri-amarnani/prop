@@ -65,7 +65,7 @@ public class MainMenu {
 
         validFormatB.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                showMessageDialog(null, "DATE : \n YYYY-MM-DD ", "Valid Formats", JOptionPane.PLAIN_MESSAGE);
+                showMessageDialog(null, "DATE : \n YYYY-MM-DD  \nLINEAR CHART: \n 2 Numeric Columns \nPIE CHART: \n 1 column of unique strings and 1 numeric column", "Valid Formats", JOptionPane.PLAIN_MESSAGE);
             }
         });
 

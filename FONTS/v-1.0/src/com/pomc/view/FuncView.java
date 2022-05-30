@@ -153,24 +153,18 @@ public class FuncView {
                 "Charts", JOptionPane.QUESTION_MESSAGE, null, selectionValues, initialSelection);
         if (selection != null) {
             if(selection.toString().equals("Linear")){
-                if (!Objects.equals(PresentationController.blockType(SheetView.currentSheetName()), "N")) {
+                if (PresentationController.blockCols(SheetView.currentSheetName()) != 2 || !Objects.equals(PresentationController.blockType(SheetView.currentSheetName()), "N")) {
                     showMessageDialog(null, "Cant generate a linear chart with the selected block.\nTry again", "Error!", JOptionPane.ERROR_MESSAGE);
                 }
                 else PresentationController.showGraphXY("","x", "y", "y(x)", SheetView.currentSheetName());
             }
             else{
-
                 if (!PresentationController.showGraphPie(SheetView.currentSheetName())){
                     showMessageDialog(null, "Cant generate a pie chart with the selected block.\nTry again", "Error!", JOptionPane.ERROR_MESSAGE);
                 }
 
             }
         }
-
-
-
-
-        //return b1;   //cambiar
     }
 
 
@@ -1033,11 +1027,6 @@ public class FuncView {
         );
         if(pop==OK_OPTION) PresentationController.blockModify(o.getText(),SheetView.currentSheetName());
     }
-
-    public static void addGraph(){
-
-    }
-
 
 
     public static String[] numtoAlphabetCols(Integer[] cols){
