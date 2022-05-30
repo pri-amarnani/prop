@@ -376,6 +376,7 @@ public class SheetView {
         });
 
 
+
         jmbar_sheet.add(Box.createHorizontalGlue());
 
         JPanel mp= (JPanel) MainMenu.getCurrentFrame().getContentPane().getComponent(0);
@@ -450,6 +451,16 @@ public class SheetView {
                 }
             });
 
+            ImageIcon graficIcon = new ImageIcon("res/iconografics.png");
+            Image grIcon = graficIcon.getImage();
+            Image gr= grIcon.getScaledInstance(40,40,Image.SCALE_DEFAULT);
+            graficIcon.setImage(gr);
+            JButton graf = new JButton(graficIcon);
+            graf.setToolTipText("Graph");
+            graf.setBackground(blockBar.getBackground());
+            graf.setBorder(BorderFactory.createLineBorder(c,1));
+            blockBar.add(graf,blockBar.getMenuCount()-1);
+
 
             switch (blockType){
                 case "N":
@@ -475,71 +486,9 @@ public class SheetView {
                         }
                     });
 
-                    ImageIcon trimIcon = new ImageIcon("res/iconotrim.png");
-                    Image trIcon = trimIcon.getImage();
-                    Image tr= trIcon.getScaledInstance(40,40,Image.SCALE_DEFAULT);
-                    trimIcon.setImage(tr);
-                    JButton trim = new JButton(trimIcon);
-                    trim.setToolTipText("Trim");
-                    trim.setBackground(blockBar.getBackground());
-                    trim.setBorder(BorderFactory.createLineBorder(c,1));
-                    blockBar.add(trim,blockBar.getMenuCount()-1);
 
 
-                    trim.addActionListener(new ActionListener() {
-                        @Override
-                        public void actionPerformed(ActionEvent e) {
-                            Integer[] trimm = FuncView.addSingleOp("trim");
-                            if(trimm!=null && trimm[0]!=-1) {
-                                if (trimm[4] == -1) writeBlock(trimm[0], trimm[1], trimm[2], trimm[3]);
-                                else rewriteBlock();
-                            }
-                        }
-                    });
 
-                    ImageIcon opAllIcon = new ImageIcon("res/iconoallfinal.png");
-                    Image oaIcon = opAllIcon.getImage();
-                    Image opa= oaIcon.getScaledInstance(40,40,Image.SCALE_DEFAULT);
-                    opAllIcon.setImage(opa);
-                    JButton opAll = new JButton(opAllIcon);
-                    opAll.setToolTipText("Op All");
-                    opAll.setBackground(blockBar.getBackground());
-                    opAll.setBorder(BorderFactory.createLineBorder(c,1));
-                    blockBar.add(opAll,blockBar.getMenuCount()-1);
-
-
-                    opAll.addActionListener(new ActionListener() {
-                        @Override
-                        public void actionPerformed(ActionEvent e) {
-                            Integer[] opA = FuncView.addSingleOp("All Op Block");
-                            if(opA!=null && opA[0]!=-1) {
-                                if (opA[4] == -1) writeBlock(opA[0], opA[1], opA[2], opA[3]);
-                                else rewriteBlock();
-                            }
-                        }
-                    });
-
-                    ImageIcon graficIcon = new ImageIcon("res/iconografics.png");
-                    Image grIcon = graficIcon.getImage();
-                    Image gr= grIcon.getScaledInstance(40,40,Image.SCALE_DEFAULT);
-                    graficIcon.setImage(gr);
-                    JButton graf = new JButton(graficIcon);
-                    graf.setToolTipText("Grafic");
-                    graf.setBackground(blockBar.getBackground());
-                    graf.setBorder(BorderFactory.createLineBorder(c,1));
-                    blockBar.add(graf,blockBar.getMenuCount()-1);
-
-
-                    trim.addActionListener(new ActionListener() {
-                        @Override
-                        public void actionPerformed(ActionEvent e) {
-                            Integer[] grafFunc = FuncView.addSingleOp("graf");
-                            if(grafFunc!=null && grafFunc[0]!=-1) {
-                                if (grafFunc[4] == -1) writeBlock(grafFunc[0], grafFunc[1], grafFunc[2], grafFunc[3]);
-                                else rewriteBlock();
-                            }
-                        }
-                    });
 
                     ImageIcon ceilIcon= new ImageIcon("res/iconoceil.png");
                     Image ceIcon=ceilIcon.getImage();
@@ -558,6 +507,23 @@ public class SheetView {
                                 if (c[4] == -1) writeBlock(c[0], c[1], c[2], c[3]);
                                 else rewriteBlock();
                             }
+                        }
+                    });
+
+                    ImageIcon CountiIcon= new ImageIcon("res/iconocountif.png");
+                    Image ciIcon=CountiIcon.getImage();
+                    Image cif=ciIcon.getScaledInstance(40,40,Image.SCALE_DEFAULT);
+                    CountiIcon.setImage(cif);
+                    JButton countIf= new JButton(CountiIcon);
+                    countIf.setToolTipText("Count if...");
+                    countIf.setBackground(blockBar.getBackground());
+                    countIf.setBorder(BorderFactory.createLineBorder(c,1));
+                    blockBar.add(countIf,blockBar.getMenuCount()-1);
+                    countIf.addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            Integer[] coif=FuncView.addSOp("countif");
+                            if(coif != null && coif[0]!=-1) writeBlock(coif[0], coif[1], coif[0], coif[1]);
                         }
                     });
 
@@ -581,6 +547,24 @@ public class SheetView {
                             }
                         }
                     });
+
+                    ImageIcon maxIcon= new ImageIcon("res/iconomax.png");
+                    Image mIcon=maxIcon.getImage();
+                    Image maxb=mIcon.getScaledInstance(40,40,Image.SCALE_DEFAULT);
+                    maxIcon.setImage(maxb);
+                    JButton max= new JButton(maxIcon);
+                    max.setToolTipText("Max/Min");
+                    max.setBackground(blockBar.getBackground());
+                    max.setBorder(BorderFactory.createLineBorder(c,1));
+                    blockBar.add(max,blockBar.getMenuCount()-1);
+                    max.addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            Integer[] maxx=FuncView.addSOp("maxmin");
+                            if(maxx !=null && maxx[0]!=-1) writeBlock(maxx[0], maxx[1], maxx[0], maxx[1]);
+                        }
+                    });
+
                     ImageIcon AOpIcon= new ImageIcon("res/iconoaritmetic.png");
                     Image aopIcon=AOpIcon.getImage();
                     Image ao=aopIcon.getScaledInstance(40,40,Image.SCALE_DEFAULT);
@@ -621,42 +605,6 @@ public class SheetView {
 
 
 
-
-                    ImageIcon maxIcon= new ImageIcon("res/iconomax.png");
-                    Image mIcon=maxIcon.getImage();
-                    Image maxb=mIcon.getScaledInstance(40,40,Image.SCALE_DEFAULT);
-                    maxIcon.setImage(maxb);
-                    JButton max= new JButton(maxIcon);
-                    max.setToolTipText("Max/Min");
-                    max.setBackground(blockBar.getBackground());
-                    max.setBorder(BorderFactory.createLineBorder(c,1));
-                    blockBar.add(max,blockBar.getMenuCount()-1);
-                    max.addActionListener(new ActionListener() {
-                        @Override
-                        public void actionPerformed(ActionEvent e) {
-                            Integer[] maxx=FuncView.addSOp("maxmin");
-                            if(maxx !=null && maxx[0]!=-1) writeBlock(maxx[0], maxx[1], maxx[0], maxx[1]);
-                        }
-                    });
-
-                    ImageIcon CountiIcon= new ImageIcon("res/iconocountif.png");
-                    Image ciIcon=CountiIcon.getImage();
-                    Image cif=ciIcon.getScaledInstance(40,40,Image.SCALE_DEFAULT);
-                    CountiIcon.setImage(cif);
-                    JButton countIf= new JButton(CountiIcon);
-                    countIf.setToolTipText("Count if...");
-                    countIf.setBackground(blockBar.getBackground());
-                    countIf.setBorder(BorderFactory.createLineBorder(c,1));
-                    blockBar.add(countIf,blockBar.getMenuCount()-1);
-                    countIf.addActionListener(new ActionListener() {
-                        @Override
-                        public void actionPerformed(ActionEvent e) {
-                            Integer[] coif=FuncView.addSOp("countif");
-                            if(coif != null && coif[0]!=-1) writeBlock(coif[0], coif[1], coif[0], coif[1]);
-                        }
-                    });
-
-
                     ImageIcon OpBIcon= new ImageIcon("res/iconoopblock.png");
                     Image obicon=OpBIcon.getImage();
                     Image opb=obicon.getScaledInstance(40,40,Image.SCALE_DEFAULT);
@@ -671,6 +619,42 @@ public class SheetView {
                         public void actionPerformed(ActionEvent e) {
                             FuncView.unitOp();
                             rewriteBlock();
+                        }
+                    });
+
+
+                    ImageIcon opAllIcon = new ImageIcon("res/iconoallfinal.png");
+                    Image oaIcon = opAllIcon.getImage();
+                    Image opa= oaIcon.getScaledInstance(40,40,Image.SCALE_DEFAULT);
+                    opAllIcon.setImage(opa);
+                    JButton opAll = new JButton(opAllIcon);
+                    opAll.setToolTipText("Op All");
+                    opAll.setBackground(blockBar.getBackground());
+                    opAll.setBorder(BorderFactory.createLineBorder(c,1));
+                    blockBar.add(opAll,blockBar.getMenuCount()-1);
+
+
+                    opAll.addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            Integer[] opA = FuncView.addSingleOp("All Op Block");
+                            if(opA!=null && opA[0]!=-1) {
+                                if (opA[4] == -1) writeBlock(opA[0], opA[1], opA[2], opA[3]);
+                                else rewriteBlock();
+                            }
+                        }
+                    });
+
+
+
+                    graf.addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            Integer[] grafFunc = FuncView.addSingleOp("graph");
+                            if(grafFunc!=null && grafFunc[0]!=-1) {
+                                if (grafFunc[4] == -1) writeBlock(grafFunc[0], grafFunc[1], grafFunc[2], grafFunc[3]);
+                                else rewriteBlock();
+                            }
                         }
                     });
 
@@ -698,6 +682,29 @@ public class SheetView {
                     });
 
 
+                    ImageIcon trimIcon = new ImageIcon("res/iconotrim.png");
+                    Image trIcon = trimIcon.getImage();
+                    Image tr= trIcon.getScaledInstance(40,40,Image.SCALE_DEFAULT);
+                    trimIcon.setImage(tr);
+                    JButton trim = new JButton(trimIcon);
+                    trim.setToolTipText("Trim");
+                    trim.setBackground(blockBar.getBackground());
+                    trim.setBorder(BorderFactory.createLineBorder(c,1));
+                    blockBar.add(trim,blockBar.getMenuCount()-1);
+
+
+                    trim.addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            Integer[] trimm = FuncView.addSingleOp("trim");
+                            if(trimm!=null && trimm[0]!=-1) {
+                                if (trimm[4] == -1) writeBlock(trimm[0], trimm[1], trimm[2], trimm[3]);
+                                else rewriteBlock();
+                            }
+                        }
+                    });
+
+
                     ImageIcon replaceIcon= new ImageIcon("res/iconoreplace.png");
                     Image repIcon=replaceIcon.getImage();
                     Image re=repIcon.getScaledInstance(40,40,Image.SCALE_DEFAULT);
@@ -715,6 +722,7 @@ public class SheetView {
                         }
                     });
 
+
                     ImageIcon concatIcon= new ImageIcon("res/iconoconcat.png");
                     Image concIcon=concatIcon.getImage();
                     Image conc=concIcon.getScaledInstance(40,40,Image.SCALE_DEFAULT);
@@ -730,6 +738,18 @@ public class SheetView {
                             Integer[] con=FuncView.addAOp("Concatenate");
                             if(con != null && con[0]!=-1) {
                                 if (con[4] == -1) writeBlock(con[0]-1, con[1]-1, con[2]-1, con[3]-1);
+                                else rewriteBlock();
+                            }
+                        }
+                    });
+
+
+                    graf.addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            Integer[] grafFunc = FuncView.addSingleOp("graph");
+                            if(grafFunc!=null && grafFunc[0]!=-1) {
+                                if (grafFunc[4] == -1) writeBlock(grafFunc[0], grafFunc[1], grafFunc[2], grafFunc[3]);
                                 else rewriteBlock();
                             }
                         }
@@ -775,10 +795,25 @@ public class SheetView {
                             if(dtw!=null && dtw[0]!=-1) writeBlock(dtw[0],dtw[1],dtw[2],dtw[3]);
                         }
                     });
+
+
+
+                    graf.addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            Integer[] grafFunc = FuncView.addSingleOp("graph");
+                            if(grafFunc!=null && grafFunc[0]!=-1) {
+                                if (grafFunc[4] == -1) writeBlock(grafFunc[0], grafFunc[1], grafFunc[2], grafFunc[3]);
+                                else rewriteBlock();
+                            }
+                        }
+                    });
                     break;
                 default:
                     break;
             }
+
+
 
 
             blockBar.repaint();

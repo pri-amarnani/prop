@@ -1,6 +1,5 @@
 package com.pomc.controller;
 import com.pomc.classes.*;
-import com.pomc.view.PresentationController;
 import org.knowm.xchart.PieChart;
 import org.knowm.xchart.SwingWrapper;
 import org.knowm.xchart.XYChart;
@@ -531,7 +530,7 @@ public class DomainController {
         doc.getSheet(sheetName).ModifyBlock(ob);
     }
 
-    public static void funcTrim(String criteria,String sheetName){
+    public static void funcTrim(String sheetName){
         doc.getSheet(sheetName).trim();
     }
 

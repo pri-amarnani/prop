@@ -832,7 +832,7 @@ public class FuncView {
                                     break;
                             }
                         }
-                            if (confirm == JOptionPane.YES_OPTION) {
+                            if (confirm == JOptionPane.YES_OPTION || x == -1) {
                                 ulrow = (Integer) ulr.getValue();
                                 ulcol = SheetView.alphabetToNum((String) ulc.getValue()) + 1;
                                 drrow = (Integer) drr.getValue();
@@ -912,7 +912,6 @@ public class FuncView {
 
         );
         if(pop==OK_OPTION) PresentationController.blockModify(o.getText(),SheetView.currentSheetName());
-
     }
 
 
