@@ -173,7 +173,11 @@ public class MenuViews {
         }
     }
 
-    public static void deleteSheet() {PresentationController.delSheet(currentSheetName());}
+    public static void deleteSheet() {
+        int confirm=showConfirmDialog(null, "Look out! The current sheet will be deleted. \n Are you sure?", "Delete Sheet", JOptionPane.YES_NO_OPTION);
+        if(confirm==JOptionPane.OK_OPTION) {
+            PresentationController.delSheet(currentSheetName());
+        }}
 
     public static void save() {
         if (PresentationController.isFileSaved())  {
@@ -305,6 +309,6 @@ public class MenuViews {
                 throw new RuntimeException(e);
             }
         }
-        showMessageDialog(null,properties, "About", JOptionPane.PLAIN_MESSAGE);
+        showMessageDialog(null,properties, "Properties of the document", JOptionPane.PLAIN_MESSAGE);
     }
 }
