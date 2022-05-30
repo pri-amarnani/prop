@@ -8,13 +8,6 @@ import java.util.*;
 public class gestorPOMC {
 
     public void writePOMC(String path, Vector<Sheet> sh_t) throws IOException {
-        /*
-        File check = new File(location);
-        if (check.isDirectory()) {
-            location = location + "/" + tempName + ".pomc";
-        }
-
-         */
         BufferedWriter file = new BufferedWriter(new FileWriter(path));
 
 

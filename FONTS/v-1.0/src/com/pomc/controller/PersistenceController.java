@@ -4,6 +4,7 @@ import com.itextpdf.text.DocumentException;
 import com.pomc.classes.*;
 
 
+import java.awt.*;
 import java.io.*;
 import java.util.Arrays;
 import java.util.Scanner;
@@ -119,5 +120,17 @@ public class PersistenceController {
         return new File(path).canRead();
     }
 
+    public static void openUG() {
+        Path path = Paths.get("DOCS", "UsersGuide.pdf");
+        File myFile = path.toFile();
+        try {
+            Desktop.getDesktop().open(myFile);
+        } catch (IOException e) {
 
+        }
+    }
+
+    public static void main(String[] args) {
+        openUG();
+    }
 }
