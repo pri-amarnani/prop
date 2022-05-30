@@ -9,9 +9,6 @@ import java.time.LocalDate;
 
 public class NumCell extends Cell {
 
-    //truncament
-    //conversio
-    //aritmetiques *falta*
     private Double info;
     private final String type="N";
 
@@ -20,13 +17,14 @@ public class NumCell extends Cell {
         this.info= info;
     }
 
-    public double truncar(){
-        this.info= Math.floor(info);
-        return info;
-    }
 
-    //metros kilometros centimetros
-    //metro a inch
+
+    /**
+     * Convierte el valor de la celda de una unidad métrica a otra
+     * @param convFrom
+     * @param convTo
+     * @return devuelve el valor modificado
+     */
     public double conversion(String convFrom, String convTo) {
         UnitOf.Length length = new UnitOf.Length();
         if (Objects.equals(convFrom, "m")) {
@@ -60,6 +58,11 @@ public class NumCell extends Cell {
         return info;
     }
 
+    /**
+     * Cambia el valor de una celda por el indicado (o)
+     * @param o
+     * @return devuelve la celda modificada
+     */
     @Override
     public Object changeValue(Object o) {
         if (o.getClass()==Double.class) {

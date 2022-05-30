@@ -25,6 +25,11 @@ public class ReferencedCell extends Cell {
         return this.info;
     }
 
+    /**
+     * Cambia el valor de una celda por el indicado (o)
+     * @param o
+     * @return devuelve la celda modificada
+     */
     @Override
     public Object changeValue(Object o) {
         int myrow=getRow();
@@ -75,6 +80,10 @@ public class ReferencedCell extends Cell {
 
     public void setContent(Object o) {this.content=o;}
 
+    /**
+     * Cambia una celda referenciada del parámetro implícito por c
+     * @param c
+     */
     public void setRCell(Cell c){
 
 
