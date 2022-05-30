@@ -125,8 +125,16 @@ public abstract class Cell {
      */
     public abstract Object changeValue(Object o);
 
+    /**
+     * Añade la celda c al conjunto de celdas a las cuales hace referencia el parámetro implícito
+     * @param c
+     */
     public void AddRef (ReferencedCell c){this.refs.add(c);}
 
+    /**
+     * Elimina la celda c del conjunto de celdas a las cuales hace referencia el parámetro implícito
+     * @param c
+     */
     public void EliminateRef(ReferencedCell c){
         refs.removeElement(c);
     }
@@ -135,6 +143,9 @@ public abstract class Cell {
         return !refs.isEmpty();
     }
 
+    /**
+     * Actualiza las referencias del parámetro implícito
+     */
     public void updateRefs(){
 
         for (int i=0; i<this.refs.size();i++){
@@ -489,6 +500,11 @@ public abstract class Cell {
     public abstract Object getContent();
     public abstract void setContent(Object o);
 
+    /**
+     * Calcula la desviación estándard de un vector de celdas
+     * @param vcells
+     * @return devuelve el val de la desviacion estandard
+     */
     public Double calcstd (Vector<Cell> vcells){
 
         Double sum=0.0;
@@ -510,6 +526,12 @@ public abstract class Cell {
         return stdd;
     }
 
+    /**
+     * Calcula la covarianza entre dos vectores de celdas
+     * @param v1
+     * @param v2
+     * @return Devuelve el valor de la covarianza
+     */
     public Double calccovar(Vector<Cell> v1, Vector<Cell> v2){
         Double auxsum1=0.0,auxsum2=0.0;
         for(int q=0; q<v1.size(); q++){
