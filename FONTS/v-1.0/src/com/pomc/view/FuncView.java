@@ -47,7 +47,6 @@ public class FuncView {
             String criteria = "<";
             if (optionList.getSelectedItem().equals("Ascending")) criteria = ">";
             int col = (int) jsp.getValue() - 1;
-            //int ncol = PresentationController.blockFirstCol(currentSheetName()) + col - 1;
             Boolean sort = PresentationController.blockSort(col, criteria, SheetView.currentSheetName());
             if (!sort) {
                 showMessageDialog(null, "Couldn't sort \nTry again", "Error!", JOptionPane.ERROR_MESSAGE);
