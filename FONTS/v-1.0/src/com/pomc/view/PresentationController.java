@@ -106,9 +106,9 @@ public class PresentationController {
 
     public static void blockSTD(Integer[] b1, boolean ref, String sheetName) {DomainController.funcStandardDeviation(b1[0]-1,b1[1]-1,ref,sheetName);}
 
-    public static void blockCovar(Integer[] a, Integer[] b1, boolean ref, String sheetName) {DomainController.funcCovariance(b1,a[0],a[1],ref,sheetName);}
+    public static void blockCovar(Integer[] a, Integer[] b1, boolean ref, String sheetName) {DomainController.funcCovariance(b1,a[0]-1,a[1]-1,ref,sheetName);}
 
-    public static void blockCPearson(Integer[] a, Integer[] b1, boolean ref, String sheetName) {DomainController.funcCPearson(b1,a[0],a[1],ref,sheetName);}
+    public static void blockCPearson(Integer[] a, Integer[] b1, boolean ref, String sheetName) {DomainController.funcCPearson(b1,a[0]-1,a[1]-1,ref,sheetName);}
 
 //    public static void blockLength(int ulr, int ulc, boolean ref,String Sheetname){
 //        DomainController.blockFloor(b_ids,ref,Sheetname);
@@ -158,7 +158,7 @@ public class PresentationController {
         return DomainController.getRefsIds(r,c,sheetName);
     }
 
-    public static int blockWRefs(int ulr, int ulc, int drr, int drc, String sheetName){return DomainController.isRef(ulr-1,ulc,drr-1,drc,sheetName);}
+    public static int blockWRefs(int ulr, int ulc, int drr, int drc, String sheetName){return DomainController.isRef(ulr-1,ulc-1,drr-1,drc-1,sheetName);}
 
 
     public static int selectedBRows(String sheetName) {return DomainController.selectedBlockRows(sheetName);}

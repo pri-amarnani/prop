@@ -421,7 +421,7 @@ public abstract class Cell {
                 Vector <Cell> v2= new Vector<>();
                 Double auxsum1=0.0,auxsum2=0.0;
 
-                for (int k=0; k<size/2-1;k++){
+                for (int k=0; k<size/2;k++){
                     v1.add(cellsref.elementAt(k));
                 }
 

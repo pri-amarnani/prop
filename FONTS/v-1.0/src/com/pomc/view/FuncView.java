@@ -302,6 +302,8 @@ public class FuncView {
             if (selection != null) {
                 if (selection.toString().equals("Covariance") || selection.toString().equals("Pearson correlation coefficient")) {
                     a = operationS2(a, selection.toString());
+                    a[0] = a[0] - 1;
+                    a[1] = a[1] - 1;
                 } else a = operationS1(selection.toString(),"",-1);
             }
         }
@@ -421,6 +423,8 @@ public class FuncView {
                                 PresentationController.blockSTD(b1, b, SheetView.currentSheetName());
                                 break;
                         }
+                        b1[0] = b1[0] - 1;
+                        b1[1] = b1[1] - 1;
                         return b1;
                     }else return null;
                 }else return null;
