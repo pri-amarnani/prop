@@ -73,7 +73,7 @@ public class PresentationController {
     public static int blockFirstRow(String sheetName) {return DomainController.blockFirstRow(sheetName);};
     public static int blockFirstCol(String sheetName) {return DomainController.blockFirstCol(sheetName);};
 
-    public static String[] blockFind(String value, String sheetName){ return DomainController.blockFind(value,sheetName);}
+    public static Integer[] blockFind(String value, String sheetName){ return DomainController.blockFind(value,sheetName);}
 
     public static Object[] blockFindAndReplace(String find, String replace, String sheetName){ return DomainController.blockFindAndReplace(find,replace,sheetName);}
 

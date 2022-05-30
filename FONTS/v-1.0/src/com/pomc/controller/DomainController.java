@@ -6,6 +6,7 @@ import org.knowm.xchart.XYChart;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
+import java.util.ArrayList;
 import java.util.Vector;
 
 import static java.lang.String.valueOf;
@@ -251,20 +252,21 @@ public class DomainController {
     }
 
 
-    public static String[] blockFind(String value,String sheetName) {
+    public static Integer[] blockFind(String value,String sheetName) {
         Object parsedValue = Parse(value);
-        Vector<Cell> v = doc.getSheet(sheetName).find(parsedValue);
-        Cell[] res = new Cell[v.size()];
         if (sheetName != null) {
+            Vector<Cell> v = doc.getSheet(sheetName).find(parsedValue);
+            Integer[] res = new Integer[v.size()];
             doc.getSheet(sheetName);
             if (doc.getSheet(sheetName).find(parsedValue) != null) {
                 for (int i = 0; i < v.size(); i++) {
-                    res[i] = v.elementAt(i);
+                    res[i] = v.elementAt(i).getColumn();
                 }
+                return res;
             }
-            else return new String[]{"Not Found"};
+            else return null;
         }
-        return new String[]{"Not Found"};
+        return null;
     }
 
     public static Object[] blockFindAndReplace(String find,String replace, String sheetName) {
