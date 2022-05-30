@@ -215,9 +215,9 @@ public class FuncView {
                         );
                         if (result22 == JOptionPane.OK_OPTION) {
                             int ul=(Integer) ulr2.getValue();
-                            int uc=SheetView.alphabetToNum((String) ulc2.getValue())+1;
+                            int uc=SheetView.alphabetToNum((String) ulc2.getValue());
                             int dl= (Integer) drr2.getValue();
-                            int dc=SheetView.alphabetToNum((String) drc2.getValue())+1;
+                            int dc=SheetView.alphabetToNum((String) drc2.getValue());
                             int x=PresentationController.blockWRefs(ul,uc,dl,dc,SheetView.currentSheetName());
                             int confirm=-1;
                             if(x!=-1){
@@ -235,9 +235,11 @@ public class FuncView {
                                 b2[2] = (Integer) drr2.getValue();
                                 b2[3] = SheetView.alphabetToNum((String) drc2.getValue())+1;
                             }
+                                else return null;
                             b2[4] = -1;
                         }
                         }
+                        else return null;
 
                 } else {
                     ref.setSelected(false);

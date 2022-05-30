@@ -595,7 +595,7 @@ public class SheetView {
                         @Override
                         public void actionPerformed(ActionEvent e) {
                             Integer[] Aop=FuncView.addAOp("arit");
-                            if (Aop[0] != -1)writeBlock(Aop[0]-1,Aop[1]-1,Aop[2]-1,Aop[3]-1);
+                            if (Aop!=null && Aop[0] != -1)writeBlock(Aop[0]-1,Aop[1]-1,Aop[2]-1,Aop[3]-1);
                         }
                     });
 
