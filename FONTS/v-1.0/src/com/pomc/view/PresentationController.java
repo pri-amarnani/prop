@@ -331,4 +331,8 @@ public class PresentationController {
 
 
     public static void openUserGuide() { PersistenceController.openUG();}
+
+    public static boolean findEq(String foundVal, Object value) {
+        return (foundVal.equals(DomainController.AntiParse(value)));
+    }
 }

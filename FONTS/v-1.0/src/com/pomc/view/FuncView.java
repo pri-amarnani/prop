@@ -75,7 +75,7 @@ public class FuncView {
 
             Integer[] cellFound = PresentationController.blockFind(value, SheetView.currentSheetName());
 
-            if (cellFound.length > 1) {
+            if (cellFound.length >= 1) {
                 foundVal =value;
                 SheetView.getCurrentTable().clearSelection();
                for (int i = 0; i < cellFound.length; i++) {
@@ -88,7 +88,7 @@ public class FuncView {
                             //Cells are by default rendered as a JLabel.
                             JLabel l = (JLabel) super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, col);
 
-                            if(foundVal != null && foundVal.equals(value)) {
+                            if(foundVal != null && value != null &&  PresentationController.findEq(foundVal,value)) {
                                 l.setBackground(new Color(141, 190, 227, 194));
                             }
                             else l.setBackground(table.getBackground());
@@ -129,7 +129,7 @@ public class FuncView {
                 PresentationController.createBlock(0, 0, SheetView.getCurrentTable().getRowCount() - 1, SheetView.getCurrentTable().getColumnCount() - 1, SheetView.currentSheetName());
             }
             Integer[] cellFound = PresentationController.blockFind(value.getText(), SheetView.currentSheetName());
-            if (cellFound.length > 1 && !value.getText().equals("")) {
+            if (cellFound.length >= 1 && !value.getText().equals("")) {
                 Object[] replaces = PresentationController.blockFindAndReplace(value.getText(), replace.getText(), SheetView.currentSheetName());
                 if (replaces != null) {
                     for (int i = 0; i < replaces.length; i += 2) {
