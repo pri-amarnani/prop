@@ -93,7 +93,6 @@ public class FuncView {
                             }
                             else l.setBackground(table.getBackground());
                             return l;
-
                         }
                     } );
                }

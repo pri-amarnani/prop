@@ -10,20 +10,16 @@ import javax.swing.table.TableColumn;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
 
 import static com.pomc.view.SheetView.*;
 import static javax.swing.JOptionPane.showConfirmDialog;
+import static javax.swing.JOptionPane.showMessageDialog;
 
 public class MenuViews {
-    public static void close() {
-        MainMenu.frame.removeAll();
-        try {
-            MainMenu.main(new String[] {""});
-        } catch (IOException ex) {
-            throw new RuntimeException(ex);
-        }
-    }
 
     public static String changeName() {
         String newname = (String) JOptionPane.showInputDialog(
@@ -183,10 +179,17 @@ public class MenuViews {
         }
     }
 
-    public static void deleteSheet() {PresentationController.delSheet(currentSheetName());}
+    public static void deleteSheet() {
+        int confirm=showConfirmDialog(null, "Look out! The current sheet will be deleted. \n Are you sure?", "Delete Sheet", JOptionPane.YES_NO_OPTION);
+        if(confirm==JOptionPane.OK_OPTION) {
+            PresentationController.delSheet(currentSheetName());
+        }}
 
     public static void save() {
-        if (PresentationController.isFileSaved()) PresentationController.save();
+        if (PresentationController.isFileSaved())  {
+            PresentationController.save();
+            showMessageDialog(null, "Saved correctly !", "Saved", JOptionPane.INFORMATION_MESSAGE);
+        }
         else saveAs();
     }
 
@@ -200,6 +203,7 @@ public class MenuViews {
         if(result == JFileChooser.APPROVE_OPTION) {
             System.out.println(selectFile.getCurrentDirectory());
             PresentationController.saveAs(selectFile.getSelectedFile());
+            showMessageDialog(null, "Saved correctly !", "Saved", JOptionPane.INFORMATION_MESSAGE);
         }
     }
 
@@ -211,12 +215,14 @@ public class MenuViews {
         selectFile.addChoosableFileFilter(new FileNameExtensionFilter("CSV Files (*.csv)", "csv"));
         selectFile.setFileFilter(pdf);
         selectFile.setDialogTitle("Select location to export the file");
+        selectFile.setApproveButtonText("Export");
         int result = selectFile.showSaveDialog(null);
         if(result == JFileChooser.APPROVE_OPTION) {
             System.out.println(selectFile.getCurrentDirectory());
             int desLength = selectFile.getFileFilter().getDescription().length();
             String ext =selectFile.getFileFilter().getDescription().substring(desLength-4,desLength-1);
             PresentationController.export(selectFile.getSelectedFile(), ext);
+            showMessageDialog(null, "Exported correctly !", "Exported", JOptionPane.INFORMATION_MESSAGE);
         }
     }
 
@@ -227,21 +233,36 @@ public class MenuViews {
         selectFile.addChoosableFileFilter(new FileNameExtensionFilter("Text Files (*.txt)", "txt"));
         selectFile.setDialogTitle("Select file to import");
         selectFile.setFileFilter(csv);
+        selectFile.setApproveButtonText("Import");
         int result = selectFile.showOpenDialog(null);
         if(result == JFileChooser.APPROVE_OPTION) {
+            if (!MainMenu.menuUpdated) {
             System.out.println(selectFile.getCurrentDirectory());
             PresentationController.Import(selectFile.getSelectedFile());
             BorderLayout blayout = (BorderLayout) MainMenu.frame.getContentPane().getLayout();
             MainMenu.frame.getContentPane().remove(blayout.getLayoutComponent(BorderLayout.CENTER));
             MainMenu.frame.repaint();
             MainMenu.frame.getContentPane().add(BorderLayout.CENTER, SheetView.cambio());
-            rewriteModel(0);
-            if (!MainMenu.menuUpdated) {
-                MainMenu.menuUpdated = true;
-                SheetView.updateMenu(MainMenu.mb);
-            }
+            MainMenu.menuUpdated = true;
+            SheetView.updateMenu(MainMenu.mb);
             MainMenu.frame.setTitle(PresentationController.getTitle() + " - POMC WORKSHEETS");
             MainMenu.frame.setVisible(true);
+            SheetView.rewriteModel(0);
+            }
+            else {
+                int confirm=showConfirmDialog(null, "Beware! Not saved changes will be lost. \n Are you sure?", "Unsaved changes!", JOptionPane.YES_NO_OPTION);
+                if(confirm==JOptionPane.OK_OPTION) {
+                    PresentationController.Import(selectFile.getSelectedFile());
+                    BorderLayout blayout = (BorderLayout) MainMenu.frame.getContentPane().getLayout();
+                    MainMenu.frame.getContentPane().remove(blayout.getLayoutComponent(BorderLayout.CENTER));
+                    MainMenu.frame.repaint();
+                    MainMenu.frame.getContentPane().add(BorderLayout.CENTER, SheetView.cambio());
+                    MainMenu.frame.setTitle(PresentationController.getTitle() + " - POMC WORKSHEETS");
+                    MainMenu.frame.setVisible(true);
+                    SheetView.rewriteModel(0);
+                }
+
+            }
         }
     }
     public static void open() {
@@ -263,24 +284,37 @@ public class MenuViews {
                 MainMenu.frame.setTitle(PresentationController.getTitle() + " - POMC WORKSHEETS");
                 MainMenu.frame.setVisible(true);
                 SheetView.rewriteModel(0);
-
             }
             else {
-                int confirm=showConfirmDialog(null, "Beware! You'll loose the current information. \n Are you sure?", "Unsaved changes!", JOptionPane.YES_NO_OPTION);
+                int confirm=showConfirmDialog(null, "Beware! Not saved changes will be lost. \n Are you sure?", "Unsaved changes!", JOptionPane.YES_NO_OPTION);
                 if(confirm==JOptionPane.OK_OPTION) {
-                    //TODO preguntar si seguro
                     PresentationController.open(selectFile.getSelectedFile());
                     BorderLayout blayout = (BorderLayout) MainMenu.frame.getContentPane().getLayout();
                     MainMenu.frame.getContentPane().remove(blayout.getLayoutComponent(BorderLayout.CENTER));
                     MainMenu.frame.repaint();
                     MainMenu.frame.getContentPane().add(BorderLayout.CENTER, SheetView.cambio());
-                    MainMenu.menuUpdated = true;
-                    SheetView.updateMenu(MainMenu.mb);
                     MainMenu.frame.setTitle(PresentationController.getTitle() + " - POMC WORKSHEETS");
                     MainMenu.frame.setVisible(true);
                     SheetView.rewriteModel(0);
                 }
             }
         }
+    }
+
+    public static void propertiesB() {
+        String properties = "TITLE: " + PresentationController.getTitle() + "\n";
+        properties += "SHEETS: " + PresentationController.getNumberofSheets() + "\n";
+        if (PresentationController.isFileSaved()) {
+            File fi = new File(PresentationController.getPath());
+            try {
+                BasicFileAttributes attr = Files.readAttributes(Path.of(PresentationController.getPath()), BasicFileAttributes.class);
+                properties += "PATH: " + fi.getPath() + "\n";
+                properties += "CREATED AT: " + attr.creationTime()+ "\n";
+                properties += "TOTAL SPACE:" + fi.length() + "B \n";
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        showMessageDialog(null,properties, "Properties of the document", JOptionPane.PLAIN_MESSAGE);
     }
 }

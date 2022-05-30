@@ -105,7 +105,8 @@ public class NumCell extends Cell {
             return d;
         }
 
-        if (hasRefs()) { System.out.println("HOLA");updateRefs();}
+        //if (hasRefs()) { updateRefs();}
+        updateRefs();
         return this;
     }
 

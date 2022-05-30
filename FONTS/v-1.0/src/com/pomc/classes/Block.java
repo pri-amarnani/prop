@@ -106,6 +106,7 @@ public class Block {
         return true;
     }
 
+
     /**
      * Crea una grafica linear con los parámetros indicados
      * @param title
@@ -211,7 +212,7 @@ public class Block {
     }
 
     /**
-     * Quita los espacios al inicio y final de una celda de tipo texto
+     * Quita los espacios al inicio y final de las celdas de tipo texto
      */
     public void trim () {
         for (int i = 0; i < this.block.length; ++i) {
@@ -604,7 +605,7 @@ public class Block {
             for (int j = 0; j < this.block[0].length; ++j) {
                 NumCell N = (NumCell) this.block[i][j];
                 deleteReff(b.getCell(i, j));
-                Cell n = (Cell) b.getCell(i, j).changeValue(N.conversion(from,to));
+                Cell n = (Cell) b.getCell(i, j).changeValue((double) Math.round(N.conversion(from,to)* 10000d) / 10000d);
                 b.setCell(i,j,n);
                 if (ref) {
                     ReferencedCell rc = new ReferencedCell(n.getRow(),n.getColumn(),"=convert");
@@ -635,7 +636,7 @@ public class Block {
             for (int j = 0; j < this.block[0].length; ++j) {
                 Cell n;
 
-                if(b1.getCell(i,j).getInfo() == null){   //nullpointer
+                if(b1.getCell(i,j).getInfo() == null){
                     b2.getCell(i, j);
                     n = (Cell) b2.getCell(i, j).changeValue((String) this.block[i][j].getInfo());
                     b2.setCell(i,j,n);
@@ -709,7 +710,8 @@ public class Block {
         for (int i = 0; i < this.block.length; ++i) {
             for (int j = 0; j < this.block[0].length; ++j) {
                 deleteReff(b2.getCell(i, j));
-                Cell n = (Cell) b2.getCell(i, j).changeValue((double) this.block[i][j].getInfo() * (double) b1.getCell(i, j).getInfo());
+                double value = (double) this.block[i][j].getInfo() * (double) b1.getCell(i, j).getInfo();
+                Cell n = (Cell) b2.getCell(i, j).changeValue((double) Math.round(value* 10000d) / 10000d);
                 b2.setCell(i,j,n);
                 if (ref) {
                     ReferencedCell rc = new ReferencedCell(n.getRow(),n.getColumn(),"=mult");
@@ -742,7 +744,8 @@ public class Block {
         for (int i = 0; i < this.block.length; ++i) {
             for (int j = 0; j < this.block[0].length; ++j) {
                 deleteReff(b2.getCell(i, j));
-                Cell n = (Cell) b2.getCell(i, j).changeValue((double) this.block[i][j].getInfo() / (double) b1.getCell(i, j).getInfo());
+                double value = (double) this.block[i][j].getInfo() / (double) b1.getCell(i, j).getInfo();
+                Cell n = (Cell) b2.getCell(i, j).changeValue((double) Math.round(value* 10000d) / 10000d);
                 b2.setCell(i,j,n);
                 if (ref) {
                     ReferencedCell rc = new ReferencedCell(n.getRow(),n.getColumn(),"=div");
@@ -970,7 +973,7 @@ public class Block {
             }
         }
         deleteReff(c);
-        c = (Cell) c.changeValue(sum);
+        c = (Cell) c.changeValue((double) Math.round(sum* 10000d) / 10000d);
 
         if (ref) {
 
@@ -1005,7 +1008,7 @@ public class Block {
             }
         }
         deleteReff(c);
-        c = (Cell) c.changeValue(sum);
+        c = (Cell) c.changeValue((double) Math.round(sum* 10000d) / 10000d);
 
         if (ref) {
 
@@ -1041,7 +1044,7 @@ public class Block {
             }
         }
         deleteReff(c);
-        c = (Cell) c.changeValue(sum/s.size());
+        c = (Cell) c.changeValue((double) Math.round((sum/s.size())* 10000d) / 10000d);
 
         if (ref) {
 
@@ -1107,7 +1110,7 @@ public class Block {
     public Cell var (Cell c, Boolean ref) {
         double d = Math.pow((double) this.std(c, false).getInfo(), 2);
         deleteReff(c);
-        c = (Cell) c.changeValue(d);
+        c = (Cell) c.changeValue((double) Math.round(d* 10000d) / 10000d);
 
         if (ref) {
             ReferencedCell rc = new ReferencedCell(c.getRow(),c.getColumn(),"=var");
@@ -1181,7 +1184,7 @@ public class Block {
         double cov = sum/(x.length-1);
 
         deleteReff(c);
-        c = (Cell) c.changeValue(cov);
+        c = (Cell) c.changeValue((double) Math.round(cov* 10000d) / 10000d);
 
         if (ref) {
             ReferencedCell rc = new ReferencedCell(c.getRow(),c.getColumn(),"=covar");
@@ -1227,7 +1230,7 @@ public class Block {
         double stdd = Math.sqrt(std/arr.length);
 
         deleteReff(c);
-        c = (Cell) c.changeValue(stdd);
+        c = (Cell) c.changeValue((double) Math.round(stdd* 10000d) / 10000d);
 
         if (ref) {
             ReferencedCell rc = new ReferencedCell(c.getRow(),c.getColumn(),"=std");
@@ -1337,7 +1340,7 @@ public class Block {
         if (cp < -1) cp = -1.0;
 
         deleteReff(c);
-        c = (Cell) c.changeValue(cp);
+        c = (Cell) c.changeValue((double) Math.round(cp* 10000d) / 10000d);
 
         if (ref) {
 
