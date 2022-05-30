@@ -468,7 +468,7 @@ public class SheetView {
                         @Override
                         public void actionPerformed(ActionEvent e) {
                             Integer[] floored=FuncView.addSingleOp("floor");
-                            if(floored != null && floored[0]!=-1) {
+                            if(floored!=null && floored[0]!=-1) {
                                 if (floored[4] == -1) writeBlock(floored[0], floored[1], floored[2], floored[3]);
                                 else rewriteBlock();
                             }
@@ -490,7 +490,7 @@ public class SheetView {
                         @Override
                         public void actionPerformed(ActionEvent e) {
                             Integer[] trimm = FuncView.addSingleOp("trim");
-                            if(trimm != null && trimm[0]!=-1) {
+                            if(trimm!=null && trimm[0]!=-1) {
                                 if (trimm[4] == -1) writeBlock(trimm[0], trimm[1], trimm[2], trimm[3]);
                                 else rewriteBlock();
                             }
@@ -512,7 +512,7 @@ public class SheetView {
                         @Override
                         public void actionPerformed(ActionEvent e) {
                             Integer[] opA = FuncView.addSingleOp("All Op Block");
-                            if(opA[0]!=-1) {
+                            if(opA!=null && opA[0]!=-1) {
                                 if (opA[4] == -1) writeBlock(opA[0], opA[1], opA[2], opA[3]);
                                 else rewriteBlock();
                             }
@@ -534,7 +534,7 @@ public class SheetView {
                         @Override
                         public void actionPerformed(ActionEvent e) {
                             Integer[] grafFunc = FuncView.addSingleOp("graf");
-                            if(grafFunc[0]!=-1) {
+                            if(grafFunc!=null && grafFunc[0]!=-1) {
                                 if (grafFunc[4] == -1) writeBlock(grafFunc[0], grafFunc[1], grafFunc[2], grafFunc[3]);
                                 else rewriteBlock();
                             }
@@ -554,7 +554,7 @@ public class SheetView {
                         @Override
                         public void actionPerformed(ActionEvent e) {
                             Integer[] c=FuncView.addSingleOp("ceil");
-                            if(c[0]!=-1) {
+                            if(c!=null && c[0]!=-1) {
                                 if (c[4] == -1) writeBlock(c[0], c[1], c[2], c[3]);
                                 else rewriteBlock();
                             }
@@ -575,7 +575,7 @@ public class SheetView {
                         @Override
                         public void actionPerformed(ActionEvent e) {
                             Integer[] conv= FuncView.addSingleOpCrit("Convert");
-                            if(conv[0]!=-1) {
+                            if(conv!=null && conv[0]!=-1) {
                                 if (conv[4] == -1) writeBlock(conv[0], conv[1], conv[2], conv[3]);
                                 else rewriteBlock();
                             }
@@ -690,7 +690,7 @@ public class SheetView {
                         @Override
                         public void actionPerformed(ActionEvent e) {
                             Integer[] L=FuncView.addSingleOpCrit("Length");
-                            if(L[0]!=-1){
+                            if(L!=null && L[0]!=-1){
                                 if(L[4]==-1)writeBlock(L[0],L[1],L[2],L[3]);
                                 else rewriteBlock();
                             }
@@ -755,7 +755,7 @@ public class SheetView {
                         @Override
                         public void actionPerformed(ActionEvent e) {
                             Integer [] ex= FuncView.addSingleOpCrit("Extract");
-                            if(ex[0]!=-1) writeBlock(ex[0],ex[1],ex[2],ex[3]);
+                            if(ex!=null && ex[0]!=-1) writeBlock(ex[0],ex[1],ex[2],ex[3]);
                         }
                     });
 
@@ -772,7 +772,7 @@ public class SheetView {
                         @Override
                         public void actionPerformed(ActionEvent e) {
                             Integer [] dtw=FuncView.addSingleOp("Day of the week");
-                            if(dtw != null && dtw[0]!=-1) writeBlock(dtw[0],dtw[1],dtw[2],dtw[3]);
+                            if(dtw!=null && dtw[0]!=-1) writeBlock(dtw[0],dtw[1],dtw[2],dtw[3]);
                         }
                     });
                     break;

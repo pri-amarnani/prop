@@ -42,6 +42,10 @@ public class Block {
         this.block[i][j] = c;
     }
 
+    /**
+     * Comprueba si todas las celdas del bloque son de tipo número
+     * @return true si lo son, si no false
+     */
     public boolean allDouble() {
         for (int i = 0; i < this.block.length; ++i) {
             for (int j = 0; j < this.block[0].length; ++j) {
@@ -61,6 +65,10 @@ public class Block {
         return true;
     }
 
+    /**
+     * Comprueba si todas las celdas del bloque son de tipo texto
+     * @return true si lo son, si no false
+     */
     public boolean allText() {
         for (int i = 0; i < this.block.length; ++i) {
             for (int j = 0; j < this.block[0].length; ++j)
@@ -70,6 +78,10 @@ public class Block {
         return true;
     }
 
+    /**
+     * Comprueba si todas las celdas del bloque son de tipo fecha
+     * @return true si lo son, si no false
+     */
     public boolean allDate() {
         for (int i = 0; i < this.block.length; ++i) {
             for (int j = 0; j < this.block[0].length; ++j) {
@@ -79,6 +91,11 @@ public class Block {
         return true;
     }
 
+    /**
+     * Compruba si dos bloques son iguales
+     * @param b
+     * @return true si el bloque actual es igual al pasado por parámetro, false si son diferentes
+     */
     public boolean isEqual(Block b) {
 
         if (b.number_cols() != this.block[0].length || b.number_rows() != this.block.length) return false;
@@ -91,6 +108,14 @@ public class Block {
         return true;
     }
 
+    /**
+     * Crea una grafica linear con los parámetros indicados
+     * @param title
+     * @param x
+     * @param y
+     * @param func
+     * @return devuelve la gráfica creada
+     */
     public XYChart graficXY(String title, String x, String y, String func){
         Cell [][] aux = new Cell[this.block.length][this.block[0].length];
 
@@ -117,6 +142,10 @@ public class Block {
         return chart;
     }
 
+    /**
+     * Crea una grafica Pie
+     * @return devuelve la gráfica creada
+     */
     public PieChart graficPie(){
         PieChart ch = new PieChart(500, 500);
 
@@ -139,6 +168,11 @@ public class Block {
     }
 
 
+    /**
+     * Hace las operaciones unitarias de un bloque
+     * @param op
+     * @param x
+     */
     public void opBlock (String op, double x) {
 
         for (int i = 0; i < this.block.length; ++i) {
@@ -182,6 +216,9 @@ public class Block {
         dr= getCell(size_r-1,size_c-1);
     }
 
+    /**
+     * Quita los espacios al inicio y final de una celda de tipo texto
+     */
     public void trim () {
         for (int i = 0; i < this.block.length; ++i) {
             for (int j = 0; j < this.block[0].length; ++j) {
@@ -194,6 +231,11 @@ public class Block {
         dr= getCell(size_r-1,size_c-1);
     }
 
+    /**
+     * Redondea hacia el entero superior el valor de la celda (numérico)
+     * @param b
+     * @param ref
+     */
     public void ceiling (Block b, Boolean ref) {
         for (int i = 0; i < this.block.length; ++i) {
             for (int j = 0; j < this.block[0].length; ++j) {
@@ -221,6 +263,12 @@ public class Block {
         b.dr=b.getCell(b.size_r-1,b.size_c-1);
     }
 
+    /**
+     * Encuentra la celda con valor máximo en un bloque, puede tener referencia
+     * @param c
+     * @param ref
+     * @return devuelve la celda
+     */
     public Cell max (Cell c, Boolean ref) {
         boolean first = true;
         double max = 0;
@@ -255,7 +303,15 @@ public class Block {
         return c;
     }
 
-    // criteria == <, >, ==, >=, <=
+
+    /**
+     * Cuenta el numero de celdas que cumplen la condicion indicada (==,<=,>=,<, >)
+     * @param c
+     * @param ref
+     * @param val
+     * @param criteria
+     * @return devuelve la celda modificada
+     */
     public Cell countIf (Cell c, Boolean ref, double val, String criteria) {
         double count = 0;
         Vector<Cell> s = new Vector<>();
@@ -300,6 +356,12 @@ public class Block {
         return c;
     }
 
+    /**
+     * Encuentra la celda con valor mínimo en un bloque, puede tener referencia
+     * @param c
+     * @param ref
+     * @return devuelve la celda
+     */
     public Cell min (Cell c, Boolean ref) {
         boolean first = true;
         double min = 0;
@@ -334,6 +396,12 @@ public class Block {
         return c;
     }
 
+    /**
+     * Calcula la longitud de las celdas de un bloque y las guarda en otro bloque, puede tener referencia
+     * @param b
+     * @param ref
+     * @param criteria
+     */
     public void length(Block b, Boolean ref, String criteria){
         for (int i = 0; i < this.block.length; ++i) {
             for (int j = 0; j < this.block[0].length; ++j) {
@@ -360,7 +428,11 @@ public class Block {
         b.dr = b.getCell(b.size_r -1,b.size_c -1);
     }
 
-    //copy values from one block to another
+    /**
+     * Copia los valores de un bloque en otro, puede tener referencia
+     * @param b
+     * @param ref
+     */
     public void ref(Block b, Boolean ref) {
         for (int i = 0; i < this.block.length; ++i) {
             for (int j = 0; j < this.block[0].length; ++j) {
@@ -389,6 +461,10 @@ public class Block {
     }
 
 
+    /**
+     * Cambia el valor de las celdas de un bloque por el valor pasado por parámetro
+     * @param n
+     */
     public void ModifyBlock(Object n) {
         for (int i=0; i<this.block.length;++i) {
             for (int j = 0; j < this.block[0].length; ++j) {
@@ -401,6 +477,12 @@ public class Block {
         dr = this.block[size_r-1][size_c-1];
     }
 
+    /**
+     * Ordena un bloque en función de la columna indicada y siguiendo el criterio indicado
+     * @param n_col
+     * @param criteria
+     * @param type
+     */
     public void SortBlock (int n_col, String criteria, String type) {
         int firstCol=ul.getColumn();
         int firstRow=ul.getRow();
@@ -443,6 +525,11 @@ public class Block {
         dr = this.block[size_r-1][size_c-1];
     }
 
+    /**
+     * Busca las celdas con valor igual al indicado
+     * @param n
+     * @return devuelve un vector con las celdas
+     */
     public Vector<Cell> find (Object n) {
         Vector<Cell> v = new Vector<>();
         for (Cell[] cells : block) {
@@ -453,6 +540,12 @@ public class Block {
         return v;
     }
 
+    /**
+     * Busca las celdas con valor n y modifica su valor poniendo r
+     * @param n
+     * @param change
+     * @return devuelve un array con las posiciones de las celdas modificadas
+     */
     public Object[] findAndReplace (Object n, Object change) {
         Vector<Integer> results = new Vector<>();
         for (Cell[] cells : block) {
@@ -469,6 +562,11 @@ public class Block {
         return  results.toArray();
     }
 
+    /**
+     * Edita la celda dejando solo su parte entera
+     * @param b
+     * @param ref
+     */
     public void floor (Block b, Boolean ref) {
         for (int i = 0; i < this.block.length; ++i) {
             for (int j = 0; j < this.block[0].length; ++j) {
@@ -496,6 +594,13 @@ public class Block {
         b.dr=b.getCell(b.size_r-1,b.size_c-1);
     }
 
+    /**
+     * Convierte el valor de las celdas de una unidad métrica a otra
+     * @param b
+     * @param ref
+     * @param from
+     * @param to
+     */
     public void convert (Block b, Boolean ref, String from, String to) {
         for (int i = 0; i < this.block.length; ++i) {
             for (int j = 0; j < this.block[0].length; ++j) {
@@ -521,6 +626,12 @@ public class Block {
         b.dr=b.getCell(b.size_r-1,b.size_c-1);
     }
 
+    /**
+     * Hace la concatenacion de las celdas de dos bloques y la escribe en un tercer bloque, puede tener referencia
+     * @param b1
+     * @param b2
+     * @param ref
+     */
     public void concatenate (Block b1, Block b2, Boolean ref) {
         for (int i = 0; i < this.block.length; ++i) {
             for (int j = 0; j < this.block[0].length; ++j) {
@@ -548,6 +659,12 @@ public class Block {
         b2.dr=b2.getCell(b2.size_r-1,b2.size_c-1);
     }
 
+    /**
+     * Hace la suma de dos bloques y escribe el resultado en un tercer bloque, puede tener referencias
+     * @param b1
+     * @param b2
+     * @param ref
+     */
     public void sum (Block b1, Block b2, Boolean ref) {
         for (int i = 0; i < this.block.length; ++i) {
             for (int j = 0; j < this.block[0].length; ++j) {
@@ -575,6 +692,12 @@ public class Block {
         b2.dr=b2.getCell(b2.size_r-1,b2.size_c-1);
     }
 
+    /**
+     * Hace la multiplicación de dos bloques y escribe el resultado en un tercer bloque, puede tener referencia
+     * @param b1
+     * @param b2
+     * @param ref
+     */
     public void mult (Block b1, Block b2, Boolean ref) {
         for (int i = 0; i < this.block.length; ++i) {
             for (int j = 0; j < this.block[0].length; ++j) {
@@ -602,6 +725,12 @@ public class Block {
         b2.dr=b2.getCell(b2.size_r-1,b2.size_c-1);
     }
 
+    /**
+     * Hace la división de dos bloques y escribe el resultado en un tercer bloque, puede tener referencia
+     * @param b1
+     * @param b2
+     * @param ref
+     */
     public void div (Block b1, Block b2, Boolean ref) {
         for (int i = 0; i < this.block.length; ++i) {
             for (int j = 0; j < this.block[0].length; ++j) {
@@ -629,6 +758,12 @@ public class Block {
         b2.dr=b2.getCell(b2.size_r-1,b2.size_c-1);
     }
 
+    /**
+     * Hace la resta de dos bloques y escribe el resultado en un tercer bloque, puede tener referencia
+     * @param b1
+     * @param b2
+     * @param ref
+     */
     public void substract (Block b1, Block b2, Boolean ref) {
         for (int i = 0; i < this.block.length; ++i) {
             for (int j = 0; j < this.block[0].length; ++j) {
@@ -653,6 +788,12 @@ public class Block {
         b2.dr=b2.getCell(b2.size_r-1,b2.size_c-1);
     }
 
+    /**
+     * Obtiene el día/mes/año de las fechas y lo escribe en otro bloque, puede tener referencia
+     * @param b
+     * @param ref
+     * @param ex
+     */
     public void extract (Block b, Boolean ref, String ex) {
         for (int i = 0; i < b.number_rows(); ++i) {
             for (int j = 0; j < b.number_cols(); ++j) {
@@ -677,7 +818,11 @@ public class Block {
         b.dr=b.getCell(b.size_r-1,b.size_c-1);
     }
 
-    //FINISH
+    /**
+     * Obtiene los días de la semana de unas fechas y los escribe en otro bloque, puede tener referencia
+     * @param b
+     * @param ref
+     */
     public void dayOfTheWeek (Block b, Boolean ref) {
         for (int i = 0; i < b.number_rows(); ++i) {
             for (int j = 0; j < b.number_cols(); ++j) {
@@ -703,7 +848,10 @@ public class Block {
       //  System.out.println(b.getCell(0,0).getType());
     }
 
-    // criteria == mayus or criteria == minus
+    /**
+     * Cambia a mayúsculas/minúsculas o la primera letra a mayúscula de las celdas tipo texto
+     * @param criteria
+     */
     public void replaceWithCriteriaText (String criteria) {
         for (Cell[] cells : this.block) {
             for (int j = 0; j < this.block[0].length; ++j) {
@@ -727,6 +875,12 @@ public class Block {
         }
     }
 
+    /**
+     * Suma todos los valores de un bloque y escribe la suma en una celda, puede tener referencia
+     * @param c
+     * @param ref
+     * @return devuelve la celda modificada
+     */
     public Cell sumAll (Cell c, Boolean ref) {
 
         double sum = 0;
@@ -741,7 +895,6 @@ public class Block {
         c = (Cell) c.changeValue(sum);
 
         if (ref) {
-            //System.out.println("entra1");
             ReferencedCell rc = new ReferencedCell(c.getRow(),c.getColumn(),"=sumAll");
             rc.setContent(c.getInfo());
             c = rc;
@@ -756,6 +909,12 @@ public class Block {
         return c;
     }
 
+    /**
+     * Resta al primer valor del bloque el resto y escribe la resta en una celda, puede tener referencia
+     * @param c
+     * @param ref
+     * @return devuelve la celda modificada
+     */
     public Cell subAll (Cell c, Boolean ref) {
 
         double sum = 0;
@@ -785,6 +944,12 @@ public class Block {
         return c;
     }
 
+    /**
+     * Multiplica todos los valores de un bloque y escribe la multiplicación en una celda, puede tener referencia
+     * @param c
+     * @param ref
+     * @return devuelve la celda modificada
+     */
     public Cell multAll (Cell c, Boolean ref) {
 
         double sum = 1;
@@ -814,6 +979,12 @@ public class Block {
         return c;
     }
 
+    /**
+     * Divide al primer valor del bloque el resto y escribe la división en una celda, puede tener referencia
+     * @param c
+     * @param ref
+     * @return devuelve la celda modificada
+     */
     public Cell divAll (Cell c, Boolean ref) {
 
         double sum = 1;
@@ -843,6 +1014,13 @@ public class Block {
         return c;
     }
 
+    /**
+     * Hace la media de los valores de un bloque y escribe el resultado en una celda
+     * Puede tener referencia
+     * @param c
+     * @param ref
+     * @return devuelve la celda modificada
+     */
     public Cell mean (Cell c, Boolean ref) {
 
         double sum = 0;
@@ -872,6 +1050,12 @@ public class Block {
         return c;
     }
 
+    /**
+     * Encuentra la mediana de los valores de un bloque y escribe el resultado en una celda
+     * @param c
+     * @param ref
+     * @return devuelve la celda modificada
+     */
     public Cell median (Cell c, Boolean ref) {
         double [] arr = new double[this.block.length*this.block[0].length];
         Vector<Cell> s = new Vector<>();
@@ -904,6 +1088,13 @@ public class Block {
         return c;
     }
 
+    /**
+     * Hace la varianza de un bloque y escribe el resultado en una celda
+     * Puede tener referencia
+     * @param c
+     * @param ref
+     * @return devuelve la celda modificada
+     */
     public Cell var (Cell c, Boolean ref) {
         double d = Math.pow((double) this.std(c, false).getInfo(), 2);
 
@@ -929,6 +1120,13 @@ public class Block {
         return c;
     }
 
+    /**
+     * Hace la covarianza de dos bloques y escribe el valor en una celda
+     * @param b
+     * @param c
+     * @param ref
+     * @return devuelve la celda modificada
+     */
     public Cell covar (Block b, Cell c, Boolean ref) {
         double mean1 = (double) this.mean(c,false).getInfo();
         double mean2 = (double) b.mean(c,false).getInfo();
@@ -978,6 +1176,12 @@ public class Block {
         return c;
     }
 
+    /**
+     * Calcula la desviación estándard de un bloque y guarda el valor en una celda
+     * @param c
+     * @param ref
+     * @return devuelve la celda modificada
+     */
     public Cell std (Cell c, Boolean ref) {
         double sum = 0, std = 0;
         double [] arr = new double[this.block.length*this.block[0].length];
@@ -1017,6 +1221,14 @@ public class Block {
         return c;
     }
 
+    /**
+     * Calcula el coeficiente de pearson entre dos bloques y escribe el resultado en una celda
+     * Puede tener referencias
+     * @param b
+     * @param c
+     * @param ref
+     * @return devlve la celda modificada
+     */
     public Cell CPearson (Block b, Cell c, Boolean ref) {
         double d1 = (double) b.std(c,false).getInfo();
         double d2 = (double) this.std(c, false).getInfo();

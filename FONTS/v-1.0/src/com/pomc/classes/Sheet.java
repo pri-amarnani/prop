@@ -341,7 +341,6 @@ public class Sheet {
      * Ordena un bloque en función de la columna indicada y siguiendo el criterio indicado
      * @param n_col
      * @param Criteria
-     * @return
      */
     public boolean SortBlock(int n_col, String Criteria){
         Cell c = b_selected.getCell(0,n_col);
@@ -357,7 +356,7 @@ public class Sheet {
     /**
      * Busca las celdas con valor igual al indicado
      * @param o
-     * @return Devuelve
+     * @return Devuelve un vector con las celdas
      */
     public Vector<Cell> find(Object o){
         return b_selected.find(o);
@@ -367,7 +366,7 @@ public class Sheet {
      * Busca las celdas con valor n y modifica su valor poniendo r
      * @param n
      * @param r
-     * @return devuelve
+     * @return devuelve un array con las posiciones de las celdas modificadas
      */
     public Object[] findAndReplace(Object n, Object r){
         Object[] result = b_selected.findAndReplace(n, r);
@@ -409,66 +408,131 @@ public class Sheet {
         update(b);
     }
 
-
+    /**
+     * Llama a la función de bloque que redondea el valor (numérico) de la celda hacia el entero superior
+     * @param b
+     * @param ref
+     */
     public void ceil(Block b, Boolean ref){
         b_selected.ceiling(b, ref);
         update(b);
     }
 
+    /**
+     * Convierte el valor de las celdas de una unidad métrica a otra
+     * @param b
+     * @param ref
+     * @param from
+     * @param to
+     */
     public void convert(Block b, Boolean ref, String from, String to){
         b_selected.convert(b, ref, from, to);
         update(b);
     }
 
+    /**
+     * Hace la suma de dos bloques y escribe el resultado en un tercer bloque, puede tener referencias
+     * @param b1
+     * @param b2
+     * @param ref
+     */
     public void sum(Block b1, Block b2, Boolean ref){
         b_selected.sum(b1, b2, ref);
         update(b2);
     }
 
+    /**
+     * Hace la multiplicación de dos bloques y escribe el resultado en otro bloque, puede tener referencias
+     * @param b1
+     * @param b2
+     * @param ref
+     */
     public void mult(Block b1, Block b2, Boolean ref){
         b_selected.mult(b1, b2, ref);
         update(b2);
     }
 
+    /**
+     * Hace la división de dos bloques y escribe el resultado en un tercer bloque, puede tener referencia
+     * @param b1
+     * @param b2
+     * @param ref
+     */
     public void div(Block b1, Block b2, Boolean ref){
         b_selected.div(b1, b2, ref);
         update(b2);
     }
 
+    /**
+     * Hace la resta de dos bloques y escribe el resultado en un tercer bloque, puede tener referencia
+     * @param b1
+     * @param b2
+     * @param ref
+     */
     public void substract(Block b1, Block b2, Boolean ref){
         b_selected.substract(b1, b2, ref);
         update(b2);
     }
 
+
+    /**
+     * Hace la concatenacion de las celdas de dos bloques y la escribe en un tercer bloque, puede tener referencia
+     * @param b1
+     * @param b2
+     * @param ref
+     */
     public void concatenate(Block b1, Block b2, Boolean ref){
         b_selected.concatenate(b1, b2, ref);
         update(b2);
     }
 
+    /**
+     * Obtiene el día/mes/año de las fechas y lo escribe en otro bloque, puede tener referencia
+     * @param b1
+     * @param ref
+     * @param ex
+     */
     public void extract(Block b1,Boolean ref, String ex){
         b_selected.extract(b1, ref, ex);
         update(b1);
     }
 
+    /**
+     * Obtiene los días de la semana de unas fechas y los escribe en otro bloque, puede tener referencia
+     * @param b
+     * @param ref
+     */
     public void dayOfTheWeek (Block b, Boolean ref){
         b_selected.dayOfTheWeek(b, ref);
         update(b);
     }
 
+    /**
+     * Cambia a mayúsculas/minúsculas o la primera letra a mayúscula de las celdas tipo texto
+     * @param criteria
+     */
     public void replaceWithCriteriaText(String criteria){
         b_selected.replaceWithCriteriaText(criteria);
         update(b_selected);
     }
 
+    /**
+     * Quita los espacios al inicio y final de una celda de tipo texto
+     */
     public void trim(){
         b_selected.trim();
         update(b_selected);
     }
 
-    public double length(TextCell c, String criteria){
-        return c.length(criteria);
-    }
-
+    /**
+     * Cuenta el numero de celdas que cumplen la condicion indicada (==,<=,>=,<, >)
+     * Escribe el número en la celda indicada, puede tener referencia
+     * @param c
+     * @param ref
+     * @param eq
+     * @param criteria
+     * @return devuelve el numero de celdas que cumplen
+     */
     public Double countIf(Cell c, Boolean ref, double eq, String criteria){
         Cell m = b_selected.countIf(c, ref, eq, criteria);
         cells.elementAt(m.getRow()).setElementAt(m, m.getColumn());
@@ -476,6 +540,12 @@ public class Sheet {
         else return (Double) m.getInfo();
     }
 
+    /**
+     * Encuntra la celda con valor máximo en un bloque, puede tener referencia
+     * @param c
+     * @param ref
+     * @return devuelve el valor de la celda
+     */
     public Double max(Cell c, Boolean ref){
         Cell m = b_selected.max(c, ref);
         cells.elementAt(m.getRow()).setElementAt(m, m.getColumn());
@@ -483,6 +553,12 @@ public class Sheet {
         else return (Double) m.getInfo();
     }
 
+    /**
+     * Encuentra la celda con valor mínimo en un bloque, puede tener referencia
+     * @param c
+     * @param ref
+     * @return devuelve el valor de la celda
+     */
     public Double min(Cell c, Boolean ref){
         Cell m = b_selected.min(c, ref);
         cells.elementAt(m.getRow()).setElementAt(m, m.getColumn());
@@ -490,6 +566,12 @@ public class Sheet {
         else return (Double) m.getInfo();
     }
 
+    /**
+     * Suma todos los valores de un bloque y escribe la suma en una celda, puede tener referencia
+     * @param c
+     * @param ref
+     * @return devuelve la suma
+     */
     public Double sumAll(Cell c, Boolean ref){
         Cell m = b_selected.sumAll(c, ref);
         cells.elementAt(m.getRow()).setElementAt(m, m.getColumn());
@@ -497,6 +579,12 @@ public class Sheet {
         else return (Double) m.getInfo();
     }
 
+    /**
+     * Resta al primer valor del bloque el resto y escribe la resta en una celda, puede tener referencia
+     * @param c
+     * @param ref
+     * @return devuelve el valor de la resta
+     */
     public Double subAll(Cell c, Boolean ref){
         Cell m = b_selected.subAll(c, ref);
         cells.elementAt(m.getRow()).setElementAt(m, m.getColumn());
@@ -504,6 +592,13 @@ public class Sheet {
         else return (Double) m.getInfo();
     }
 
+    /**
+     * Multiplica todos los valores de un bloque y escribe la multiplicación en una celda, puede tener referencia
+     * @param c
+     * @param ref
+     * @param val
+     * @return devuelve el valor de la división
+     */
     public Double multAll(Cell c, Boolean ref, Boolean val){
         Cell m = b_selected.multAll(c, ref);
         cells.elementAt(m.getRow()).setElementAt(m, m.getColumn());
@@ -511,6 +606,13 @@ public class Sheet {
         else return (Double) m.getInfo();
     }
 
+    /**
+     * Divide al primer valor del bloque el resto y escribe la división en una celda, puede tener referencia
+     * @param c
+     * @param ref
+     * @param val
+     * @return devuelve el valor de la multiplicación
+     */
     public Double divAll(Cell c, Boolean ref, Boolean val){
         Cell m = b_selected.divAll(c, ref);
         cells.elementAt(m.getRow()).setElementAt(m, m.getColumn());
@@ -518,6 +620,13 @@ public class Sheet {
         else return (Double) m.getInfo();
     }
 
+    /**
+     * Hace la media de los valores de un bloque y escribe el resultado en una celda
+     * Puede tener referencias
+     * @param c
+     * @param ref
+     * @return devuelve el valor de la media
+     */
     public Double mean(Cell c, Boolean ref){
         Cell m = b_selected.mean(c, ref);
         cells.elementAt(m.getRow()).setElementAt(m, m.getColumn());
@@ -525,6 +634,12 @@ public class Sheet {
         else return (Double) m.getInfo();
     }
 
+    /**
+     * Encuentra la mediana de los valores de un bloque y escribe el resultado en una celda
+     * @param c
+     * @param ref
+     * @return devuelve el valor de la mediana
+     */
     public Double median(Cell c, Boolean ref){
         Cell m = b_selected.median(c, ref);
         cells.elementAt(m.getRow()).setElementAt(m, m.getColumn());
@@ -532,6 +647,13 @@ public class Sheet {
         else return (Double) m.getInfo();
     }
 
+    /**
+     * Hace la varianza de un bloque y escribe el resultado en una celda
+     * Puede tener referencia
+     * @param c
+     * @param ref
+     * @return devuelve el valor de la varianza
+     */
     public Double var(Cell c, Boolean ref){
         Cell m = b_selected.var(c, ref);
         cells.elementAt(m.getRow()).setElementAt(m, m.getColumn());
@@ -539,13 +661,28 @@ public class Sheet {
         else return (Double) m.getInfo();
     }
 
-    public Double covar(Block b, Cell c, Boolean ref){ //sii
+    /**
+     * Hace la covarianza de dos bloques y escribe el valor en una celda
+     * Puede tener referencias
+     * @param b
+     * @param c
+     * @param ref
+     * @return devuelve el valor de la covarianza
+     */
+    public Double covar(Block b, Cell c, Boolean ref){
         Cell m = b_selected.covar(b, c, ref);
         cells.elementAt(m.getRow()).setElementAt(m, m.getColumn());
         if (ref) return (Double) m.getContent();
         else return (Double) m.getInfo();
     }
 
+    /**
+     * Calcula la desviación estándard de un bloque y guarda el valor en una celda
+     * Puede tener referencia
+     * @param c
+     * @param ref
+     * @return devuelve el valor de la desviación estandard
+     */
     public Double std(Cell c, Boolean ref){
         Cell m = b_selected.std(c, ref);
         cells.elementAt(m.getRow()).setElementAt(m, m.getColumn());
@@ -553,6 +690,14 @@ public class Sheet {
         else return (Double) m.getInfo();
     }
 
+    /**
+     * Calcula el coeficiente de pearson entre dos bloques y escribe el resultado en una celda
+     * Puede tener referencia
+     * @param b
+     * @param c
+     * @param ref
+     * @return devuelve el valor del coeficiente de pearson
+     */
     public Double CPearson(Block b, Cell c, Boolean ref){
         Cell m = b_selected.CPearson(b, c, ref);
         cells.elementAt(m.getRow()).setElementAt(m, m.getColumn());
