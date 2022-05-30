@@ -319,6 +319,7 @@ public class FuncView {
             if (countiff==JOptionPane.OK_OPTION) {
                 a = operationS1("Count if",selection.toString(),Double.parseDouble(eq.getText()));
             }
+            else return null;
         }
         return a;
 
@@ -511,45 +512,63 @@ public class FuncView {
 //              System.out.println("dr: "+drrow+" , "+drcol);
 
             if (printb.isSelected()) {
-                int confirm = showConfirmDialog(null, "The information from the cells will be lost.\n Are you sure", "Alert!", JOptionPane.YES_NO_OPTION);
-                if (confirm == JOptionPane.YES_OPTION) {
-                    int trows = SheetView.getCurrentTable().getModel().getRowCount();
-                    int tcols = SheetView.getCurrentTable().getModel().getColumnCount();
-                    String [] alphCols=numtoAlphabetCols(getCols(tcols));
-                    SpinnerNumberModel ulrm = new SpinnerNumberModel(1, 1, trows, 1);
-                    SpinnerListModel ulcm= new SpinnerListModel(alphCols);
-                    JSpinner ulr = new JSpinner(ulrm);
-                    JSpinner ulc = new JSpinner(ulcm);
+                int trows = SheetView.getCurrentTable().getModel().getRowCount();
+                int tcols = SheetView.getCurrentTable().getModel().getColumnCount();
+                String[] alphCols = numtoAlphabetCols(getCols(tcols));
+                SpinnerNumberModel ulrm = new SpinnerNumberModel(1, 1, trows, 1);
+                SpinnerListModel ulcm = new SpinnerListModel(alphCols);
+                JSpinner ulr = new JSpinner(ulrm);
+                JSpinner ulc = new JSpinner(ulcm);
 
-                    SpinnerNumberModel drrm = new SpinnerNumberModel(trows, 1, trows, 1);
-                    SpinnerListModel drcm= new SpinnerListModel(alphCols);
-                    JSpinner drr = new JSpinner(drrm);
-                    JSpinner drc = new JSpinner(drcm);
+                SpinnerNumberModel drrm = new SpinnerNumberModel(trows, 1, trows, 1);
+                SpinnerListModel drcm = new SpinnerListModel(alphCols);
+                JSpinner drr = new JSpinner(drrm);
+                JSpinner drc = new JSpinner(drcm);
 
-                    Object[] fields2 = new Object[]{
-                            "Select the upper left cell's row", ulr,
-                            "Select the upper left cell's column", ulc,
-                            "Select the down right cell's row", drr,
-                            "Select the down right cell's column", drc,
-                    };
-                    int result2 = JOptionPane.showConfirmDialog(
-                            null,
-                            fields2,
-                            op,
-                            JOptionPane.OK_CANCEL_OPTION,
-                            JOptionPane.PLAIN_MESSAGE,
-                            null
+                Object[] fields2 = new Object[]{
+                        "Select the upper left cell's row", ulr,
+                        "Select the upper left cell's column", ulc,
+                        "Select the down right cell's row", drr,
+                        "Select the down right cell's column", drc,
+                };
+                int result2 = JOptionPane.showConfirmDialog(
+                        null,
+                        fields2,
+                        op,
+                        JOptionPane.OK_CANCEL_OPTION,
+                        JOptionPane.PLAIN_MESSAGE,
+                        null
 
-                    );
-                    if (result2 == JOptionPane.OK_OPTION) {
-                        ulrow = (Integer) ulr.getValue();
-                        ulcol = SheetView.alphabetToNum((String) ulc.getValue())+1;
-                        drrow = (Integer) drr.getValue();
-                        drcol = SheetView.alphabetToNum((String) drc.getValue())+1;
+                );
+                if (result2 == JOptionPane.OK_OPTION) {
+                    int ul = (Integer) ulr.getValue();
+                    int uc = SheetView.alphabetToNum((String) ulc.getValue());
+                    int dl = (Integer) drr.getValue();
+                    int dc = SheetView.alphabetToNum((String) drc.getValue());
+                    int x = PresentationController.blockWRefs(ul, uc, dl, dc, SheetView.currentSheetName());
+                    int confirm = -1;
+                    if (x != -1) {
+                        switch (x) {
+                            case 0:
+                                confirm = showConfirmDialog(null, "Watch out! There are references in the selected block, the content and references will be lost after the print. \n Are you sure?", "References!", JOptionPane.YES_NO_OPTION);
+                                break;
+                            case 1:
+                                confirm = showConfirmDialog(null, "Watch out! There is information in the selected block, the content  will be lost after the print. \n Are you sure?", "Alert", YES_NO_OPTION);
+                                break;
+                            default:
+                                break;
+                        }
+                        if (confirm == JOptionPane.YES_OPTION) {
+                            ulrow = (Integer) ulr.getValue();
+                            ulcol = SheetView.alphabetToNum((String) ulc.getValue()) + 1;
+                            drrow = (Integer) drr.getValue();
+                            drcol = SheetView.alphabetToNum((String) drc.getValue()) + 1;
+                        } else return null;
+                        ids[4] = -1;
                     }
-                }
-                ids[4] = -1;
-            } else ref.setSelected(false);
+                } else return null;
+            }
+            else ref.setSelected(false);
             boolean b = false;
             if (ref.isSelected()) b = true;
             switch (op) {
@@ -670,33 +689,28 @@ public class FuncView {
 
         );
         if (result == JOptionPane.OK_OPTION) {
-            Object selection="-1";
+            Object selection = "-1";
             String s;
-            String from="";
-            String to ="";
-            if(op.equals("Extract")) {
+            String from = "";
+            String to = "";
+            if (op.equals("Extract")) {
                 Object[] selectionValues = {"Day", "Month", "Year"};
                 String initialSelection = "Day";
                 selection = JOptionPane.showInputDialog(null, "Select the criteria",
                         "Extraction", JOptionPane.QUESTION_MESSAGE, null, selectionValues, initialSelection);
-            }
-            else if(op.equals("Convert")){
-                Object[] selectionValues = {"mTOcm", "mTOkm", "mTOinches","inchesTOm","kmTOm","kmTOcm","cmTOm","cmTOkm"};
+            } else if (op.equals("Convert")) {
+                Object[] selectionValues = {"mTOcm", "mTOkm", "mTOinches", "inchesTOm", "kmTOm", "kmTOcm", "cmTOm", "cmTOkm"};
                 String initialSelection = "mTOcm";
                 selection = JOptionPane.showInputDialog(null, "Select the criteria",
                         "Convert", JOptionPane.QUESTION_MESSAGE, null, selectionValues, initialSelection);
-                if(selection!=null){
-                    s=selection.toString();
-                    String[] sconvert=s.split("TO");
-                    from=sconvert[0];
-                    to=sconvert[1];
+                if (selection != null) {
+                    s = selection.toString();
+                    String[] sconvert = s.split("TO");
+                    from = sconvert[0];
+                    to = sconvert[1];
                 }
-
-
-            }
-
-            else if(op.equals("Length")){
-                Object[] selectionValues = {"Words","Letters","Characters"};
+            } else if (op.equals("Length")) {
+                Object[] selectionValues = {"Words", "Letters", "Characters"};
                 String initialSelection = "Words";
                 selection = JOptionPane.showInputDialog(null, "Select the criteria",
                         "Text length", JOptionPane.QUESTION_MESSAGE, null, selectionValues, initialSelection);
@@ -712,19 +726,18 @@ public class FuncView {
 //              System.out.println("ul: "+ulrow+" , "+ulcol);
 //              System.out.println("dr: "+drrow+" , "+drcol);
 
-            if (printb.isSelected()) {
-                int confirm = showConfirmDialog(null, "The information from the cells will be lost.\n Are you sure", "Alert!", JOptionPane.YES_NO_OPTION);
-                if (confirm == JOptionPane.YES_OPTION) {
+            if (selection != null) {
+                if (printb.isSelected()) {
                     int trows = SheetView.getCurrentTable().getModel().getRowCount();
                     int tcols = SheetView.getCurrentTable().getModel().getColumnCount();
-                    String [] alphCols=numtoAlphabetCols(getCols(tcols));
+                    String[] alphCols = numtoAlphabetCols(getCols(tcols));
                     SpinnerNumberModel ulrm = new SpinnerNumberModel(1, 1, trows, 1);
-                    SpinnerListModel ulcm= new SpinnerListModel(alphCols);
+                    SpinnerListModel ulcm = new SpinnerListModel(alphCols);
                     JSpinner ulr = new JSpinner(ulrm);
                     JSpinner ulc = new JSpinner(ulcm);
 
                     SpinnerNumberModel drrm = new SpinnerNumberModel(trows, 1, trows, 1);
-                    SpinnerListModel drcm= new SpinnerListModel(alphCols);
+                    SpinnerListModel drcm = new SpinnerListModel(alphCols);
                     JSpinner drr = new JSpinner(drrm);
                     JSpinner drc = new JSpinner(drcm);
 
@@ -744,35 +757,56 @@ public class FuncView {
 
                     );
                     if (result2 == JOptionPane.OK_OPTION) {
-                        ulrow = (Integer) ulr.getValue();
-                        ulcol = SheetView.alphabetToNum((String) ulc.getValue())+1;
-                        drrow = (Integer) drr.getValue();
-                        drcol = SheetView.alphabetToNum((String) drc.getValue())+1;
-                    }
-                }
-                ids[4] = -1;
-            } else ref.setSelected(false);
-            boolean b = false;
-            if (ref.isSelected()) b = true;
-            if(selection!=null) {
-                switch (op) {
-                    case "Extract":
-                        PresentationController.blockExtract(ulrow, ulcol, drrow, drcol, b, selection.toString(), SheetView.currentSheetName());
-                        break;
-                    case "Convert":
-                        PresentationController.blockConvert(ulrow, ulcol, drrow, drcol, b, from, to, SheetView.currentSheetName());
-                        break;
-                    case "Length":
-                        PresentationController.blockLength(ulrow, ulcol, drrow, drcol, b, SheetView.currentSheetName(), selection.toString());
-                        break;
-                    default:
-                        break;
-                }
+                        int ul = (Integer) ulr.getValue();
+                        int uc = SheetView.alphabetToNum((String) ulc.getValue());
+                        int dl = (Integer) drr.getValue();
+                        int dc = SheetView.alphabetToNum((String) drc.getValue());
+                        int x = PresentationController.blockWRefs(ul, uc, dl, dc, SheetView.currentSheetName());
+                        int confirm = -1;
+                        if (x != -1) {
+                            switch (x) {
+                                case 0:
+                                    confirm = showConfirmDialog(null, "Watch out! There are references in the selected block, the content and references will be lost after the print. \n Are you sure?", "References!", JOptionPane.YES_NO_OPTION);
+                                    break;
+                                case 1:
+                                    confirm = showConfirmDialog(null, "Watch out! There is information in the selected block, the content  will be lost after the print. \n Are you sure?", "Alert", YES_NO_OPTION);
+                                    break;
+                                default:
+                                    break;
+                            }
+                            if (confirm == JOptionPane.YES_OPTION) {
+                                ulrow = (Integer) ulr.getValue();
+                                ulcol = SheetView.alphabetToNum((String) ulc.getValue()) + 1;
+                                drrow = (Integer) drr.getValue();
+                                drcol = SheetView.alphabetToNum((String) drc.getValue()) + 1;
+                            } else return null;
+                            ids[4] = -1;
+                        }
 
-                ids[0] = ulrow - 1;
-                ids[1] = ulcol - 1;
-                ids[2] = drrow - 1;
-                ids[3] = drcol - 1;
+                    } else return null;
+                } else ref.setSelected(false);
+                boolean b = false;
+                if (ref.isSelected()) b = true;
+                if (selection != null) {
+                    switch (op) {
+                        case "Extract":
+                            PresentationController.blockExtract(ulrow, ulcol, drrow, drcol, b, selection.toString(), SheetView.currentSheetName());
+                            break;
+                        case "Convert":
+                            PresentationController.blockConvert(ulrow, ulcol, drrow, drcol, b, from, to, SheetView.currentSheetName());
+                            break;
+                        case "Length":
+                            PresentationController.blockLength(ulrow, ulcol, drrow, drcol, b, SheetView.currentSheetName(), selection.toString());
+                            break;
+                        default:
+                            break;
+                    }
+
+                    ids[0] = ulrow - 1;
+                    ids[1] = ulcol - 1;
+                    ids[2] = drrow - 1;
+                    ids[3] = drcol - 1;
+                }
             }
         }
         return ids;

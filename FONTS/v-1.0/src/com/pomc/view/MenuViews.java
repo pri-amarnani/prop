@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import static com.pomc.view.SheetView.*;
+import static javax.swing.JOptionPane.showConfirmDialog;
 
 public class MenuViews {
     public static void close() {
@@ -258,17 +259,21 @@ public class MenuViews {
                 SheetView.rewriteModel(0);
 
             }
-            else {//TODO preguntar si seguro
-                PresentationController.open(selectFile.getSelectedFile());
-                BorderLayout blayout = (BorderLayout) MainMenu.frame.getContentPane().getLayout();
-                MainMenu.frame.getContentPane().remove(blayout.getLayoutComponent(BorderLayout.CENTER));
-                MainMenu.frame.repaint();
-                MainMenu.frame.getContentPane().add(BorderLayout.CENTER, SheetView.cambio());
-                MainMenu.menuUpdated = true;
-                SheetView.updateMenu(MainMenu.mb);
-                MainMenu.frame.setTitle(PresentationController.getTitle() + " - POMC WORKSHEETS");
-                MainMenu.frame.setVisible(true);
-                SheetView.rewriteModel(0);
+            else {
+                int confirm=showConfirmDialog(null, "Beware! You'll loose the current information. \n Are you sure?", "Unsaved changes!", JOptionPane.YES_NO_OPTION);
+                if(confirm==JOptionPane.OK_OPTION) {
+                    //TODO preguntar si seguro
+                    PresentationController.open(selectFile.getSelectedFile());
+                    BorderLayout blayout = (BorderLayout) MainMenu.frame.getContentPane().getLayout();
+                    MainMenu.frame.getContentPane().remove(blayout.getLayoutComponent(BorderLayout.CENTER));
+                    MainMenu.frame.repaint();
+                    MainMenu.frame.getContentPane().add(BorderLayout.CENTER, SheetView.cambio());
+                    MainMenu.menuUpdated = true;
+                    SheetView.updateMenu(MainMenu.mb);
+                    MainMenu.frame.setTitle(PresentationController.getTitle() + " - POMC WORKSHEETS");
+                    MainMenu.frame.setVisible(true);
+                    SheetView.rewriteModel(0);
+                }
             }
         }
     }

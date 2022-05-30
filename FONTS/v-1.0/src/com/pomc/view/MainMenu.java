@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 
+import static javax.swing.JOptionPane.showConfirmDialog;
 import static javax.swing.JOptionPane.showMessageDialog;
 public class MainMenu {
     static boolean menuUpdated=false;
@@ -173,15 +174,18 @@ public class MainMenu {
 
                                     }
                                     else {//TODO preguntar si seguro
-                                        PresentationController.newDoc(result2);
-                                        frame.getContentPane().removeAll();
-                                        frame.repaint();
-                                        ok = true;
-                                        PresentationController.newSheet(newsheet_title.getText(), numfil, numcol);
-                                        frame.getContentPane().add(BorderLayout.NORTH,menuPanel);
-                                        frame.getContentPane().add(BorderLayout.CENTER, SheetView.cambio());
-                                        frame.setTitle(result2 + " - POMC WORKSHEETS");
-                                        frame.setVisible(true);
+                                        int confirm=showConfirmDialog(null, "Beware! You'll loose the current information. \n Are you sure?", "Unsaved changes!", JOptionPane.YES_NO_OPTION);
+                                        if(confirm==JOptionPane.OK_OPTION) {
+                                            PresentationController.newDoc(result2);
+                                            frame.getContentPane().removeAll();
+                                            frame.repaint();
+                                            ok = true;
+                                            PresentationController.newSheet(newsheet_title.getText(), numfil, numcol);
+                                            frame.getContentPane().add(BorderLayout.NORTH, menuPanel);
+                                            frame.getContentPane().add(BorderLayout.CENTER, SheetView.cambio());
+                                            frame.setTitle(result2 + " - POMC WORKSHEETS");
+                                            frame.setVisible(true);
+                                        }
                                     }
                                 }
 
