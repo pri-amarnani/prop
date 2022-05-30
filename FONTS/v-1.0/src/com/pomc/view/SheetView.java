@@ -376,6 +376,7 @@ public class SheetView {
         });
 
 
+
         jmbar_sheet.add(Box.createHorizontalGlue());
 
         JPanel mp= (JPanel) MainMenu.getCurrentFrame().getContentPane().getComponent(0);
