@@ -42,9 +42,10 @@ public class gestorPOMC {
                         }
                         file.write(" )");
                     } else if (sh.getCell(i, j).getClass() == TextCell.class) {
-                        file.write('"' + (String) sh.getCell(i, j).getInfo() + '"');
+                        if (Objects.equals(sh.getCell(i, j).getInfo(), "")) file.write("null");
+                        else file.write('"' + (String) sh.getCell(i, j).getInfo() + '"');
                     } else {
-                        if (sh.getCell(i, j).getInfo() == null || Objects.equals(sh.getCell(i, j).getInfo(), "")) file.write("null");
+                        if (sh.getCell(i, j) == null || sh.getCell(i, j).getInfo() == null || Objects.equals(sh.getCell(i, j).getInfo(), "")) file.write("null");
                         else file.write(sh.getCell(i, j).getInfo().toString());
                     }
 

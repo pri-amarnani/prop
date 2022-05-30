@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 public class NumCellTest {
 
     private NumCell ncell;
-
+/*
     @BeforeEach
     void setUp(){
         ncell= new NumCell(1,1,2.5432);
@@ -45,7 +45,7 @@ public class NumCellTest {
     public void test_changeValue(){
         Object a=ncell.changeValue(1.25);
         assertEquals(ncell.getInfo(),1.25); //se hace así???
-    }
+    }*/
 
 
 }

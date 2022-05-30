@@ -668,7 +668,6 @@ public class Block {
     public void sum (Block b1, Block b2, Boolean ref) {
         for (int i = 0; i < this.block.length; ++i) {
             for (int j = 0; j < this.block[0].length; ++j) {
-                //System.out.println("suma");
                 Cell n = (Cell) b2.getCell(i, j).changeValue((double) this.block[i][j].getInfo() + (double) b1.getCell(i, j).getInfo());
                 b2.setCell(i,j,n);
                 if (ref) {

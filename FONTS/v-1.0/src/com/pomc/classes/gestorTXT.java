@@ -23,7 +23,8 @@ public class gestorTXT {
                 }
 
                 else if (sh.getCell(i,j).getClass() == TextCell.class) {
-                    file.write('"' + (String) sh.getCell(i,j).getInfo() + '"');
+                    if (Objects.equals(sh.getCell(i, j).getInfo(), "")) file.write("null");
+                    else file.write('"' + (String) sh.getCell(i, j).getInfo() + '"');
                 }
 
                 else {
